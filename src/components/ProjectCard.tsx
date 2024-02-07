@@ -2,7 +2,6 @@ type Project = {
   title: string;
   description: string;
   slug: string;
-  needsJS: boolean;
 };
 
 type ProjectCardProps = {

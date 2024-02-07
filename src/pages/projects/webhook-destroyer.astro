@@ -1,0 +1,8 @@
+---
+import ProjectLayout from "@/layouts/ProjectLayout.astro";
+import { Destroyer } from "@/projects/webhook-destroyer/webhook-destroyer";
+---
+
+<ProjectLayout needsJS>
+  <Destroyer client:only />
+</ProjectLayout>
