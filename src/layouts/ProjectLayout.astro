@@ -1,0 +1,39 @@
+---
+import { Card } from "@/components/Card";
+import { projects } from "../lib/project";
+import Layout from "./Layout.astro";
+
+type Props = {
+  needsJS: boolean;
+};
+const slug = Astro.url.pathname.replace("/projects/", "");
+
+const project = projects.find((project) => project.slug === slug);
+
+if (!project) throw Astro.redirect("/404");
+
+const { title, description } = project;
+const { needsJS } = Astro.props;
+---
+
+<Layout title={`projects - ${title}`}>
+  <a href="/projects" class="decoration-none text-white">⬅️ back</a>
+  {
+    needsJS && (
+      <noscript>
+        <Card type="error">
+          <p slot="header">
+            you need javascript for this, please enable it and try again
+          </p>
+        </Card>
+      </noscript>
+    )
+  }
+  <h1 class="text-4xl" transition:name={`${slug}-title`}>
+    {title}
+  </h1>
+  <p transition:name={`${slug}-description`}>
+    {description}
+  </p>
+  <slot />
+</Layout>
