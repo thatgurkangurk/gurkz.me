@@ -19,6 +19,11 @@ const projects: Project[] = [
     description: "a simple tool to destroy discord webhooks",
     slug: "webhook-destroyer",
   },
+  {
+    title: "most beautiful pokémon",
+    description: "the internet decides which pokémon is the prettiest",
+    slug: "most-beautiful-pokemon"
+  }
 ];
 
 export { type Project, projectSchema, projects };
