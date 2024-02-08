@@ -1,7 +1,7 @@
 ---
 import "../../style.css";
 import { join } from "node:path";
-import { ViewTransitions } from "astro:transitions";
+
 type Props = {
   title: string;
 };
@@ -19,7 +19,6 @@ import { AstroFont } from "astro-font";
 <meta name="viewport" content="width=device-width" />
 <meta name="generator" content={Astro.generator} />
 <title>{title}</title>
-<ViewTransitions />
 <AstroFont
   config={[
     {
