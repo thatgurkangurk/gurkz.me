@@ -24,6 +24,8 @@
     "astro-font": "^0.0.71",
     "clsx": "^2.1.0",
     "cva": "npm:class-variance-authority",
+    "drizzle-orm": "^0.29.3",
+    "postgres": "^3.4.3",
     "solid-icons": "^1.1.0",
     "solid-js": "^1.8.7",
     "tailwind-merge": "^2.2.0",
@@ -32,6 +34,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@types/node": "^20.11.16"
+    "@types/node": "^20.11.16",
+    "drizzle-kit": "^0.20.14"
   }
 }
