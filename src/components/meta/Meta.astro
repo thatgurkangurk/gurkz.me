@@ -1,8 +1,13 @@
 ---
 import "../../style.css";
+import { join } from "node:path";
+
 type Props = {
   title: string;
 };
+
+const appDir = process.cwd();
+const makeFontPath = (src: string) => join(appDir, "public", "fonts", src)
 
 const { title } = Astro.props;
 import { AstroFont } from "astro-font";
@@ -25,12 +30,12 @@ import { AstroFont } from "astro-font";
         {
           weight: "100",
           style: "normal",
-          path: "./public/fonts/GeistMono.woff2",
+          path: makeFontPath("GeistMono.woff2"),
         },
         {
           weight: "100",
           style: "normal",
-          path: "./public/fonts/GeistMono.ttf",
+          path: makeFontPath("GeistMono.ttf"),
         },
       ],
     },
