@@ -1,5 +1,6 @@
 ---
 import ProjectLayout from "@/layouts/ProjectLayout.astro";
+import { Card } from "@/components/Card";
 
 function getRandomNumber(min: number, max: number) {
     min = Math.ceil(min);
@@ -11,6 +12,7 @@ const randomNumber = getRandomNumber(1, 200);
 ---
 
 <ProjectLayout needsJS>
+  <Card type="warning">currently, all data here is <span class="font-bold">fake and no votes will be cast.</span></Card>
   <p>work in progress, here is a random pokémon, just for you!</p>
   <br />
   <img src={`/projects/most-beautiful-pokemon/image/${randomNumber}.png`} alt="random pokémon" />
