@@ -1,6 +1,7 @@
 {
   "extends": "astro/tsconfigs/strictest",
   "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
     "baseUrl": ".",
