@@ -8,7 +8,7 @@ export async function GET({ params }: { params: { id: string } }) {
       `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${mon}.png`
   );
 
-  const buffer = Buffer.from(await response.arrayBuffer);
+  const buffer = Buffer.from(response.arrayBuffer);
 
   const newRes = new Response(buffer, {
     headers: { "Content-Type": "image/png", "Cache-Control": "max-age=31536000, immutable" }
