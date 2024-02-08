@@ -1,4 +1,4 @@
-export async function GET({ params }) {
+export async function GET({ params }: { params: { id: string } }) {
   const { id } = params;
   const mon = parseInt(rawId, 10);
   if (typeof mon !== "number")
