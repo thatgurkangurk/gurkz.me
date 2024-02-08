@@ -1,7 +1,17 @@
 ---
 import ProjectLayout from "@/layouts/ProjectLayout.astro";
+
+function getRandomNumber(min: number, max: number) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+const randomNumber = getRandomNumber(1, 200);
 ---
 
 <ProjectLayout needsJS>
-  <h1>work in progress</h1>
+  <p>work in progress, here is a random pokémon, just for you!</p>
+  <br />
+  <img src={`/image/${randomNumber}.png`} alt="random pokémon" />
 </ProjectLayout>
