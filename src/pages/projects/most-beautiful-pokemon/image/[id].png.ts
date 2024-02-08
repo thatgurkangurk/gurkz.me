@@ -1,6 +1,6 @@
 export async function GET({ params }: { params: { id: string } }) {
   const { id } = params;
-  const mon = parseInt(rawId, 10);
+  const mon = parseInt(id, 10);
   if (typeof mon !== "number")
       return new Response("Not found", { status: 404 });
 
