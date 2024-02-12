@@ -8,7 +8,8 @@ import {
   ColorModeScript,
   cookieStorageManagerSSR,
 } from "@kobalte/core";
-import { ModeToggle } from "./components/ui/theme-toggle";
+import { Layout } from "./components/layout";
+import "@fontsource/geist-mono";
 
 export default function App() {
   const event = getRequestEvent();
@@ -21,14 +22,14 @@ export default function App() {
     <Router
       root={(props) => (
         <>
-          <ColorModeScript storageType={storageManager.type} />
+          <ColorModeScript
+            initialColorMode="dark"
+            storageType={storageManager.type}
+          />
           <Suspense>
-            <div class="p-3">
-              <ColorModeProvider storageManager={storageManager}>
-                <ModeToggle />
-                {props.children}
-              </ColorModeProvider>
-            </div>
+            <ColorModeProvider storageManager={storageManager}>
+              <Layout>{props.children}</Layout>
+            </ColorModeProvider>
           </Suspense>
         </>
       )}

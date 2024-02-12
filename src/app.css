@@ -100,9 +100,33 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-feature-settings:
-      "rlig" 1,
-      "calt" 1;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    grid-template-areas: "main" "footer";
+    font-family: "Geist Mono", monospace;
+  }
+
+  h1 {
+    @apply text-3xl font-bold my-2;
+  }
+
+  h2 {
+    @apply text-3xl font-bold my-2;
+  }
+
+  h3 {
+    @apply text-2xl font-bold my-2;
+  }
+
+  p {
+    @apply text-base my-2;
+  }
+
+  span {
+    @apply text-base my-2;
+  }
+
+  a {
+    @apply decoration-themeColor underline-offset-4 transition-colors inline-block;
   }
 }
 

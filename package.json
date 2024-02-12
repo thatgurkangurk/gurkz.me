@@ -7,6 +7,7 @@
     "start": "vinxi start"
   },
   "dependencies": {
+    "@fontsource/geist-mono": "^5.0.1",
     "@kobalte/core": "^0.12.1",
     "@solidjs/router": "^0.12.0",
     "@solidjs/start": "^0.5.4",
