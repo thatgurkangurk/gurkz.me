@@ -24,6 +24,7 @@ export default createHandler(() => (
             {children}
           </div>
           {scripts}
+          <script async src="https://umami.gurkz.me/script.js" data-website-id="d6b3253f-e547-4a4f-82f4-b7424d80b446"></script>
         </body>
       </html>
     )}
