@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { statSync, createReadStream } from "node:fs";
 import { fileUrlToPath } from "url";
 
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const videoPath = join(__dirname, "..", "..", "..", "badapple.mp4");
 
 export async function GET({ request }: APIEvent) {
