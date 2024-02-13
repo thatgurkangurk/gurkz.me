@@ -98,11 +98,12 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
-    grid-template-areas: "main" "footer";
     font-family: "Geist Mono", monospace;
+    grid-template-areas: "main" "footer";
   }
 
   h1 {

@@ -13,18 +13,27 @@ export default createHandler(() => (
           <link rel="icon" href="/favicon.ico" />
           {assets}
         </head>
-        <body class="font-geist m-auto p-4 text-left max-w-[64ch] h-full grid gap-3 grid-cols-[1fr] grid-rows-[1fr]">
-          <div id="app">
-            <noscript>
-              <p class="bg-red-500 rounded-md p-0.5">
-                you do not have javascript enabled. some things might break.
-              </p>
-            </noscript>
+        <body
+          id="app"
+          class="font-geist m-auto p-4 text-left max-w-[64ch] h-screen grid gap-3 grid-cols-[1fr] grid-rows-[1fr]"
+        >
+          <noscript>
+            <p class="bg-red-500 rounded-md p-0.5">
+              you do not have javascript enabled. some things might break.
+            </p>
+          </noscript>
 
-            {children}
-          </div>
+          {children}
           {scripts}
-          <script async src="https://umami.gurkz.me/script.js" data-website-id="d6b3253f-e547-4a4f-82f4-b7424d80b446"></script>
+          {process.env.PROD ? (
+            <script
+              async
+              src="https://umami.gurkz.me/script.js"
+              data-website-id="d6b3253f-e547-4a4f-82f4-b7424d80b446"
+            ></script>
+          ) : (
+            <></>
+          )}
         </body>
       </html>
     )}
