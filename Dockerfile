@@ -14,8 +14,9 @@ RUN pnpm run build
 
 FROM base AS runner
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=build /app/dist ./dist
+COPY --from=build /app/.output ./.output
+COPY --from=build /app/.vinxi ./.vinxi
 ENV HOST=0.0.0.0
 ENV PORT=4321
 EXPOSE 4321
-CMD [ "node", "./dist/server/entry.mjs" ]
+CMD [ "node", "./.output/server/index.mjs" ]
