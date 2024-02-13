@@ -8,6 +8,7 @@ const Layout: ParentComponent = (props) => {
       <ModeToggle />
       <Navbar>
         <Link href="/">home</Link>
+        <Link href="/projects">projects</Link>
       </Navbar>
       {props.children}
     </main>
