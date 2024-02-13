@@ -9,6 +9,7 @@
   "dependencies": {
     "@fontsource/geist-mono": "^5.0.1",
     "@kobalte/core": "^0.12.1",
+    "@solid-primitives/event-bus": "^1.0.9",
     "@solidjs/router": "^0.12.0",
     "@solidjs/start": "^0.5.4",
     "autoprefixer": "^10.4.14",

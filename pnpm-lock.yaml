@@ -11,6 +11,9 @@ dependencies:
   '@kobalte/core':
     specifier: ^0.12.1
     version: 0.12.1(solid-js@1.8.14)
+  '@solid-primitives/event-bus':
+    specifier: ^1.0.9
+    version: 1.0.9(solid-js@1.8.14)
   '@solidjs/router':
     specifier: ^0.12.0
     version: 0.12.0(solid-js@1.8.14)
@@ -1437,6 +1440,15 @@ packages:
   /@sindresorhus/merge-streams@2.1.0:
     resolution: {integrity: sha512-g3/sYJWXTAf3Ce861z4/mW9jDxN7hoNHZMEyhd3Zh7GKQPiovWNttzhRW2BeGPwPxPpLDKumL6Sg056VAMjdkg==}
     engines: {node: '>=18'}
+    dev: false
+
+  /@solid-primitives/event-bus@1.0.9(solid-js@1.8.14):
+    resolution: {integrity: sha512-BI9dla3GQzINsufEzr/CV3B/9e0D1pyk7Ig6kPI6s4geUkiVgFadY5V8R95PEeHH1NagOny7AHpw+RaRIuBpkA==}
+    peerDependencies:
+      solid-js: ^1.6.12
+    dependencies:
+      '@solid-primitives/utils': 6.2.2(solid-js@1.8.14)
+      solid-js: 1.8.14
     dev: false
 
   /@solid-primitives/event-listener@2.3.1(solid-js@1.8.14):
