@@ -10,6 +10,7 @@ import {
 } from "@kobalte/core";
 import { Layout } from "./components/layout";
 import "@fontsource/geist-mono";
+import { Toaster } from "./components/ui/toast";
 
 export default function App() {
   const event = getRequestEvent();
@@ -29,6 +30,7 @@ export default function App() {
           <Suspense>
             <ColorModeProvider storageManager={storageManager}>
               <Layout>{props.children}</Layout>
+              <Toaster />
             </ColorModeProvider>
           </Suspense>
         </>
