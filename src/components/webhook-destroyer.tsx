@@ -13,7 +13,7 @@ import { Grid } from "./ui/grid";
 import { Button } from "./ui/button";
 import { TbLoader } from "solid-icons/tb";
 import { showToast } from "./ui/toast";
-import { useUmami } from "~/lib/umami";
+import { useAnalytics } from "@gurkz/solid-analytics";
 
 const FormSchema = object({
   url: string([
@@ -27,7 +27,7 @@ const FormSchema = object({
 export type WebhookForm = ValibotInput<typeof FormSchema>;
 
 const WebhookDestroyer = () => {
-  const umami = useUmami();
+  const umami = useAnalytics();
   const [webhookForm, { Form, Field }] = createForm<WebhookForm>({
     validate: valiForm(FormSchema),
   });

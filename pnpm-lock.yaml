@@ -8,6 +8,9 @@ dependencies:
   '@fontsource/geist-mono':
     specifier: ^5.0.1
     version: 5.0.1
+  '@gurkz/solid-analytics':
+    specifier: ^1.0.0
+    version: 1.0.0(solid-js@1.8.14)
   '@kobalte/core':
     specifier: ^0.12.1
     version: 0.12.1(solid-js@1.8.14)
@@ -833,6 +836,15 @@ packages:
 
   /@fontsource/geist-mono@5.0.1:
     resolution: {integrity: sha512-fbLTXtnGagDEaKmRqAnjbqWZbZ3RR6RExvNikt3hLI/qJXxaBZZw8OH+Ve5rAxVxmKwz0a5GmPk2cqW0aapbfQ==}
+    dev: false
+
+  /@gurkz/solid-analytics@1.0.0(solid-js@1.8.14):
+    resolution: {integrity: sha512-dI/tBChQ7pnDEKDRFBoHktk40efmzRmTXm3U6/LFKhphfGCN1+zgkUQA9MnsBmWhW+LnRHaTWLS8N7li628sdg==}
+    engines: {node: '>=18', pnpm: '>=8.6.0'}
+    peerDependencies:
+      solid-js: ^1.8.0
+    dependencies:
+      solid-js: 1.8.14
     dev: false
 
   /@internationalized/date@3.5.1:

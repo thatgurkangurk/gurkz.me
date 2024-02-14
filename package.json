@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@fontsource/geist-mono": "^5.0.1",
+    "@gurkz/solid-analytics": "^1.0.0",
     "@kobalte/core": "^0.12.1",
     "@modular-forms/solid": "^0.20.0",
     "@solid-primitives/event-bus": "^1.0.9",

@@ -1,3 +1,4 @@
+import { Analytics } from "@gurkz/solid-analytics";
 import { createHandler, StartServer } from "@solidjs/start/server";
 
 export default createHandler(() => (
@@ -22,18 +23,8 @@ export default createHandler(() => (
               you do not have javascript enabled. some things might break.
             </p>
           </noscript>
-
           {children}
           {scripts}
-          {process.env.PROD ? (
-            <script
-              async
-              src="https://umami.gurkz.me/script.js"
-              data-website-id="d6b3253f-e547-4a4f-82f4-b7424d80b446"
-            ></script>
-          ) : (
-            <></>
-          )}
         </body>
       </html>
     )}
