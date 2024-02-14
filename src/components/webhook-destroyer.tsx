@@ -13,7 +13,7 @@ import { Grid } from "./ui/grid";
 import { Button } from "./ui/button";
 import { TbLoader } from "solid-icons/tb";
 import { showToast } from "./ui/toast";
-import { trackEvent } from "~/lib/umami";
+import { useUmami } from "~/lib/umami";
 
 const FormSchema = object({
   url: string([
@@ -27,6 +27,7 @@ const FormSchema = object({
 export type WebhookForm = ValibotInput<typeof FormSchema>;
 
 const WebhookDestroyer = () => {
+  const umami = useUmami();
   const [webhookForm, { Form, Field }] = createForm<WebhookForm>({
     validate: valiForm(FormSchema),
   });
@@ -52,7 +53,7 @@ const WebhookDestroyer = () => {
             description: "webhook has been deleted",
             duration: 5000,
           });
-          trackEvent("deleted webhook");
+          umami.track("deleted webhook");
         } else {
           setResponse(webhookForm, {
             status: "error",
