@@ -11,7 +11,6 @@ import {
 
 export function ModeToggle() {
   const { toggleColorMode, colorMode } = useColorMode();
-  console.log(colorMode());
 
   return (
     <>

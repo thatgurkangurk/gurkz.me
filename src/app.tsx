@@ -11,6 +11,7 @@ import {
 import { Layout } from "./components/layout";
 import "@fontsource/geist-mono";
 import { Toaster } from "./components/ui/toast";
+import { UmamiProvider } from "~/lib/umami";
 
 export default function App() {
   const event = getRequestEvent();
@@ -29,7 +30,9 @@ export default function App() {
           />
           <Suspense>
             <ColorModeProvider storageManager={storageManager}>
-              <Layout>{props.children}</Layout>
+              <UmamiProvider>
+                <Layout>{props.children}</Layout>
+              </UmamiProvider>
               <Toaster />
             </ColorModeProvider>
           </Suspense>
