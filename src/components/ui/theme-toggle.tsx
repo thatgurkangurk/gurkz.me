@@ -8,8 +8,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import { useUmami } from "~/lib/umami";
 
 export function ModeToggle() {
+  const umami = useUmami();
   const { toggleColorMode, colorMode } = useColorMode();
   console.log(colorMode());
 
@@ -18,6 +20,7 @@ export function ModeToggle() {
       <Button
         onClick={() => {
           toggleColorMode();
+          umami.track("toggled theme"); //! placeholder to see if the umami context works
         }}
         variant="ghost"
         size="icon"
