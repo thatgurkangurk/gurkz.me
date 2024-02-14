@@ -4,10 +4,15 @@ import { createContext, useContext, type ParentComponent } from "solid-js";
 const UmamiContext = createContext();
 
 const UmamiProvider: ParentComponent = (props) => {
-    if (isServer) return;
+    const getUmami = () => {
+        if (isServer) return null;
+        return window.umami!n
+    }
+
+    const umami = getUmami();
 
     return (
-        <UmamiContext.Provider value={window.umami!}>
+        <UmamiContext.Provider value={umami}>
             {props.children}
         </UmamiContext.Provider>
     )
