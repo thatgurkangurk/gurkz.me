@@ -13,6 +13,7 @@ import { Grid } from "./ui/grid";
 import { Button } from "./ui/button";
 import { TbLoader } from "solid-icons/tb";
 import { showToast } from "./ui/toast";
+import { trackEvent } from "~/lib/umami";
 
 const FormSchema = object({
   url: string([
@@ -51,6 +52,7 @@ const WebhookDestroyer = () => {
             description: "webhook has been deleted",
             duration: 5000,
           });
+          trackEvent("deleted webhook");
         } else {
           setResponse(webhookForm, {
             status: "error",
