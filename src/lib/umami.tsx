@@ -6,7 +6,7 @@ const UmamiContext = createContext();
 const UmamiProvider: ParentComponent = (props) => {
     const getUmami = () => {
         if (isServer) return null;
-        return window.umami!n
+        return window.umami!;
     }
 
     const umami = getUmami();
