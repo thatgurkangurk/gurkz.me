@@ -26,6 +26,12 @@ dependencies:
   '@solidjs/start':
     specifier: ^0.5.4
     version: 0.5.4(solid-js@1.8.14)(vinxi@0.2.1)(vite@5.1.1)
+  '@trpc/client':
+    specifier: ^10.45.1
+    version: 10.45.1(@trpc/server@10.45.1)
+  '@trpc/server':
+    specifier: ^10.45.1
+    version: 10.45.1
   autoprefixer:
     specifier: ^10.4.14
     version: 10.4.17(postcss@8.4.35)
@@ -1617,6 +1623,18 @@ packages:
     resolution: {integrity: sha512-aYX01Ke9hunpoCexYAgQucEpARGQ5w/cqHFrIR+e9gdKb1QWTsVJuTJ2ozQzIAxLyRQe/m+2RqzkyOOGiMKRQA==}
     dependencies:
       tslib: 2.6.2
+    dev: false
+
+  /@trpc/client@10.45.1(@trpc/server@10.45.1):
+    resolution: {integrity: sha512-nVbAk1xpIiI64WgzXGgfxPOGgHoYvffn1IsjV1D/Ri7DL4BKuo2qtZ7UQ+OuHkzH2M8j4ikSVBDpk545fOdvpw==}
+    peerDependencies:
+      '@trpc/server': 10.45.1
+    dependencies:
+      '@trpc/server': 10.45.1
+    dev: false
+
+  /@trpc/server@10.45.1:
+    resolution: {integrity: sha512-KOzBEVaHW9IxEedUP9E50y0tYxAuvlzyjn80Bpemw4rcNbT4WtJnhkFPUY+qDJl7Crt3B/oY2qMgSxVWi9toLg==}
     dev: false
 
   /@ts-morph/common@0.21.0:
