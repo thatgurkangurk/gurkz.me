@@ -12,7 +12,7 @@ import { Layout } from "./components/layout";
 import "@fontsource/geist-mono";
 import { Toaster } from "./components/ui/toast";
 import { Analytics } from "@gurkz/solid-analytics";
-import { queryClient, trpc } from "./lib/api";
+import { queryClient } from "./lib/api";
 import { QueryClientProvider } from "@tanstack/solid-query";
 
 export default function App() {

@@ -1,6 +1,5 @@
 import { QueryClient } from "@tanstack/solid-query";
 import { createTRPCProxyClient, httpBatchLink, loggerLink } from "@trpc/client";
-import {} from "@solid-mediakit/trpc";
 import { AppRouter } from "~/server/api/root";
 
 const getBaseUrl = () => {
