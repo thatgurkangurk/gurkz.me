@@ -11,6 +11,9 @@ export default function Projects() {
         <li>
           <A href="/project/webhook-destroyer">webhook destroyer</A>
         </li>
+        <li>
+          <A href="/project/most-beautiful-pokemon">most beautiful pokémon</A>
+        </li>
       </ul>
     </>
   );

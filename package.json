@@ -14,6 +14,8 @@
     "@solid-primitives/event-bus": "^1.0.9",
     "@solidjs/router": "^0.12.0",
     "@solidjs/start": "^0.5.4",
+    "@tanstack/solid-query": "^5.20.5",
+    "@tanstack/solid-query-devtools": "^5.20.5",
     "@trpc/client": "^10.45.1",
     "@trpc/server": "^10.45.1",
     "autoprefixer": "^10.4.14",
