@@ -47,9 +47,6 @@ dependencies:
   clsx:
     specifier: ^2.1.0
     version: 2.1.0
-  mediakit-mono:
-    specifier: github:solidjs-community/mediakit
-    version: github.com/solidjs-community/mediakit/80d12fd528f5f32934fe323dbeec37ee50089d4f
   postcss:
     specifier: ^8.4.26
     version: 8.4.35
@@ -5493,11 +5490,4 @@ packages:
 
   /zod@3.22.4:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
-    dev: false
-
-  github.com/solidjs-community/mediakit/80d12fd528f5f32934fe323dbeec37ee50089d4f:
-    resolution: {tarball: https://codeload.github.com/solidjs-community/mediakit/tar.gz/80d12fd528f5f32934fe323dbeec37ee50089d4f}
-    name: mediakit-mono
-    version: 0.0.0
-    engines: {node: '>=16', pnpm: '>=7'}
     dev: false

@@ -21,7 +21,6 @@
     "autoprefixer": "^10.4.14",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
-    "mediakit-mono": "github:solidjs-community/mediakit",
     "postcss": "^8.4.26",
     "solid-icons": "^1.1.0",
     "solid-js": "^1.8.14",

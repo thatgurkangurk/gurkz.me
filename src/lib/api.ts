@@ -1,7 +1,7 @@
 import { QueryClient, isServer } from "@tanstack/solid-query";
 import { httpBatchLink } from "@trpc/client";
 import { AppRouter } from "~/server/api/root";
-import { createTRPCSolidStart } from "mediakit-mono/packages/trpc/src/createTRPCSolid";
+import { createTRPCSolidStart } from "./mediakit/trpc";
 
 const getBaseUrl = () => {
   if (typeof window !== "undefined") return "";
