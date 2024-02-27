@@ -47,6 +47,9 @@ dependencies:
   clsx:
     specifier: ^2.1.0
     version: 2.1.0
+  mediakit-mono:
+    specifier: github:solidjs-community/mediakit
+    version: github.com/solidjs-community/mediakit/80d12fd528f5f32934fe323dbeec37ee50089d4f
   postcss:
     specifier: ^8.4.26
     version: 8.4.35
@@ -56,6 +59,9 @@ dependencies:
   solid-js:
     specifier: ^1.8.14
     version: 1.8.14
+  solid-spinner:
+    specifier: ^0.2.0
+    version: 0.2.0(solid-js@1.8.14)
   tailwind-merge:
     specifier: ^2.2.1
     version: 2.2.1
@@ -4552,6 +4558,15 @@ packages:
       solid-js: 1.8.14
     dev: false
 
+  /solid-spinner@0.2.0(solid-js@1.8.14):
+    resolution: {integrity: sha512-xLTYFljnvtp8evg9H1Cs4UlIwFelO9HYmRF/bfByhlrcilHJwyQgSus9ICbu8Gt/CUubpT4LsADWxJ9rYg8VHA==}
+    engines: {node: '>=16'}
+    peerDependencies:
+      solid-js: '*'
+    dependencies:
+      solid-js: 1.8.14
+    dev: false
+
   /solid-use@0.8.0(solid-js@1.8.14):
     resolution: {integrity: sha512-YX+XmcKLvSx3bwMimMhFy40ZkDnShnUcEw6cW6fSscwKEgl1TG3GlgAvkBmQ3AeWjvQSd8+HGTr82ImsrjkkqA==}
     engines: {node: '>=10'}
@@ -5478,4 +5493,11 @@ packages:
 
   /zod@3.22.4:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
+    dev: false
+
+  github.com/solidjs-community/mediakit/80d12fd528f5f32934fe323dbeec37ee50089d4f:
+    resolution: {tarball: https://codeload.github.com/solidjs-community/mediakit/tar.gz/80d12fd528f5f32934fe323dbeec37ee50089d4f}
+    name: mediakit-mono
+    version: 0.0.0
+    engines: {node: '>=16', pnpm: '>=7'}
     dev: false

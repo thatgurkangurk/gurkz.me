@@ -1,6 +1,7 @@
-import { QueryClient } from "@tanstack/solid-query";
-import { createTRPCProxyClient, httpBatchLink, loggerLink } from "@trpc/client";
+import { QueryClient, isServer } from "@tanstack/solid-query";
+import { httpBatchLink } from "@trpc/client";
 import { AppRouter } from "~/server/api/root";
+import { createTRPCSolidStart } from "mediakit-mono/packages/trpc/src/createTRPCSolid";
 
 const getBaseUrl = () => {
   if (typeof window !== "undefined") return "";
@@ -8,14 +9,23 @@ const getBaseUrl = () => {
   return `http://localhost:${process.env.PORT ?? 3000}`;
 };
 
-// create the client, export it
-export const trpc = createTRPCProxyClient<AppRouter>({
-  links: [
-    // will print out helpful logs when using client
-    loggerLink(),
-    // identifies what url will handle trpc requests
-    httpBatchLink({ url: `${getBaseUrl()}/api/trpc` }),
-  ],
+export const trpc = createTRPCSolidStart<AppRouter>({
+  config(event) {
+    // PageEvent of Solid-start
+    return {
+      links: [
+        httpBatchLink({
+          url: `${getBaseUrl()}/api/trpc`,
+          headers: () => {
+            if (isServer && event?.request) {
+              // do something
+            }
+            return {};
+          },
+        }),
+      ],
+    };
+  },
 });
 
 export const queryClient = new QueryClient();

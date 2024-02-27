@@ -11,10 +11,15 @@ const getRandomPokemonID = (notThisOne?: number): number => {
 const limitPokemonID = (id: number) => Math.max(1, Math.min(1009, id));
 
 export const pokemonRouter = createTRPCRouter({
-  getPokemonPair: publicProcedure.query(() => {
+  getPokemonPair: publicProcedure.query(async () => {
     const pokemonOne = limitPokemonID(getRandomPokemonID());
     const pokemonTwo = limitPokemonID(getRandomPokemonID(pokemonOne));
 
     return [pokemonOne, pokemonTwo];
+  }),
+  getPokemon: publicProcedure.query(() => {
+    const pokemon = limitPokemonID(getRandomPokemonID());
+
+    return pokemon;
   }),
 });
