@@ -14,6 +14,7 @@ import { Toaster } from "./components/ui/toast";
 import { Analytics } from "@gurkz/solid-analytics";
 import { queryClient } from "./lib/api";
 import { QueryClientProvider } from "@tanstack/solid-query";
+import { SolidQueryDevtools } from "@tanstack/solid-query-devtools";
 
 export default function App() {
   const event = getRequestEvent();
@@ -46,6 +47,7 @@ export default function App() {
                   </Switch>
 
                   <Toaster />
+                  <SolidQueryDevtools />
                 </ColorModeProvider>
               </QueryClientProvider>
             </ErrorBoundary>

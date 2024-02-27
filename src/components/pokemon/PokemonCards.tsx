@@ -1,21 +1,17 @@
-import { Match, Show, Switch, VoidComponent } from "solid-js";
+import { Match, Show, Switch, VoidComponent, onMount } from "solid-js";
 import { trpc } from "~/lib/api";
 import { Button } from "../ui/button";
-import { Spinner, SpinnerType } from "solid-spinner";
+import { TbLoader } from "solid-icons/tb";
 
 const PokemonCards: VoidComponent = () => {
   const pokemon = trpc.pokemon.getPokemonPair.useQuery();
+
+  onMount(() => {
+    pokemon.refetch();
+  });
+
   return (
     <>
-      <Show when={pokemon.isLoading}>
-        <p>loading</p>
-      </Show>
-      {/* <img
-        class="bg-themeColor rounded-md"
-        width={128}
-        src={`/api/pokemon/image/${pokemon.data}.png`}
-      /> */}
-
       <Switch>
         <Match when={pokemon.isPending}>
           <p>Loading...</p>
@@ -36,21 +32,25 @@ const PokemonCards: VoidComponent = () => {
               <div class="flex-row justify-center flex gap-14">
                 <PokemonCard
                   id={pokemon.data![0]!}
-                  isLoading={!pokemon.isFetched}
+                  isLoading={pokemon.isRefetching}
                 />
                 <PokemonCard
                   id={pokemon.data![1]!}
-                  isLoading={!pokemon.isFetched}
+                  isLoading={pokemon.isRefetching}
                 />
               </div>
               <div class="pt-2">
                 <Button
+                  disabled={pokemon.isRefetching}
                   onClick={() => {
                     pokemon.refetch();
                   }}
                   variant={"secondary"}
                   class="gap-2"
                 >
+                  <Show when={pokemon.isRefetching}>
+                    <TbLoader class="mr-2 h-4 w-4 animate-spin" />
+                  </Show>
                   these are boring, get me new ones
                 </Button>
               </div>
@@ -69,7 +69,7 @@ const PokemonCard: VoidComponent<{ id: number; isLoading: boolean }> = (
     <div class="w-32 h-32 bg-themeColor rounded-md flex justify-center items-center">
       <Switch>
         <Match when={props.isLoading}>
-          <Spinner type={SpinnerType.puff} />
+          <TbLoader size={64} class="animate-spin" />
         </Match>
         <Match when={!props.isLoading}>
           <img width={128} src={`/api/pokemon/image/${props.id}.png`} />
