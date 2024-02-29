@@ -1,16 +1,16 @@
-import type { Component, JSX } from "solid-js"
-import { splitProps } from "solid-js"
-import { Portal } from "solid-js/web"
+import type { Component, JSX } from "solid-js";
+import { splitProps } from "solid-js";
+import { Portal } from "solid-js/web";
 
-import { Toast as ToastPrimitive, toaster } from "@kobalte/core"
-import type { VariantProps } from "class-variance-authority"
-import { cva } from "class-variance-authority"
-import { TbX } from "solid-icons/tb"
+import { Toast as ToastPrimitive, toaster } from "@kobalte/core";
+import type { VariantProps } from "class-variance-authority";
+import { cva } from "class-variance-authority";
+import { TbX } from "solid-icons/tb";
 
-import { cn } from "~/lib/utils"
+import { cn } from "~/lib/utils";
 
 const Toaster: Component<ToastPrimitive.ToastListProps> = (props) => {
-  const [, rest] = splitProps(props, ["class"])
+  const [, rest] = splitProps(props, ["class"]);
   return (
     <Portal>
       <ToastPrimitive.Region>
@@ -23,8 +23,8 @@ const Toaster: Component<ToastPrimitive.ToastListProps> = (props) => {
         />
       </ToastPrimitive.Region>
     </Portal>
-  )
-}
+  );
+};
 
 const toastVariants = cva(
   "data-[opened]:animate-in data-[closed]:animate-out data-[swipe=end]:animate-out data-[closed]:fade-out-80 data-[closed]:slide-out-to-right-full data-[opened]:slide-in-from-top-full data-[opened]:sm:slide-in-from-bottom-full group pointer-events-auto relative flex w-full items-center justify-between space-x-4 overflow-hidden rounded-md border p-6 pr-8 shadow-lg transition-all data-[swipe=cancel]:translate-x-0 data-[swipe=end]:translate-x-[var(--kb-toast-swipe-end-x)] data-[swipe=move]:translate-x-[var(--kb-toast-swipe-move-x)] data-[swipe=move]:transition-none",
@@ -33,32 +33,32 @@ const toastVariants = cva(
       variant: {
         default: "bg-background text-foreground border",
         destructive:
-          "destructive border-destructive bg-destructive text-destructive-foreground group"
-      }
+          "destructive border-destructive bg-destructive text-destructive-foreground group",
+      },
     },
     defaultVariants: {
-      variant: "default"
-    }
+      variant: "default",
+    },
   }
-)
-type ToastVariant = NonNullable<VariantProps<typeof toastVariants>["variant"]>
+);
+type ToastVariant = NonNullable<VariantProps<typeof toastVariants>["variant"]>;
 
 export interface ToastProps
   extends ToastPrimitive.ToastRootProps,
     VariantProps<typeof toastVariants> {}
 
 const Toast: Component<ToastProps> = (props) => {
-  const [, rest] = splitProps(props, ["class", "variant"])
+  const [, rest] = splitProps(props, ["class", "variant"]);
   return (
     <ToastPrimitive.Root
       class={cn(toastVariants({ variant: props.variant }), props.class)}
       {...rest}
     />
-  )
-}
+  );
+};
 
 const ToastClose: Component<ToastPrimitive.ToastCloseButtonProps> = (props) => {
-  const [, rest] = splitProps(props, ["class"])
+  const [, rest] = splitProps(props, ["class"]);
   return (
     <ToastPrimitive.CloseButton
       class={cn(
@@ -69,34 +69,52 @@ const ToastClose: Component<ToastPrimitive.ToastCloseButtonProps> = (props) => {
     >
       <TbX class="h-4 w-4" />
     </ToastPrimitive.CloseButton>
-  )
-}
+  );
+};
 
 const ToastTitle: Component<ToastPrimitive.ToastTitleProps> = (props) => {
-  const [, rest] = splitProps(props, ["class"])
-  return <ToastPrimitive.Title class={cn("text-sm font-semibold", props.class)} {...rest} />
-}
+  const [, rest] = splitProps(props, ["class"]);
+  return (
+    <ToastPrimitive.Title
+      class={cn("text-sm font-semibold", props.class)}
+      {...rest}
+    />
+  );
+};
 
-const ToastDescription: Component<ToastPrimitive.ToastDescriptionProps> = (props) => {
-  const [, rest] = splitProps(props, ["class"])
-  return <ToastPrimitive.Description class={cn("text-sm opacity-90", props.class)} {...rest} />
-}
+const ToastDescription: Component<ToastPrimitive.ToastDescriptionProps> = (
+  props
+) => {
+  const [, rest] = splitProps(props, ["class"]);
+  return (
+    <ToastPrimitive.Description
+      class={cn("text-sm opacity-90", props.class)}
+      {...rest}
+    />
+  );
+};
 
 function showToast(props: {
-  title?: JSX.Element
-  description?: JSX.Element
-  variant?: ToastVariant
-  duration?: number
+  title?: JSX.Element;
+  description?: JSX.Element;
+  variant?: ToastVariant;
+  duration?: number;
 }) {
   toaster.show((data) => (
-    <Toast toastId={data.toastId} variant={props.variant} duration={props.duration}>
+    <Toast
+      toastId={data.toastId}
+      variant={props.variant}
+      duration={props.duration}
+    >
       <div class="grid gap-1">
         {props.title && <ToastTitle>{props.title}</ToastTitle>}
-        {props.description && <ToastDescription>{props.description}</ToastDescription>}
+        {props.description && (
+          <ToastDescription>{props.description}</ToastDescription>
+        )}
       </div>
       <ToastClose />
     </Toast>
-  ))
+  ));
 }
 
-export { Toaster, Toast, ToastClose, ToastTitle, ToastDescription, showToast }
+export { Toaster, Toast, ToastClose, ToastTitle, ToastDescription, showToast };

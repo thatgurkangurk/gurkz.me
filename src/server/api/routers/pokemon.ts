@@ -26,10 +26,12 @@ export const pokemonRouter = createTRPCRouter({
     return pokemon;
   }),
   vote: publicProcedure
-    .input(z.object({
-      for: z.number(),
-      against: z.number()
-    }))
+    .input(
+      z.object({
+        for: z.number(),
+        against: z.number(),
+      })
+    )
     .mutation(async (opts) => {
       const ip = opts.ctx.request.headers.get("x-forwarded-for") ?? "127.0.0.1";
 
@@ -46,12 +48,15 @@ export const pokemonRouter = createTRPCRouter({
       }
 
       if (requests > 10) {
-        throw new TRPCError({ code: "TOO_MANY_REQUESTS", message: `you have voted too many times too quickly. seconds left: ${ttl}. your vote was not cast.` })
+        throw new TRPCError({
+          code: "TOO_MANY_REQUESTS",
+          message: `you have voted too many times too quickly. seconds left: ${ttl}. your vote was not cast.`,
+        });
       }
 
       return {
         message: "vote submitted",
-        requestsLeft: 10 - requests
-      }
-    })
+        requestsLeft: 10 - requests,
+      };
+    }),
 });

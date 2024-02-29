@@ -15,6 +15,7 @@ import { Analytics } from "@gurkz/solid-analytics";
 import { queryClient } from "./lib/api";
 import { QueryClientProvider } from "@tanstack/solid-query";
 import { SolidQueryDevtools } from "@tanstack/solid-query-devtools";
+import { trpc } from "./lib/api";
 
 export default function App() {
   const event = getRequestEvent();
@@ -34,21 +35,23 @@ export default function App() {
           <Suspense>
             <ErrorBoundary fallback={<p>uh oh, something went wrong</p>}>
               <QueryClientProvider client={queryClient}>
-                <ColorModeProvider storageManager={storageManager}>
-                  <Switch fallback={<Layout>{props.children}</Layout>}>
-                    <Match when={process.env.PROD}>
-                      <Analytics
-                        websiteId={process.env.WEBSITE_ID!}
-                        hostUrl="https://umami.gurkz.me"
-                      >
-                        <Layout>{props.children}</Layout>
-                      </Analytics>
-                    </Match>
-                  </Switch>
+                <trpc.Provider queryClient={queryClient}>
+                  <ColorModeProvider storageManager={storageManager}>
+                    <Switch fallback={<Layout>{props.children}</Layout>}>
+                      <Match when={process.env.PROD}>
+                        <Analytics
+                          websiteId={process.env.WEBSITE_ID!}
+                          hostUrl="https://umami.gurkz.me"
+                        >
+                          <Layout>{props.children}</Layout>
+                        </Analytics>
+                      </Match>
+                    </Switch>
 
-                  <Toaster />
-                  <SolidQueryDevtools />
-                </ColorModeProvider>
+                    <Toaster />
+                    <SolidQueryDevtools />
+                  </ColorModeProvider>
+                </trpc.Provider>
               </QueryClientProvider>
             </ErrorBoundary>
           </Suspense>

@@ -1,11 +1,11 @@
-import { QueryClient, isServer } from "@tanstack/solid-query";
+import { createTRPCSolidStart } from "@solid-mediakit/trpc";
+import { QueryClient } from "@tanstack/solid-query";
 import { httpBatchLink } from "@trpc/client";
-import { AppRouter } from "~/server/api/root";
-import { createTRPCSolidStart } from "./mediakit/trpc";
+import { isServer } from "solid-js/web";
+import type { AppRouter } from "~/server/api/root";
 
 const getBaseUrl = () => {
   if (typeof window !== "undefined") return "";
-  if (process.env.NODE_ENV === "production") return "https://www.gurkz.me";
   return `http://localhost:${process.env.PORT ?? 3000}`;
 };
 
