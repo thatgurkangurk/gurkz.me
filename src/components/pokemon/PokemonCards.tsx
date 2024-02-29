@@ -1,8 +1,24 @@
-import { Match, Show, Switch, VoidComponent } from "solid-js";
-import { Button } from "../ui/button";
+import { Match, Switch, VoidComponent, createEffect } from "solid-js";
 import { TbLoader } from "solid-icons/tb";
+import { trpc } from "~/lib/api";
+import { showToast } from "../ui/toast";
+
+type VoteFuncProps = { for: number; against: number; };
 
 const PokemonCards: VoidComponent<{ data: number[], isRefetching: boolean, refetch: () => void }> = (props) => {
+  const mutation = trpc.pokemon.vote.useMutation();
+
+  createEffect(() => {
+    if (mutation.isError) {
+      return showToast({
+        variant: "destructive",
+        title: "error",
+        description: mutation.error.message,
+        duration: 5 * 1000
+      })
+    }
+  })
+
   return (
     <>
       <div class="w-full flex justify-center gap-4">
@@ -11,26 +27,17 @@ const PokemonCards: VoidComponent<{ data: number[], isRefetching: boolean, refet
             <PokemonCard
               id={props.data[0]}
               isLoading={props.isRefetching}
+              otherId={props.data[1]}
+              refetch={() => props.refetch()}
+              vote={(opts) => mutation.mutate(opts)}
             />
             <PokemonCard
               id={props.data[1]}
               isLoading={props.isRefetching}
+              otherId={props.data[0]}
+              refetch={() => props.refetch()}
+              vote={(opts) => mutation.mutate(opts)}
             />
-          </div>
-          <div class="pt-2">
-            <Button
-              disabled={props.isRefetching}
-              onClick={() => {
-                props.refetch();
-              }}
-              variant={"secondary"}
-              class="gap-2"
-            >
-              <Show when={props.isRefetching}>
-                <TbLoader class="mr-2 h-4 w-4 animate-spin" />
-              </Show>
-              these are boring, get me new ones
-            </Button>
           </div>
         </div>
       </div>
@@ -38,21 +45,32 @@ const PokemonCards: VoidComponent<{ data: number[], isRefetching: boolean, refet
   );
 };
 
-const PokemonCard: VoidComponent<{ id: number; isLoading: boolean }> = (
+
+const PokemonCard: VoidComponent<{
+  id: number, isLoading: boolean, otherId: number, refetch: () => void, vote: (opts: VoteFuncProps) => void
+}> = (
   props
 ) => {
-  return (
-    <div class="w-32 h-32 bg-themeColor rounded-md flex justify-center items-center">
-      <Switch>
-        <Match when={props.isLoading}>
-          <TbLoader size={64} class="animate-spin" />
-        </Match>
-        <Match when={!props.isLoading}>
-          <img width={128} src={`/api/pokemon/image/${props.id}.png`} />
-        </Match>
-      </Switch>
-    </div>
-  );
-};
+
+    return (
+      <div class="w-32 h-32 bg-themeColor rounded-md flex justify-center items-center">
+        <Switch>
+          <Match when={props.isLoading}>
+            <TbLoader size={64} class="animate-spin" />
+          </Match>
+          <Match when={!props.isLoading}>
+            <button onClick={() => {
+              props.vote({
+                for: props.id,
+                against: props.otherId
+              });
+              props.refetch();
+            }}><img width={128} src={`/api/pokemon/image/${props.id}.png`} /></button>
+
+          </Match>
+        </Switch>
+      </div>
+    );
+  };
 
 export default PokemonCards;
