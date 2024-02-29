@@ -3,8 +3,8 @@ import { createContext } from "~/server/api/context";
 import { appRouter } from "~/server/api/root";
 
 const handler = createSolidAPIHandler({
-  router: appRouter,
-  createContext,
+	router: appRouter,
+	createContext,
 });
 
 export const { GET, POST } = handler;
