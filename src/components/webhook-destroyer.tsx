@@ -82,7 +82,7 @@ const WebhookDestroyer = () => {
 									placeholder="https://discord.com/api/webhooks..."
 									class={`${
 										field.error
-											? " focus-visible:ring-red-500 focus-visible:ring-2 focus:border-none border-red-500"
+											? " border-red-500 focus:border-none focus-visible:ring-2 focus-visible:ring-red-500"
 											: ""
 									}`}
 									{...props}

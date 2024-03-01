@@ -3,7 +3,7 @@ import { WebhookDestroyer as WebhookDestroyerComponent } from "~/components/webh
 export default function WebhookDestroyer() {
 	return (
 		<>
-			<h1 class="text-4xl pt-2">webhook destroyer</h1>
+			<h1 class="pt-2 text-4xl">webhook destroyer</h1>
 			<WebhookDestroyerComponent />
 		</>
 	);

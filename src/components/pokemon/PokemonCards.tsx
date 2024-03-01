@@ -21,9 +21,9 @@ const PokemonCards: VoidComponent<{ data: number[]; isRefetching: boolean; refet
 
 	return (
 		<>
-			<div class="w-full flex justify-center gap-4">
+			<div class="flex w-full justify-center gap-4">
 				<div class="flex-col">
-					<div class="flex-row justify-center flex gap-14">
+					<div class="flex flex-row justify-center gap-14">
 						<PokemonCard
 							id={props.data[0]}
 							isLoading={props.isRefetching}
@@ -53,7 +53,7 @@ const PokemonCard: VoidComponent<{
 	vote: (opts: VoteFuncProps) => void;
 }> = (props) => {
 	return (
-		<div class="w-32 h-32 bg-themeColor rounded-md flex justify-center items-center">
+		<div class="flex h-32 w-32 items-center justify-center rounded-md bg-themeColor">
 			<Switch>
 				<Match when={props.isLoading}>
 					<TbLoader size={64} class="animate-spin" />

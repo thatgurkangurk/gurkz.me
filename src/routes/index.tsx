@@ -1,5 +1,5 @@
 function Home() {
-	return <h1 class="text-4xl pt-2">hello! 👋</h1>;
+	return <h1 class="pt-2 text-4xl">hello! 👋</h1>;
 }
 
 export default Home;
