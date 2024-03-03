@@ -41,10 +41,12 @@
 		"@astrojs/node": "^8.2.3",
 		"@astrojs/tailwind": "^5.1.0",
 		"astro": "^4.4.9",
+		"astro-font": "^0.0.77",
 		"tailwindcss": "^3.4.1",
 		"typescript": "^5.3.3"
 	},
 	"devDependencies": {
+		"@types/node": "^20.11.24",
 		"@typescript-eslint/eslint-plugin": "^7.1.0",
 		"@typescript-eslint/parser": "^7.1.0",
 		"eslint": "^8.57.0",
