@@ -1,35 +1,90 @@
 {
-  "name": "gurkz.me",
-  "type": "module",
-  "scripts": {
-    "dev": "vinxi dev",
-    "build": "vinxi build",
-    "start": "vinxi start"
-  },
-  "dependencies": {
-    "@fontsource/geist-mono": "^5.0.1",
-    "@gurkz/solid-analytics": "^1.0.0",
-    "@kobalte/core": "^0.12.1",
-    "@modular-forms/solid": "^0.20.0",
-    "@solid-primitives/event-bus": "^1.0.9",
-    "@solidjs/router": "^0.12.0",
-    "@solidjs/start": "^0.5.4",
-    "autoprefixer": "^10.4.14",
-    "class-variance-authority": "^0.7.0",
-    "clsx": "^2.1.0",
-    "postcss": "^8.4.26",
-    "solid-icons": "^1.1.0",
-    "solid-js": "^1.8.14",
-    "tailwind-merge": "^2.2.1",
-    "tailwindcss": "^3.4.1",
-    "tailwindcss-animate": "^1.0.7",
-    "valibot": "^0.28.1",
-    "vinxi": "^0.2.1"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "devDependencies": {
-    "solidui-cli": "^0.4.0"
-  }
+	"name": "gurkz.me",
+	"type": "module",
+	"scripts": {
+		"dev": "vinxi dev",
+		"build": "prisma generate && vinxi build",
+		"start": "vinxi start",
+		"fix:eslint": "eslint src --fix",
+		"fix:prettier": "prettier --write src",
+		"fix": "run-s fix:*",
+		"lint:eslint": "eslint src",
+		"lint:prettier": "prettier src",
+		"lint": "run-s lint:*"
+	},
+	"prettier": {
+		"printWidth": 120,
+		"tabWidth": 4,
+		"trailingComma": "all",
+		"useTabs": true,
+		"plugins": [
+			"prettier-plugin-tailwindcss"
+		]
+	},
+	"eslintConfig": {
+		"parser": "@typescript-eslint/parser",
+		"parserOptions": {
+			"jsx": true,
+			"useJSXTextNode": true,
+			"ecmaVersion": "latest",
+			"sourceType": "module",
+			"project": "./tsconfig.json"
+		},
+		"plugins": [
+			"@typescript-eslint"
+		],
+		"extends": [
+			"eslint:recommended",
+			"plugin:@typescript-eslint/recommended",
+			"prettier"
+		],
+		"ignorePatterns": [
+			"ui.preset.js",
+			"node_modules"
+		]
+	},
+	"dependencies": {
+		"@fontsource/geist-mono": "^5.0.1",
+		"@gurkz/solid-analytics": "^1.1.0",
+		"@kobalte/core": "^0.12.2",
+		"@modular-forms/solid": "^0.20.0",
+		"@prisma/client": "5.10.2",
+		"@solid-mediakit/trpc": "^2.0.2",
+		"@solid-primitives/event-bus": "^1.0.10",
+		"@solidjs/router": "^0.12.4",
+		"@solidjs/start": "^0.5.10",
+		"@tanstack/solid-query": "^5.24.1",
+		"@tanstack/solid-query-devtools": "^5.24.1",
+		"@trpc/client": "^10.45.1",
+		"@trpc/server": "^10.45.1",
+		"autoprefixer": "^10.4.17",
+		"class-variance-authority": "^0.7.0",
+		"clsx": "^2.1.0",
+		"ioredis": "^5.3.2",
+		"postcss": "^8.4.35",
+		"solid-icons": "^1.1.0",
+		"solid-js": "^1.8.15",
+		"solid-start-trpc": "^0.0.16",
+		"solid-trpc": "^0.0.9",
+		"tailwind-merge": "^2.2.1",
+		"tailwindcss": "^3.4.1",
+		"tailwindcss-animate": "^1.0.7",
+		"valibot": "^0.28.1",
+		"vinxi": "^0.2.1",
+		"zod": "^3.22.4"
+	},
+	"engines": {
+		"node": ">=18"
+	},
+	"devDependencies": {
+		"@typescript-eslint/eslint-plugin": "^7.1.0",
+		"@typescript-eslint/parser": "^7.1.0",
+		"eslint": "^8.57.0",
+		"eslint-config-prettier": "^9.1.0",
+		"npm-run-all": "^4.1.5",
+		"prettier": "^3.2.5",
+		"prettier-plugin-tailwindcss": "^0.5.11",
+		"prisma": "^5.10.2",
+		"solidui-cli": "^0.4.0"
+	}
 }

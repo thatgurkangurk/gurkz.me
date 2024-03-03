@@ -10,12 +10,16 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-l
 
 FROM base AS build
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN apt-get update -y \
+    && apt-get install -y openssl
 RUN pnpm run build
 
 FROM base AS runner
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=build /app/.output ./.output
 COPY --from=build /app/.vinxi ./.vinxi
+RUN apt-get update -y \
+    && apt-get install -y openssl
 ENV HOST=0.0.0.0
 ENV PORT=4321
 EXPOSE 4321
