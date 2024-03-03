@@ -17,7 +17,3 @@ p {
 span {
     @apply text-base my-2;
 }
-
-a {
-    @apply underline decoration-themeColor text-themeColor underline-offset-4 transition-colors inline-block;
-}
