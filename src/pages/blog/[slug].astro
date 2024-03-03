@@ -1,0 +1,23 @@
+---
+import { getEntry } from "astro:content";
+import Layout from "~/layouts/Layout.astro";
+
+const { slug } = Astro.params;
+
+if (!slug) {
+	throw new Error("please provide a slug");
+}
+
+const post = await getEntry("blog", slug);
+
+if (!post) {
+	return Astro.redirect("/404");
+}
+
+const { Content } = await post.render();
+---
+
+<Layout>
+	<p>work in progress blog</p>
+	<Content />
+</Layout>
