@@ -1,18 +1,57 @@
 {
-  "name": "gurkz.me",
-  "type": "module",
-  "version": "0.0.1",
-  "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro check && astro build",
-    "preview": "astro preview",
-    "astro": "astro"
-  },
-  "dependencies": {
-    "@astrojs/check": "^0.5.6",
-    "@astrojs/node": "^8.2.3",
-    "astro": "^4.4.9",
-    "typescript": "^5.3.3"
-  }
+	"name": "gurkz.me",
+	"type": "module",
+	"version": "0.0.1",
+	"scripts": {
+		"dev": "astro dev",
+		"start": "astro dev",
+		"build": "astro check && astro build",
+		"preview": "astro preview",
+		"astro": "astro",
+		"fix:eslint": "eslint src --fix",
+		"fix:prettier": "prettier --write src",
+		"fix": "run-s fix:*",
+		"lint:eslint": "eslint src",
+		"lint:prettier": "prettier src",
+		"lint": "run-s lint:*"
+	},
+	"eslintConfig": {
+		"parser": "@typescript-eslint/parser",
+		"parserOptions": {
+			"jsx": true,
+			"useJSXTextNode": true,
+			"ecmaVersion": "latest",
+			"sourceType": "module",
+			"project": "./tsconfig.json"
+		},
+		"plugins": [
+			"@typescript-eslint"
+		],
+		"extends": [
+			"eslint:recommended",
+			"plugin:@typescript-eslint/recommended",
+			"prettier"
+		],
+		"ignorePatterns": [
+			"node_modules"
+		]
+	},
+	"dependencies": {
+		"@astrojs/check": "^0.5.6",
+		"@astrojs/node": "^8.2.3",
+		"@astrojs/tailwind": "^5.1.0",
+		"astro": "^4.4.9",
+		"tailwindcss": "^3.4.1",
+		"typescript": "^5.3.3"
+	},
+	"devDependencies": {
+		"@typescript-eslint/eslint-plugin": "^7.1.0",
+		"@typescript-eslint/parser": "^7.1.0",
+		"eslint": "^8.57.0",
+		"eslint-config-prettier": "^9.1.0",
+		"npm-run-all": "^4.1.5",
+		"prettier": "^3.2.5",
+		"prettier-plugin-astro": "^0.13.0",
+		"prettier-plugin-tailwindcss": "^0.5.11"
+	}
 }
