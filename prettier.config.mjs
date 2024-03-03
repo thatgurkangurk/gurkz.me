@@ -5,5 +5,13 @@ export default {
     printWidth: 120,
     tabWidth: 4,
     trailingComma: "all",
-    useTabs: true
+    useTabs: true,
+    overrides: [
+        {
+            files: ".astro",
+            options: {
+                parser: "astro"
+            }
+        }
+    ]
 }
