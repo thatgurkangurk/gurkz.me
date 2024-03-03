@@ -1,5 +1,7 @@
 ---
 import Meta from "~/components/Meta.astro";
+import Header from "~/components/Header.astro";
+import Link from "~/components/Link.astro";
 ---
 
 <html
@@ -8,9 +10,12 @@ import Meta from "~/components/Meta.astro";
 >
 	<Meta />
 	<body
-		class=`font-geist max-w-64ch gap-10px m-auto grid h-full grid-cols-[1fr] grid-rows-[1fr] p-4 text-left [grid-template-areas:_"main"_"footer"]`
+		class=`font-geist max-w-64ch gap-10px m-auto grid h-full grid-cols-[1fr] grid-rows-[1fr] p-4 text-left [grid-template-areas:"main"_"footer"]`
 	>
 		<main class="[grid-area:main]">
+			<Header>
+				<Link href="/">home</Link>
+			</Header>
 			<slot />
 		</main>
 	</body>
