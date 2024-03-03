@@ -3,6 +3,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vinxi dev",
+		"generate": "drizzle-kit generate:pg",
 		"build": "vinxi build",
 		"start": "vinxi start",
 		"fix:eslint": "eslint src --fix",
@@ -17,7 +18,9 @@
 		"tabWidth": 4,
 		"trailingComma": "all",
 		"useTabs": true,
-    "plugins": ["prettier-plugin-tailwindcss"]
+		"plugins": [
+			"prettier-plugin-tailwindcss"
+		]
 	},
 	"eslintConfig": {
 		"parser": "@typescript-eslint/parser",
@@ -46,6 +49,7 @@
 		"@gurkz/solid-analytics": "^1.1.0",
 		"@kobalte/core": "^0.12.2",
 		"@modular-forms/solid": "^0.20.0",
+		"@prisma/client": "5.10.2",
 		"@solid-mediakit/trpc": "^2.0.2",
 		"@solid-primitives/event-bus": "^1.0.10",
 		"@solidjs/router": "^0.12.4",
@@ -81,6 +85,7 @@
 		"npm-run-all": "^4.1.5",
 		"prettier": "^3.2.5",
 		"prettier-plugin-tailwindcss": "^0.5.11",
+		"prisma": "^5.10.2",
 		"solidui-cli": "^0.4.0"
 	}
 }

@@ -68,7 +68,11 @@ const PokemonCard: VoidComponent<{
 							props.refetch();
 						}}
 					>
-						<img width={128} src={`/api/pokemon/image/${props.id}.png`} />
+						<img
+							width={128}
+							class="[image-rendering:pixelated]"
+							src={`/api/pokemon/image/${props.id}.png`}
+						/>
 					</button>
 				</Match>
 			</Switch>

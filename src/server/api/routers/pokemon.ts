@@ -2,6 +2,7 @@ import { redis } from "~/lib/redis";
 import { createTRPCRouter, publicProcedure } from "../utils";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import { prisma } from "~/lib/db";
 
 // get random pokemon id (max id is 1010)
 const getRandomPokemonID = (notThisOne?: number): number => {
@@ -54,9 +55,58 @@ export const pokemonRouter = createTRPCRouter({
 				});
 			}
 
+			try {
+				// connect to db and do shit
+				await prisma.vote.create({
+					data: {
+						for: {
+							connectOrCreate: {
+								where: {
+									id: opts.input.for,
+								},
+								create: {
+									id: opts.input.for,
+								},
+							},
+						},
+						against: {
+							connectOrCreate: {
+								where: {
+									id: opts.input.against,
+								},
+								create: {
+									id: opts.input.against,
+								},
+							},
+						},
+					},
+				});
+			} catch (err) {
+				console.error(err);
+				throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "something went wrong" });
+			}
+
 			return {
 				message: "vote submitted",
 				requestsLeft: 10 - requests,
 			};
 		}),
+	getLeader: publicProcedure.query(async () => {
+		const result = await prisma.pokemon.findMany({
+			orderBy: {
+				votesFor: {
+					_count: "desc",
+				},
+			},
+			take: 1,
+			include: {
+				votesFor: true,
+			},
+		});
+
+		return {
+			leader: result[0].id,
+			votes: result[0].votesFor.length,
+		};
+	}),
 });
