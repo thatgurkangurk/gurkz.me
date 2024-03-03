@@ -1,0 +1,22 @@
+---
+type Props = {
+	href: string;
+};
+
+const { href } = Astro.props;
+
+const pathname = Astro.url.pathname;
+
+const isExternal = href.startsWith("http");
+const isUnderlined = isExternal || pathname === href;
+---
+
+<a
+	href={href}
+	target={isExternal ? "_blank" : "_self"}
+	class={isUnderlined
+		? "underline decoration-themeColor text-themeColor underline-offset-4 transition-colors inline-block"
+		: ""}
+>
+	<slot />
+</a>
