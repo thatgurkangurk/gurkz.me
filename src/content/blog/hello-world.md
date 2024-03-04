@@ -7,7 +7,7 @@ author: "gurkan"
 
 Hello? *taps mic*, is this thing on?
 
-![person tapping a microphone with text "Hello? Is this thing on?"](https://media.tenor.com/eNFHRT1pNAEAAAAC/bill-hicks-mic-tap.gif align="center")
+![person tapping a microphone with text "Hello? Is this thing on?"](https://media.tenor.com/eNFHRT1pNAEAAAAC/bill-hicks-mic-tap.gif)
 
 Well, if you can hear this, hello there!
 
