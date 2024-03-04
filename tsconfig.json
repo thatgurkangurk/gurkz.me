@@ -1,13 +1,11 @@
 {
-  "extends": "astro/tsconfigs/strictest",
-  "compilerOptions": {
-    "baseUrl": "C:/Users/Gurkan/OneDrive/Dokument/GitHub/gurkz.me",
-    "paths": {
-      "~/*": [
-        "./src/*"
-      ]
-    },
-    "jsx": "preserve",
-    "jsxImportSource": "solid-js"
-  }
+	"extends": "astro/tsconfigs/strictest",
+	"compilerOptions": {
+		"baseUrl": ".",
+		"paths": {
+			"~/*": ["./src/*"]
+		},
+		"jsx": "preserve",
+		"jsxImportSource": "solid-js"
+	}
 }
