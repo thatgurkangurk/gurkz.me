@@ -10,7 +10,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-l
 
 FROM base AS build
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
-RUN pnpm run build
+RUN WEBSITE_ID=placeholder pnpm run build
 
 FROM base AS runner
 COPY --from=deps /app/node_modules ./node_modules
