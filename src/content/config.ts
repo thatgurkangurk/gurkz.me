@@ -15,7 +15,17 @@ const authors = defineCollection({
 	}),
 });
 
+const projects = defineCollection({
+	type: "content",
+	schema: z.object({
+		title: z.string(),
+		description: z.string(),
+		needsJS: z.boolean(),
+	}),
+});
+
 export const collections = {
 	blog,
 	authors,
+	projects,
 };
