@@ -3,6 +3,8 @@ import "~/app.css";
 import { join } from "node:path";
 import { AstroFont } from "astro-font";
 import { ViewTransitions } from "astro:transitions";
+
+const WEBSITE_ID = import.meta.env.WEBSITE_ID;
 ---
 
 <head>
@@ -36,3 +38,4 @@ import { ViewTransitions } from "astro:transitions";
 	/>
 </head>
 <ViewTransitions />
+<script is:inline async src="https://umami.gurkz.me/script.js" data-website-id={WEBSITE_ID}></script>
