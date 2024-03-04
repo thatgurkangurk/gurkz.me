@@ -21,6 +21,7 @@ const { Content } = await post.render();
 <Layout>
 	<Link href="/blog">⬅️ back</Link>
 	<div class="prose prose-cyan text-white prose-headings:text-white">
+		<h1 transition:name=`${post.slug}-title`>{post.data.title}</h1>
 		<Content />
 	</div>
 </Layout>

@@ -12,7 +12,9 @@ const blogEntries = await getCollection("blog");
 		{
 			blogEntries.map((blogPostEntry) => (
 				<li>
-					<a href={`/blog/${blogPostEntry.slug}`}>{blogPostEntry.data.title}</a>
+					<a href={`/blog/${blogPostEntry.slug}`} transition:name={`${blogPostEntry.slug}-title`}>
+						{blogPostEntry.data.title}
+					</a>
 				</li>
 			))
 		}
