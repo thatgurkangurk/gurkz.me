@@ -1,0 +1,27 @@
+---
+import { getEntry } from "astro:content";
+import Link from "~/components/Link.astro";
+import Layout from "~/layouts/Layout.astro";
+
+const { slug } = Astro.params;
+
+if (!slug) {
+	throw new Error("please provide a slug");
+}
+
+const post = await getEntry("blog", slug);
+
+if (!post) {
+	return Astro.redirect("/404");
+}
+
+const { Content } = await post.render();
+---
+
+<Layout>
+	<Link href="/blog">⬅️ back</Link>
+	<div class="prose prose-cyan text-white prose-headings:text-white">
+		<h1 transition:name=`${post.slug}-title`>{post.data.title}</h1>
+		<Content />
+	</div>
+</Layout>
