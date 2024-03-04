@@ -1,0 +1,21 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "~/layouts/Layout.astro";
+
+const projects = await getCollection("projects");
+---
+
+<Layout>
+	<h2>projects</h2>
+	<ul class="list-inside list-disc">
+		{
+			projects.map((project) => (
+				<li>
+					<a href={`/projects/${project.slug}`} transition:name={`${project.slug}-title`}>
+						{project.data.title}
+					</a>
+				</li>
+			))
+		}
+	</ul>
+</Layout>
