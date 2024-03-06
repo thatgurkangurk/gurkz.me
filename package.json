@@ -42,6 +42,7 @@
 		"@astrojs/node": "^8.2.3",
 		"@astrojs/solid-js": "^4.0.1",
 		"@astrojs/tailwind": "^5.1.0",
+		"@astroutils/analytics": "^1.1.0",
 		"@modular-forms/solid": "^0.20.0",
 		"@tailwindcss/typography": "^0.5.10",
 		"astro": "^4.4.9",

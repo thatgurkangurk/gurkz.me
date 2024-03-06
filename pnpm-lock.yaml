@@ -20,6 +20,9 @@ dependencies:
   '@astrojs/tailwind':
     specifier: ^5.1.0
     version: 5.1.0(astro@4.4.9)(tailwindcss@3.4.1)
+  '@astroutils/analytics':
+    specifier: ^1.1.0
+    version: 1.1.0
   '@modular-forms/solid':
     specifier: ^0.20.0
     version: 0.20.0(solid-js@1.8.15)
@@ -276,6 +279,10 @@ packages:
       which-pm-runs: 1.1.0
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /@astroutils/analytics@1.1.0:
+    resolution: {integrity: sha512-pAENknO8Ieyt2tcc4c6ZTmWbeFW9agHWqTa9WT0tbG4o+GC2uc7E8oYYzDOmHW9QgkXbub1e8O/OatjBxMfLlQ==}
     dev: false
 
   /@babel/code-frame@7.23.5:
