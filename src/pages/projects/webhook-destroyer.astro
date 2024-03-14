@@ -1,0 +1,9 @@
+---
+import Layout from "~/layouts/ProjectLayout.astro";
+import { Projects } from "~/lib/projects";
+import { WebhookDestroyer as Destroyer } from "~/projects/webhook-destroyer";
+---
+
+<Layout project={Projects.WEBHOOK_DESTROYER}>
+	<Destroyer client:only />
+</Layout>

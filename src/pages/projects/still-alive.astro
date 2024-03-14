@@ -1,0 +1,9 @@
+---
+import Layout from "~/layouts/ProjectLayout.astro";
+import { Projects } from "~/lib/projects";
+import { StillAlive as StillAliveComponent } from "~/projects/still-alive";
+---
+
+<Layout project={Projects.STILL_ALIVE}>
+	<StillAliveComponent client:only />
+</Layout>

@@ -1,8 +1,8 @@
 ---
-import { getCollection } from "astro:content";
+import { getAllProjects } from "~/lib/projects";
 import Layout from "~/layouts/Layout.astro";
 
-const projects = await getCollection("projects");
+const projects = getAllProjects();
 ---
 
 <Layout>
@@ -12,7 +12,7 @@ const projects = await getCollection("projects");
 			projects.map((project) => (
 				<li>
 					<a href={`/projects/${project.slug}`} transition:name={`${project.slug}-title`}>
-						{project.data.title}
+						{project.title}
 					</a>
 				</li>
 			))
