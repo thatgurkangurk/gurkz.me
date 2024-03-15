@@ -279,7 +279,7 @@ setTimeout(() => {
 		startBlinkCreditTerminalCursor();
 	}
 }, TERMINAL_CURSOR_BLINK_INTERVAL);
-const stillAliveBGM = document.getElementById("stillalive_bgm");
+const stillAliveBGM = new Audio("https://github.com/thatgurkangurk/gurkz.me/raw/projects/still-alive/public/stillalive/stillalive.m4a");
 if (stillAliveBGM) {
 	stillAliveBGM.addEventListener("canplaythrough", (e) => {
 		e.preventDefault();
