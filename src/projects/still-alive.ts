@@ -1,3 +1,5 @@
+import { type ASCII, parseStringToAsciiArt } from "./still-alive/utils";
+
 const CREDIT_DATA = [
 	">LIST PERSONNEL",
 	"",
@@ -250,8 +252,6 @@ const terminalCreditCursorElem = document.createElement("span");
 terminalCreditCursorElem.id = "terminal_cursor_credit";
 terminalCreditCursorElem.textContent = "_";
 
-let gettingfaster = false;
-
 const containerLyricsBeforeLoading = document.querySelector(".container_lyrics_before_loading>span");
 if (containerLyricsBeforeLoading instanceof HTMLElement) {
 	positionTerminalCursor(containerLyricsBeforeLoading);
@@ -279,7 +279,9 @@ setTimeout(() => {
 		startBlinkCreditTerminalCursor();
 	}
 }, TERMINAL_CURSOR_BLINK_INTERVAL);
-const stillAliveBGM = new Audio("https://github.com/thatgurkangurk/gurkz.me/raw/projects/still-alive/public/stillalive/stillalive.m4a");
+const stillAliveBGM = new Audio(
+	"https://github.com/thatgurkangurk/gurkz.me/raw/projects/still-alive/public/stillalive/stillalive.m4a",
+);
 if (stillAliveBGM) {
 	stillAliveBGM.addEventListener("canplaythrough", (e) => {
 		e.preventDefault();
@@ -344,8 +346,7 @@ function startTypingCurrentLyrics() {
 				if (start !== undefined && dur !== undefined && text !== undefined) {
 					setTimeout(() => {
 						const asciiart = element.dataset.asciiart;
-						if (asciiart !== undefined) changeAsciiArt(asciiart);
-						if (element.classList.contains("play-game")) gettingfaster = true;
+						if (asciiart) changeAsciiArt(parseStringToAsciiArt(asciiart));
 
 						typeOneByOne(element, text, parseInt(dur), element.dataset.appendBr !== undefined);
 					}, parseInt(start));
@@ -377,10 +378,6 @@ function startChangeLyricsContainer() {
 				}
 				that.classList.add("current");
 				startTypingCurrentLyrics();
-
-				if (that.classList.contains("celebrate_credit")) {
-					changeAsciiArtRandomly(5000);
-				}
 			}, parseInt(startData));
 		}
 	});
@@ -500,7 +497,7 @@ function startTypingCredits() {
 		creditCurrentPosition++;
 	}
 }
-function changeAsciiArt(aaname: string) {
+function changeAsciiArt(aaname: ASCII) {
 	const containerAsciiArt = document.querySelector(".container_asciiart");
 	if (!containerAsciiArt) return;
 
@@ -510,31 +507,9 @@ function changeAsciiArt(aaname: string) {
 	});
 
 	if (aaname !== "clear") {
-		const asciiartElement = containerAsciiArt.querySelector(`.asciiart_${aaname}`);
+		const asciiartElement = containerAsciiArt.querySelector(`.${aaname}`);
 		if (asciiartElement) {
 			asciiartElement.classList.add("display");
 		}
 	}
-}
-
-function changeAsciiArtRandomly(loopdelay: number) {
-	setTimeout(() => {
-		const preElements = document.querySelectorAll(".container_asciiart > pre");
-		const rand = Math.floor(Math.random() * preElements.length);
-		preElements.forEach((pre) => {
-			pre.classList.remove("display");
-		});
-		preElements[rand]!.classList.add("display");
-
-		const htmlBody = document.querySelector("html, body");
-		if (!htmlBody) return;
-
-		if (loopdelay <= 800) {
-			htmlBody.classList.add("gettingfasterandfaster");
-		} else if (loopdelay <= 2500) {
-			htmlBody.classList.add("gettingfaster");
-		}
-
-		changeAsciiArtRandomly(loopdelay <= 50 ? 50 : loopdelay - (gettingfaster ? 39 : 0));
-	}, loopdelay);
 }

@@ -1,0 +1,32 @@
+---
+import { type ASCII } from "./utils";
+
+type Props = {
+	start: string;
+	duration: string;
+	appendBr: boolean;
+	text: string;
+	ascii?: ASCII;
+};
+
+const { props } = Astro;
+---
+
+{
+	props.ascii ? (
+		<span
+			data-start={props.start}
+			data-dur={props.duration}
+			data-append-br={`${props.appendBr}`}
+			data-text={props.text}
+			data-asciiart={props.ascii}
+		/>
+	) : (
+		<span
+			data-start={props.start}
+			data-dur={props.duration}
+			data-append-br={`${props.appendBr}`}
+			data-text={props.text}
+		/>
+	)
+}

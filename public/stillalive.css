@@ -105,24 +105,3 @@ a {
 br.force-display {
     display: inline !important;
 }
-
-.container_sns {
-    margin-top: 0.5em;
-    margin-left: 0.5em;
-}
-
-.container_sns>* {
-    display: inline-flex !important;
-}
-
-.container_sns img {
-    width: 25px;
-}
-
-.gettingfaster {
-    cursor: progress !important;
-}
-
-.gettingfasterandfaster {
-    cursor: wait !important;
-}
