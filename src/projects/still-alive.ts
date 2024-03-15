@@ -301,7 +301,7 @@ if (stillAliveBGM) {
 	});
 }
 
-const containerLyricsBeforeMobileLink = document.querySelector(".container_lyrics_before_mobile>a");
+const containerLyricsBeforeMobileLink = document.querySelector(".container_lyrics_before_mobile>button");
 if (containerLyricsBeforeMobileLink) {
 	containerLyricsBeforeMobileLink.addEventListener("click", (e) => {
 		e.preventDefault();
