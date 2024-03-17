@@ -49,10 +49,14 @@ a {
     color: currentColor;
 }
 
-.container_lyrics,
 .container_lyrics_before_loading,
 .container_lyrics_before_mobile {
     display: none;
+}
+
+.container_lyrics,
+.container_lyrics_before_loading,
+.container_lyrics_before_mobile {
     position: absolute;
     width: 26.75em;
     height: 39em;
@@ -64,11 +68,11 @@ a {
     display: block;
 }
 
-.container_lyrics.current {
+.container_lyrics {
     display: block;
 }
 
-.container_lyrics.current>br {
+.container_lyrics>br {
     display: none;
 }
 

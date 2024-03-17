@@ -19,24 +19,25 @@ const _asciiEnum = z.nativeEnum({
 	CLEAR: "clear",
 } as const);
 
-/**
- * safely parses a string to valid ASCII art
- * @param input the string to parse
- * @returns the parsed ascii art (defaults to clear if the input is invalid)
- */
-function parseStringToAsciiArt(input: string): ASCII {
-	const result = _asciiEnum.safeParse(input);
-
-	if (!result.success) {
-		console.error("ASCII art parsing failed. Clearing.");
-		return _asciiEnum.enum.CLEAR;
-	}
-
-	return result.data;
-}
-
 type ASCII = z.infer<typeof _asciiEnum>;
 
 const AsciiEnum = _asciiEnum.enum;
 
-export { type ASCII, parseStringToAsciiArt, AsciiEnum };
+function changeAsciiArt(aaname: ASCII) {
+	const containerAsciiArt = document.querySelector(".container_asciiart");
+	if (!containerAsciiArt) return;
+
+	const preElements = containerAsciiArt.querySelectorAll("pre");
+	preElements.forEach((pre) => {
+		pre.classList.remove("display");
+	});
+
+	if (aaname !== "clear") {
+		const asciiartElement = containerAsciiArt.querySelector(`.${aaname}`);
+		if (asciiartElement) {
+			asciiartElement.classList.add("display");
+		}
+	}
+}
+
+export { changeAsciiArt, type ASCII, AsciiEnum };

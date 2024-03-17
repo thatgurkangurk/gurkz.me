@@ -1,4 +1,4 @@
-import { type ASCII, parseStringToAsciiArt } from "./still-alive/utils";
+import { Lyrics, renderLyric } from "./still-alive/lyrics";
 
 const CREDIT_DATA = [
 	">LIST PERSONNEL",
@@ -313,7 +313,6 @@ if (containerLyricsBeforeMobileLink) {
 		}
 
 		startTypingCurrentLyrics();
-		startChangeLyricsContainer();
 
 		const stillAliveBGM = document.getElementById("stillalive_bgm") as HTMLAudioElement;
 		if (stillAliveBGM) {
@@ -332,54 +331,21 @@ if (containerLyricsBeforeMobileLink) {
 }
 
 function startTypingCurrentLyrics() {
-	const currentLyrics = document.querySelector(".container_lyrics.current");
-	if (!currentLyrics) return;
-
-	currentLyrics.childNodes.forEach((child: Node) => {
-		if (child.nodeType === Node.ELEMENT_NODE) {
-			const element = child as HTMLElement;
-			if (element.tagName.toLowerCase() !== "br") {
-				const start = element.dataset.start;
-				const dur = element.dataset.dur;
-				const text = element.dataset.text;
-
-				if (start !== undefined && dur !== undefined && text !== undefined) {
-					setTimeout(() => {
-						const asciiart = element.dataset.asciiart;
-						if (asciiart) changeAsciiArt(parseStringToAsciiArt(asciiart));
-
-						typeOneByOne(element, text, parseInt(dur), element.dataset.appendBr !== undefined);
-					}, parseInt(start));
-				}
-			} else {
-				const showOffset = element.dataset.showOffset;
-				if (showOffset !== undefined) {
-					setTimeout(() => {
-						element.style.display = "block";
-						positionTerminalCursor(element);
-					}, parseInt(showOffset));
-				}
+	Lyrics.forEach((section) => {
+		setTimeout(() => {
+			const currentLyrics = document.querySelector(".container_lyrics");
+			if (currentLyrics) {
+				currentLyrics.remove();
 			}
-		}
-	});
-}
 
-function startChangeLyricsContainer() {
-	const lyricsContainers = document.querySelectorAll(".container_lyrics");
-	lyricsContainers.forEach((container) => {
-		const startData = container.getAttribute("data-start");
-		if (startData !== null) {
-			const that = container;
+			const newLyrics = document.createElement("div");
+			newLyrics.classList.add("container_lyrics");
+			document.body.appendChild(newLyrics);
 
-			setTimeout(() => {
-				const currentLyrics = document.querySelector(".container_lyrics.current");
-				if (currentLyrics) {
-					currentLyrics.remove();
-				}
-				that.classList.add("current");
-				startTypingCurrentLyrics();
-			}, parseInt(startData));
-		}
+			section.lyrics.forEach((lyric) => {
+				renderLyric(lyric, newLyrics);
+			});
+		}, parseInt(section.start));
 	});
 }
 
@@ -417,31 +383,6 @@ function positionCreditTerminalCursor(currentLineElem: Element) {
 		terminalCreditCursor.remove();
 	}
 	currentLineElem.parentNode?.insertBefore(terminalCreditCursorElem, currentLineElem.nextSibling);
-}
-
-function typeOneByOne(targetElem: HTMLElement, text: string, duration: number, shouldAppendBR: boolean) {
-	let timeoutPerChar = duration / text.length;
-	const chars = text.split("");
-	let charIdx = 0;
-
-	positionTerminalCursor(targetElem);
-
-	if (shouldAppendBR) {
-		timeoutPerChar = duration / (chars.length + 1);
-	}
-
-	for (let i = 0, n = chars.length + (shouldAppendBR ? 1 : 0); i < n; i++) {
-		setTimeout(() => {
-			if (shouldAppendBR && charIdx === chars.length) {
-				const newBR = document.createElement("br");
-				newBR.classList.add("force-display");
-				targetElem.parentNode?.insertBefore(newBR, targetElem.nextSibling);
-				positionTerminalCursor(newBR);
-			} else {
-				targetElem.append(chars[charIdx++]!);
-			}
-		}, timeoutPerChar * i);
-	}
 }
 
 function typeCreditOneByOne(text: string, duration: number) {
@@ -495,21 +436,5 @@ function startTypingCredits() {
 
 		// Move to the next credit
 		creditCurrentPosition++;
-	}
-}
-function changeAsciiArt(aaname: ASCII) {
-	const containerAsciiArt = document.querySelector(".container_asciiart");
-	if (!containerAsciiArt) return;
-
-	const preElements = containerAsciiArt.querySelectorAll("pre");
-	preElements.forEach((pre) => {
-		pre.classList.remove("display");
-	});
-
-	if (aaname !== "clear") {
-		const asciiartElement = containerAsciiArt.querySelector(`.${aaname}`);
-		if (asciiartElement) {
-			asciiartElement.classList.add("display");
-		}
 	}
 }
