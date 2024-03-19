@@ -369,12 +369,12 @@ H#,                     =;+/;,       ,#X
 function createAsciiArt() {
 	const asciiContainer = document.querySelector(".container_asciiart");
 	if (!asciiContainer) return;
-	for (const art in _artPieces) {
+	_artPieces.forEach((art) => {
 		const artElement = document.createElement("div");
 		artElement.classList.add(`asciiart_${art.id}`);
 		artElement.innerHTML = art.content;
-		asciiContaine.appendChild(artElement);
-	}
+		asciiContainer.appendChild(artElement);
+	});
 }
 
 const _asciiEnum = z.nativeEnum({
