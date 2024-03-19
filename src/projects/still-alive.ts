@@ -1,4 +1,5 @@
 import { Lyrics, renderLyric } from "./still-alive/lyrics";
+import { createAsciiArt } from "./still-alive/ascii";
 
 const CREDIT_DATA = [
 	">LIST PERSONNEL",
@@ -251,6 +252,8 @@ terminalCursorElem.textContent = "_";
 const terminalCreditCursorElem = document.createElement("span");
 terminalCreditCursorElem.id = "terminal_cursor_credit";
 terminalCreditCursorElem.textContent = "_";
+
+createAsciiArt();
 
 const containerLyricsBeforeLoading = document.querySelector(".container_lyrics_before_loading>span");
 if (containerLyricsBeforeLoading instanceof HTMLElement) {
