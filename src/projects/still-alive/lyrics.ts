@@ -371,7 +371,7 @@ function renderLyric(lyric: Lyric, container: HTMLDivElement) {
 			container.appendChild(text);
 			setTimeout(() => {
 				if (lyric.ascii) changeAsciiArt(lyric.ascii);
-				typeOneByOne(text, lyric.text, parseInt(lyric.duration), text.dataset.appendBr !== undefined);
+				typeOneByOne(text, lyric.text, parseInt(lyric.duration), lyric.appendBr);
 			}, parseInt(lyric.start));
 			break;
 		}
@@ -394,7 +394,7 @@ function renderLyric(lyric: Lyric, container: HTMLDivElement) {
 			link.href = lyric.href;
 			container.appendChild(link);
 			setTimeout(() => {
-				typeOneByOne(link, lyric.text, parseInt(lyric.duration), link.dataset.appendBr !== undefined);
+				typeOneByOne(link, lyric.text, parseInt(lyric.duration), lyric.appendBr);
 			}, parseInt(lyric.start));
 			break;
 		}
