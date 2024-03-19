@@ -8,6 +8,7 @@ function typeOneByOne(targetElem: HTMLElement, text: string, duration: number, s
 	positionTerminalCursor(targetElem);
 
 	if (shouldAppendBR) {
+		chars.push(` `);
 		timeoutPerChar = duration / (chars.length + 1);
 	}
 
