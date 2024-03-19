@@ -9,8 +9,6 @@ function typeOneByOne(targetElem: HTMLElement, text: string, duration: number, s
 
 	if (shouldAppendBR) {
 		timeoutPerChar = duration / (chars.length + 1);
-	} else {
-		chars.push(` `);
 	}
 
 	for (let i = 0, n = chars.length + (shouldAppendBR ? 1 : 0); i < n; i++) {
