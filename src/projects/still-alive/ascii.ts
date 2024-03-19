@@ -370,7 +370,7 @@ function createAsciiArt() {
 	const asciiContainer = document.querySelector(".container_asciiart");
 	if (!asciiContainer) return;
 	_artPieces.forEach((art) => {
-		const artElement = document.createElement("div");
+		const artElement = document.createElement("pre");
 		artElement.classList.add(`asciiart_${art.id}`);
 		artElement.innerHTML = art.content;
 		asciiContainer.appendChild(artElement);
