@@ -285,7 +285,7 @@ const Section5: Lyric[] = [
 		start: "11000",
 		duration: "1000",
 		appendBr: true,
-		text: "https://github.com/SDSkyKlouD/still-alive-web",
+		text: "based on https://github.com/SDSkyKlouD/still-alive-web",
 		href: "https://github.com/SDSkyKlouD/still-alive-web",
 	},
 	{ type: "br", showOffset: "12500" },
