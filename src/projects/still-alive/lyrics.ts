@@ -26,7 +26,7 @@ type Lyric =
 	  };
 
 const Section1: Lyric[] = [
-	{ type: "text", start: "0", duration: "2000", appendBr: false, text: "Forms FORM-29827281-12:" },
+	{ type: "text", start: "0", duration: "2000", appendBr: true, text: "Forms FORM-29827281-12:" },
 	{ type: "text", start: "2000", duration: "2000", appendBr: true, text: "Test Assessment Report" },
 	{ type: "br", showOffset: "4010" },
 	{ type: "br", showOffset: "4020" },
