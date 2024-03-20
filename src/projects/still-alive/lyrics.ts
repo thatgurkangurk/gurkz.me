@@ -280,7 +280,7 @@ const Section5: Lyric[] = [
 	{ type: "text", start: "7000", duration: "1500", appendBr: true, text: "'Still Alive' ending scene" },
 	{ type: "text", start: "8500", duration: "1500", appendBr: true, text: "remade with HTML, JS" },
 	{ type: "text", start: "10000", duration: "1000", appendBr: true, text: "by Gurkan" },
-	{ type: "text", start: "11000", duration: "500", appendBr: true, text: "based on " }
+	{ type: "text", start: "11000", duration: "500", appendBr: true, text: "based on " },
 	{
 		type: "link",
 		start: "11500",
