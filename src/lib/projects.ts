@@ -2,7 +2,7 @@ function isKey<T extends object>(x: T, k: PropertyKey): k is keyof T {
 	return k in x;
 }
 
-type Projects = "WEBHOOK_DESTROYER" | "STILL_ALIVE";
+type Projects = "WEBHOOK_DESTROYER" | "STILL_ALIVE" | "BRAINFUCK";
 type Project = {
 	title: string;
 	description: string;
@@ -23,6 +23,12 @@ const Projects: Record<Projects, Project> = {
 		needsJS: true,
 		slug: "still-alive",
 	},
+	BRAINFUCK: {
+		title: "brainf**k interpreter",
+		description: "a interpreter for the brainf**k language",
+		needsJS: true,
+		slug: "brainfuck"
+	}
 } as const;
 
 const keys = Object.keys(Projects);
