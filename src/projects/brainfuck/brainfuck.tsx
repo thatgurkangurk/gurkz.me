@@ -4,7 +4,7 @@ import type { JSX } from "solid-js";
 
 const [output, setOutput] = createSignal("none");
 
-const handleSubmit: JSX.EventHandler<HTMLFormEvent, SubmitEvent> = (e) => {
+const handleSubmit: JSX.EventHandler<HTMLFormElement, SubmitEvent> = (e) => {
     e.preventDefault();
     setOutput("this interpreter is not done, this output is a placeholder.");
 }
