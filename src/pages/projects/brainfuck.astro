@@ -1,9 +1,9 @@
 ---
 import ProjectLayout from "~/layouts/ProjectLayout.astro";
 import { Projects } from "~/lib/projects";
-import { Brainfuck } from "~/projects/brainfuck/brainfuck";
+import { Brainfuck as Brainfk } from "~/projects/brainfuck/brainfuck";
 ---
 
 <ProjectLayout project={Projects.BRAINFUCK}>
-    <Brainfuck client:only />
+    <Brainfk client:only />
 </ProjectLayout>
