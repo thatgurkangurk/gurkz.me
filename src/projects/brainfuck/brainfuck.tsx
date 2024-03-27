@@ -1,12 +1,14 @@
-import { createSignal } from "solid-js";
 import { Input } from "~/components/ui/input";
 import type { JSX } from "solid-js";
+import { useBrainfuck } from "./brainfuck.ts";
 
-const [output, setOutput] = createSignal("none");
+const [output, interpret] = useBrainfuck();
 
 const handleSubmit: JSX.EventHandler<HTMLFormElement, SubmitEvent> = (e) => {
     e.preventDefault();
-    setOutput("this interpreter is not done, this output is a placeholder.");
+    const formData = new FormData(e.target);
+    const program = formData.get("program").toString();
+    interpret(program);
 }
 
 export function Brainfuck() {
