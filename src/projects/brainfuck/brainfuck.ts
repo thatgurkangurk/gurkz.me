@@ -4,6 +4,7 @@ function useBrainfuck() {
     const [output, setOutput] = createSignal("none");
 
     function interpret(program: string) {
+        console.log(program);
         setOutput("this interpreter is not done, this output is just a placeholder");
     }
 
