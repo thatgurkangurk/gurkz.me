@@ -3,7 +3,7 @@ import type { JSX } from "solid-js";
 import { useBrainfuck } from "./brainfuck.ts";
 
 export function Brainfuck() {
-    const [output, interpret] = useBrainfuck();
+    const { output, interpret } = useBrainfuck();
     return (
         <>
             <span>output: {output()} </span>

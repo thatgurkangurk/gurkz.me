@@ -9,11 +9,15 @@ function useBrainfuck() {
         setOutput("this interpreter is not done, this output is just a placeholder");
     }
 
-    function reset() {
+    const reset = () => {
         setOutput("none");
     }
 
-    return [output, interpret, reset];
+    return {
+        output,
+        interpret,
+        reset
+    };
 }
 
 export { useBrainfuck };
