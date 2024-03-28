@@ -2,20 +2,17 @@ import { Input } from "~/components/ui/input";
 import type { JSX } from "solid-js";
 import { useBrainfuck } from "./brainfuck.ts";
 
-const [output, interpret] = useBrainfuck();
-
-const handleSubmit: JSX.EventHandler<HTMLFormElement, SubmitEvent> = (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const program = formData.get("program").toString();
-    interpret(program);
-}
-
 export function Brainfuck() {
+    const [output, interpret] = useBrainfuck();
     return (
         <>
             <span>output: {output()} </span>
-           <form onSubmit={handleSubmit}>
+           <form onSubmit={(e) => {
+		e.preventDefault();
+		const formData = new FormData(e.target);
+		const program = formData.get("program").toString();
+		interpret(program);
+	   }}>
 				<Input
                     id="program"
 					placeholder="the brainfuck program to execute"
