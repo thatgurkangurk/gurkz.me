@@ -1,4 +1,5 @@
 FROM node:20-slim AS base
+LABEL org.opencontainers.image.source="https://github.com/thatgurkangurk/gurkz.me"
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
