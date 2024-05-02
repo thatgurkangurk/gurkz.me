@@ -1,70 +1,33 @@
 {
 	"name": "gurkz.me",
-	"type": "module",
 	"version": "0.0.1",
+	"private": true,
 	"scripts": {
-		"dev": "astro dev",
-		"start": "astro dev",
-		"build": "astro check && astro build",
-		"preview": "astro preview",
-		"astro": "astro",
-		"fix:eslint": "eslint src --fix",
-		"fix:prettier": "prettier --write src",
-		"fix": "run-s fix:*",
-		"lint:eslint": "eslint src",
-		"lint:prettier": "prettier src",
-		"lint": "run-s lint:*"
-	},
-	"eslintConfig": {
-		"parser": "@typescript-eslint/parser",
-		"parserOptions": {
-			"jsx": true,
-			"useJSXTextNode": true,
-			"ecmaVersion": "latest",
-			"sourceType": "module",
-			"project": "./tsconfig.json"
-		},
-		"plugins": [
-			"@typescript-eslint"
-		],
-		"extends": [
-			"eslint:recommended",
-			"plugin:@typescript-eslint/recommended",
-			"prettier"
-		],
-		"ignorePatterns": [
-			"node_modules"
-		]
-	},
-	"dependencies": {
-		"@astrojs/check": "^0.5.6",
-		"@astrojs/mdx": "^2.1.1",
-		"@astrojs/node": "^8.2.3",
-		"@astrojs/solid-js": "^4.0.1",
-		"@astrojs/tailwind": "^5.1.0",
-		"@astroutils/analytics": "^1.1.0",
-		"@modular-forms/solid": "^0.20.0",
-		"@tailwindcss/typography": "^0.5.10",
-		"astro": "^4.4.9",
-		"astro-font": "^0.0.77",
-		"class-variance-authority": "^0.7.0",
-		"clsx": "^2.1.0",
-		"solid-icons": "^1.1.0",
-		"solid-js": "^1.8.15",
-		"tailwind-merge": "^2.2.1",
-		"tailwindcss": "^3.4.1",
-		"typescript": "^5.3.3",
-		"zod": "^3.22.4"
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"lint": "prettier --check . && eslint .",
+		"format": "prettier --write ."
 	},
 	"devDependencies": {
-		"@types/node": "^20.11.24",
-		"@typescript-eslint/eslint-plugin": "^7.1.0",
-		"@typescript-eslint/parser": "^7.1.0",
-		"eslint": "^8.57.0",
+		"@sveltejs/adapter-node": "^5.0.1",
+		"@sveltejs/kit": "^2.0.0",
+		"@sveltejs/vite-plugin-svelte": "^3.0.0",
+		"@types/eslint": "^8.56.0",
+		"@typescript-eslint/eslint-plugin": "^7.0.0",
+		"@typescript-eslint/parser": "^7.0.0",
+		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
-		"npm-run-all": "^4.1.5",
-		"prettier": "^3.2.5",
-		"prettier-plugin-astro": "^0.13.0",
-		"prettier-plugin-tailwindcss": "^0.5.11"
-	}
+		"eslint-plugin-svelte": "^2.35.1",
+		"prettier": "^3.1.1",
+		"prettier-plugin-svelte": "^3.1.2",
+		"svelte": "^4.2.7",
+		"svelte-check": "^3.6.0",
+		"tslib": "^2.4.1",
+		"typescript": "^5.0.0",
+		"vite": "^5.0.3"
+	},
+	"type": "module"
 }
