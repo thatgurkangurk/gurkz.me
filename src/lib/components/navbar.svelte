@@ -21,6 +21,10 @@
 		{
 			href: "/",
 			text: "Home"
+		},
+		{
+			href: "/projects",
+			text: "Projects"
 		}
 	];
 

@@ -12,6 +12,10 @@
 	if (!project) error(404, "not found");
 </script>
 
+<svelte:head>
+	<title>{project.title} - gurkan's projects</title>
+</svelte:head>
+
 <Button href="/projects"><ArrowLeftIcon class="mr-2 h-6 w-6" /> back</Button>
 
 <h2 class="text-3xl">{project.title}</h2>

@@ -4,6 +4,10 @@
 	import Button from "$lib/components/ui/button/button.svelte";
 </script>
 
+<svelte:head>
+	<title>projects - gurkan's website</title>
+</svelte:head>
+
 <h2 class="text-3xl pb-3">projects</h2>
 
 <div class="grid gap-2 grid-cols-2 md:grid-cols-4">
