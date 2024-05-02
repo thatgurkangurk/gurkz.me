@@ -1,10 +1,17 @@
 <script lang="ts">
 	import "../app.css";
 	import { ModeWatcher } from "mode-watcher";
+	import Navbar from "$lib/components/navbar.svelte";
+	import SpaceGrotesk from "$lib/fonts/SpaceGroteskVariable.woff2";
 </script>
 
 <ModeWatcher />
+<link rel="preload" as="font" type="font/woff2" crossorigin="anonymous" href={SpaceGrotesk} />
 
-<main class="p-2">
-	<slot />
-</main>
+<div class="min-h-[100dvh] w-full flex flex-col">
+	<Navbar />
+
+	<main class="p-2 flex-grow">
+		<slot />
+	</main>
+</div>
