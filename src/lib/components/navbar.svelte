@@ -5,6 +5,8 @@
 	import { writable } from "svelte/store";
 	import NavLink from "./navlink.svelte";
 	import ModeToggle from "./mode-toggle.svelte";
+	import { getUser } from "$lib/auth/store";
+	import { enhance } from "$app/forms";
 
 	type Link = {
 		href: string;
@@ -29,6 +31,7 @@
 	];
 
 	let sheetOpen = writable(false);
+	let user = getUser();
 </script>
 
 <header
@@ -72,6 +75,14 @@
 	</Sheet.Root>
 	<div class="justify-items-end flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
 		<div class="ml-auto flex-1 sm:flex-initial"></div>
+		{#if $user}
+			<p>hello, {$user.username}</p>
+			<form use:enhance method="post" action="/auth/logout">
+				<Button variant="link" class="px-0" type="submit">log out</Button>
+			</form>
+		{:else}
+			<Button variant="link" class="px-0" type="submit">log in</Button>
+		{/if}
 		<ModeToggle />
 	</div>
 </header>
