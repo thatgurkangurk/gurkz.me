@@ -41,7 +41,7 @@
 					{#if id.ownerId === data.user.id || data.userIsAdmin}
 						<form action="?/delete" method="post" use:enhance>
 							<input type="hidden" name="id" value={id.id} />
-							<Button variant="destructive">delete</Button>
+							<Button type="submit" variant="destructive">delete</Button>
 						</form>
 					{/if}
 				{/if}
