@@ -309,7 +309,6 @@ class CreditsRenderer {
 			// Calculate typing duration based on the length of the credit text
 			const typingDuration = this.characterVelocity * (curCredit === "" ? 1 : curCredit.length);
 
-
 			// Type the current credit one by one
 			this.typeOneByOne(curCredit, typingDuration);
 

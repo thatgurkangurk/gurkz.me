@@ -5,6 +5,14 @@
 	import Navbar from "$lib/components/navbar.svelte";
 	import SpaceGrotesk from "$lib/fonts/SpaceGroteskVariable.woff2";
 	import { Toaster } from "$lib/components/ui/sonner";
+	import { setUser } from "$lib/auth/store";
+	import type { LayoutServerData } from "./$types";
+
+	export let data: LayoutServerData;
+
+	$: {
+		setUser(data.user);
+	}
 </script>
 
 <ModeWatcher />
