@@ -1,43 +1,26 @@
-function isKey<T extends object>(x: T, k: PropertyKey): k is keyof T {
-	return k in x;
-}
-
-type Projects = "WEBHOOK_DESTROYER" | "STILL_ALIVE";
 type Project = {
 	title: string;
 	description: string;
-	needsJS: boolean;
 	slug: string;
+	reload?: boolean;
 };
 
-const Projects: Record<Projects, Project> = {
-	WEBHOOK_DESTROYER: {
+const projects: Project[] = [
+	{
 		title: "webhook destroyer",
-		description: "a simple tool to destroy Discord webhooks",
-		needsJS: true,
-		slug: "webhook-destroyer",
+		description: "a simple tool to destroy discord webhooks",
+		slug: "/webhook-destroyer"
 	},
-	STILL_ALIVE: {
+	{
 		title: "still alive",
-		description: "recreation of the ending credits in Portal",
-		needsJS: true,
-		slug: "still-alive",
-	},
-} as const;
+		description: "still alive recreated in HTML,CSS and JS",
+		slug: "/still-alive"
+	}
+];
 
-const keys = Object.keys(Projects);
-
-function getAllProjects() {
-	const projects: Project[] = [];
-
-	keys.forEach((key) => {
-		if (isKey(Projects, key)) {
-			projects.push(Projects[key]);
-		}
-	});
-
-	return projects;
+function getProjectBySlug(slug: string) {
+	return projects.find((project) => project.slug === slug);
 }
 
-export { getAllProjects, Projects };
+export { projects, getProjectBySlug };
 export type { Project };
