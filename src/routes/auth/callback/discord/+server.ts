@@ -1,7 +1,7 @@
 import { discord } from "$lib/auth/providers";
 import { db } from "$lib/db/client";
 import type { RequestEvent } from "./$types";
-import { users } from "$lib/db/schema/user";
+import { Permission, users } from "$lib/db/schema/user";
 import { eq } from "drizzle-orm";
 import { lucia } from "$lib/auth/lucia";
 import { nanoid } from "nanoid";
@@ -38,15 +38,13 @@ export async function GET(event: RequestEvent): Promise<Response> {
 			});
 		} else {
 			const userId = nanoid(32);
-			const newUser = await db
-				.insert(users)
-				.values({
-					id: userId,
-					discordId: discordUser.id,
-					username: discordUser.username,
-					email: discordUser.email
-				})
-				.returning();
+			await db.insert(users).values({
+				id: userId,
+				discordId: discordUser.id,
+				username: discordUser.username,
+				permissions: [Permission.STANDARD],
+				email: discordUser.email
+			});
 
 			const session = await lucia.createSession(userId, {});
 			const sessionCookie = lucia.createSessionCookie(session.id);
@@ -78,7 +76,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 }
 
 type DiscordUser = {
-	id: number;
+	id: string;
 	username: string;
 	email: string;
 };

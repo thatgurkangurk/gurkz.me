@@ -27,6 +27,10 @@
 		{
 			href: "/projects",
 			text: "Projects"
+		},
+		{
+			href: "/music",
+			text: "Music ID List"
 		}
 	];
 
