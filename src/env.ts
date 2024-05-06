@@ -15,5 +15,5 @@ export const env = createEnv({
 		DISCORD_CLIENT_SECRET: privateEnv.DISCORD_CLIENT_SECRET,
 		CALLBACK_URI: privateEnv.CALLBACK_URI
 	},
-	skipValidation: process.env.CI === 1
+	skipValidation: privateEnv.CI === "1"
 });
