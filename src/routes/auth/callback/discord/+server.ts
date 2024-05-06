@@ -76,7 +76,7 @@ export async function GET(event: RequestEvent): Promise<Response> {
 }
 
 type DiscordUser = {
-	id: number;
+	id: string;
 	username: string;
 	email: string;
 };

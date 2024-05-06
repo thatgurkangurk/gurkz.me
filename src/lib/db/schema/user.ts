@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { bigint, pgEnum, pgTable, text } from "drizzle-orm/pg-core";
+import { pgEnum, pgTable, text } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { musicIds } from "./music-id";
 
@@ -14,9 +14,7 @@ export const users = pgTable("user", {
 	id: text("id").primaryKey(),
 	username: text("username").unique(),
 	email: text("email").unique(),
-	discordId: bigint("discord_id", {
-		mode: "number"
-	}).unique(),
+	discordId: text("discord_id").unique(),
 	permissions: permissionEnum("permissions").array().notNull()
 });
 
