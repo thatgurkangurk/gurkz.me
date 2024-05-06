@@ -64,6 +64,8 @@ export async function GET(event: RequestEvent): Promise<Response> {
 		console.error(e);
 		// the specific error message depends on the provider
 		if (e instanceof OAuth2RequestError) {
+			console.error(e.message);
+			console.error(e.cause);
 			// invalid code
 			return new Response(null, {
 				status: 400
