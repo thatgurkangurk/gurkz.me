@@ -20,7 +20,10 @@
 				<p>{project.description}</p>
 			</Card.Content>
 			<Card.Footer>
-				<Button href={`/project${project.slug}`}>open</Button>
+				<Button
+					data-sveltekit-reload={project.reload ? true : "off"}
+					href={`/project${project.slug}`}>open</Button
+				>
 			</Card.Footer>
 		</Card.Root>
 	{/each}
