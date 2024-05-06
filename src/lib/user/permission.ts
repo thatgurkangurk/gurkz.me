@@ -15,7 +15,8 @@ export async function getUserPermissions(userId: string) {
 	return permissions;
 }
 
-export async function hasPermission(userId: string, permission: Permission) {
+export async function hasPermission(userId: string | undefined, permission: Permission) {
+	if (!userId) return false;
 	const permissions = await getUserPermissions(userId);
 	if (permissions.includes(Permission.ADMIN)) return true; // if the user has "ADMIN" it should be allowed to do anything
 	const hasPermission = permissions.includes(permission);
