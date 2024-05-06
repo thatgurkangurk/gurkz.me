@@ -7,7 +7,7 @@
 		SheetPortal,
 		type Side,
 		sheetTransitions,
-		sheetVariants,
+		sheetVariants
 	} from "./index.js";
 	import { cn } from "$lib/utils.js";
 

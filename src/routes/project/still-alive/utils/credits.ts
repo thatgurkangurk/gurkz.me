@@ -1,4 +1,5 @@
 import type { Cursor } from "./cursor";
+import { typeOneByOne } from "./text";
 import { createTimeout } from "./timeout";
 
 const CREDIT_DATA = [
@@ -256,6 +257,65 @@ class CreditsRenderer {
 		console.log(this.container);
 		console.log(this.cursor);
 		console.log(this.currentPosition);
+	}
+
+	private typeOneByOne(text: string, duration: number) {
+		const targetElem = document.querySelector(
+			".container_credits>span.row15"
+		) as HTMLSpanElement | null;
+		if (!targetElem) return;
+
+		targetElem.textContent = "";
+
+		if (text !== "") {
+			const timeoutPerChar = duration / text.length;
+			const chars = text.split("");
+			let charIdx = 0;
+
+			this.cursor.position(targetElem);
+
+			for (let i = 0, n = chars.length + 1; i < n; i++) {
+				createTimeout(() => {
+					const textToAdd = `${chars[charIdx++]}`.replace("undefined", "");
+					const textNode = document.createTextNode(textToAdd);
+					targetElem.appendChild(textNode);
+
+					if (charIdx === chars.length + 1) this.startTypingCredits();
+				}, timeoutPerChar * i);
+			}
+		} else {
+			setTimeout(() => {
+				this.startTypingCredits();
+			}, duration);
+		}
+	}
+
+	startTypingCredits() {
+		if (this.currentPosition < CREDIT_DATA.length) {
+			const curCredit = CREDIT_DATA[this.currentPosition] || "";
+
+			// Select the container for credits
+			// const containerCredits = document.querySelector(".container_credits");
+			// if (!containerCredits) return;
+
+			// Update the content of each row in the credits container
+			for (let i = 1, l = 16; i < l; i++) {
+				const prevRowText = (this.container.querySelector(".row" + i) as HTMLElement)?.innerText;
+				if (prevRowText !== undefined) {
+					(this.container.querySelector(".row" + (i - 1)) as HTMLElement).innerText = prevRowText;
+				}
+			}
+
+			// Calculate typing duration based on the length of the credit text
+			const typingDuration = this.characterVelocity * (curCredit === "" ? 1 : curCredit.length);
+
+
+			// Type the current credit one by one
+			this.typeOneByOne(curCredit, typingDuration);
+
+			// Move to the next credit
+			this.currentPosition++;
+		}
 	}
 }
 
