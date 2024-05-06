@@ -23,7 +23,7 @@ export const lucia = new Lucia(adapter, {
 });
 
 type DatabaseUserAttributes = {
-	discordId?: number;
+	discordId?: string;
 	username: string;
 	email: string;
 };
