@@ -81,7 +81,7 @@
 				<Button variant="link" class="px-0" type="submit">log out</Button>
 			</form>
 		{:else}
-			<Button variant="link" class="px-0" type="submit">log in</Button>
+			<Button variant="link" class="px-0" href={"/auth/login"}>log in</Button>
 		{/if}
 		<ModeToggle />
 	</div>
