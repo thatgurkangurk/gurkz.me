@@ -6,11 +6,11 @@
 	import SpaceGrotesk from "$lib/fonts/SpaceGroteskVariable.woff2";
 	import { Toaster } from "$lib/components/ui/sonner";
 	import { setUser } from "$lib/auth/store";
-	import type { PageData } from "./$types";
+	import type { LayoutData } from "./$types";
 	import { QueryClientProvider } from "@tanstack/svelte-query";
 	import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
 
-	export let data: PageData;
+	export let data: LayoutData;
 
 	$: {
 		setUser(data.user);

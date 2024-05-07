@@ -12,10 +12,12 @@ export async function GET(event: RequestEvent): Promise<Response> {
 	const state = event.url.searchParams.get("state");
 	const storedState = event.cookies.get("discord_oauth_state") ?? null;
 
-	if (!code || !state || !storedState || state !== storedState)
+	if (!code || !state || !storedState || state !== storedState) {
+		console.log("invalid code or state");
 		return new Response(null, {
 			status: 400
 		});
+	}
 
 	try {
 		const tokens = await discord.validateAuthorizationCode(code);
