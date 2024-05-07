@@ -10,12 +10,6 @@ import { musicIds } from "$lib/db/schema/music-id";
 import { nanoid } from "nanoid";
 import { eq } from "drizzle-orm";
 
-async function getAllIds() {
-	const ids = await db.select().from(musicIds);
-
-	return ids;
-}
-
 async function getId(id: string) {
 	const musicId = await db.select().from(musicIds).where(eq(musicIds.id, id));
 
@@ -26,8 +20,7 @@ export const load: PageServerLoad = async (event) => {
 	return {
 		user: event.locals.user,
 		userIsAdmin: await hasPermission(event.locals.user?.id, Permission.MUSIC_ADMIN),
-		form: await superValidate(zod(formSchema)),
-		ids: await getAllIds()
+		form: await superValidate(zod(formSchema))
 	};
 };
 
