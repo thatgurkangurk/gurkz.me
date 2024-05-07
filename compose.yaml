@@ -1,14 +1,14 @@
 services:
   # this should only ever be used for local dev
   postgres:
-      restart: unless-stopped
-      container_name: postgres
-      image: postgres:16.2-alpine
-      ports:
-        - 5432:5432
-      environment:
-        - POSTGRES_PASSWORD=gurkz-me-user
-        - POSTGRES_USER=gurkz-me
-        - POSTGRES_DB=gurkz
-      volumes:
-        - ./data:/var/lib/postgresql/data
+    restart: unless-stopped
+    container_name: postgres
+    image: postgres:16.2-alpine
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=gurkz-me-user
+      - POSTGRES_USER=gurkz-me
+      - POSTGRES_DB=gurkz
+    volumes:
+      - ./data:/var/lib/postgresql/data
