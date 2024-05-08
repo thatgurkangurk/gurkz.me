@@ -1,4 +1,4 @@
-import type { GetMusicIdsResponse, MusicId } from "./types";
+import type { GetMusicIdsResponse, MusicId } from "./music-id/type";
 
 export const api = (customFetch = fetch) => ({
 	getMusicIds: async (page: number) => {

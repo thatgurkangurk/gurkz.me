@@ -1,15 +1,7 @@
 import type { RequestHandler } from "./$types";
-import { db } from "$lib/db/client";
-import { musicIds } from "$lib/db/schema/music-id";
-import { eq } from "drizzle-orm";
+import { getMusicId } from "$lib/music-id";
 
-async function getMusicId(id: string) {
-	const res = await db.select().from(musicIds).where(eq(musicIds.robloxId, id));
-
-	return res[0];
-}
-
-export const GET: RequestHandler = async ({ params }) => {
+export const GET: RequestHandler = async ({ params, locals }) => {
 	const { id } = params;
 
 	if (!id) {
@@ -23,7 +15,7 @@ export const GET: RequestHandler = async ({ params }) => {
 		);
 	}
 
-	const res = await getMusicId(id);
+	const res = await getMusicId(locals.pb, id);
 
 	if (!res)
 		return new Response(

@@ -1,23 +1,30 @@
-import { fail, redirect } from "@sveltejs/kit";
-import { lucia } from "$lib/auth/lucia";
-
+import { redirect } from "@sveltejs/kit";
 import type { Actions } from "./$types";
-import { db } from "$lib/db/client";
-import { sessions } from "$lib/db/schema/session";
-import { eq } from "drizzle-orm";
+import { dev } from "$app/environment";
+import { parse } from "set-cookie-parser";
 
-export const actions: Actions = {
-	default: async (event) => {
-		if (!event.locals.session) {
-			return fail(401);
-		}
-		await lucia.invalidateSession(event.locals.session.id);
-		await db.delete(sessions).where(eq(sessions.id, event.locals.session.id));
-		const sessionCookie = lucia.createBlankSessionCookie();
-		event.cookies.set(sessionCookie.name, sessionCookie.value, {
-			path: ".",
-			...sessionCookie.attributes
+export const actions = {
+	default: async ({ cookies, locals }) => {
+		if (!locals.pb.authStore.isValid) redirect(302, "/");
+
+		locals.pb.authStore.clear();
+
+		const cookie = locals.pb.authStore.exportToCookie({
+			secure: !dev,
+			path: "/",
+			httpOnly: true,
+			sameSite: "lax"
 		});
-		redirect(302, "/auth/login");
+
+		const parsedCookie = parse(cookie);
+
+		cookies.set(parsedCookie[0].name, parsedCookie[0].value, {
+			secure: parsedCookie[0].secure,
+			path: parsedCookie[0].path ?? "/",
+			httpOnly: parsedCookie[0].httpOnly,
+			sameSite: "lax"
+		});
+
+		redirect(301, "/");
 	}
-};
+} satisfies Actions;

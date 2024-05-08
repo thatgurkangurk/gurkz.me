@@ -1,32 +1,36 @@
-import { lucia } from "$lib/auth/lucia";
+import PocketBase from "pocketbase";
 import type { Handle } from "@sveltejs/kit";
+import { dev } from "$app/environment";
+import { parse } from "set-cookie-parser";
+import type { User } from "$lib/user/types";
+import { env } from "./env";
 
 export const handle: Handle = async ({ event, resolve }) => {
-	const sessionId = event.cookies.get(lucia.sessionCookieName);
-	if (!sessionId) {
-		event.locals.user = null;
-		event.locals.session = null;
-		return resolve(event);
+	event.locals.pb = new PocketBase(env.PUBLIC_BACKEND_URL);
+	event.locals.pb.authStore.loadFromCookie(event.request.headers.get("cookie") || "");
+
+	try {
+		event.locals.pb.authStore.isValid && (await event.locals.pb.collection("users").authRefresh());
+		event.locals.user = event.locals.pb.authStore.model as User;
+	} catch (_) {
+		event.locals.pb.authStore.clear();
 	}
 
-	const { session, user } = await lucia.validateSession(sessionId);
-	if (session && session.fresh) {
-		const sessionCookie = lucia.createSessionCookie(session.id);
-		// sveltekit types deviates from the de-facto standard
-		// you can use 'as any' too
-		event.cookies.set(sessionCookie.name, sessionCookie.value, {
-			path: ".",
-			...sessionCookie.attributes
-		});
-	}
-	if (!session) {
-		const sessionCookie = lucia.createBlankSessionCookie();
-		event.cookies.set(sessionCookie.name, sessionCookie.value, {
-			path: ".",
-			...sessionCookie.attributes
-		});
-	}
-	event.locals.user = user;
-	event.locals.session = session;
-	return resolve(event);
+	const cookie = event.locals.pb.authStore.exportToCookie({
+		secure: !dev,
+		path: "/",
+		httpOnly: true,
+		sameSite: "lax"
+	});
+
+	const parsedCookie = parse(cookie);
+
+	event.cookies.set(parsedCookie[0].name, parsedCookie[0].value, {
+		secure: parsedCookie[0].secure,
+		path: parsedCookie[0].path ?? "/",
+		httpOnly: parsedCookie[0].httpOnly,
+		sameSite: "lax"
+	});
+
+	return await resolve(event);
 };
