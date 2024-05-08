@@ -14,7 +14,9 @@ export async function GET(event: RequestEvent): Promise<Response> {
 
 	if (!code || !state || !storedState || state !== storedState) {
 		console.log("invalid code or state");
-		return new Response(null, {
+		return new Response(JSON.stringify({
+			message: "something went wrong. error code: INVALID_OAUTH_STATE"
+		}), {
 			status: 400
 		});
 	}
