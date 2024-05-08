@@ -1,7 +1,7 @@
 import { fail } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
 import { formSchema } from "./validation";
-import { superValidate } from "sveltekit-superforms";
+import { setError, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { hasPermission } from "$lib/user/permission";
 import { Permission } from "$lib/user/types";
@@ -42,7 +42,7 @@ export const actions: Actions = {
 				owner: user.id
 			});
 		} catch (e) {
-			console.error(e);
+			setError(form, "something unexpected went wrong");
 			return fail(500, {
 				form
 			});

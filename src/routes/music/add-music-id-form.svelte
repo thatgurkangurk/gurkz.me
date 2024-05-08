@@ -6,6 +6,7 @@
 	import { type SuperValidated, type Infer, superForm } from "sveltekit-superforms";
 	import { zodClient } from "sveltekit-superforms/adapters";
 	import { useQueryClient } from "@tanstack/svelte-query";
+	import { LoaderCircle } from "lucide-svelte";
 
 	export let data: SuperValidated<Infer<FormSchema>>;
 	let queryClient = useQueryClient();
@@ -29,6 +30,10 @@
 							toast.error("You do not have permission to create new IDs");
 							break;
 						}
+						case 500: {
+							toast.error("Something unexpected went wrong.");
+							break;
+						}
 						default: {
 							toast.error("Please fix the field errors.");
 							break;
@@ -41,7 +46,7 @@
 		}
 	});
 
-	const { form: formData, enhance } = form;
+	const { form: formData, enhance, submitting } = form;
 </script>
 
 <form method="POST" use:enhance action="?/create">
@@ -62,5 +67,9 @@
 		<Form.FieldErrors />
 	</Form.Field>
 
-	<Form.Button>Create</Form.Button>
+	<Form.Button disabled={$submitting}
+		>{#if $submitting}
+			<LoaderCircle class="h-6 w-6 animate-spin" />
+		{/if} Create</Form.Button
+	>
 </form>

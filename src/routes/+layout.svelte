@@ -1,5 +1,6 @@
 <script lang="ts">
 	import "../app.css";
+	import "$lib/nprogress.css";
 	import { page } from "$app/stores";
 	import { ModeWatcher } from "mode-watcher";
 	import Navbar from "$lib/components/navbar.svelte";
@@ -9,11 +10,26 @@
 	import type { LayoutData } from "./$types";
 	import { QueryClientProvider } from "@tanstack/svelte-query";
 	import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
+	import { navigating } from "$app/stores";
+	import nProgress from "nprogress";
 
 	export let data: LayoutData;
 
+	nProgress.configure({
+		minimum: 0.16,
+		trickle: true
+	});
+
 	$: {
 		setUser(data.user);
+
+		if ($navigating) {
+			nProgress.start();
+		}
+
+		if (!$navigating) {
+			nProgress.done();
+		}
 	}
 </script>
 

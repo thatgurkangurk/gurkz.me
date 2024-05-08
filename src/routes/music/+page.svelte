@@ -85,7 +85,9 @@
 	on:click={() => $query.fetchNextPage()}
 	disabled={!$query.hasNextPage || $query.isFetchingNextPage}
 >
-	{#if $query.isFetching}
-		loading more...
+	{#if $query.hasNextPage}
+		load more
+	{:else if $query.isFetching}
+		loading...
 	{:else}nothing more to load{/if}
 </button>

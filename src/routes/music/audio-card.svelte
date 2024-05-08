@@ -18,6 +18,7 @@
 	let buttonText: string = "play";
 	let isPlaying: boolean = false;
 	let queryClient = useQueryClient();
+	let isDeleting = false;
 
 	const query = createQuery({
 		queryKey: ["music_id", id],
@@ -89,8 +90,11 @@
 						action="?/delete"
 						method="post"
 						use:enhance={() => {
+							isDeleting = true;
+
 							return async ({ update, result }) => {
 								if (result) {
+									isDeleting = false;
 									if (result.status === 200) {
 										queryClient.invalidateQueries({ queryKey: ["music_ids"] });
 										toast.success("success", {
@@ -117,7 +121,11 @@
 						}}
 					>
 						<input type="hidden" name="id" value={$query.data.id} />
-						<Button type="submit" variant="destructive">delete</Button>
+						<Button type="submit" variant="destructive" disabled={isDeleting}
+							>{#if isDeleting}
+								<LoaderCircle class="h-6 w-6 animate-spin" />
+							{/if} delete</Button
+						>
 					</form>
 				{/if}
 			{/if}
