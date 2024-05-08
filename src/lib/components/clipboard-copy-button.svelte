@@ -3,7 +3,7 @@
 	import { Check, Clipboard } from "lucide-svelte";
 	import * as Tooltip from "$lib/components/ui/tooltip";
 
-	export let contentToCopy: string;
+	export let contentToCopy: string | number;
 
 	let state: "idle" | "copied" = "idle";
 </script>
@@ -14,7 +14,7 @@
 			builders={[builder]}
 			on:click={() => {
 				state = "copied";
-				navigator.clipboard.writeText(contentToCopy);
+				navigator.clipboard.writeText(contentToCopy.toString());
 				setTimeout(() => {
 					state = "idle";
 				}, 1000);

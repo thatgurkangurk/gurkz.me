@@ -4,10 +4,10 @@
 	import * as Card from "$lib/components/ui/card";
 	import AudioCard from "./audio-card.svelte";
 	import { createInfiniteQuery } from "@tanstack/svelte-query";
-	import type { GetMusicIdsResponse } from "$lib/types";
 	import { api } from "$lib/api";
 	import { browser } from "$app/environment";
 	import { onDestroy, onMount } from "svelte";
+	import type { GetMusicIdsResponse } from "$lib/music-id/type";
 
 	export let data: PageServerData;
 
@@ -75,7 +75,7 @@
 	>
 		{#each $query.data.pages as page}
 			{#each page.data as id}
-				<AudioCard id={id.robloxId} user={data.user} userIsAdmin={data.userIsAdmin} />
+				<AudioCard id={id.id} user={data.user} userIsAdmin={data.userIsAdmin} />
 			{/each}
 		{/each}
 	</div>

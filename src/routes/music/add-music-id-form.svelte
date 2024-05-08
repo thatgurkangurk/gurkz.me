@@ -5,8 +5,10 @@
 	import { formSchema, type FormSchema } from "./validation";
 	import { type SuperValidated, type Infer, superForm } from "sveltekit-superforms";
 	import { zodClient } from "sveltekit-superforms/adapters";
+	import { useQueryClient } from "@tanstack/svelte-query";
 
 	export let data: SuperValidated<Infer<FormSchema>>;
+	let queryClient = useQueryClient();
 
 	const form = superForm(data, {
 		validators: zodClient(formSchema),
@@ -14,6 +16,7 @@
 			switch (result.type) {
 				case "success": {
 					toast.success("Successfully created");
+					queryClient.invalidateQueries({ queryKey: ["music_ids"] });
 					break;
 				}
 				case "error": {

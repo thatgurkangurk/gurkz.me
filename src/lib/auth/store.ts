@@ -1,4 +1,4 @@
-import type { User } from "lucia";
+import type { User } from "$lib/user/types";
 import { getContext, setContext } from "svelte";
 import { writable, type Writable } from "svelte/store";
 

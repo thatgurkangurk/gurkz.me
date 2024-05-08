@@ -4,22 +4,17 @@ import { formSchema } from "./validation";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import { hasPermission } from "$lib/user/permission";
-import { Permission } from "$lib/db/schema/user";
-import { db } from "$lib/db/client";
-import { musicIds } from "$lib/db/schema/music-id";
-import { nanoid } from "nanoid";
-import { eq } from "drizzle-orm";
-
-async function getId(id: string) {
-	const musicId = await db.select().from(musicIds).where(eq(musicIds.id, id));
-
-	return musicId[0];
-}
+import { Permission } from "$lib/user/types";
+import { createMusicId, deleteMusicId, getMusicId } from "$lib/music-id";
 
 export const load: PageServerLoad = async (event) => {
 	return {
 		user: event.locals.user,
-		userIsAdmin: await hasPermission(event.locals.user?.id, Permission.MUSIC_ADMIN),
+		userIsAdmin: await hasPermission(
+			event.locals.pb,
+			event.locals.user?.id,
+			Permission.manage_music_ids
+		),
 		form: await superValidate(zod(formSchema))
 	};
 };
@@ -40,16 +35,11 @@ export const actions: Actions = {
 				form
 			});
 
-		const userIsMusicAdmin = await hasPermission(user.id, Permission.MUSIC_ADMIN);
-
 		try {
-			await db.insert(musicIds).values({
-				id: nanoid(32),
-				ownerId: user.id,
-				approved: userIsMusicAdmin,
-				robloxId: form.data.id,
+			await createMusicId(event.locals.pb, {
 				name: form.data.name,
-				ownerUsername: user.username
+				roblox_id: Number(form.data.id),
+				owner: user.id
 			});
 		} catch (e) {
 			console.error(e);
@@ -69,10 +59,10 @@ export const actions: Actions = {
 		if (!event.locals.user) return fail(403);
 
 		const { user } = event.locals;
-		const id = await getId(formDataId);
+		const id = await getMusicId(event.locals.pb, formDataId);
 
 		const hasPermissionToDelete =
-			user.id === id.ownerId || hasPermission(user.id, Permission.MUSIC_ADMIN);
+			user.id === id.owner || hasPermission(event.locals.pb, user.id, Permission.manage_music_ids);
 
 		if (!hasPermissionToDelete)
 			return fail(403, {
@@ -80,7 +70,7 @@ export const actions: Actions = {
 			});
 
 		try {
-			await db.delete(musicIds).where(eq(musicIds.id, id.id));
+			await deleteMusicId(event.locals.pb, id.id);
 		} catch (e) {
 			console.error(e);
 			return fail(500, {

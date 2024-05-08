@@ -1,15 +1,14 @@
 <script lang="ts">
-	import type { User } from "lucia";
 	import * as Card from "$lib/components/ui/card";
 	import ClipboardCopyButton from "$lib/components/clipboard-copy-button.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import { enhance } from "$app/forms";
-	import { createQuery } from "@tanstack/svelte-query";
+	import { createQuery, useQueryClient } from "@tanstack/svelte-query";
 	import { api } from "$lib/api";
 	import { Skeleton } from "$lib/components/ui/skeleton";
 	import { LoaderCircle } from "lucide-svelte";
-	import { onMount } from "svelte";
-	import { browser } from "$app/environment";
+	import type { User } from "$lib/user/types";
+	import { toast } from "svelte-sonner";
 
 	export let user: User | null;
 	export let userIsAdmin: boolean;
@@ -18,6 +17,7 @@
 	let audio: HTMLAudioElement;
 	let buttonText: string = "play";
 	let isPlaying: boolean = false;
+	let queryClient = useQueryClient();
 
 	const query = createQuery({
 		queryKey: ["music_id", id],
@@ -54,12 +54,12 @@
 			<Card.Title class="text-xl">{$query.data.name}</Card.Title>
 		</Card.Header>
 		<Card.Content class="flex items-center text-xl">
-			<span>{$query.data.robloxId}</span>
-			<ClipboardCopyButton contentToCopy={$query.data.robloxId} />
+			<span>{$query.data.roblox_id}</span>
+			<ClipboardCopyButton contentToCopy={$query.data.roblox_id} />
 		</Card.Content>
 		<Card.Footer class="grid grid-cols-1">
 			<audio
-				src={`https://api.hyra.io/audio/${$query.data.robloxId}`}
+				src={`https://api.hyra.io/audio/${$query.data.roblox_id}`}
 				bind:this={audio}
 				on:play={() => {
 					isPlaying = true;
@@ -82,10 +82,40 @@
 					audio.play();
 				}}>{buttonText}</Button
 			>
-			<span>Created by: {$query.data.ownerUsername}</span>
+			<span>Created by: {$query.data.expand.owner.username}</span>
 			{#if user}
-				{#if $query.data.ownerId === user.id || userIsAdmin}
-					<form action="?/delete" method="post" use:enhance>
+				{#if $query.data.expand.owner.id === user.id || userIsAdmin}
+					<form
+						action="?/delete"
+						method="post"
+						use:enhance={() => {
+							return async ({ update, result }) => {
+								if (result) {
+									if (result.status === 200) {
+										queryClient.invalidateQueries({ queryKey: ["music_ids"] });
+										toast.success("success", {
+											description: "successfully deleted the music id"
+										});
+
+										return;
+									}
+
+									if (result.status === 403) {
+										toast.error("error", {
+											description: "you do not have permission to do that"
+										});
+										return;
+									}
+
+									toast.error("error", {
+										description: "something unexpected went wrong"
+									});
+									return;
+								}
+								await update();
+							};
+						}}
+					>
 						<input type="hidden" name="id" value={$query.data.id} />
 						<Button type="submit" variant="destructive">delete</Button>
 					</form>
