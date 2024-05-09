@@ -30,7 +30,7 @@ export async function hasPermission(
 
 	const permissions = await getUserPermissions(pb, userId);
 	if (!permissions) return false;
-	if (permissions.includes(Permission.admin)) return true;
+	if (permissions.includes(Permission.ADMIN)) return true;
 
 	const hasPermission = permissions.includes(permission);
 

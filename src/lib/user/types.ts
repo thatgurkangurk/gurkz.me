@@ -9,13 +9,9 @@ export type User = {
 	updated: string;
 	username: string;
 	verified: boolean;
-
-	// permissions
-	can_manage_music_ids: boolean;
-	admin: boolean;
 };
 
-const permissionEnumSchema = z.enum(["admin", "manage_music_ids"]);
+const permissionEnumSchema = z.enum(["ADMIN", "MANAGE_MUSIC_IDS"]);
 
 export type Permission = z.infer<typeof permissionEnumSchema>;
 export const Permission = permissionEnumSchema.enum;

@@ -13,7 +13,7 @@ export const load: PageServerLoad = async (event) => {
 		userIsAdmin: await hasPermission(
 			event.locals.pb,
 			event.locals.user?.id,
-			Permission.manage_music_ids
+			Permission.MANAGE_MUSIC_IDS
 		),
 		form: await superValidate(zod(formSchema))
 	};
@@ -62,7 +62,7 @@ export const actions: Actions = {
 		const id = await getMusicId(event.locals.pb, formDataId);
 
 		const hasPermissionToDelete =
-			user.id === id.owner || hasPermission(event.locals.pb, user.id, Permission.manage_music_ids);
+			user.id === id.owner || hasPermission(event.locals.pb, user.id, Permission.MANAGE_MUSIC_IDS);
 
 		if (!hasPermissionToDelete)
 			return fail(403, {
