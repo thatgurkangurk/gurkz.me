@@ -25,6 +25,10 @@
 			text: "Home"
 		},
 		{
+			href: "/blog",
+			text: "Blog"
+		},
+		{
 			href: "/projects",
 			text: "Projects"
 		},
