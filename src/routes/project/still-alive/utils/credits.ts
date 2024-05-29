@@ -290,9 +290,7 @@ class CreditsRenderer {
 	}
 
 	startTypingCredits() {
-		console.log("should type credits now i think")
 		if (this.currentPosition < CREDIT_DATA.length) {
-			console.log("it is shorter")
 			const curCredit = CREDIT_DATA[this.currentPosition] || "";
 
 			// Select the container for credits

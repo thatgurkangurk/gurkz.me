@@ -35,8 +35,9 @@
 		const cursor = new Cursor().startBlink(TERMINAL_CURSOR_BLINK_INTERVAL);
 		const renderer = new CreditsRenderer(CREDIT_CHARACTER_VELOCITY_MS, container, cursor);
 
+		setupRows(container, cursor);
+
 		startButton.addEventListener("click", () => {
-			setupRows(container, cursor);
 			console.log("clicked on the start button");
 			createTimeout(() => {
 				console.log("starting typing credits");
