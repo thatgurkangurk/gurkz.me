@@ -15,6 +15,11 @@ const projects: Project[] = [
 		title: "still alive",
 		description: "still alive recreated in HTML,CSS and JS",
 		slug: "/still-alive"
+	},
+	{
+		title: "want you gone",
+		description: "want you gone in HTML, CSS and JS",
+		slug: "/want-you-gone"
 	}
 ];
 
