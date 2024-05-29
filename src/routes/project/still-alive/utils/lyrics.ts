@@ -6,26 +6,26 @@ import { createTimeout } from "./timeout";
 
 type Lyric =
 	| {
-			type: "text";
-			start: string;
-			duration: string;
-			appendBr: boolean;
-			text: string;
-			ascii?: ASCII;
-	  }
+		type: "text";
+		start: string;
+		duration: string;
+		appendBr: boolean;
+		text: string;
+		ascii?: ASCII;
+	}
 	| {
-			type: "br";
-			showOffset: string;
-	  }
+		type: "br";
+		showOffset: string;
+	}
 	| {
-			type: "link";
-			start: string;
-			duration: string;
-			appendBr: boolean;
-			text: string;
-			href: string;
-			ascii?: ASCII;
-	  };
+		type: "link";
+		start: string;
+		duration: string;
+		appendBr: boolean;
+		text: string;
+		href: string;
+		ascii?: ASCII;
+	};
 
 const Section1: Lyric[] = [
 	{ type: "text", start: "0", duration: "2000", appendBr: true, text: "Forms FORM-29827281-12:" },
@@ -516,27 +516,27 @@ const Lyrics: {
 	start: string;
 	lyrics: Lyric[];
 }[] = [
-	{
-		start: "0",
-		lyrics: Section1
-	},
-	{
-		start: "53827",
-		lyrics: Section2
-	},
-	{
-		start: "106008",
-		lyrics: Section3
-	},
-	{
-		start: "156843",
-		lyrics: Section4
-	},
-	{
-		start: "179250",
-		lyrics: Section5
-	}
-];
+		{
+			start: "0",
+			lyrics: Section1
+		},
+		{
+			start: "53827",
+			lyrics: Section2
+		},
+		{
+			start: "106008",
+			lyrics: Section3
+		},
+		{
+			start: "156843",
+			lyrics: Section4
+		},
+		{
+			start: "179250",
+			lyrics: Section5
+		}
+	];
 
 class LyricRenderer {
 	protected container: HTMLDivElement;
@@ -590,6 +590,7 @@ class LyricRenderer {
 				link.dataset.dur = lyric.duration;
 				link.dataset.appendBr = `${lyric.appendBr}`;
 				link.dataset.text = lyric.text;
+				link.classList.add("stillalive-link");
 				link.href = lyric.href;
 				this.container.appendChild(link);
 				createTimeout(() => {
@@ -610,7 +611,11 @@ class LyricRenderer {
 				const newLyrics = document.createElement("div");
 				newLyrics.classList.add("container_lyrics");
 				const stillaliveContainer = document.querySelector(".stillalive");
-				stillaliveContainer?.appendChild(newLyrics);
+				if (!stillaliveContainer) {
+					alert("something went wrong");
+					return;
+				}
+				stillaliveContainer.appendChild(newLyrics);
 				this.setContainer(newLyrics);
 
 				section.lyrics.forEach((lyric) => {

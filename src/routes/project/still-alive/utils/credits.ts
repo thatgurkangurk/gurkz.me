@@ -1,5 +1,4 @@
 import type { Cursor } from "./cursor";
-import { typeOneByOne } from "./text";
 import { createTimeout } from "./timeout";
 
 const CREDIT_DATA = [
