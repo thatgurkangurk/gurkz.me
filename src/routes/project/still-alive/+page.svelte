@@ -5,53 +5,22 @@
 	import { LyricRenderer } from "./utils/lyrics";
 	import { ascii, artPieces } from "./utils/ascii";
 	import { onMount } from "svelte";
-	import "./style.css";
 	import { Cursor } from "./utils/cursor";
-	import { clearTimeouts, createTimeout } from "./utils/timeout";
-	import { CreditsRenderer } from "./utils/credits";
+	import { createTimeout } from "./utils/timeout";
+	import { TERMINAL_CURSOR_BLINK_INTERVAL } from "./utils/consts";
+	import CreditsContainer from "./lib/credits-container.svelte";
 
 	let music: HTMLAudioElement;
-	let creditsContainer: HTMLDivElement;
 	let lyricsContainer: HTMLDivElement;
 	let infoMessage: HTMLDivElement;
 	let startButton: HTMLButtonElement;
 
 	onMount(() => {
-		clearTimeouts();
 		ascii.set("clear");
 
-		const CREDIT_CHARACTER_VELOCITY_MS = 68.623562;
-		const TERMINAL_CURSOR_BLINK_INTERVAL = 300;
-
 		const terminalCursor = new Cursor().startBlink(TERMINAL_CURSOR_BLINK_INTERVAL);
-		const creditCursor = new Cursor().startBlink(TERMINAL_CURSOR_BLINK_INTERVAL);
-
 		const lyricRenderer = new LyricRenderer(lyricsContainer, ascii, terminalCursor);
-		const creditsRenderer = new CreditsRenderer(
-			CREDIT_CHARACTER_VELOCITY_MS,
-			creditsContainer,
-			creditCursor
-		);
 
-		createTimeout(() => {
-			if (creditsContainer instanceof HTMLElement) {
-				for (let i = 0, len = 16; i < len; i++) {
-					const spanElement = document.createElement("span");
-					spanElement.className = `row row${i}`;
-					spanElement.id = `row${i}`;
-					creditsContainer.appendChild(spanElement);
-
-					if (i !== len - 1) {
-						const brElement = document.createElement("br");
-						brElement.className = "force-display";
-						creditsContainer.appendChild(brElement);
-					}
-				}
-
-				creditCursor.position(document.querySelector(".container_credits>span.row15")!);
-				creditCursor.startBlink(TERMINAL_CURSOR_BLINK_INTERVAL);
-			}
-		}, TERMINAL_CURSOR_BLINK_INTERVAL);
 		music.addEventListener("canplaythrough", (e) => {
 			e.preventDefault();
 			infoMessage.style.display = "block";
@@ -75,9 +44,6 @@
 					music.muted = false;
 					music.currentTime = 0;
 				}, 6750);
-				createTimeout(() => {
-					creditsRenderer.startTypingCredits();
-				}, 9000);
 			}
 		});
 	});
@@ -137,7 +103,7 @@
 	</div>
 
 	<div class="info_message" bind:this={infoMessage}>
-		<button bind:this={startButton}>click here to start</button><br />
+		<button bind:this={startButton} id="start-btn">click here to start</button><br />
 		<span>works best on a PC</span>
 	</div>
 
@@ -149,5 +115,103 @@
 		{/each}
 	</div>
 
-	<div class="container_credits" bind:this={creditsContainer}></div>
+	<CreditsContainer />
 </div>
+
+<style>
+	::selection {
+		background: rgba(0, 0, 0, 0) !important;
+	}
+
+	::-moz-selection {
+		background: rgba(0, 0, 0, 0) !important;
+	}
+
+	.stillalive {
+		width: 100dvw;
+		height: 82.4dvh;
+		background-color: black !important;
+		color: #debe5f !important;
+		font-family: "Courier New", "Courier", "CourierPrimeSans", monospace !important;
+		font-weight: 600 !important;
+	}
+
+	span {
+		display: inline-block;
+		line-height: 1.35 !important;
+		font-size: 1em !important;
+	}
+
+	pre {
+		font-family: "Courier New", "Courier", "CourierPrimeSans", monospace !important;
+		margin: 0;
+
+		-webkit-touch-callout: none !important;
+		-webkit-user-select: none !important;
+		-khtml-user-select: none !important;
+		-moz-user-select: none !important;
+		-ms-user-select: none !important;
+		user-select: none !important;
+	}
+
+	a {
+		text-decoration: underline;
+		color: currentColor;
+	}
+
+	.info_message {
+		display: none;
+	}
+
+	.container_lyrics,
+	.info_message {
+		position: absolute;
+		width: 26.75em;
+		height: 39em;
+		top: calc(0.8em + 0.25em + 10.5rem);
+		left: calc(0.7em + 0.25em + 2.5rem);
+	}
+
+	.info_message {
+		display: block;
+	}
+
+	.container_lyrics {
+		display: block;
+		white-space: pre;
+	}
+
+	.container_lyrics > br {
+		display: none;
+	}
+
+	.container_credits {
+		display: block;
+		position: absolute;
+		width: 28.75em;
+		height: 21em;
+		top: calc(1.5em + 0.25em + 10.5rem);
+		left: 32em;
+	}
+
+	.container_credits > span.row:empty:before {
+		content: "\200b";
+	}
+
+	.container_asciiart {
+		display: block;
+		position: absolute;
+		left: 38em;
+		top: 40.5em;
+		font-size: 14px;
+	}
+
+	.container_asciiart > pre {
+		display: block;
+		line-height: 1.2;
+	}
+
+	br.force-display {
+		display: inline !important;
+	}
+</style>
