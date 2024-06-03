@@ -89,7 +89,12 @@
 				<Button variant="link" class="px-0" type="submit">log out</Button>
 			</form>
 		{:else}
-			<Button variant="link" class="px-0" href={"/auth/login"}>log in</Button>
+			<Button
+				variant="link"
+				class="px-0"
+				href={"https://passport.gurkz.me/auth/login?redirect=http://localhost:5173/auth/callback"}
+				>log in</Button
+			>
 		{/if}
 		<ModeToggle />
 	</div>
