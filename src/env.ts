@@ -9,13 +9,11 @@ export const env = createEnv({
 		DATABASE_URL: z.string().url()
 	},
 	client: {
-		PUBLIC_BACKEND_URL: z.string().url(),
-		PUBLIC_DOMAIN: z.string().url()
+		PUBLIC_BACKEND_URL: z.string().url()
 	},
 	runtimeEnvStrict: {
 		PUBLIC_BACKEND_URL: publicEnv.PUBLIC_BACKEND_URL,
-		DATABASE_URL: privateEnv.DATABASE_URL,
-		PUBLIC_DOMAIN: publicEnv.PUBLIC_DOMAIN
+		DATABASE_URL: privateEnv.DATABASE_URL
 	},
 	skipValidation: privateEnv.CI === "1"
 });
