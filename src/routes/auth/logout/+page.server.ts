@@ -1,28 +1,14 @@
 import { redirect } from "@sveltejs/kit";
 import type { Actions } from "./$types";
-import { dev } from "$app/environment";
-import { parse } from "set-cookie-parser";
 
 export const actions = {
-	default: async ({ cookies, locals }) => {
-		if (!locals.pb.authStore.isValid) redirect(302, "/");
+	default: async ({ cookies }) => {
+		const sessionCookie = await cookies.get("session");
 
-		locals.pb.authStore.clear();
+		if (!sessionCookie) redirect(302, "/");
 
-		const cookie = locals.pb.authStore.exportToCookie({
-			secure: !dev,
-			path: "/",
-			httpOnly: true,
-			sameSite: "lax"
-		});
-
-		const parsedCookie = parse(cookie);
-
-		cookies.set(parsedCookie[0].name, parsedCookie[0].value, {
-			secure: parsedCookie[0].secure,
-			path: parsedCookie[0].path ?? "/",
-			httpOnly: parsedCookie[0].httpOnly,
-			sameSite: "lax"
+		cookies.delete("session", {
+			path: "/"
 		});
 
 		redirect(301, "/");

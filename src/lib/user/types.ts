@@ -2,13 +2,10 @@ import { z } from "zod";
 
 export type User = {
 	id: string;
-	avatar: string;
-	created: string;
-	email: string;
-	name: string;
-	updated: string;
 	username: string;
-	verified: boolean;
+	email: string;
+	profilePictureUrl: string;
+	permissions: Record<string, string>;
 };
 
 const permissionEnumSchema = z.enum(["ADMIN", "MANAGE_MUSIC_IDS"]);

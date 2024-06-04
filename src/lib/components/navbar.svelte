@@ -7,6 +7,7 @@
 	import ModeToggle from "./mode-toggle.svelte";
 	import { getUser } from "$lib/auth/store";
 	import { enhance } from "$app/forms";
+	import { PUBLIC_DOMAIN } from "$env/static/public";
 
 	type Link = {
 		href: string;
@@ -89,7 +90,12 @@
 				<Button variant="link" class="px-0" type="submit">log out</Button>
 			</form>
 		{:else}
-			<Button variant="link" class="px-0" href={"/auth/login"}>log in</Button>
+			<Button
+				variant="link"
+				class="px-0"
+				href={`https://passport.gurkz.me/auth/login?redirect=${PUBLIC_DOMAIN}/auth/callback`}
+				>log in</Button
+			>
 		{/if}
 		<ModeToggle />
 	</div>
