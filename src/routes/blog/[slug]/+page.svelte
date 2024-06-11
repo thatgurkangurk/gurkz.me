@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
 	import Button from "$lib/components/ui/button/button.svelte";
 	import { ArrowLeft } from "lucide-svelte";
 	import type { PageData } from "./$types";
@@ -10,4 +10,5 @@
 
 <h1 class="text-3xl">{data.post.title}</h1>
 <span>by {data.post.expand.author.name}</span>
-<article class="prose dark:prose-invert dark:text-white">{@html data.post.content}</article>
+<article class="prose dark:prose-invert dark:text-white">{@html data.post.content}</article> -->
+<h2 class="text-3xl">the blog is currently undergoing maintenance. please check back later</h2>
