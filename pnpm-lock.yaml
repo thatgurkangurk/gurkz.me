@@ -11,6 +11,12 @@ importers:
       '@t3-oss/env-core':
         specifier: ^0.10.1
         version: 0.10.1(typescript@5.4.5)(zod@3.23.8)
+      '@trpc/client':
+        specifier: ^10.45.2
+        version: 10.45.2(@trpc/server@10.45.2)
+      '@trpc/server':
+        specifier: ^10.45.2
+        version: 10.45.2
       arctic:
         specifier: ^1.8.1
         version: 1.8.1
@@ -20,9 +26,15 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      delay:
+        specifier: ^6.0.0
+        version: 6.0.0
       drizzle-orm:
         specifier: ^0.31.0
         version: 0.31.0(postgres@3.4.4)
+      drizzle-pagination:
+        specifier: ^1.0.10
+        version: 1.0.10(drizzle-orm@0.31.0(postgres@3.4.4))
       formsnap:
         specifier: ^1.0.0
         version: 1.0.0(svelte@4.2.16)(sveltekit-superforms@2.13.1(@sveltejs/kit@2.5.8(@sveltejs/vite-plugin-svelte@3.1.0(svelte@4.2.16)(vite@5.2.11(@types/node@20.12.11)))(svelte@4.2.16)(vite@5.2.11(@types/node@20.12.11)))(@types/json-schema@7.0.15)(esbuild-runner@2.2.2(esbuild@0.19.12))(esbuild@0.19.12)(svelte@4.2.16))
@@ -53,6 +65,12 @@ importers:
       tailwind-variants:
         specifier: ^0.2.1
         version: 0.2.1(tailwindcss@3.4.3)
+      trpc-svelte-query-adapter:
+        specifier: ^2.3.4
+        version: 2.3.4(@tanstack/svelte-query@5.36.0(svelte@4.2.16))(@trpc/client@10.45.2(@trpc/server@10.45.2))(@trpc/server@10.45.2)(svelte@4.2.16)(typescript@5.4.5)
+      trpc-sveltekit:
+        specifier: ^3.6.1
+        version: 3.6.1(@sveltejs/adapter-node@5.0.1(@sveltejs/kit@2.5.8(@sveltejs/vite-plugin-svelte@3.1.0(svelte@4.2.16)(vite@5.2.11(@types/node@20.12.11)))(svelte@4.2.16)(vite@5.2.11(@types/node@20.12.11))))(@trpc/client@10.45.2(@trpc/server@10.45.2))(@trpc/server@10.45.2)(ws@8.17.0)
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -1053,6 +1071,14 @@ packages:
     peerDependencies:
       svelte: ^3.54.0 || ^4.0.0 || ^5.0.0-next.0
 
+  '@trpc/client@10.45.2':
+    resolution: {integrity: sha512-ykALM5kYWTLn1zYuUOZ2cPWlVfrXhc18HzBDyRhoPYN0jey4iQHEFSEowfnhg1RvYnrAVjNBgHNeSAXjrDbGwg==}
+    peerDependencies:
+      '@trpc/server': 10.45.2
+
+  '@trpc/server@10.45.2':
+    resolution: {integrity: sha512-wOrSThNNE4HUnuhJG6PfDRp4L2009KDVxsd+2VYH8ro6o/7/jwYZ8Uu5j+VaW+mOmc8EHerHzGcdbGNQSAUPgg==}
+
   '@tybys/wasm-util@0.8.3':
     resolution: {integrity: sha512-Z96T/L6dUFFxgFJ+pQtkPpne9q7i6kIPYCFnQBHSgSPV9idTsKfIhCss0h5iM9irweZCatkrdeP8yi5uM1eX6Q==}
 
@@ -1343,6 +1369,10 @@ packages:
     resolution: {integrity: sha512-3sUqbMEc77XqpdNO7FRyRog+eW3ph+GYCbj+rK+uYyRMuwsVy0rMiVtPn+QJlKFvWP/1PYpapqYn0Me2knFn+A==}
     engines: {node: '>=0.10.0'}
 
+  delay@6.0.0:
+    resolution: {integrity: sha512-2NJozoOHQ4NuZuVIr5CWd0iiLVIRSDepakaovIN+9eIDHEhdCAEvSy2cuf1DCrPPQLvHmbqTHODlhHg8UCy4zw==}
+    engines: {node: '>=16'}
+
   dequal@2.0.3:
     resolution: {integrity: sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==}
     engines: {node: '>=6'}
@@ -1451,6 +1481,11 @@ packages:
         optional: true
       sqlite3:
         optional: true
+
+  drizzle-pagination@1.0.10:
+    resolution: {integrity: sha512-4n811FkmQukhDs9y91sK5nRNPnK1cH+soLmw84rwpJHPJjkFr6zD/f8+UHRv9mldoA/mq1JihMpE3/Lz6h6INA==}
+    peerDependencies:
+      drizzle-orm: '>=0.27.2 <1.0.0'
 
   eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
@@ -2095,6 +2130,9 @@ packages:
   property-expr@2.0.6:
     resolution: {integrity: sha512-SVtmxhRE/CGkn3eZY1T6pC8Nln6Fr/lu1mKSgRud0eC73whjGfoAogbn78LkD8aFL0zz3bAFerKSnOl7NlErBA==}
 
+  proxy-deep@3.1.1:
+    resolution: {integrity: sha512-kppbvLUNJ4IOMZds9/4gz/rtT5OFiesy3XosLsgMKlF3vb6GA5Y3ptyDlzKLcOcUBW+zaY+RiMINTsgE+O6e+Q==}
+
   punycode@2.3.1:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
@@ -2351,6 +2389,23 @@ packages:
     resolution: {integrity: sha512-sf4i37nQ2LBx4m3wB74y+ubopq6W/dIzXg0FDGjsYnZHVa1Da8FH853wlL2gtUhg+xJXjfk3kUZS3BRoQeoQBQ==}
     engines: {node: '>=6'}
 
+  trpc-svelte-query-adapter@2.3.4:
+    resolution: {integrity: sha512-TnqMV6h7gYbTtkXbnonZ+aGbRrZzmCGQ66J4fqoQz2at6z4xZPUtAT4KaoZruFpegXoKQQQfBLV9We6JkVXedw==}
+    peerDependencies:
+      '@tanstack/svelte-query': ^5.8.2
+      '@trpc/client': ^10.43.3
+      '@trpc/server': ^10.43.3
+      svelte: ^4.2.3
+      typescript: ^5.2.2
+
+  trpc-sveltekit@3.6.1:
+    resolution: {integrity: sha512-5Sfw/xwvyuAdpoMHPgzC5B3m3pjbjcT6d3Vo9ukS1/NP8d2LPj30wWyHP3ploeUQNJRvCffRRkc69mp7csqf/g==}
+    peerDependencies:
+      '@sveltejs/adapter-node': '>=1.2'
+      '@trpc/client': ^10.0.0
+      '@trpc/server': ^10.0.0
+      ws: '>=8'
+
   ts-algebra@2.0.0:
     resolution: {integrity: sha512-FPAhNPFMrkwz76P7cdjdmiShwMynZYN6SgOujD1urY4oNm80Ou9oMdmbR45LotcKOXoy7wSmHkRFE6Mxbrhefw==}
 
@@ -2467,6 +2522,18 @@ packages:
 
   wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
+
+  ws@8.17.0:
+    resolution: {integrity: sha512-uJq6108EgZMAl20KagGkzCKfMEjxmKvZHG7Tlq0Z6nOky7YF7aq4mOx6xK8TJ/i1LeK4Qus7INktacctDgY8Ow==}
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      bufferutil: ^4.0.1
+      utf-8-validate: '>=5.0.2'
+    peerDependenciesMeta:
+      bufferutil:
+        optional: true
+      utf-8-validate:
+        optional: true
 
   yaml@1.10.2:
     resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}
@@ -3166,6 +3233,12 @@ snapshots:
       '@tanstack/query-core': 5.36.0
       svelte: 4.2.16
 
+  '@trpc/client@10.45.2(@trpc/server@10.45.2)':
+    dependencies:
+      '@trpc/server': 10.45.2
+
+  '@trpc/server@10.45.2': {}
+
   '@tybys/wasm-util@0.8.3':
     dependencies:
       tslib: 2.6.2
@@ -3476,6 +3549,8 @@ snapshots:
 
   deepmerge@4.3.1: {}
 
+  delay@6.0.0: {}
+
   dequal@2.0.3: {}
 
   detect-indent@6.1.0: {}
@@ -3505,6 +3580,10 @@ snapshots:
   drizzle-orm@0.31.0(postgres@3.4.4):
     optionalDependencies:
       postgres: 3.4.4
+
+  drizzle-pagination@1.0.10(drizzle-orm@0.31.0(postgres@3.4.4)):
+    dependencies:
+      drizzle-orm: 0.31.0(postgres@3.4.4)
 
   eastasianwidth@0.2.0: {}
 
@@ -4191,6 +4270,8 @@ snapshots:
   property-expr@2.0.6:
     optional: true
 
+  proxy-deep@3.1.1: {}
+
   punycode@2.3.1: {}
 
   queue-microtask@1.2.3: {}
@@ -4505,6 +4586,22 @@ snapshots:
 
   totalist@3.0.1: {}
 
+  trpc-svelte-query-adapter@2.3.4(@tanstack/svelte-query@5.36.0(svelte@4.2.16))(@trpc/client@10.45.2(@trpc/server@10.45.2))(@trpc/server@10.45.2)(svelte@4.2.16)(typescript@5.4.5):
+    dependencies:
+      '@tanstack/svelte-query': 5.36.0(svelte@4.2.16)
+      '@trpc/client': 10.45.2(@trpc/server@10.45.2)
+      '@trpc/server': 10.45.2
+      proxy-deep: 3.1.1
+      svelte: 4.2.16
+      typescript: 5.4.5
+
+  trpc-sveltekit@3.6.1(@sveltejs/adapter-node@5.0.1(@sveltejs/kit@2.5.8(@sveltejs/vite-plugin-svelte@3.1.0(svelte@4.2.16)(vite@5.2.11(@types/node@20.12.11)))(svelte@4.2.16)(vite@5.2.11(@types/node@20.12.11))))(@trpc/client@10.45.2(@trpc/server@10.45.2))(@trpc/server@10.45.2)(ws@8.17.0):
+    dependencies:
+      '@sveltejs/adapter-node': 5.0.1(@sveltejs/kit@2.5.8(@sveltejs/vite-plugin-svelte@3.1.0(svelte@4.2.16)(vite@5.2.11(@types/node@20.12.11)))(svelte@4.2.16)(vite@5.2.11(@types/node@20.12.11)))
+      '@trpc/client': 10.45.2(@trpc/server@10.45.2)
+      '@trpc/server': 10.45.2
+      ws: 8.17.0
+
   ts-algebra@2.0.0:
     optional: true
 
@@ -4584,6 +4681,8 @@ snapshots:
       strip-ansi: 7.1.0
 
   wrappy@1.0.2: {}
+
+  ws@8.17.0: {}
 
   yaml@1.10.2: {}
 

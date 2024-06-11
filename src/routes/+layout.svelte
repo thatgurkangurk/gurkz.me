@@ -37,12 +37,12 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin="anonymous" href={SpaceGrotesk} />
 <QueryClientProvider client={data.queryClient}>
 	{#if $page.route.id === "/project/still-alive"}
-		<Toaster />
+		<Toaster richColors />
 		<Navbar />
 		<slot />
 	{:else}
 		<div class="min-h-[100dvh] w-full flex flex-col">
-			<Toaster />
+			<Toaster richColors />
 			<Navbar />
 
 			<main class="p-2 flex-grow">

@@ -18,6 +18,8 @@ export const musicIds = pgTable("music_id", {
 	}).notNull(),
 	created: timestamp("created_at", {
 		mode: "date"
-	}).defaultNow(),
+	})
+		.notNull()
+		.defaultNow(),
 	working: boolean("working").notNull().default(true)
 });

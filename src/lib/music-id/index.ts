@@ -1,31 +1,22 @@
-import PocketBase from "pocketbase";
 import type { MusicId } from "./type";
-
-export async function getMusicId(pb: PocketBase, id: string) {
-	const record = await pb.collection("music_ids").getOne<MusicId>(id, {
-		expand: "owner"
-	});
-
-	return record;
-}
-
-export async function getMusicIds(pb: PocketBase, page = 1) {
-	const record = await pb.collection("music_ids").getList<MusicId>(page, 14, {
-		expand: "owner"
-	});
-
-	return record;
-}
+import { db } from "$lib/db";
+import { musicIds } from "$lib/schema/music";
+import type { User } from "$lib/user/types";
+import { eq } from "drizzle-orm";
 
 export async function createMusicId(
-	pb: PocketBase,
-	data: Omit<MusicId, "created" | "updated" | "id" | "working" | "expand">
+	data: Omit<MusicId, "created" | "id" | "working" | "createdBy">,
+	user: User
 ) {
-	await pb.collection("music_ids").create<MusicId>(data, {
-		expand: "owner"
-	});
+	if (user.permissions["canCreateMusicIds"]) {
+		await db.insert(musicIds).values({
+			...data
+		});
+	}
 }
 
-export async function deleteMusicId(pb: PocketBase, id: string) {
-	await pb.collection("music_ids").delete(id);
+export async function deleteMusicId(id: string, user: User) {
+	if (user.permissions["canManageMusicIds"]) {
+		await db.delete(musicIds).where(eq(musicIds.id, id));
+	}
 }

@@ -6,12 +6,23 @@ const matcher = new RegExpMatcher({
 	...englishRecommendedTransformers
 });
 
-export const formSchema = z.object({
-	id: z.string().min(4).max(24),
+export const createMusicIdSchema = z.object({
+	id: z
+		.string()
+		.min(4, {
+			message: "id has to be longer than 4 characters"
+		})
+		.max(24, {
+			message: "id has to be shorter than 24 characters"
+		}),
 	name: z
 		.string()
-		.min(4)
-		.max(48)
+		.min(4, {
+			message: "name has to be longer than 4 characters"
+		})
+		.max(48, {
+			message: "name has to be shorter than 48 characters"
+		})
 		.refine(
 			(input) => {
 				if (matcher.hasMatch(input)) return false;
@@ -22,5 +33,3 @@ export const formSchema = z.object({
 			}
 		)
 });
-
-export type FormSchema = typeof formSchema;
