@@ -5,7 +5,7 @@ export type User = {
 	username: string;
 	email: string;
 	profilePictureUrl: string;
-	permissions: Record<string, string>;
+	permissions: Record<string, boolean>;
 };
 
 const permissionEnumSchema = z.enum(["ADMIN", "MANAGE_MUSIC_IDS"]);

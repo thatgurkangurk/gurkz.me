@@ -1,36 +1,14 @@
 import PocketBase from "pocketbase";
 import type { Handle } from "@sveltejs/kit";
-import { dev } from "$app/environment";
-import { parse } from "set-cookie-parser";
+import { createTRPCHandle } from "trpc-sveltekit";
 import type { User } from "$lib/user/types";
 import { env } from "./env";
+import { createContext } from "$lib/trpc/context";
+import { sequence } from "@sveltejs/kit/hooks";
+import { appRouter } from "$lib/trpc/router";
 
-export const handle: Handle = async ({ event, resolve }) => {
+const authHook: Handle = async ({ event, resolve }) => {
 	event.locals.pb = new PocketBase(env.PUBLIC_BACKEND_URL);
-	event.locals.pb.authStore.loadFromCookie(event.request.headers.get("cookie") || "");
-
-	// try {
-	// 	event.locals.pb.authStore.isValid && (await event.locals.pb.collection("users").authRefresh());
-	// 	event.locals.user = event.locals.pb.authStore.model as User;
-	// } catch (_) {
-	// 	event.locals.pb.authStore.clear();
-	// }
-
-	// const cookie = event.locals.pb.authStore.exportToCookie({
-	// 	secure: !dev,
-	// 	path: "/",
-	// 	httpOnly: true,
-	// 	sameSite: "lax"
-	// });
-
-	// const parsedCookie = parse(cookie);
-
-	// event.cookies.set(parsedCookie[0].name, parsedCookie[0].value, {
-	// 	secure: parsedCookie[0].secure,
-	// 	path: parsedCookie[0].path ?? "/",
-	// 	httpOnly: parsedCookie[0].httpOnly,
-	// 	sameSite: "lax"
-	// });
 
 	const sessionCookie = event.cookies.get("session");
 
@@ -51,3 +29,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	return await resolve(event);
 };
+
+export const trpcHook: Handle = createTRPCHandle({ router: appRouter, createContext });
+
+export const handle = sequence(authHook, trpcHook);
