@@ -1,0 +1,32 @@
+---
+import type { Link } from "./Navbar";
+import { Navbar as Nav } from "./Navbar";
+
+const currentPath = new URL(Astro.request.url).pathname;
+
+const links: Link[] = [
+  {
+    href: "/",
+    text: "gurkan's website",
+    alwaysActive: true,
+  },
+  {
+    href: "/",
+    text: "Home",
+  },
+  {
+    href: "/blog",
+    text: "Blog",
+  },
+  {
+    href: "/projects",
+    text: "Projects",
+  },
+  {
+    href: "/music",
+    text: "Music ID List",
+  },
+];
+---
+
+<Nav client:idle links={links} currentPath={currentPath} />
