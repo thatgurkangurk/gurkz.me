@@ -22,7 +22,7 @@ RUN adduser --system --uid 1001 gurkz
 ENV NODE_ENV production
 
 COPY --from=prod-deps --chown=gurkz:nodejs /app/node_modules /app/node_modules
-COPY --from=build --chown=gurkz:nodejs /app/build /app/build
+COPY --from=build --chown=gurkz:nodejs /app/dist /app/dist
 
 EXPOSE 4321/tcp
-CMD [ "bun", "run", "build/entry.mjs" ]
+CMD [ "bun", "run", "./dist/entry.mjs" ]
