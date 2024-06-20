@@ -24,5 +24,6 @@ ENV NODE_ENV production
 COPY --from=prod-deps --chown=gurkz:nodejs /app/node_modules /app/node_modules
 COPY --from=build --chown=gurkz:nodejs /app/dist /app/dist
 
+ENV HOST=0.0.0.0
 EXPOSE 4321/tcp
 CMD [ "bun", "run", "./dist/server/entry.mjs" ]
