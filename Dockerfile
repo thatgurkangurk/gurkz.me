@@ -4,7 +4,7 @@ COPY . /app
 WORKDIR /app
 
 FROM base AS prod-deps
-RUN pnpm install --production --frozen-lockfile
+RUN bun install --production --frozen-lockfile
 
 FROM base AS build
 ENV CI=1
