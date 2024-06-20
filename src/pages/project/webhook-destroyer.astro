@@ -1,0 +1,8 @@
+---
+import ProjectLayout from "@/components/ProjectLayout.astro";
+import { WebhookDestroyer as Destroyer } from "@/components/projects/webhook-destroyer";
+---
+
+<ProjectLayout>
+  <Destroyer client:only />
+</ProjectLayout>
