@@ -9,6 +9,11 @@ RUN bun install --production --frozen-lockfile
 FROM base AS build
 ENV CI=1
 RUN bun install --frozen-lockfile
+
+ENV PUBLIC_SITE_URL=""
+ENV DISCORD_CLIENT_ID=""
+ENV DISCORD_CLIENT_SECRET=""
+
 RUN bun run build
 
 FROM base
