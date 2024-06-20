@@ -23,5 +23,5 @@ ENV NODE_ENV production
 COPY --from=prod-deps --chown=gurkz:nodejs /app/node_modules /app/node_modules
 COPY --from=build --chown=gurkz:nodejs /app/build /app/build
 
-EXPOSE 3000/tcp
-CMD [ "node", "build" ]
+EXPOSE 4321/tcp
+CMD [ "node", "build/entry.mjs" ]

@@ -1,1 +1,0 @@
-ALTER TABLE "music_id" ALTER COLUMN "created_at" SET NOT NULL;

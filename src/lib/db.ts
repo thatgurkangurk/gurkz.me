@@ -1,9 +1,14 @@
-import postgres from "postgres";
-import { env } from "../env";
 import { drizzle } from "drizzle-orm/postgres-js";
-import { schema } from "./schema";
+import postgres from "postgres";
+import * as usersSchema from "./schema/user";
+import * as musicSchema from "./schema/music";
+import * as sessionsSchema from "./schema/session";
 
-const queryClient = postgres(env.DATABASE_URL);
-const db = drizzle(queryClient, { schema: schema });
+const schema = {
+  ...usersSchema,
+  ...musicSchema,
+  ...sessionsSchema,
+};
 
-export { db };
+const pool = postgres(import.meta.env.DATABASE_URL, { max: 1 });
+export const db = drizzle(pool, { schema: schema });
