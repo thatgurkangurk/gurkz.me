@@ -31,7 +31,7 @@ export function WebhookDestroyer() {
     validate: zodForm(formSchema),
   });
 
-  const handleSubmit: SubmitHandler<FormSchema> = async (values, event) => {
+  const handleSubmit: SubmitHandler<FormSchema> = async (values) => {
     try {
       const res = await fetch(values.url, {
         method: "DELETE",
