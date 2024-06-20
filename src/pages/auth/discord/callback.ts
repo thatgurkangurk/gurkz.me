@@ -49,10 +49,3 @@ export async function GET(context: APIContext): Promise<Response> {
     });
   }
 }
-
-type DiscordUser = {
-  id: string;
-  username: string;
-  email: string;
-  avatar: string;
-};
