@@ -10,11 +10,7 @@ FROM base AS build
 ENV CI=1
 RUN bun install --frozen-lockfile
 
-ENV PUBLIC_SITE_URL="set me"
-ENV DISCORD_CLIENT_ID="set me"
-ENV DISCORD_CLIENT_SECRET="set me"
-
-RUN bun run build
+RUN PUBLIC_SITE_URL="set me" DISCORD_CLIENT_ID="set me" DISCORD_CLIENT_SECRET="set me" bun run build
 
 FROM base
 RUN addgroup --system --gid 1001 nodejs
