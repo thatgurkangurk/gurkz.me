@@ -1,10 +1,24 @@
 import { createSignal, onMount, Switch, Match, Show } from "solid-js";
 import video from "./badapple.mp4";
 import { createEmitter } from "@solid-primitives/event-bus";
-import { Card } from "@/components/ui/card";
-import { TextField, TextFieldRoot } from "@/components/ui/textfield";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  TextField,
+  TextFieldLabel,
+  TextFieldRoot,
+} from "@/components/ui/textfield";
+import type { JSX } from "solid-js";
+import { Button } from "@/components/ui/button";
 
 const [videoElem, setVideoElem] = createSignal<HTMLVideoElement>();
+const [videoSrc, setVideoSrc] = createSignal<string>("");
 const events = createEmitter<{
   play: HTMLVideoElement;
   pause: HTMLVideoElement;
@@ -32,6 +46,49 @@ function createTable(props: {
   return props.table;
 }
 
+function VideoSelector() {
+  return (
+    <Card class="w-fit">
+      <CardHeader>
+        <CardTitle>choose a video</CardTitle>
+      </CardHeader>
+      <CardContent>
+        choose between the bad apple video or you can upload your own
+      </CardContent>
+      <CardFooter>
+        <div class="flex flex-row gap-3">
+          <Button
+            onClick={() => {
+              setVideoSrc(video);
+            }}
+          >
+            bad apple video
+          </Button>
+          <input
+            accept=".mp4"
+            onChange={(e) => {
+              if (e.target.files) {
+                const file = e.target.files[0];
+                if (file) {
+                  const videoUrl = URL.createObjectURL(file);
+                  setVideoSrc(videoUrl);
+                }
+              }
+            }}
+            type="file"
+          />
+        </div>
+        <br />
+      </CardFooter>
+      <CardDescription>
+        <p class="p-2 pl-6">
+          note: the video never gets uploaded, it stays on your device
+        </p>
+      </CardDescription>
+    </Card>
+  );
+}
+
 function VideoPlayer() {
   return (
     <video
@@ -42,14 +99,12 @@ function VideoPlayer() {
         events.emit("pause", videoElem()!);
       }}
       ref={setVideoElem}
-      width="160"
-      height="120"
+      width="240"
+      height="180"
       controls
       playsinline
-    >
-      <source src={video} type="video/mp4" />
-      your browser does not support the video tag
-    </video>
+      src={videoSrc()}
+    />
   );
 }
 
@@ -80,6 +135,7 @@ export function BadApple() {
   }
 
   onMount(() => {
+    setVideoSrc("");
     checkDevice();
     setIsDefault(true);
     const video = videoElem()!;
@@ -171,6 +227,7 @@ export function BadApple() {
             <label for="downscalefactor"> downscale factor</label>
             <br />
             <hr />
+            <VideoSelector />
             <br />
           </div>
         </Show>
