@@ -10,7 +10,7 @@ FROM base AS build
 ENV CI=1
 RUN bun install --frozen-lockfile
 
-RUN DATABASE_URL="set me" SITE_URL="set me" DISCORD_CLIENT_ID="set me" DISCORD_CLIENT_SECRET="set me" bun run build
+RUN DATABASE_URL="postgres://set-me:set-me@set-me:5432/set-me" SITE_URL="set me" DISCORD_CLIENT_ID="set me" DISCORD_CLIENT_SECRET="set me" bun run build
 
 FROM base
 RUN addgroup --system --gid 1001 nodejs
