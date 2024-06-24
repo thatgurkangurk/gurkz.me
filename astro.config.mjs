@@ -22,9 +22,9 @@ export default defineConfig({
   experimental: {
     env: {
       schema: {
-        PUBLIC_SITE_URL: envField.string({
-          context: "client",
-          access: "public",
+        SITE_URL: envField.string({
+          context: "server",
+          access: "secret",
           optional: false,
         }),
         DISCORD_CLIENT_ID: envField.string({

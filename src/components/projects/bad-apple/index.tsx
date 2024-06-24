@@ -9,12 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  TextField,
-  TextFieldLabel,
-  TextFieldRoot,
-} from "@/components/ui/textfield";
-import type { JSX } from "solid-js";
+import { TextField, TextFieldRoot } from "@/components/ui/textfield";
 import { Button } from "@/components/ui/button";
 
 const [videoElem, setVideoElem] = createSignal<HTMLVideoElement>();
