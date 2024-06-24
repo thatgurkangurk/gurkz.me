@@ -51,7 +51,12 @@ export async function POST({ request, locals }: APIContext) {
     createdById: locals.user.id,
   });
 
-  return new Response(null, {
-    status: 200,
-  });
+  return new Response(
+    JSON.stringify({
+      message: "created",
+    }),
+    {
+      status: 200,
+    }
+  );
 }

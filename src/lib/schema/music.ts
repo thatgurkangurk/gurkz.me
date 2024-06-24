@@ -7,6 +7,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { nanoid } from "nanoid";
 import { users } from "./user";
+import { relations } from "drizzle-orm";
 
 export const musicIds = pgTable("music_id", {
   id: varchar("id", {
@@ -32,3 +33,10 @@ export const musicIds = pgTable("music_id", {
     .defaultNow(),
   working: boolean("working").notNull().default(true),
 });
+
+export const musicIdRelations = relations(musicIds, ({ one }) => ({
+  creator: one(users, {
+    fields: [musicIds.createdById],
+    references: [users.id],
+  }),
+}));
