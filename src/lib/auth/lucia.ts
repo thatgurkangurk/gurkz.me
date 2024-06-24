@@ -19,6 +19,7 @@ export const lucia = new Lucia(adapter, {
       username: databaseUserAttributes.username,
       profilePictureUrl: databaseUserAttributes.profilePictureUrl,
       email: databaseUserAttributes.email,
+      permissions: databaseUserAttributes.permissions,
     };
   },
 });
