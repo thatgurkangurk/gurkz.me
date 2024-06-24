@@ -37,6 +37,11 @@ export default defineConfig({
           access: "secret",
           optional: false,
         }),
+        DATABASE_URL: envField.string({
+          context: "server",
+          access: "secret",
+          optional: false,
+        }),
       },
     },
   },
