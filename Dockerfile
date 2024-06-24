@@ -10,11 +10,7 @@ FROM base AS build
 ENV CI=1
 RUN bun install --frozen-lockfile
 
-ENV PUBLIC_SITE_URL="set me"
-ENV DISCORD_CLIENT_ID="set me"
-ENV DISCORD_CLIENT_SECRET="set me"
-
-RUN bun run build
+RUN DATABASE_URL="postgres://set-me:set-me@set-me:5432/set-me" SITE_URL="set me" DISCORD_CLIENT_ID="set me" DISCORD_CLIENT_SECRET="set me" bun run build
 
 FROM base
 RUN addgroup --system --gid 1001 nodejs
@@ -22,7 +18,8 @@ RUN adduser --system --uid 1001 gurkz
 ENV NODE_ENV production
 
 COPY --from=prod-deps --chown=gurkz:nodejs /app/node_modules /app/node_modules
-COPY --from=build --chown=gurkz:nodejs /app/build /app/build
+COPY --from=build --chown=gurkz:nodejs /app/dist /app/dist
 
+ENV HOST=0.0.0.0
 EXPOSE 4321/tcp
-CMD [ "bun", "run", "build/entry.mjs" ]
+CMD [ "bun", "run", "./dist/server/entry.mjs" ]
