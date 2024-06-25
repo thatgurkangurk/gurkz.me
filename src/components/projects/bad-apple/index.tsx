@@ -12,6 +12,8 @@ import {
 import { TextField, TextFieldRoot } from "@/components/ui/textfield";
 import { Button } from "@/components/ui/button";
 
+const animationFrames: number[] = [];
+
 const [videoElem, setVideoElem] = createSignal<HTMLVideoElement>();
 const [videoSrc, setVideoSrc] = createSignal<string>("");
 const events = createEmitter<{
@@ -130,6 +132,9 @@ export function BadApple() {
   }
 
   onMount(() => {
+    animationFrames.forEach((number) => {
+      cancelAnimationFrame(number);
+    });
     setVideoSrc("");
     checkDevice();
     setIsDefault(true);
@@ -194,10 +199,10 @@ export function BadApple() {
           }
         }
 
-        requestAnimationFrame(draw);
+        animationFrames.push(requestAnimationFrame(draw));
       }
 
-      requestAnimationFrame(draw);
+      animationFrames.push(requestAnimationFrame(draw));
     });
   });
 
