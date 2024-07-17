@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "vinxi dev",
     "build": "vinxi build",
-    "start": "vinxi start"
+    "start": "vinxi start",
+    "format": "bunx @biomejs/biome check --write src"
   },
   "dependencies": {
     "@fontsource-variable/space-grotesk": "^5.0.18",
@@ -25,5 +26,8 @@
   },
   "engines": {
     "node": ">=18"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.8.3"
   }
 }
