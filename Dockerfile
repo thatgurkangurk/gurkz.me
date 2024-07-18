@@ -22,5 +22,6 @@ COPY --from=build --chown=gurkz:nodejs /app/.output /app/.output
 
 ENV HOST=0.0.0.0
 ENV PORT=4321
+ENV DATABASE_URL="set me"
 EXPOSE 4321/tcp
 CMD [ "bun", "run", "./.output/server/index.mjs" ]
