@@ -12,6 +12,9 @@ import {
 } from "@kobalte/core";
 import { isServer } from "solid-js/web";
 import { Nav } from "./components/nav";
+import { QueryClientProvider } from "@tanstack/solid-query";
+import { queryClient, trpc } from "./lib/trpc/client";
+import { SolidQueryDevtools } from "@tanstack/solid-query-devtools";
 
 function getServerCookies() {
 	"use server";
@@ -35,10 +38,15 @@ export default function App() {
 							<Title>gurkan's website</Title>
 
 							<Suspense>
-								<Nav />
-								<div class="min-h-[93dvh] w-full flex flex-col">
-									<main class="p-2 flex-grow">{props.children}</main>
-								</div>
+								<QueryClientProvider client={queryClient}>
+									<trpc.Provider queryClient={queryClient}>
+										<Nav />
+										<div class="min-h-[93dvh] w-full flex flex-col">
+											<main class="p-2 flex-grow">{props.children}</main>
+										</div>
+										<SolidQueryDevtools />
+									</trpc.Provider>
+								</QueryClientProvider>
 							</Suspense>
 						</MetaProvider>
 					</ColorModeProvider>
