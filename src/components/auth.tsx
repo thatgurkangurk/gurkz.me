@@ -1,7 +1,7 @@
 import { createAsync } from "@solidjs/router";
-import { getAuthenticatedUser } from "../auth/utils";
+import { getAuthenticatedUser } from "../lib/auth/utils";
 import { Show } from "solid-js";
-import { discordLoginAction, logoutAction } from "../auth/actions";
+import { discordLoginAction, logoutAction } from "../lib/auth/actions";
 
 export function Auth() {
 	const user = createAsync(() => getAuthenticatedUser());
