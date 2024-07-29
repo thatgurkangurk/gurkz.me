@@ -1,6 +1,7 @@
 import { Title } from "@solidjs/meta";
 import { createAsync } from "@solidjs/router";
 import { Show } from "solid-js";
+import { Auth } from "~/lib/components/auth";
 import { getMessage } from "~/message";
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
 			<Show when={message()} fallback={<span>no message</span>}>
 				{message()}
 			</Show>
+			<Auth />
 			<p>
 				if you want to, you can check out the progress{" "}
 				<a href="https://github.com/thatgurkangurk/gurkz.me/pull/38">here</a>
