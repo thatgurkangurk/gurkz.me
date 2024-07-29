@@ -1,10 +1,16 @@
 import type { inferAsyncReturnType } from "@trpc/server";
 import type { createSolidAPIHandlerContext } from "@solid-mediakit/trpc/handler";
+import { getRequestEvent } from "solid-js/web";
 
 export const createContextInner = async (
 	opts: createSolidAPIHandlerContext,
 ) => {
+	const requestEvent = getRequestEvent();
+
+	const user = requestEvent?.locals.user;
+
 	return {
+		user,
 		...opts,
 	};
 };
