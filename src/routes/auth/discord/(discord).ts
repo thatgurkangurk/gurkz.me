@@ -2,6 +2,7 @@ import { generateState } from "arctic";
 import { setCookie } from "vinxi/http";
 import { getDiscordAuthorisationUrl } from "~/lib/auth/discord";
 import { isDev } from "solid-js/web";
+import { redirect } from "@solidjs/router";
 
 export async function GET() {
 	const state = generateState();
@@ -14,5 +15,5 @@ export async function GET() {
 		maxAge: 60 * 10,
 		sameSite: "lax",
 	});
-	return Response.redirect(url.toString());
+	return redirect(url.toString());
 }
