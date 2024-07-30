@@ -1,18 +1,93 @@
+import { For } from "solid-js";
 import { Show } from "solid-js";
 import { trpc } from "~/lib/trpc/client";
+import type { InferSelectModel } from "drizzle-orm";
+import type { User } from "lucia";
+import {
+	Card,
+	CardContent,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "~/components/ui/card";
+import type { musicIds } from "~/lib/schema/music";
+import { Skeleton } from "~/components/ui/skeleton";
+import { LoaderCircle } from "lucide-solid";
+
+type MusicId = InferSelectModel<typeof musicIds> & {
+	creator: User;
+};
+
+function MusicCard(props: { musicId: MusicId }) {
+	return (
+		<Card class="w-full h-full">
+			<CardHeader>
+				<CardTitle class="text-xl">{props.musicId.name}</CardTitle>
+			</CardHeader>
+			<CardContent class="flex items-center text-xl">
+				<span>{props.musicId.robloxId}</span>
+			</CardContent>
+			<CardFooter class="grid grid-cols-1">
+				<span>created by: {props.musicId.creator.username}</span>
+			</CardFooter>
+		</Card>
+	);
+}
+
+function MusicCardSkeleton() {
+	return (
+		<Card class="w-full h-full">
+			<CardHeader>
+				<CardTitle class="text-xl pt-1">
+					<Skeleton class="h-6 w-2 sm:w-48 md:w-48 lg:w-60" />
+				</CardTitle>
+			</CardHeader>
+			<CardContent class="flex items-center text-xl gap-2 pt-3">
+				<Skeleton class="h-6 w-2 sm:w-32 md:w-32 lg:w-48" />
+				<Skeleton class="h-6 w-6" />
+			</CardContent>
+			<CardFooter class="grid grid-cols-1 gap-1">
+				<Skeleton class="h-10" />
+				<Skeleton class="h-6 w-[95%]" />
+			</CardFooter>
+			<div class="p-2">
+				<LoaderCircle class="h-6 w-6 animate-spin" />
+			</div>
+		</Card>
+	);
+}
 
 export default function MusicIdList() {
-	const query = trpc.music.hello.createQuery();
+	const query = trpc.music.getMusicIds.createQuery();
+
 	return (
 		<>
 			<h2 class="text-2xl">music id list</h2>
-			<Show when={!query.isFetching} fallback={<span>loading</span>}>
-				<p>{query.data}</p>
-
-				<button type="button" onClick={() => query.refetch()}>
-					refetch
-				</button>
-			</Show>
+			<div class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4">
+				<Show
+					when={!query.isFetching}
+					fallback={
+						<>
+							<MusicCardSkeleton />
+							<MusicCardSkeleton />
+							<MusicCardSkeleton />
+							<MusicCardSkeleton />
+							<MusicCardSkeleton />
+							<MusicCardSkeleton />
+							<MusicCardSkeleton />
+						</>
+					}
+				>
+					{/* biome-ignore lint/style/noNonNullAssertion: i know it is safe since it isn't fetching */}
+					<For each={query.data!.data} fallback={<p>there isn't any data</p>}>
+						{(id) => (
+							<>
+								<MusicCard musicId={id} />
+							</>
+						)}
+					</For>
+				</Show>
+			</div>
 		</>
 	);
 }
