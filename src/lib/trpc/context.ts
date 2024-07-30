@@ -12,6 +12,8 @@ export const createContextInner = async (
 	const user = requestEvent?.locals.user;
 
 	return {
+		db,
+		musicIds,
 		user,
 		...opts,
 	};
