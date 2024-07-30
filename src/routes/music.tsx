@@ -27,7 +27,7 @@ import {
 	TextField,
 	TextFieldLabel,
 	TextFieldErrorMessage,
-	TextFieldInput,
+	TextFieldRoot,
 } from "~/components/ui/text-field";
 import { Button } from "~/components/ui/button";
 import { showToast } from "~/components/ui/toast";
@@ -119,31 +119,31 @@ function CreateMusicCard() {
 				<Form onSubmit={handleSubmit}>
 					<Field name="id">
 						{(field, props) => (
-							<TextField
+							<TextFieldRoot
 								class="w-full max-w-xs"
 								validationState={field.error ? "invalid" : "valid"}
 							>
 								<TextFieldLabel>roblox id</TextFieldLabel>
-								<TextFieldInput {...props} type="number" required />
+								<TextField {...props} type="number" required />
 								{field.error && (
 									<TextFieldErrorMessage>{field.error}</TextFieldErrorMessage>
 								)}
-							</TextField>
+							</TextFieldRoot>
 						)}
 					</Field>
 
 					<Field name="name">
 						{(field, props) => (
-							<TextField
+							<TextFieldRoot
 								class="w-full max-w-xs"
 								validationState={field.error ? "invalid" : "valid"}
 							>
 								<TextFieldLabel>name</TextFieldLabel>
-								<TextFieldInput {...props} type="text" required />
+								<TextField {...props} type="text" required />
 								{field.error && (
 									<TextFieldErrorMessage>{field.error}</TextFieldErrorMessage>
 								)}
-							</TextField>
+							</TextFieldRoot>
 						)}
 					</Field>
 					<Button type="submit">create</Button>
