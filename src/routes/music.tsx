@@ -31,10 +31,19 @@ import {
 } from "~/components/ui/textfield";
 import { Button } from "~/components/ui/button";
 import { toast } from "solid-sonner";
+import { cookieStorage, makePersisted } from "@solid-primitives/storage";
+import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 
 type MusicId = InferSelectModel<typeof musicIds> & {
 	creator: User;
 };
+
+type IdFormat = "NORMAL" | "TRAITOR_TOWN";
+
+const [idFormat, setIdFormat] = makePersisted(
+	createSignal<IdFormat>("NORMAL"),
+	{ name: "music_id_format", storage: cookieStorage },
+);
 
 function MusicCard(props: { musicId: MusicId }) {
 	return (
@@ -43,7 +52,14 @@ function MusicCard(props: { musicId: MusicId }) {
 				<CardTitle class="text-xl">{props.musicId.name}</CardTitle>
 			</CardHeader>
 			<CardContent class="flex items-center text-xl">
-				<span>{props.musicId.robloxId}</span>
+				<Switch fallback={<p>something went wrong</p>}>
+					<Match when={idFormat() === "NORMAL"}>
+						<span>{props.musicId.robloxId}</span>
+					</Match>
+					<Match when={idFormat() === "TRAITOR_TOWN"}>
+						<span>s/{props.musicId.robloxId}</span>
+					</Match>
+				</Switch>
 			</CardContent>
 			<CardFooter class="grid grid-cols-1">
 				<span>created by: {props.musicId.creator.username}</span>
@@ -149,6 +165,27 @@ function CreateMusicCard() {
 	);
 }
 
+function IdFormatToggle() {
+	return (
+		<div class="text-center pt-3 grid gap-2">
+			<ToggleGroup
+				variant={"outline"}
+				value={idFormat()}
+				onChange={(value) => {
+					setIdFormat((value as IdFormat) ?? idFormat());
+				}}
+			>
+				<ToggleGroupItem value="NORMAL" aria-label="normal">
+					Normal
+				</ToggleGroupItem>
+				<ToggleGroupItem value="TRAITOR_TOWN" aria-label="traitor town">
+					Traitor Town
+				</ToggleGroupItem>
+			</ToggleGroup>
+		</div>
+	);
+}
+
 export default function MusicIdList() {
 	const infinite = trpc.music.getInfiniteMusicIds.createInfiniteQuery(
 		() => ({
@@ -164,9 +201,12 @@ export default function MusicIdList() {
 	return (
 		<>
 			<h2 class="text-2xl">music id list</h2>
+
 			<Show when={user()?.permissions.includes("CREATE_MUSIC_IDS")}>
 				<CreateMusicCard />
 			</Show>
+
+			<IdFormatToggle />
 
 			<Show
 				when={!infinite.isPending}
