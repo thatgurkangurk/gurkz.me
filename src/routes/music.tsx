@@ -169,7 +169,6 @@ function IdFormatToggle() {
 	return (
 		<div class="text-center pt-3 grid gap-2">
 			<ToggleGroup
-				variant={"outline"}
 				value={idFormat()}
 				onChange={(value) => {
 					setIdFormat((value as IdFormat) ?? idFormat());
