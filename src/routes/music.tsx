@@ -28,9 +28,9 @@ import {
 	TextFieldLabel,
 	TextFieldErrorMessage,
 	TextFieldRoot,
-} from "~/components/ui/text-field";
+} from "~/components/ui/textfield";
 import { Button } from "~/components/ui/button";
-import { showToast } from "~/components/ui/toast";
+import { toast } from "solid-sonner";
 
 type MusicId = InferSelectModel<typeof musicIds> & {
 	creator: User;
@@ -83,17 +83,13 @@ function CreateMusicCard() {
 	});
 	const mutation = trpc.music.createMusicId.createMutation(() => ({
 		onError: () => {
-			showToast({
-				title: "error",
+			toast.error("error", {
 				description: "something went wrong while creating the id",
-				variant: "error",
 			});
 		},
 		onSuccess: () => {
-			showToast({
-				title: "success",
+			toast.success("success", {
 				description: "successfully created the music id",
-				variant: "success",
 			});
 			queryClient.refetchQueries({
 				queryKey: [["music"]],

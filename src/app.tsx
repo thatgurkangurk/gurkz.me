@@ -15,7 +15,7 @@ import { Nav } from "./components/nav";
 import { QueryClientProvider } from "@tanstack/solid-query";
 import { queryClient, trpc } from "./lib/trpc/client";
 import { SolidQueryDevtools } from "@tanstack/solid-query-devtools";
-import { Toaster } from "./components/ui/toast";
+import { Toaster } from "./components/ui/sonner";
 
 function getServerCookies() {
 	"use server";
