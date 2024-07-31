@@ -2,6 +2,7 @@ import { z } from "zod";
 import { procedure, protectedProcedure, router } from "../utils";
 import { TRPCError } from "@trpc/server";
 import { createIdSchema } from "~/lib/music";
+import { withCursorPagination } from "drizzle-pagination";
 
 const numberSchema = z.number();
 
@@ -18,6 +19,35 @@ export default router({
 			data: music,
 		};
 	}),
+	getInfiniteMusicIds: procedure
+		.input(
+			z.object({
+				cursor: z.string().nullish(),
+				limit: z.number().min(1).max(30).default(15),
+			}),
+		)
+		.query(async ({ ctx, input }) => {
+			const { cursor, limit } = input;
+			const { db, musicIds } = ctx;
+			const data = await db.query.musicIds.findMany({
+				...withCursorPagination({
+					limit,
+					cursors: [
+						[musicIds.created, "desc", cursor ? new Date(cursor) : undefined],
+					],
+				}),
+				with: {
+					creator: true,
+				},
+			});
+
+			return {
+				data,
+				nextCursor: data.length
+					? data[data.length - 1].created?.toISOString()
+					: null,
+			};
+		}),
 	createMusicId: protectedProcedure
 		.input(createIdSchema)
 		.mutation(async ({ ctx, input }) => {

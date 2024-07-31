@@ -1,4 +1,4 @@
-import { createSignal, For } from "solid-js";
+import { createSignal, For, Match, Switch } from "solid-js";
 import { Show } from "solid-js";
 import { queryClient, trpc } from "~/lib/trpc/client";
 import type { InferSelectModel } from "drizzle-orm";
@@ -150,7 +150,15 @@ function CreateMusicCard() {
 }
 
 export default function MusicIdList() {
-	const query = trpc.music.getMusicIds.createQuery();
+	const infinite = trpc.music.getInfiniteMusicIds.createInfiniteQuery(
+		() => ({
+			limit: 15,
+		}),
+		() => ({
+			initialPageParam: undefined, //? shockingly, that works
+			getNextPageParam: (lastPage) => lastPage.nextCursor,
+		}),
+	);
 	const user = createAsync(() => getAuthenticatedUser());
 
 	return (
@@ -159,11 +167,52 @@ export default function MusicIdList() {
 			<Show when={user()?.permissions.includes("CREATE_MUSIC_IDS")}>
 				<CreateMusicCard />
 			</Show>
-			<div class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4">
-				<Show
-					when={!query.isFetching}
-					fallback={
-						<>
+
+			<Show
+				when={!infinite.isPending}
+				fallback={
+					<>
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+					</>
+				}
+			>
+				<>
+					<div class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4">
+						<For
+							each={infinite.data?.pages}
+							fallback={<p>no music ids have been created yet.</p>}
+						>
+							{(page) => (
+								<For each={page.data}>
+									{(musicId) => <MusicCard musicId={musicId} />}
+								</For>
+							)}
+						</For>
+					</div>
+				</>
+			</Show>
+
+			<div class="pt-2">
+				<Switch fallback={<p>nothing more to load</p>}>
+					<Match when={infinite.hasNextPage}>
+						<Button onClick={() => infinite.fetchNextPage()}>fetch more</Button>
+					</Match>
+					<Match when={infinite.isFetching}>
+						<div class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4">
 							<MusicCardSkeleton />
 							<MusicCardSkeleton />
 							<MusicCardSkeleton />
@@ -171,18 +220,17 @@ export default function MusicIdList() {
 							<MusicCardSkeleton />
 							<MusicCardSkeleton />
 							<MusicCardSkeleton />
-						</>
-					}
-				>
-					{/* biome-ignore lint/style/noNonNullAssertion: i know it is safe since it isn't fetching */}
-					<For each={query.data!.data} fallback={<p>there isn't any data</p>}>
-						{(id) => (
-							<>
-								<MusicCard musicId={id} />
-							</>
-						)}
-					</For>
-				</Show>
+							<MusicCardSkeleton />
+							<MusicCardSkeleton />
+							<MusicCardSkeleton />
+							<MusicCardSkeleton />
+							<MusicCardSkeleton />
+							<MusicCardSkeleton />
+							<MusicCardSkeleton />
+							<MusicCardSkeleton />
+						</div>
+					</Match>
+				</Switch>
 			</div>
 		</>
 	);
