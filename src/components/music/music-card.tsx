@@ -1,8 +1,4 @@
-import type { InferSelectModel } from "drizzle-orm";
-import type { User } from "lucia";
-import { Switch, Match } from "solid-js";
-import type { musicIds } from "~/lib/schema/music";
-import { idFormat } from "~/lib/music/id-format";
+import { getFormattedId, idFormat } from "~/lib/music/id-format";
 import {
 	Card,
 	CardHeader,
@@ -14,6 +10,7 @@ import type { MusicId } from "~/lib/music";
 import { Skeleton } from "../ui/skeleton";
 import { LoaderCircle } from "lucide-solid";
 import { CopyButton } from "../copy-button";
+import { Image, ImageFallback, ImageRoot } from "../ui/image";
 
 export function MusicCard(props: { musicId: MusicId }) {
 	return (
@@ -22,20 +19,22 @@ export function MusicCard(props: { musicId: MusicId }) {
 				<CardTitle class="text-xl">{props.musicId.name}</CardTitle>
 			</CardHeader>
 			<CardContent class="flex items-center text-xl">
-				<Switch fallback={<p>something went wrong</p>}>
-					<Match when={idFormat() === "NORMAL"}>
-						<span>{props.musicId.robloxId}</span>
-					</Match>
-					<Match when={idFormat() === "TRAITOR_TOWN"}>
-						<span>s/{props.musicId.robloxId}</span>
-					</Match>
-				</Switch>
+				<span>{getFormattedId(props.musicId.robloxId, idFormat())}</span>
 				<CopyButton
 					content={`${idFormat() === "TRAITOR_TOWN" ? `s/${props.musicId.robloxId}` : props.musicId.robloxId}`}
 				/>
 			</CardContent>
-			<CardFooter class="grid grid-cols-1">
-				<span>created by: {props.musicId.creator.username}</span>
+			<CardFooter class="grid gap-1">
+				<p>created by:</p>
+				<div class="flex gap-2 items-center">
+					<ImageRoot fallbackDelay={600} class="h-10 w-10">
+						<Image src={props.musicId.creator.profilePictureUrl} />
+						<ImageFallback>
+							{props.musicId.creator.username[0].toUpperCase()}
+						</ImageFallback>
+					</ImageRoot>
+					<span>{props.musicId.creator.username}</span>
+				</div>
 			</CardFooter>
 		</Card>
 	);
