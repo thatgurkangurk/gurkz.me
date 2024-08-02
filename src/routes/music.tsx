@@ -1,189 +1,15 @@
-import { createSignal, For, Match, Switch } from "solid-js";
+import { For, Match, Switch } from "solid-js";
 import { Show } from "solid-js";
-import { queryClient, trpc } from "~/lib/trpc/client";
-import type { InferSelectModel } from "drizzle-orm";
-import type { User } from "lucia";
-import {
-	Card,
-	CardContent,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from "~/components/ui/card";
-import type { musicIds } from "~/lib/schema/music";
-import { Skeleton } from "~/components/ui/skeleton";
-import { LoaderCircle } from "lucide-solid";
+import { trpc } from "~/lib/trpc/client";
 import { createAsync } from "@solidjs/router";
 import { getAuthenticatedUser } from "~/lib/auth/utils";
-import type { z } from "zod";
-import { createIdSchema } from "~/lib/music";
-import {
-	createForm,
-	reset,
-	type SubmitHandler,
-	zodForm,
-} from "@modular-forms/solid";
-import {
-	TextField,
-	TextFieldLabel,
-	TextFieldErrorMessage,
-	TextFieldRoot,
-} from "~/components/ui/textfield";
 import { Button } from "~/components/ui/button";
-import { toast } from "solid-sonner";
-import { cookieStorage, makePersisted } from "@solid-primitives/storage";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
-
-type MusicId = InferSelectModel<typeof musicIds> & {
-	creator: User;
-};
-
-type IdFormat = "NORMAL" | "TRAITOR_TOWN";
-
-const [idFormat, setIdFormat] = makePersisted(
-	createSignal<IdFormat>("NORMAL"),
-	{ name: "music_id_format", storage: cookieStorage },
-);
-
-function MusicCard(props: { musicId: MusicId }) {
-	return (
-		<Card class="w-full h-full">
-			<CardHeader>
-				<CardTitle class="text-xl">{props.musicId.name}</CardTitle>
-			</CardHeader>
-			<CardContent class="flex items-center text-xl">
-				<Switch fallback={<p>something went wrong</p>}>
-					<Match when={idFormat() === "NORMAL"}>
-						<span>{props.musicId.robloxId}</span>
-					</Match>
-					<Match when={idFormat() === "TRAITOR_TOWN"}>
-						<span>s/{props.musicId.robloxId}</span>
-					</Match>
-				</Switch>
-			</CardContent>
-			<CardFooter class="grid grid-cols-1">
-				<span>created by: {props.musicId.creator.username}</span>
-			</CardFooter>
-		</Card>
-	);
-}
-
-function MusicCardSkeleton() {
-	return (
-		<Card class="w-full h-full">
-			<CardHeader>
-				<CardTitle class="text-xl pt-1">
-					<Skeleton class="h-6 w-2 sm:w-48 md:w-48 lg:w-60" />
-				</CardTitle>
-			</CardHeader>
-			<CardContent class="flex items-center text-xl gap-2 pt-3">
-				<Skeleton class="h-6 w-2 sm:w-32 md:w-32 lg:w-48" />
-				<Skeleton class="h-6 w-6" />
-			</CardContent>
-			<CardFooter class="grid grid-cols-1 gap-1">
-				<Skeleton class="h-10" />
-				<Skeleton class="h-6 w-[95%]" />
-			</CardFooter>
-			<div class="p-2">
-				<LoaderCircle class="h-6 w-6 animate-spin" />
-			</div>
-		</Card>
-	);
-}
-
-type CreateIdForm = z.infer<typeof createIdSchema>;
-
-function CreateMusicCard() {
-	const [form, { Form, Field }] = createForm<CreateIdForm>({
-		validate: zodForm(createIdSchema),
-	});
-	const mutation = trpc.music.createMusicId.createMutation(() => ({
-		onError: () => {
-			toast.error("error", {
-				description: "something went wrong while creating the id",
-			});
-		},
-		onSuccess: () => {
-			toast.success("success", {
-				description: "successfully created the music id",
-			});
-			queryClient.refetchQueries({
-				queryKey: [["music"]],
-			});
-			reset(form);
-		},
-	}));
-
-	const handleSubmit: SubmitHandler<CreateIdForm> = async (input, event) => {
-		await mutation.mutate({
-			id: input.id,
-			name: input.name,
-		});
-		reset(form, ["id", "name"]);
-	};
-
-	return (
-		<Card class="w-full max-w-xs">
-			<CardHeader>
-				<CardTitle>add a music id</CardTitle>
-			</CardHeader>
-			<CardContent>
-				<Form onSubmit={handleSubmit}>
-					<Field name="id">
-						{(field, props) => (
-							<TextFieldRoot
-								class="w-full max-w-xs"
-								validationState={field.error ? "invalid" : "valid"}
-							>
-								<TextFieldLabel>roblox id</TextFieldLabel>
-								<TextField {...props} type="number" required />
-								{field.error && (
-									<TextFieldErrorMessage>{field.error}</TextFieldErrorMessage>
-								)}
-							</TextFieldRoot>
-						)}
-					</Field>
-
-					<Field name="name">
-						{(field, props) => (
-							<TextFieldRoot
-								class="w-full max-w-xs"
-								validationState={field.error ? "invalid" : "valid"}
-							>
-								<TextFieldLabel>name</TextFieldLabel>
-								<TextField {...props} type="text" required />
-								{field.error && (
-									<TextFieldErrorMessage>{field.error}</TextFieldErrorMessage>
-								)}
-							</TextFieldRoot>
-						)}
-					</Field>
-					<Button type="submit">create</Button>
-				</Form>
-			</CardContent>
-		</Card>
-	);
-}
-
-function IdFormatToggle() {
-	return (
-		<div class="text-center pt-3 grid gap-2">
-			<ToggleGroup
-				value={idFormat()}
-				onChange={(value) => {
-					setIdFormat((value as IdFormat) ?? idFormat());
-				}}
-			>
-				<ToggleGroupItem value="NORMAL" aria-label="normal">
-					Normal
-				</ToggleGroupItem>
-				<ToggleGroupItem value="TRAITOR_TOWN" aria-label="traitor town">
-					Traitor Town
-				</ToggleGroupItem>
-			</ToggleGroup>
-		</div>
-	);
-}
+import { type IdFormat, idFormat, setIdFormat } from "../lib/music/id-format";
+import { MusicList } from "~/components/music/music-list";
+import { CreateMusicCard } from "~/components/music/create-card";
+import { MusicCardSkeleton } from "~/components/music/music-card";
+import { IdFormatToggle } from "~/components/music/id-format";
 
 export default function MusicIdList() {
 	const infinite = trpc.music.getInfiniteMusicIds.createInfiniteQuery(
@@ -235,11 +61,7 @@ export default function MusicIdList() {
 							each={infinite.data?.pages}
 							fallback={<p>no music ids have been created yet.</p>}
 						>
-							{(page) => (
-								<For each={page.data}>
-									{(musicId) => <MusicCard musicId={musicId} />}
-								</For>
-							)}
+							{(page) => <MusicList data={page.data} />}
 						</For>
 					</div>
 				</>

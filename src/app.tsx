@@ -45,7 +45,6 @@ export default function App() {
 										<div class="min-h-[93dvh] w-full flex flex-col">
 											<main class="p-2 flex-grow">{props.children}</main>
 										</div>
-										<SolidQueryDevtools />
 										<Toaster />
 									</trpc.Provider>
 								</QueryClientProvider>

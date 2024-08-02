@@ -1,4 +1,11 @@
+import type { InferSelectModel } from "drizzle-orm";
+import type { User } from "lucia";
 import { z } from "zod";
+import type { musicIds } from "./schema/music";
+
+export type MusicId = InferSelectModel<typeof musicIds> & {
+	creator: User;
+};
 
 export const createIdSchema = z.object({
 	id: z
