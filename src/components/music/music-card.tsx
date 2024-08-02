@@ -13,6 +13,7 @@ import {
 import type { MusicId } from "~/lib/music";
 import { Skeleton } from "../ui/skeleton";
 import { LoaderCircle } from "lucide-solid";
+import { CopyButton } from "../copy-button";
 
 export function MusicCard(props: { musicId: MusicId }) {
 	return (
@@ -29,6 +30,9 @@ export function MusicCard(props: { musicId: MusicId }) {
 						<span>s/{props.musicId.robloxId}</span>
 					</Match>
 				</Switch>
+				<CopyButton
+					content={`${idFormat() === "TRAITOR_TOWN" ? `s/${props.musicId.robloxId}` : props.musicId.robloxId}`}
+				/>
 			</CardContent>
 			<CardFooter class="grid grid-cols-1">
 				<span>created by: {props.musicId.creator.username}</span>

@@ -4,8 +4,6 @@ import { trpc } from "~/lib/trpc/client";
 import { createAsync } from "@solidjs/router";
 import { getAuthenticatedUser } from "~/lib/auth/utils";
 import { Button } from "~/components/ui/button";
-import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
-import { type IdFormat, idFormat, setIdFormat } from "../lib/music/id-format";
 import { MusicList } from "~/components/music/music-list";
 import { CreateMusicCard } from "~/components/music/create-card";
 import { MusicCardSkeleton } from "~/components/music/music-card";
