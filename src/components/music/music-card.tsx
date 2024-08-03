@@ -11,6 +11,79 @@ import { Skeleton } from "../ui/skeleton";
 import { LoaderCircle } from "lucide-solid";
 import { CopyButton } from "../copy-button";
 import { Image, ImageFallback, ImageRoot } from "../ui/image";
+import { createSignal, onMount, Show } from "solid-js";
+import { Button } from "../ui/button";
+import { toast } from "solid-sonner";
+import {
+	debounce,
+	leading,
+	leadingAndTrailing,
+	throttle,
+} from "@solid-primitives/scheduled";
+import { cache, createAsync } from "@solidjs/router";
+
+const idIsAvailable = cache(async (id: number) => {
+	"use server";
+	const res = await fetch(`https://api.hyra.io/audio/${id}`);
+
+	// unavailable for legal reasons
+	if (res.status === 451) {
+		return {
+			available: false,
+			message: "sorry, this cannot be played due to rights issues.",
+		};
+	}
+
+	return {
+		available: true,
+	};
+}, "is_available");
+
+function AudioPlayer(props: { musicId: MusicId }) {
+	const [isPlaying, setIsPlaying] = createSignal<boolean>(false);
+	const isAvailable = createAsync(() => idIsAvailable(props.musicId.robloxId));
+
+	let audio: HTMLAudioElement;
+
+	return (
+		<>
+			<Show
+				when={isAvailable()?.available}
+				fallback={<p class="text-destructive">{isAvailable()?.message}</p>}
+			>
+				{/* biome-ignore lint/a11y/useMediaCaption: roblox doesn't provide captions for audio */}
+				<audio
+					src={`https://api.hyra.io/audio/${props.musicId.robloxId}`}
+					onPlay={() => {
+						setIsPlaying(true);
+					}}
+					onPause={() => {
+						setIsPlaying(false);
+					}}
+					// biome-ignore lint/style/noNonNullAssertion: it is safe
+					ref={audio!}
+				/>
+			</Show>
+
+			<Button
+				disabled={!isAvailable()?.available}
+				onClick={() => {
+					if (!audio) return;
+					if (isPlaying()) {
+						audio.pause();
+						audio.currentTime = 0;
+						return;
+					}
+
+					audio.currentTime = 0;
+					audio.play();
+				}}
+			>
+				{isPlaying() ? "pause" : "play"}
+			</Button>
+		</>
+	);
+}
 
 export function MusicCard(props: { musicId: MusicId }) {
 	return (
@@ -24,7 +97,8 @@ export function MusicCard(props: { musicId: MusicId }) {
 					content={`${idFormat() === "TRAITOR_TOWN" ? `s/${props.musicId.robloxId}` : props.musicId.robloxId}`}
 				/>
 			</CardContent>
-			<CardFooter class="grid gap-1">
+			<CardFooter class="grid gap-1 grid-cols-1">
+				<AudioPlayer musicId={props.musicId} />
 				<p>created by:</p>
 				<div class="flex gap-2 items-center">
 					<ImageRoot fallbackDelay={600} class="h-10 w-10">

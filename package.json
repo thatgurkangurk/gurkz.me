@@ -13,6 +13,7 @@
     "@lucia-auth/adapter-drizzle": "^1.0.7",
     "@modular-forms/solid": "^0.22.1",
     "@solid-mediakit/trpc": "^3.0.3",
+    "@solid-primitives/scheduled": "^1.4.3",
     "@solid-primitives/storage": "^3.8.0",
     "@solidjs/meta": "^0.29.4",
     "@solidjs/router": "^0.14.1",
