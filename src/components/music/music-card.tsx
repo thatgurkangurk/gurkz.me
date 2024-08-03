@@ -11,15 +11,8 @@ import { Skeleton } from "../ui/skeleton";
 import { LoaderCircle } from "lucide-solid";
 import { CopyButton } from "../copy-button";
 import { Image, ImageFallback, ImageRoot } from "../ui/image";
-import { createSignal, onMount, Show } from "solid-js";
+import { createSignal, Show } from "solid-js";
 import { Button } from "../ui/button";
-import { toast } from "solid-sonner";
-import {
-	debounce,
-	leading,
-	leadingAndTrailing,
-	throttle,
-} from "@solid-primitives/scheduled";
 import { cache, createAsync } from "@solidjs/router";
 
 const idIsAvailable = cache(async (id: number) => {
