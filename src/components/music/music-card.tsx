@@ -11,7 +11,7 @@ import { Skeleton } from "../ui/skeleton";
 import { LoaderCircle } from "lucide-solid";
 import { CopyButton } from "../copy-button";
 import { Image, ImageFallback, ImageRoot } from "../ui/image";
-import { createSignal, Show } from "solid-js";
+import { createSignal, Show, Suspense } from "solid-js";
 import { Button } from "../ui/button";
 import { cache, createAsync } from "@solidjs/router";
 
@@ -91,7 +91,9 @@ export function MusicCard(props: { musicId: MusicId }) {
 				/>
 			</CardContent>
 			<CardFooter class="grid gap-1 grid-cols-1">
-				<AudioPlayer musicId={props.musicId} />
+				<Suspense fallback={<Button disabled>loading music player...</Button>}>
+					<AudioPlayer musicId={props.musicId} />
+				</Suspense>
 				<p>created by:</p>
 				<div class="flex gap-2 items-center">
 					<ImageRoot fallbackDelay={600} class="h-10 w-10">

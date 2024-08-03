@@ -2,6 +2,7 @@ import { Button } from "./ui/button";
 import { Check, Clipboard } from "lucide-solid";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { createSignal, Show } from "solid-js";
+import { writeClipboard } from "@solid-primitives/clipboard";
 
 type CopyButtonProps = {
 	/** the text to copy */
@@ -22,7 +23,7 @@ export function CopyButton(props: CopyButtonProps) {
 				<Button
 					onClick={() => {
 						setState(() => "copied");
-						navigator.clipboard.writeText(props.content.toString());
+						writeClipboard(props.content);
 						setTimeout(() => {
 							setState(() => "idle");
 						}, 1000);
