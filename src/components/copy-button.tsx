@@ -1,7 +1,7 @@
 import { Button } from "./ui/button";
 import { Check, Clipboard } from "lucide-solid";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
-import { createSignal, Match, Switch } from "solid-js";
+import { createSignal, Show } from "solid-js";
 
 type CopyButtonProps = {
 	/** the text to copy */
@@ -14,14 +14,9 @@ export function CopyButton(props: CopyButtonProps) {
 	return (
 		<Tooltip>
 			<TooltipContent>
-				<Switch>
-					<Match when={state() === "idle"}>
-						<p>copy to clipboard</p>
-					</Match>
-					<Match when={state() === "copied"}>
-						<p>copied</p>
-					</Match>
-				</Switch>
+				<Show when={state() === "copied"} fallback={<p>copy to clipboard</p>}>
+					<p>copied</p>
+				</Show>
 			</TooltipContent>
 			<TooltipTrigger>
 				<Button
@@ -34,14 +29,12 @@ export function CopyButton(props: CopyButtonProps) {
 					}}
 					variant={"ghost"}
 				>
-					<Switch>
-						<Match when={state() === "idle"}>
-							<Clipboard class="h-6 w-6" />
-						</Match>
-						<Match when={state() === "copied"}>
-							<Check class="h-6 w-6" />
-						</Match>
-					</Switch>
+					<Show
+						when={state() === "copied"}
+						fallback={<Clipboard class="h-6 w-6" />}
+					>
+						<Check class="h-6 w-6" />
+					</Show>
 				</Button>
 			</TooltipTrigger>
 		</Tooltip>

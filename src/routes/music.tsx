@@ -1,4 +1,4 @@
-import { For, Match, Switch } from "solid-js";
+import { For } from "solid-js";
 import { Show } from "solid-js";
 import { trpc } from "~/lib/trpc/client";
 import { createAsync } from "@solidjs/router";
@@ -66,30 +66,31 @@ export default function MusicIdList() {
 			</Show>
 
 			<div class="pt-2">
-				<Switch fallback={<p>nothing more to load</p>}>
-					<Match when={infinite.hasNextPage}>
-						<Button onClick={() => infinite.fetchNextPage()}>fetch more</Button>
-					</Match>
-					<Match when={infinite.isFetching}>
-						<div class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4">
-							<MusicCardSkeleton />
-							<MusicCardSkeleton />
-							<MusicCardSkeleton />
-							<MusicCardSkeleton />
-							<MusicCardSkeleton />
-							<MusicCardSkeleton />
-							<MusicCardSkeleton />
-							<MusicCardSkeleton />
-							<MusicCardSkeleton />
-							<MusicCardSkeleton />
-							<MusicCardSkeleton />
-							<MusicCardSkeleton />
-							<MusicCardSkeleton />
-							<MusicCardSkeleton />
-							<MusicCardSkeleton />
-						</div>
-					</Match>
-				</Switch>
+				<Show when={infinite.hasNextPage}>
+					<Button onClick={() => infinite.fetchNextPage()}>fetch more</Button>
+				</Show>
+				<Show when={infinite.isFetching}>
+					<div class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4">
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+						<MusicCardSkeleton />
+					</div>
+				</Show>
+				<Show when={!infinite.hasNextPage && !infinite.isFetching}>
+					<p>nothing more to load</p>
+				</Show>
 			</div>
 		</>
 	);
