@@ -91,7 +91,14 @@ export function MusicCard(props: { musicId: MusicId }) {
 				/>
 			</CardContent>
 			<CardFooter class="grid gap-1 grid-cols-1">
-				<Suspense fallback={<Button disabled>loading music player...</Button>}>
+				<Suspense
+					fallback={
+						<Button disabled>
+							<LoaderCircle class="h-6 w-6 animate-spin" /> loading music
+							player...
+						</Button>
+					}
+				>
 					<AudioPlayer musicId={props.musicId} />
 				</Suspense>
 				<p>created by:</p>

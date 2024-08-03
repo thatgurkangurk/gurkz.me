@@ -5,7 +5,10 @@ type IdFormat = "NORMAL" | "TRAITOR_TOWN";
 
 const [idFormat, setIdFormat] = makePersisted(
 	createSignal<IdFormat>("NORMAL"),
-	{ name: "music_id_format", storage: cookieStorage },
+	{
+		name: "music_id_format",
+		storage: cookieStorage,
+	},
 );
 
 function getFormattedId(id: string | number, format: IdFormat): string {

@@ -6,8 +6,8 @@ import { getAuthenticatedUser } from "~/lib/auth/utils";
 import { Button } from "~/components/ui/button";
 import { MusicList } from "~/components/music/music-list";
 import { CreateMusicCard } from "~/components/music/create-card";
-import { MusicCardSkeleton } from "~/components/music/music-card";
 import { IdFormatToggle } from "~/components/music/id-format";
+import { LoaderCircle } from "lucide-solid";
 
 export default function MusicIdList() {
 	const infinite = trpc.music.getInfiniteMusicIds.createInfiniteQuery(
@@ -33,25 +33,7 @@ export default function MusicIdList() {
 
 			<Show
 				when={!infinite.isPending}
-				fallback={
-					<>
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-					</>
-				}
+				fallback={<LoaderCircle class="h-6 w-6 animate-spin" />}
 			>
 				<>
 					<div class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4">
@@ -70,23 +52,7 @@ export default function MusicIdList() {
 					<Button onClick={() => infinite.fetchNextPage()}>fetch more</Button>
 				</Show>
 				<Show when={infinite.isFetching}>
-					<div class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4">
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-						<MusicCardSkeleton />
-					</div>
+					<LoaderCircle class="h-6 w-6 animate-spin" />
 				</Show>
 				<Show when={!infinite.hasNextPage && !infinite.isFetching}>
 					<p>nothing more to load</p>
