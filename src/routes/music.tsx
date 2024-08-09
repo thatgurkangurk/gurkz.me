@@ -1,4 +1,4 @@
-import { For } from "solid-js";
+import { For, Suspense } from "solid-js";
 import { Show } from "solid-js";
 import { trpc } from "~/lib/trpc/client";
 import { createAsync } from "@solidjs/router";
@@ -29,23 +29,27 @@ export default function MusicIdList() {
 				<CreateMusicCard />
 			</Show>
 
-			<IdFormatToggle />
+			<Suspense>
+				<IdFormatToggle />
+			</Suspense>
 
-			<Show
-				when={!infinite.isPending}
-				fallback={<LoaderCircle class="h-6 w-6 animate-spin" />}
-			>
-				<>
-					<div class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4">
-						<For
-							each={infinite.data?.pages}
-							fallback={<p>no music ids have been created yet.</p>}
-						>
-							{(page) => <MusicList data={page.data} />}
-						</For>
-					</div>
-				</>
-			</Show>
+			<Suspense>
+				<Show
+					when={!infinite.isPending}
+					fallback={<LoaderCircle class="h-6 w-6 animate-spin" />}
+				>
+					<>
+						<div class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4">
+							<For
+								each={infinite.data?.pages}
+								fallback={<p>no music ids have been created yet.</p>}
+							>
+								{(page) => <MusicList data={page.data} />}
+							</For>
+						</div>
+					</>
+				</Show>
+			</Suspense>
 
 			<div class="pt-2">
 				<Show when={infinite.hasNextPage}>
