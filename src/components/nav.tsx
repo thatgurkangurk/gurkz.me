@@ -83,7 +83,7 @@ export function Nav() {
 					<Menu class="h-5 w-5" />
 					<span class="sr-only">toggle navigation menu</span>
 				</Button>
-				<SheetContent position="left">
+				<SheetContent>
 					<nav class="grid gap-6 text-lg font-medium">
 						<For each={links}>
 							{(link) => (
