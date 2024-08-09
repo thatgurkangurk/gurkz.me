@@ -1,6 +1,12 @@
 import { redirect } from "@solidjs/router";
 import { OAuth2RequestError } from "arctic";
-import { createError, getCookie, getQuery, setCookie } from "vinxi/http";
+import {
+	createError,
+	deleteCookie,
+	getCookie,
+	getQuery,
+	setCookie,
+} from "vinxi/http";
 import { discord } from "~/lib/auth/clients";
 import { createDiscordSession } from "~/lib/auth/discord";
 import { createSessionCookie } from "~/lib/auth/session";
@@ -10,6 +16,7 @@ export async function GET() {
 	const code = query.code?.toString() ?? null;
 	const state = query.state?.toString() ?? null;
 	const storedState = getCookie("discord_oauth_state") ?? null;
+	const redirectTo = getCookie("redirect_to") ?? "/";
 	if (!code || !state || !storedState || state !== storedState) {
 		throw createError({
 			status: 400,
@@ -36,7 +43,8 @@ export async function GET() {
 			sessionCookie.value,
 			sessionCookie.attributes,
 		);
-		return redirect("/");
+		deleteCookie("redirect_to");
+		return redirect(redirectTo);
 	} catch (e) {
 		console.error(e);
 		if (e instanceof OAuth2RequestError) {

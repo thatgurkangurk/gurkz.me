@@ -1,4 +1,4 @@
-import { A, createAsync } from "@solidjs/router";
+import { A, createAsync, useLocation } from "@solidjs/router";
 import { Menu } from "lucide-solid";
 import { For, Show, createSignal } from "solid-js";
 import { Button } from "~/components/ui/button";
@@ -59,6 +59,7 @@ function Link(props: LinkProps) {
 export function Nav() {
 	const [sheetOpen, setSheetOpen] = createSignal(false);
 	const user = createAsync(() => getAuthenticatedUser());
+	const location = useLocation();
 
 	return (
 		<header class="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 [grid-area:header]">
@@ -103,7 +104,13 @@ export function Nav() {
 				<Show
 					when={user()}
 					fallback={
-						<form class="w-full" method="post" action={discordLoginAction}>
+						<form class="w-full" action={discordLoginAction} method="post">
+							<input
+								type="hidden"
+								id="redirect-to"
+								name="redirect-to"
+								value={location.pathname}
+							/>
 							<Button type="submit" variant="link">
 								login
 							</Button>
@@ -114,6 +121,12 @@ export function Nav() {
 						hi, <span>{user()?.username}</span>
 					</p>
 					<form method="post" action={logoutAction}>
+						<input
+							type="hidden"
+							id="redirect-to"
+							name="redirect-to"
+							value={location.pathname}
+						/>
 						<Button type="submit" variant="link">
 							logout
 						</Button>
