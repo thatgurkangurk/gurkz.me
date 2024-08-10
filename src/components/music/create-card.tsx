@@ -16,6 +16,7 @@ import {
 	TextFieldErrorMessage,
 } from "../ui/textfield";
 import { Button } from "../ui/button";
+import { revalidate } from "@solidjs/router";
 
 type CreateIdForm = z.infer<typeof createIdSchema>;
 
@@ -36,6 +37,7 @@ export function CreateMusicCard() {
 			queryClient.refetchQueries({
 				queryKey: [["music"]],
 			});
+			revalidate("music_ids");
 			reset(form);
 		},
 	}));

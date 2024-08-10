@@ -3,13 +3,7 @@ import { createSignal } from "solid-js";
 
 type IdFormat = "NORMAL" | "TRAITOR_TOWN";
 
-const [idFormat, setIdFormat] = makePersisted(
-	createSignal<IdFormat>("NORMAL"),
-	{
-		name: "music_id_format",
-		storage: cookieStorage,
-	},
-);
+const [idFormat, setIdFormat] = createSignal<IdFormat>("NORMAL");
 
 function getFormattedId(id: string | number, format: IdFormat): string {
 	switch (format) {

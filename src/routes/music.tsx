@@ -1,24 +1,15 @@
-import { For, Suspense } from "solid-js";
+import { ErrorBoundary, Suspense } from "solid-js";
 import { Show } from "solid-js";
-import { trpc } from "~/lib/trpc/client";
 import { createAsync } from "@solidjs/router";
 import { getAuthenticatedUser } from "~/lib/auth/utils";
-import { Button } from "~/components/ui/button";
 import { MusicList } from "~/components/music/music-list";
 import { CreateMusicCard } from "~/components/music/create-card";
 import { IdFormatToggle } from "~/components/music/id-format";
 import { LoaderCircle } from "lucide-solid";
+import { getMusicIds } from "~/lib/music";
+import { MusicCardSkeleton } from "~/components/music/music-card";
 
 export default function MusicIdList() {
-	const infinite = trpc.music.getInfiniteMusicIds.createInfiniteQuery(
-		() => ({
-			limit: 15,
-		}),
-		() => ({
-			initialPageParam: undefined, //? shockingly, that works
-			getNextPageParam: (lastPage) => lastPage.nextCursor,
-		}),
-	);
 	const user = createAsync(() => getAuthenticatedUser());
 
 	return (
@@ -33,35 +24,37 @@ export default function MusicIdList() {
 				<IdFormatToggle />
 			</Suspense>
 
-			<Suspense>
-				<Show
-					when={!infinite.isPending}
-					fallback={<LoaderCircle class="h-6 w-6 animate-spin" />}
-				>
-					<>
+			<ErrorBoundary
+				fallback={(err, reset) => (
+					<div>
+						<p>sorry, something went wrong. error: {err.toString()}</p>{" "}
+						<button type="button" onClick={() => reset()}>
+							retry?
+						</button>
+					</div>
+				)}
+			>
+				<Suspense
+					fallback={
 						<div class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4">
-							<For
-								each={infinite.data?.pages}
-								fallback={<p>no music ids have been created yet.</p>}
-							>
-								{(page) => <MusicList data={page.data} />}
-							</For>
+							<MusicCardSkeleton />
+							<MusicCardSkeleton />
+							<MusicCardSkeleton />
+							<MusicCardSkeleton />
+							<MusicCardSkeleton />
+							<MusicCardSkeleton />
+							<MusicCardSkeleton />
+							<MusicCardSkeleton />
+							<MusicCardSkeleton />
+							<MusicCardSkeleton />
+							<MusicCardSkeleton />
+							<MusicCardSkeleton />
 						</div>
-					</>
-				</Show>
-			</Suspense>
-
-			<div class="pt-2">
-				<Show when={infinite.hasNextPage}>
-					<Button onClick={() => infinite.fetchNextPage()}>fetch more</Button>
-				</Show>
-				<Show when={infinite.isFetching}>
-					<LoaderCircle class="h-6 w-6 animate-spin" />
-				</Show>
-				<Show when={!infinite.hasNextPage && !infinite.isFetching}>
-					<p>nothing more to load</p>
-				</Show>
-			</div>
+					}
+				>
+					<MusicList />
+				</Suspense>
+			</ErrorBoundary>
 		</>
 	);
 }

@@ -1,9 +1,15 @@
-import { For } from "solid-js";
-import type { MusicId } from "~/lib/music";
+import { For, Show } from "solid-js";
+import { getMusicIds } from "~/lib/music";
 import { MusicCard } from "./music-card";
+import { createAsync } from "@solidjs/router";
 
-export function MusicList(props: { data: MusicId[] }) {
+export function MusicList() {
+	const data = createAsync(() => getMusicIds());
 	return (
-		<For each={props.data}>{(musicId) => <MusicCard musicId={musicId} />}</For>
+		<Show when={data()}>
+			<div class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4">
+				<For each={data()}>{(musicId) => <MusicCard musicId={musicId} />}</For>
+			</div>
+		</Show>
 	);
 }

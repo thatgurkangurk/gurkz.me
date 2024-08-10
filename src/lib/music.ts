@@ -2,9 +2,11 @@ import type { InferSelectModel } from "drizzle-orm";
 import type { User } from "lucia";
 import { z } from "zod";
 import type { musicIds } from "./schema/music";
+import { cache } from "@solidjs/router";
+import { db } from "./db";
 
 export type MusicId = InferSelectModel<typeof musicIds> & {
-	creator: User;
+	creator: Omit<User, "discordId" | "email" | "permissions">;
 };
 
 export const createIdSchema = z.object({
@@ -25,3 +27,20 @@ export const createIdSchema = z.object({
 			message: "the name has to be shorter than 128 characters",
 		}),
 });
+
+export const getMusicIds = cache(async () => {
+	"use server";
+	const ids = await db.query.musicIds.findMany({
+		with: {
+			creator: {
+				columns: {
+					profilePictureUrl: true,
+					username: true,
+					id: true,
+				},
+			},
+		},
+	});
+
+	return ids;
+}, "music_ids");
