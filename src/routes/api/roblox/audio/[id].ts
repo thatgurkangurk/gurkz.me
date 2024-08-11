@@ -15,8 +15,6 @@ export async function GET({ params }: APIEvent) {
 
 	const res = await fetch(`https://api.hyra.io/audio/${id}`);
 
-	console.log(res);
-
 	if (res.status === 200)
 		return new Response(await res.blob(), {
 			headers: {
