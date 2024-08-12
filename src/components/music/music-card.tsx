@@ -46,7 +46,7 @@ function AudioPlayer(props: { musicId: MusicId }) {
 			>
 				{/* biome-ignore lint/a11y/useMediaCaption: roblox doesn't provide captions for audio */}
 				<audio
-					src={`/api/roblox/audio/${props.musicId.robloxId}`}
+					src={`https://api.hyra.io/audio/${props.musicId.robloxId}`}
 					onPlay={() => {
 						setIsPlaying(true);
 					}}

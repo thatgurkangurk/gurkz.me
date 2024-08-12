@@ -40,7 +40,6 @@ export const getMusicIds = cache(async () => {
 				},
 			},
 		},
-		orderBy: (ids, { desc }) => [desc(ids.created)],
 	});
 
 	return ids;
