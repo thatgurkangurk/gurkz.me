@@ -6,6 +6,7 @@ import { withCursorPagination } from "drizzle-pagination";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis/node";
 import { env } from "~/env";
+import { eq } from "drizzle-orm";
 
 const numberSchema = z.number();
 
@@ -107,6 +108,43 @@ export default router({
 						message: "something went wrong",
 					});
 				});
+
+			return {
+				message: "success",
+			};
+		}),
+	deleteMusicId: protectedProcedure
+		.input(
+			z.object({
+				id: z.string(),
+			}),
+		)
+		.mutation(async ({ ctx, input }) => {
+			const { user, db, musicIds } = ctx;
+			const { id } = input;
+
+			const musicId = await db.query.musicIds.findFirst({
+				where: (musicId, { eq }) => eq(musicId.id, id),
+			});
+
+			if (!musicId)
+				throw new TRPCError({
+					code: "NOT_FOUND",
+					message: "that music id doesn't exist",
+				});
+
+			if (
+				!(
+					musicId.createdById === user.id ||
+					user.permissions.includes("MANAGE_MUSIC_IDS")
+				)
+			)
+				throw new TRPCError({
+					code: "FORBIDDEN",
+					message: "you do not have permission to do that.",
+				});
+
+			await db.delete(musicIds).where(eq(musicIds.id, id));
 
 			return {
 				message: "success",

@@ -13,7 +13,10 @@ import { CopyButton } from "../copy-button";
 import { Image, ImageFallback, ImageRoot } from "../ui/image";
 import { createSignal, Show, Suspense } from "solid-js";
 import { Button } from "../ui/button";
-import { cache, createAsync } from "@solidjs/router";
+import { cache, createAsync, revalidate } from "@solidjs/router";
+import { getAuthenticatedUser } from "~/lib/auth/utils";
+import { trpc } from "~/lib/trpc/client";
+import { toast } from "solid-sonner";
 
 const idIsAvailable = cache(async (id: number) => {
 	"use server";
@@ -24,6 +27,13 @@ const idIsAvailable = cache(async (id: number) => {
 		return {
 			available: false,
 			message: "sorry, this cannot be played due to rights issues.",
+		};
+	}
+
+	if (res.status !== 200) {
+		return {
+			available: false,
+			message: "sorry, this music id is unavailable.",
 		};
 	}
 
@@ -78,7 +88,34 @@ function AudioPlayer(props: { musicId: MusicId }) {
 	);
 }
 
+function DeleteButton(props: { id: string }) {
+	const mutation = trpc.music.deleteMusicId.createMutation(() => ({
+		onSuccess: () => {
+			toast.success("successfully deleted the music id");
+			revalidate("music_ids");
+		},
+	}));
+
+	return (
+		<Button
+			onClick={() =>
+				mutation.mutate({
+					id: props.id,
+				})
+			}
+			disabled={mutation.isPending}
+			variant={"destructive"}
+		>
+			<Show when={mutation.isPending}>
+				<LoaderCircle class="h-6 w-6 animate-spin" />
+			</Show>{" "}
+			delete
+		</Button>
+	);
+}
+
 export function MusicCard(props: { musicId: MusicId }) {
+	const user = createAsync(() => getAuthenticatedUser());
 	return (
 		<Card class="w-full h-full">
 			<CardHeader>
@@ -110,6 +147,14 @@ export function MusicCard(props: { musicId: MusicId }) {
 						</ImageFallback>
 					</ImageRoot>
 					<span>{props.musicId.creator.username}</span>
+					<Show
+						when={
+							user()?.permissions.includes("MANAGE_MUSIC_IDS") ||
+							user()?.id === props.musicId.createdById
+						}
+					>
+						<DeleteButton id={props.musicId.id} />
+					</Show>
 				</div>
 			</CardFooter>
 		</Card>
