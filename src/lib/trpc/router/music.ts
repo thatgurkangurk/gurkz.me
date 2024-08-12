@@ -3,8 +3,20 @@ import { procedure, protectedProcedure, router } from "../utils";
 import { TRPCError } from "@trpc/server";
 import { createIdSchema } from "~/lib/music";
 import { withCursorPagination } from "drizzle-pagination";
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis/node";
+import { env } from "~/env";
 
 const numberSchema = z.number();
+
+const createRatelimit = new Ratelimit({
+	redis: new Redis({
+		url: env.UPSTASH_REDIS_REST_URL,
+		token: env.UPSTASH_REDIS_REST_TOKEN,
+	}),
+	limiter: Ratelimit.slidingWindow(10, "10 s"),
+	prefix: "@upstash/ratelimit/music",
+});
 
 export default router({
 	getMusicIds: procedure.query(async ({ ctx }) => {
@@ -29,6 +41,7 @@ export default router({
 		.query(async ({ ctx, input }) => {
 			const { cursor, limit } = input;
 			const { db, musicIds } = ctx;
+
 			const data = await db.query.musicIds.findMany({
 				...withCursorPagination({
 					limit,
@@ -60,6 +73,17 @@ export default router({
 					message: "you do not have permission to do that",
 				});
 
+			if (process.env.NODE_ENV === "production") {
+				const { success } = await createRatelimit.limit(user.id);
+
+				if (!success) {
+					throw new TRPCError({
+						code: "TOO_MANY_REQUESTS",
+						message: "slow down, you are being rate-limited",
+					});
+				}
+			}
+
 			const number = await numberSchema.safeParseAsync(Number(id));
 
 			if (!number.success)
@@ -83,5 +107,9 @@ export default router({
 						message: "something went wrong",
 					});
 				});
+
+			return {
+				message: "success",
+			};
 		}),
 });

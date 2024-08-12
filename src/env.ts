@@ -8,6 +8,8 @@ export const env = createEnv({
 		AUTH_SECRET: z.string().min(32).max(256),
 		DISCORD_CLIENT_ID: z.string(),
 		DISCORD_CLIENT_SECRET: z.string(),
+		UPSTASH_REDIS_REST_URL: z.string().url(),
+		UPSTASH_REDIS_REST_TOKEN: z.string(),
 	},
 
 	runtimeEnv: process.env,
