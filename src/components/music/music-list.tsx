@@ -1,7 +1,7 @@
+import { createAsync } from "@solidjs/router";
 import { For, Show } from "solid-js";
 import { getMusicIds } from "~/lib/music";
 import { MusicCard } from "./music-card";
-import { createAsync } from "@solidjs/router";
 
 export function MusicList() {
 	const data = createAsync(() => getMusicIds());

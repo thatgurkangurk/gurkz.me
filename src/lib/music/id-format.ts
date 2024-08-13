@@ -1,4 +1,4 @@
-import { makePersisted, cookieStorage } from "@solid-primitives/storage";
+import { cookieStorage, makePersisted } from "@solid-primitives/storage";
 import { createSignal } from "solid-js";
 
 type IdFormat = "NORMAL" | "TRAITOR_TOWN";

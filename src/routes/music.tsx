@@ -1,13 +1,13 @@
+import { createAsync } from "@solidjs/router";
+import { LoaderCircle } from "lucide-solid";
 import { ErrorBoundary, Suspense } from "solid-js";
 import { Show } from "solid-js";
-import { createAsync } from "@solidjs/router";
-import { getAuthenticatedUser } from "~/lib/auth/utils";
-import { MusicList } from "~/components/music/music-list";
 import { CreateMusicCard } from "~/components/music/create-card";
 import { IdFormatToggle } from "~/components/music/id-format";
-import { LoaderCircle } from "lucide-solid";
-import { getMusicIds } from "~/lib/music";
 import { MusicCardSkeleton } from "~/components/music/music-card";
+import { MusicList } from "~/components/music/music-list";
+import { getAuthenticatedUser } from "~/lib/auth/utils";
+import { getMusicIds } from "~/lib/music";
 
 export default function MusicIdList() {
 	const user = createAsync(() => getAuthenticatedUser());

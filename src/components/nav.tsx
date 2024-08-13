@@ -3,9 +3,9 @@ import { Menu } from "lucide-solid";
 import { For, Show, createSignal } from "solid-js";
 import { Button } from "~/components/ui/button";
 import { Sheet, SheetContent } from "~/components/ui/sheet";
-import { ModeToggle } from "./mode-toggle";
-import { getAuthenticatedUser } from "~/lib/auth/utils";
 import { discordLoginAction, logoutAction } from "~/lib/auth/actions";
+import { getAuthenticatedUser } from "~/lib/auth/utils";
+import { ModeToggle } from "./mode-toggle";
 
 type Link = {
 	text: string;

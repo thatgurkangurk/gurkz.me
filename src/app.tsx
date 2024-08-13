@@ -4,18 +4,18 @@ import { FileRoutes } from "@solidjs/start/router";
 import { Suspense } from "solid-js";
 import "@fontsource-variable/space-grotesk";
 import "./app.css";
-import { getCookie } from "vinxi/http";
 import {
 	ColorModeProvider,
 	ColorModeScript,
 	cookieStorageManagerSSR,
 } from "@kobalte/core";
-import { isServer } from "solid-js/web";
-import { Nav } from "./components/nav";
 import { QueryClientProvider } from "@tanstack/solid-query";
-import { queryClient, trpc } from "./lib/trpc/client";
 import { SolidQueryDevtools } from "@tanstack/solid-query-devtools";
+import { isServer } from "solid-js/web";
+import { getCookie } from "vinxi/http";
+import { Nav } from "./components/nav";
 import { Toaster } from "./components/ui/sonner";
+import { queryClient, trpc } from "./lib/trpc/client";
 
 function getServerCookies() {
 	"use server";

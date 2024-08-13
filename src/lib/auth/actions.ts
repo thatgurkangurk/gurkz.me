@@ -1,10 +1,10 @@
 import { action, redirect, useLocation } from "@solidjs/router";
+import { generateState } from "arctic";
+import { eq } from "drizzle-orm";
 import { getRequestEvent, isDev } from "solid-js/web";
+import { setCookie } from "vinxi/http";
 import { db } from "../db";
 import { sessions } from "../schema/session";
-import { eq } from "drizzle-orm";
-import { generateState } from "arctic";
-import { setCookie } from "vinxi/http";
 import { getDiscordAuthorisationUrl } from "./discord";
 
 export const logoutAction = action(async (formData: FormData) => {

@@ -1,5 +1,5 @@
-import { QueryClient } from "@tanstack/solid-query";
 import { createTRPCSolidStart } from "@solid-mediakit/trpc";
+import { QueryClient } from "@tanstack/solid-query";
 import { httpBatchLink } from "@trpc/client";
 import { isServer } from "solid-js/web";
 import type { AppRouter } from "./router/_app";

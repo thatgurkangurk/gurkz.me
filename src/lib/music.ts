@@ -1,9 +1,9 @@
+import { cache } from "@solidjs/router";
 import type { InferSelectModel } from "drizzle-orm";
 import type { User } from "lucia";
 import { z } from "zod";
-import type { musicIds } from "./schema/music";
-import { cache } from "@solidjs/router";
 import { db } from "./db";
+import type { musicIds } from "./schema/music";
 
 export type MusicId = InferSelectModel<typeof musicIds> & {
 	creator: Omit<User, "discordId" | "email" | "permissions">;

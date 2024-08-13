@@ -1,10 +1,10 @@
 import type { DiscordTokens } from "arctic";
-import { discord } from "./clients";
+import { eq } from "drizzle-orm";
+import { request } from "undici";
 import { db } from "../db";
 import { users } from "../schema/user";
+import { discord } from "./clients";
 import { createSession } from "./session";
-import { request } from "undici";
-import { eq } from "drizzle-orm";
 
 export async function getDiscordAuthorisationUrl(state: string): Promise<URL> {
 	return await discord.createAuthorizationURL(state, {

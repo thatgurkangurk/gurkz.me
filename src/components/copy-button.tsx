@@ -1,8 +1,8 @@
-import { Button } from "./ui/button";
-import { Check, Clipboard } from "lucide-solid";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
-import { createSignal, Show } from "solid-js";
 import { writeClipboard } from "@solid-primitives/clipboard";
+import { Check, Clipboard } from "lucide-solid";
+import { Show, createSignal } from "solid-js";
+import { Button } from "./ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 type CopyButtonProps = {
 	/** the text to copy */

@@ -1,8 +1,8 @@
-import { idFormat, setIdFormat, type IdFormat } from "~/lib/music/id-format";
-import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
-import { onMount, Show } from "solid-js";
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { OctagonAlert } from "lucide-solid";
+import { Show, onMount } from "solid-js";
+import { type IdFormat, idFormat, setIdFormat } from "~/lib/music/id-format";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 
 export function IdFormatToggle() {
 	onMount(() => {

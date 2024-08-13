@@ -1,6 +1,6 @@
 import { useColorMode } from "@kobalte/core";
 
-import { Laptop, Sun, Moon } from "lucide-solid";
+import { Laptop, Moon, Sun } from "lucide-solid";
 import { Button } from "~/components/ui/button";
 import {
 	DropdownMenu,

@@ -1,22 +1,22 @@
+import { cache, createAsync, revalidate } from "@solidjs/router";
+import { LoaderCircle } from "lucide-solid";
+import { Show, Suspense, createSignal } from "solid-js";
+import { toast } from "solid-sonner";
+import { getAuthenticatedUser } from "~/lib/auth/utils";
+import type { MusicId } from "~/lib/music";
 import { getFormattedId, idFormat } from "~/lib/music/id-format";
+import { trpc } from "~/lib/trpc/client";
+import { CopyButton } from "../copy-button";
+import { Button } from "../ui/button";
 import {
 	Card,
-	CardHeader,
-	CardTitle,
 	CardContent,
 	CardFooter,
+	CardHeader,
+	CardTitle,
 } from "../ui/card";
-import type { MusicId } from "~/lib/music";
-import { Skeleton } from "../ui/skeleton";
-import { LoaderCircle } from "lucide-solid";
-import { CopyButton } from "../copy-button";
 import { Image, ImageFallback, ImageRoot } from "../ui/image";
-import { createSignal, Show, Suspense } from "solid-js";
-import { Button } from "../ui/button";
-import { cache, createAsync, revalidate } from "@solidjs/router";
-import { getAuthenticatedUser } from "~/lib/auth/utils";
-import { trpc } from "~/lib/trpc/client";
-import { toast } from "solid-sonner";
+import { Skeleton } from "../ui/skeleton";
 
 const idIsAvailable = cache(async (id: number) => {
 	"use server";

@@ -1,22 +1,22 @@
 import {
-	createForm,
-	zodForm,
-	reset,
 	type SubmitHandler,
+	createForm,
+	reset,
+	zodForm,
 } from "@modular-forms/solid";
+import { revalidate } from "@solidjs/router";
 import { toast } from "solid-sonner";
 import type { z } from "zod";
 import { createIdSchema } from "~/lib/music";
-import { trpc, queryClient } from "~/lib/trpc/client";
-import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
+import { queryClient, trpc } from "~/lib/trpc/client";
+import { Button } from "../ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
 	TextField,
-	TextFieldRoot,
-	TextFieldLabel,
 	TextFieldErrorMessage,
+	TextFieldLabel,
+	TextFieldRoot,
 } from "../ui/textfield";
-import { Button } from "../ui/button";
-import { revalidate } from "@solidjs/router";
 
 type CreateIdForm = z.infer<typeof createIdSchema>;
 

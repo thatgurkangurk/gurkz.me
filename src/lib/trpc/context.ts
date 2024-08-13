@@ -1,5 +1,5 @@
-import type { inferAsyncReturnType } from "@trpc/server";
 import type { createSolidAPIHandlerContext } from "@solid-mediakit/trpc/handler";
+import type { inferAsyncReturnType } from "@trpc/server";
 import { getRequestEvent } from "solid-js/web";
 import { db } from "../db";
 import { musicIds } from "../schema/music";
