@@ -1,8 +1,8 @@
 import { Discord } from "arctic";
-import { getSecret } from "astro:env/server";
+import { env } from "~/env";
 
 export const discord = new Discord(
-  getSecret("DISCORD_CLIENT_ID"),
-  getSecret("DISCORD_CLIENT_SECRET"),
-  `${getSecret("SITE_URL")}/auth/discord/callback`
+	env.DISCORD_CLIENT_ID,
+	env.DISCORD_CLIENT_SECRET,
+	`${env.SITE_URL}/auth/discord/callback`,
 );

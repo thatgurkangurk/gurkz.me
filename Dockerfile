@@ -1,4 +1,4 @@
-FROM oven/bun:1.1.15 AS base
+FROM oven/bun:1.1.20 AS base
 LABEL org.opencontainers.image.source="https://github.com/thatgurkangurk/gurkz.me"
 COPY . /app
 WORKDIR /app
@@ -10,7 +10,7 @@ FROM base AS build
 ENV CI=1
 RUN bun install --frozen-lockfile
 
-RUN DATABASE_URL="postgres://set-me:set-me@set-me:5432/set-me" SITE_URL="set me" DISCORD_CLIENT_ID="set me" DISCORD_CLIENT_SECRET="set me" bun run build
+RUN bun run build
 
 FROM base
 RUN addgroup --system --gid 1001 nodejs
@@ -18,8 +18,9 @@ RUN adduser --system --uid 1001 gurkz
 ENV NODE_ENV production
 
 COPY --from=prod-deps --chown=gurkz:nodejs /app/node_modules /app/node_modules
-COPY --from=build --chown=gurkz:nodejs /app/dist /app/dist
+COPY --from=build --chown=gurkz:nodejs /app/.output /app/.output
 
 ENV HOST=0.0.0.0
+ENV PORT=4321
 EXPOSE 4321/tcp
-CMD [ "bun", "run", "./dist/server/entry.mjs" ]
+CMD [ "bun", "run", "./.output/server/index.mjs" ]
