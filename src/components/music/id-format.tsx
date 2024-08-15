@@ -1,20 +1,23 @@
 import { OctagonAlert } from "lucide-solid";
-import { Show, onMount } from "solid-js";
-import { type IdFormat, idFormat, setIdFormat } from "~/lib/music/id-format";
+import { type Accessor, type Setter, onMount } from "solid-js";
+import type { IdFormat } from "~/lib/music/id-format";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 
-export function IdFormatToggle() {
+export function IdFormatToggle(props: {
+	idFormat: Accessor<IdFormat>;
+	setIdFormat: Setter<IdFormat>;
+}) {
 	onMount(() => {
-		console.log(idFormat());
+		console.log(props.idFormat());
 	});
 
 	return (
 		<div class="text-center pt-3 gap-2">
 			<ToggleGroup
-				value={idFormat()}
+				value={props.idFormat()}
 				onChange={(value) => {
-					setIdFormat((value as IdFormat) ?? idFormat());
+					props.setIdFormat((value as IdFormat) ?? props.idFormat());
 				}}
 			>
 				<ToggleGroupItem value="NORMAL" aria-label="normal">
@@ -25,7 +28,7 @@ export function IdFormatToggle() {
 				</ToggleGroupItem>
 			</ToggleGroup>
 
-			{idFormat() === "TRAITOR_TOWN" && (
+			{props.idFormat() === "TRAITOR_TOWN" && (
 				<div class="text-left w-fit pt-2">
 					<Alert variant={"destructive"}>
 						<OctagonAlert class="h-4 w-4" />

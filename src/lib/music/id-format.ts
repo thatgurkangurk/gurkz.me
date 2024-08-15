@@ -1,9 +1,4 @@
-import { cookieStorage, makePersisted } from "@solid-primitives/storage";
-import { createSignal } from "solid-js";
-
 type IdFormat = "NORMAL" | "TRAITOR_TOWN";
-
-const [idFormat, setIdFormat] = createSignal<IdFormat>("NORMAL");
 
 function getFormattedId(id: string | number, format: IdFormat): string {
 	switch (format) {
@@ -16,4 +11,4 @@ function getFormattedId(id: string | number, format: IdFormat): string {
 	}
 }
 
-export { type IdFormat, idFormat, setIdFormat, getFormattedId };
+export { type IdFormat, getFormattedId };

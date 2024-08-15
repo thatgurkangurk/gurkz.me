@@ -1,10 +1,14 @@
-import { For, Show } from "solid-js";
+import { type Accessor, For, type Setter, Show } from "solid-js";
 import { MusicCard, MusicCardSkeleton } from "./music-card";
 import { trpc } from "~/lib/trpc/client";
 import { LoaderCircle } from "lucide-solid";
 import { Button } from "../ui/button";
+import type { IdFormat } from "~/lib/music/id-format";
 
-export function MusicList() {
+export function MusicList(props: {
+	idFormat: Accessor<IdFormat>;
+	setIdFormat: Setter<IdFormat>;
+}) {
 	const query = trpc.music.getInfiniteMusicIds.createInfiniteQuery(
 		() => ({
 			limit: 24,
@@ -52,7 +56,13 @@ export function MusicList() {
 						{(page) => (
 							<>
 								<For each={page.data}>
-									{(item) => <MusicCard musicId={item.id} />}
+									{(item) => (
+										<MusicCard
+											idFormat={props.idFormat}
+											setIdFormat={props.setIdFormat}
+											musicId={item.id}
+										/>
+									)}
 								</For>
 							</>
 						)}

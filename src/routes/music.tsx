@@ -1,16 +1,24 @@
 import { createAsync } from "@solidjs/router";
-import { LoaderCircle } from "lucide-solid";
-import { ErrorBoundary, Suspense } from "solid-js";
+import { createSignal, ErrorBoundary, Suspense } from "solid-js";
 import { Show } from "solid-js";
 import { CreateMusicCard } from "~/components/music/create-card";
 import { IdFormatToggle } from "~/components/music/id-format";
 import { MusicCardSkeleton } from "~/components/music/music-card";
 import { MusicList } from "~/components/music/music-list";
 import { getAuthenticatedUser } from "~/lib/auth/utils";
-import { getMusicIds } from "~/lib/music";
+import { cookieStorage, makePersisted } from "@solid-primitives/storage";
+import type { IdFormat } from "~/lib/music/id-format";
 
 export default function MusicIdList() {
 	const user = createAsync(() => getAuthenticatedUser());
+
+	const [idFormat, setIdFormat] = makePersisted(
+		createSignal<IdFormat>("NORMAL"),
+		{
+			storage: cookieStorage,
+			name: "music_id_format",
+		},
+	);
 
 	return (
 		<>
@@ -21,7 +29,7 @@ export default function MusicIdList() {
 			</Show>
 
 			<Suspense>
-				<IdFormatToggle />
+				<IdFormatToggle idFormat={idFormat} setIdFormat={setIdFormat} />
 			</Suspense>
 
 			<ErrorBoundary
@@ -52,7 +60,7 @@ export default function MusicIdList() {
 						</div>
 					}
 				>
-					<MusicList />
+					<MusicList idFormat={idFormat} setIdFormat={setIdFormat} />
 				</Suspense>
 			</ErrorBoundary>
 		</>

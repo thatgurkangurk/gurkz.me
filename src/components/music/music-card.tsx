@@ -1,10 +1,16 @@
-import { cache, createAsync, revalidate } from "@solidjs/router";
+import { cache, createAsync } from "@solidjs/router";
 import { LoaderCircle } from "lucide-solid";
-import { Show, Suspense, createSignal } from "solid-js";
+import {
+	type Accessor,
+	type Setter,
+	Show,
+	Suspense,
+	createSignal,
+} from "solid-js";
 import { toast } from "solid-sonner";
 import { getAuthenticatedUser } from "~/lib/auth/utils";
 import type { MusicId } from "~/lib/music";
-import { getFormattedId, idFormat } from "~/lib/music/id-format";
+import { getFormattedId, type IdFormat } from "~/lib/music/id-format";
 import { trpc } from "~/lib/trpc/client";
 import { CopyButton } from "../copy-button";
 import { Button } from "../ui/button";
@@ -118,7 +124,11 @@ function DeleteButton(props: { id: string }) {
 	);
 }
 
-export function MusicCard(props: { musicId: string }) {
+export function MusicCard(props: {
+	musicId: string;
+	idFormat: Accessor<IdFormat>;
+	setIdFormat: Setter<IdFormat>;
+}) {
 	const user = createAsync(() => getAuthenticatedUser());
 	const query = trpc.music.getMusicId.createQuery(() => ({
 		id: props.musicId,
@@ -132,10 +142,13 @@ export function MusicCard(props: { musicId: string }) {
 				</CardHeader>
 				<CardContent class="flex items-center text-xl">
 					<span>
-						{getFormattedId(query.data?.robloxId ?? "invalid id", idFormat())}
+						{getFormattedId(
+							query.data?.robloxId ?? "invalid id",
+							props.idFormat(),
+						)}
 					</span>
 					<CopyButton
-						content={`${idFormat() === "TRAITOR_TOWN" ? `s/${query.data?.robloxId}` : query.data?.robloxId}`}
+						content={`${props.idFormat() === "TRAITOR_TOWN" ? `s/${query.data?.robloxId}` : query.data?.robloxId}`}
 					/>
 				</CardContent>
 				<CardFooter class="grid gap-1 grid-cols-1">
