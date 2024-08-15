@@ -64,7 +64,12 @@ export function CreateMusicCard() {
 								validationState={field.error ? "invalid" : "valid"}
 							>
 								<TextFieldLabel>roblox id</TextFieldLabel>
-								<TextField {...props} type="number" required />
+								<TextField
+									{...props}
+									type="number"
+									required
+									value={field.value || ""}
+								/>
 								{field.error && (
 									<TextFieldErrorMessage>{field.error}</TextFieldErrorMessage>
 								)}
@@ -79,7 +84,12 @@ export function CreateMusicCard() {
 								validationState={field.error ? "invalid" : "valid"}
 							>
 								<TextFieldLabel>name</TextFieldLabel>
-								<TextField {...props} type="text" required />
+								<TextField
+									{...props}
+									type="text"
+									required
+									value={field.value || ""}
+								/>
 								{field.error && (
 									<TextFieldErrorMessage>{field.error}</TextFieldErrorMessage>
 								)}
