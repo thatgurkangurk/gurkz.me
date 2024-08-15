@@ -31,14 +31,8 @@ export const createIdSchema = z.object({
 export const getMusicIds = cache(async () => {
 	"use server";
 	const ids = await db.query.musicIds.findMany({
-		with: {
-			creator: {
-				columns: {
-					profilePictureUrl: true,
-					username: true,
-					id: true,
-				},
-			},
+		columns: {
+			id: true,
 		},
 		orderBy: (id, { desc }) => desc(id.created),
 	});

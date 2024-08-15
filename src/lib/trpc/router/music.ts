@@ -50,8 +50,9 @@ export default router({
 						[musicIds.created, "desc", cursor ? new Date(cursor) : undefined],
 					],
 				}),
-				with: {
-					creator: true,
+				columns: {
+					id: true,
+					created: true,
 				},
 			});
 
@@ -149,5 +150,32 @@ export default router({
 			return {
 				message: "success",
 			};
+		}),
+
+	getMusicId: procedure
+		.input(
+			z.object({
+				id: z.string(),
+			}),
+		)
+		.query(async ({ ctx, input }) => {
+			const { db } = ctx;
+			const { id } = input;
+
+			const data = await db.query.musicIds.findFirst({
+				where: (musicId, { eq }) => eq(musicId.id, id),
+				with: {
+					creator: {
+						columns: {
+							id: true,
+							username: true,
+							permissions: true,
+							profilePictureUrl: true,
+						},
+					},
+				},
+			});
+
+			return data;
 		}),
 });

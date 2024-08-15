@@ -17,6 +17,7 @@ import {
 } from "../ui/card";
 import { Image, ImageFallback, ImageRoot } from "../ui/image";
 import { Skeleton } from "../ui/skeleton";
+import { useQueryClient } from "@tanstack/solid-query";
 
 const idIsAvailable = cache(async (id: number) => {
 	"use server";
@@ -89,10 +90,13 @@ function AudioPlayer(props: { musicId: MusicId }) {
 }
 
 function DeleteButton(props: { id: string }) {
+	const queryClient = useQueryClient();
 	const mutation = trpc.music.deleteMusicId.createMutation(() => ({
 		onSuccess: () => {
 			toast.success("successfully deleted the music id");
-			revalidate("music_ids");
+			queryClient.refetchQueries({
+				queryKey: [["music", "getInfiniteMusicIds"]],
+			});
 		},
 	}));
 
@@ -114,50 +118,59 @@ function DeleteButton(props: { id: string }) {
 	);
 }
 
-export function MusicCard(props: { musicId: MusicId }) {
+export function MusicCard(props: { musicId: string }) {
 	const user = createAsync(() => getAuthenticatedUser());
+	const query = trpc.music.getMusicId.createQuery(() => ({
+		id: props.musicId,
+	}));
+
 	return (
-		<Card class="w-full h-full">
-			<CardHeader>
-				<CardTitle class="text-xl">{props.musicId.name}</CardTitle>
-			</CardHeader>
-			<CardContent class="flex items-center text-xl">
-				<span>{getFormattedId(props.musicId.robloxId, idFormat())}</span>
-				<CopyButton
-					content={`${idFormat() === "TRAITOR_TOWN" ? `s/${props.musicId.robloxId}` : props.musicId.robloxId}`}
-				/>
-			</CardContent>
-			<CardFooter class="grid gap-1 grid-cols-1">
-				<Suspense
-					fallback={
-						<Button disabled>
-							<LoaderCircle class="h-6 w-6 animate-spin" /> loading music
-							player...
-						</Button>
-					}
-				>
-					<AudioPlayer musicId={props.musicId} />
-				</Suspense>
-				<p>created by:</p>
-				<div class="flex gap-2 items-center">
-					<ImageRoot fallbackDelay={600} class="h-10 w-10">
-						<Image src={props.musicId.creator.profilePictureUrl} />
-						<ImageFallback>
-							{props.musicId.creator.username[0].toUpperCase()}
-						</ImageFallback>
-					</ImageRoot>
-					<span>{props.musicId.creator.username}</span>
-					<Show
-						when={
-							user()?.permissions.includes("MANAGE_MUSIC_IDS") ||
-							user()?.id === props.musicId.createdById
+		<Show when={!query.isLoading} fallback={<MusicCardSkeleton />}>
+			<Card class="w-full h-full">
+				<CardHeader>
+					<CardTitle class="text-xl">{query.data?.name}</CardTitle>
+				</CardHeader>
+				<CardContent class="flex items-center text-xl">
+					<span>
+						{getFormattedId(query.data?.robloxId ?? "invalid id", idFormat())}
+					</span>
+					<CopyButton
+						content={`${idFormat() === "TRAITOR_TOWN" ? `s/${query.data?.robloxId}` : query.data?.robloxId}`}
+					/>
+				</CardContent>
+				<CardFooter class="grid gap-1 grid-cols-1">
+					<Suspense
+						fallback={
+							<Button disabled>
+								<LoaderCircle class="h-6 w-6 animate-spin" /> loading music
+								player...
+							</Button>
 						}
 					>
-						<DeleteButton id={props.musicId.id} />
-					</Show>
-				</div>
-			</CardFooter>
-		</Card>
+						{/* biome-ignore lint/style/noNonNullAssertion: this should be safe */}
+						<AudioPlayer musicId={query.data!} />
+					</Suspense>
+					<p>created by:</p>
+					<div class="flex gap-2 items-center">
+						<ImageRoot fallbackDelay={600} class="h-10 w-10">
+							<Image src={query.data?.creator.profilePictureUrl} />
+							<ImageFallback>
+								{query.data?.creator.username[0].toUpperCase()}
+							</ImageFallback>
+						</ImageRoot>
+						<span>{query.data?.creator.username}</span>
+						<Show
+							when={
+								user()?.permissions.includes("MANAGE_MUSIC_IDS") ||
+								user()?.id === query.data?.createdById
+							}
+						>
+							<DeleteButton id={query.data?.id ?? "invalid id"} />
+						</Show>
+					</div>
+				</CardFooter>
+			</Card>
+		</Show>
 	);
 }
 

@@ -46,6 +46,7 @@ export default function App() {
 											<main class="p-2 flex-grow">{props.children}</main>
 										</div>
 										<Toaster />
+										<SolidQueryDevtools />
 									</trpc.Provider>
 								</QueryClientProvider>
 							</Suspense>

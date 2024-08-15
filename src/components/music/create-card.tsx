@@ -4,7 +4,6 @@ import {
 	reset,
 	zodForm,
 } from "@modular-forms/solid";
-import { revalidate } from "@solidjs/router";
 import { toast } from "solid-sonner";
 import type { z } from "zod";
 import { createIdSchema } from "~/lib/music";
@@ -35,9 +34,8 @@ export function CreateMusicCard() {
 				description: "successfully created the music id",
 			});
 			queryClient.refetchQueries({
-				queryKey: [["music"]],
+				queryKey: [["music", "getInfiniteMusicIds"]],
 			});
-			revalidate("music_ids");
 			reset(form);
 		},
 	}));
