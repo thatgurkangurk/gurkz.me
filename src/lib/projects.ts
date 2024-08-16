@@ -10,12 +10,11 @@ const projects: Project[] = [
 		description: "portal 2's ending remade in HTML, CSS and JS",
 		slug: "want-you-gone",
 	},
-	// ,
-	// {
-	// 	title: "webhook destroyer",
-	// 	description: "a simple tool to destroy discord webhooks",
-	// 	slug: "webhook-destroyer",
-	// },
+	{
+		title: "webhook destroyer",
+		description: "a simple tool to destroy discord webhooks",
+		slug: "webhook-destroyer",
+	},
 	// {
 	// 	title: "bad apple",
 	// 	description: "bad apple in HTML",
