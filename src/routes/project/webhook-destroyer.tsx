@@ -52,6 +52,9 @@ function DestroyerForm() {
 				toast.success("success", {
 					description: "that webhook is now deleted",
 				});
+				if (window.umami) {
+					window.umami.track("webhook-delete");
+				}
 				reset(destroyerForm);
 				return;
 			}

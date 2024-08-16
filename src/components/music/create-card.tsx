@@ -36,6 +36,9 @@ export function CreateMusicCard() {
 			queryClient.refetchQueries({
 				queryKey: [["music", "getInfiniteMusicIds"]],
 			});
+			if (window.umami) {
+				window.umami.track("music-id-create");
+			}
 			reset(form);
 		},
 	}));

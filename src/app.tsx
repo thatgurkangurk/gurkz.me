@@ -16,6 +16,7 @@ import { getCookie } from "vinxi/http";
 import { Nav } from "./components/nav";
 import { Toaster } from "./components/ui/sonner";
 import { queryClient, trpc } from "./lib/trpc/client";
+import { Footer } from "./components/footer";
 
 function getServerCookies() {
 	"use server";
@@ -41,10 +42,21 @@ export default function App() {
 							<Suspense>
 								<QueryClientProvider client={queryClient}>
 									<trpc.Provider queryClient={queryClient}>
-										<Nav />
-										<div class="min-h-[93dvh] w-full flex flex-col">
-											<main class="p-2 flex-grow">{props.children}</main>
+										<div class="flex flex-col min-h-screen">
+											<Nav />
+											<div class="flex-grow min-h-[83dvh] w-full flex flex-col">
+												<main class="p-2 flex-grow">{props.children}</main>
+											</div>
+											<Footer />
 										</div>
+
+										{process.env.NODE_ENV === "production" && (
+											<script
+												defer
+												src="https://analytics.gurkz.me/script.js"
+												data-website-id="3043940f-d9c8-4ed2-abf4-5efbe527d701"
+											/>
+										)}
 										<Toaster />
 										<SolidQueryDevtools />
 									</trpc.Provider>

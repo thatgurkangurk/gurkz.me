@@ -100,6 +100,9 @@ function DeleteButton(props: { id: string }) {
 	const mutation = trpc.music.deleteMusicId.createMutation(() => ({
 		onSuccess: () => {
 			toast.success("successfully deleted the music id");
+			if (window.umami) {
+				window.umami.track("music-id-create");
+			}
 			queryClient.refetchQueries({
 				queryKey: [["music", "getInfiniteMusicIds"]],
 			});

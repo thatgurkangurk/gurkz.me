@@ -7,3 +7,11 @@ declare module "@solidjs/start/server" {
 		session?: Session | null;
 	}
 }
+
+declare global {
+	interface Window {
+		umami: {
+			track(input: string | object): void;
+		};
+	}
+}
