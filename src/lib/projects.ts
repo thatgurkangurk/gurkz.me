@@ -15,11 +15,11 @@ const projects: Project[] = [
 		description: "a simple tool to destroy discord webhooks",
 		slug: "webhook-destroyer",
 	},
-	// {
-	// 	title: "bad apple",
-	// 	description: "bad apple in HTML",
-	// 	slug: "bad-apple",
-	// },
+	{
+		title: "bad apple",
+		description: "bad apple in HTML",
+		slug: "bad-apple",
+	},
 ];
 
 function getProjectBySlug(slug: string) {
