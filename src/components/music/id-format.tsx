@@ -3,21 +3,17 @@ import { type Accessor, type Setter, onMount } from "solid-js";
 import type { IdFormat } from "~/lib/music/id-format";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
+import { useMusicContext } from "~/lib/music/context";
 
-export function IdFormatToggle(props: {
-	idFormat: Accessor<IdFormat>;
-	setIdFormat: Setter<IdFormat>;
-}) {
-	onMount(() => {
-		console.log(props.idFormat());
-	});
+export function IdFormatToggle() {
+	const { idFormat, setIdFormat } = useMusicContext();
 
 	return (
 		<div class="text-center pt-3 gap-2">
 			<ToggleGroup
-				value={props.idFormat()}
+				value={idFormat()}
 				onChange={(value) => {
-					props.setIdFormat((value as IdFormat) ?? props.idFormat());
+					setIdFormat((value as IdFormat) ?? idFormat());
 				}}
 			>
 				<ToggleGroupItem value="NORMAL" aria-label="normal">
@@ -28,7 +24,7 @@ export function IdFormatToggle(props: {
 				</ToggleGroupItem>
 			</ToggleGroup>
 
-			{props.idFormat() === "TRAITOR_TOWN" && (
+			{idFormat() === "TRAITOR_TOWN" && (
 				<div class="text-left w-fit pt-2">
 					<Alert variant={"destructive"}>
 						<OctagonAlert class="h-4 w-4" />

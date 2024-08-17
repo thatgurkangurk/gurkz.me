@@ -8,61 +8,56 @@ import { MusicList } from "~/components/music/music-list";
 import { getAuthenticatedUser } from "~/lib/auth/utils";
 import { cookieStorage, makePersisted } from "@solid-primitives/storage";
 import type { IdFormat } from "~/lib/music/id-format";
+import { MusicProvider } from "~/lib/music/context";
 
 export default function MusicIdList() {
 	const user = createAsync(() => getAuthenticatedUser());
 
-	const [idFormat, setIdFormat] = makePersisted(
-		createSignal<IdFormat>("NORMAL"),
-		{
-			storage: cookieStorage,
-			name: "music_id_format",
-		},
-	);
-
 	return (
 		<>
-			<h2 class="text-2xl">music id list</h2>
+			<MusicProvider>
+				<h2 class="text-2xl">music id list</h2>
 
-			<Show when={user()?.permissions.includes("CREATE_MUSIC_IDS")}>
-				<CreateMusicCard />
-			</Show>
+				<Show when={user()?.permissions.includes("CREATE_MUSIC_IDS")}>
+					<CreateMusicCard />
+				</Show>
 
-			<Suspense>
-				<IdFormatToggle idFormat={idFormat} setIdFormat={setIdFormat} />
-			</Suspense>
-
-			<ErrorBoundary
-				fallback={(err, reset) => (
-					<div>
-						<p>sorry, something went wrong. error: {err.toString()}</p>{" "}
-						<button type="button" onClick={() => reset()}>
-							retry?
-						</button>
-					</div>
-				)}
-			>
-				<Suspense
-					fallback={
-						<div class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4">
-							<MusicCardSkeleton />
-							<MusicCardSkeleton />
-							<MusicCardSkeleton />
-							<MusicCardSkeleton />
-							<MusicCardSkeleton />
-							<MusicCardSkeleton />
-							<MusicCardSkeleton />
-							<MusicCardSkeleton />
-							<MusicCardSkeleton />
-							<MusicCardSkeleton />
-							<MusicCardSkeleton />
-							<MusicCardSkeleton />
-						</div>
-					}
-				>
-					<MusicList idFormat={idFormat} setIdFormat={setIdFormat} />
+				<Suspense>
+					<IdFormatToggle />
 				</Suspense>
-			</ErrorBoundary>
+
+				<ErrorBoundary
+					fallback={(err, reset) => (
+						<div>
+							<p>sorry, something went wrong. error: {err.toString()}</p>{" "}
+							<button type="button" onClick={() => reset()}>
+								retry?
+							</button>
+						</div>
+					)}
+				>
+					<Suspense
+						fallback={
+							<div class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4">
+								<MusicCardSkeleton />
+								<MusicCardSkeleton />
+								<MusicCardSkeleton />
+								<MusicCardSkeleton />
+								<MusicCardSkeleton />
+								<MusicCardSkeleton />
+								<MusicCardSkeleton />
+								<MusicCardSkeleton />
+								<MusicCardSkeleton />
+								<MusicCardSkeleton />
+								<MusicCardSkeleton />
+								<MusicCardSkeleton />
+							</div>
+						}
+					>
+						<MusicList />
+					</Suspense>
+				</ErrorBoundary>
+			</MusicProvider>
 		</>
 	);
 }

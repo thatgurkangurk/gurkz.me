@@ -1,12 +1,6 @@
 import { cache, createAsync } from "@solidjs/router";
 import { LoaderCircle } from "lucide-solid";
-import {
-	type Accessor,
-	type Setter,
-	Show,
-	Suspense,
-	createSignal,
-} from "solid-js";
+import { Show, Suspense, createSignal } from "solid-js";
 import { toast } from "solid-sonner";
 import { getAuthenticatedUser } from "~/lib/auth/utils";
 import type { MusicId } from "~/lib/music";
@@ -24,6 +18,7 @@ import {
 import { Image, ImageFallback, ImageRoot } from "../ui/image";
 import { Skeleton } from "../ui/skeleton";
 import { useQueryClient } from "@tanstack/solid-query";
+import { useMusicContext } from "~/lib/music/context";
 
 const idIsAvailable = cache(async (id: number) => {
 	"use server";
@@ -129,13 +124,12 @@ function DeleteButton(props: { id: string }) {
 
 export function MusicCard(props: {
 	musicId: string;
-	idFormat: Accessor<IdFormat>;
-	setIdFormat: Setter<IdFormat>;
 }) {
 	const user = createAsync(() => getAuthenticatedUser());
 	const query = trpc.music.getMusicId.createQuery(() => ({
 		id: props.musicId,
 	}));
+	const { idFormat } = useMusicContext();
 
 	return (
 		<Show when={!query.isLoading} fallback={<MusicCardSkeleton />}>
@@ -145,13 +139,10 @@ export function MusicCard(props: {
 				</CardHeader>
 				<CardContent class="flex items-center text-xl">
 					<span>
-						{getFormattedId(
-							query.data?.robloxId ?? "invalid id",
-							props.idFormat(),
-						)}
+						{getFormattedId(query.data?.robloxId ?? "invalid id", idFormat())}
 					</span>
 					<CopyButton
-						content={`${props.idFormat() === "TRAITOR_TOWN" ? `s/${query.data?.robloxId}` : query.data?.robloxId}`}
+						content={`${idFormat() === "TRAITOR_TOWN" ? `s/${query.data?.robloxId}` : query.data?.robloxId}`}
 					/>
 				</CardContent>
 				<CardFooter class="grid gap-1 grid-cols-1">
