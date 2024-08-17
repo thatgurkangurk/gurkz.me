@@ -20,6 +20,11 @@ const projects: Project[] = [
 		description: "bad apple in HTML",
 		slug: "bad-apple",
 	},
+	{
+		title: "video to gif",
+		description: "a video to gif converter",
+		slug: "video-to-gif",
+	},
 ];
 
 function getProjectBySlug(slug: string) {

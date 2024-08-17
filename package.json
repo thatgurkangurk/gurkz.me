@@ -8,6 +8,8 @@
     "version": "vinxi version"
   },
   "dependencies": {
+    "@ffmpeg/ffmpeg": "^0.12.10",
+    "@ffmpeg/util": "^0.12.1",
     "@fontsource-variable/space-grotesk": "^5.0.18",
     "@kobalte/core": "^0.13.4",
     "@lucia-auth/adapter-drizzle": "^1.0.7",
