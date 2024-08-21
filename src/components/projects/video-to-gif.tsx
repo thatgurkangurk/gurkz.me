@@ -3,10 +3,45 @@ import { useFFmpeg } from "~/lib/hooks/ffmpeg";
 import { Button } from "../ui/button";
 import { LoaderCircle, Video } from "lucide-solid";
 import { Progress } from "~/components/ui/progress";
+import { createDropzone } from "@soorria/solid-dropzone";
+
+const [file, setFile] = createSignal<File | undefined | null>();
+
+function Dropzone() {
+	const onDrop = (acceptedFiles: File[]) => {
+		if (acceptedFiles.length > 1) {
+			console.warn(
+				"[dropzone] there was more than 1 file (somehow), only using the first one",
+			);
+		}
+
+		const file = acceptedFiles[0];
+
+		setFile(file);
+	};
+
+	const dropzone = createDropzone({ accept: "video/mp4", onDrop, maxFiles: 1 });
+
+	return (
+		<div
+			class="py-8 cursor-pointer outline rounded-md outline-6 dark:outline-gray-600 w-48 h-32 flex justify-center items-center"
+			{...dropzone.getRootProps()}
+		>
+			<input {...dropzone.getInputProps()} />
+			{dropzone.isDragActive ? (
+				<p>drop here</p>
+			) : (
+				<div class="text-center">
+					<p>click here to upload</p>
+					<p>you can also drag and drop</p>
+				</div>
+			)}
+		</div>
+	);
+}
 
 export default function VideoGifConverter() {
 	const ffmpeg = useFFmpeg();
-	const [file, setFile] = createSignal<File | undefined | null>();
 	const [result, setResult] = createSignal<string | undefined | null>();
 
 	async function reset() {
@@ -26,6 +61,7 @@ export default function VideoGifConverter() {
 				<Switch>
 					<Match when={ffmpeg.status() === "default"}>
 						<p>you need to download ffmpeg :D</p>
+
 						<Button onClick={() => ffmpeg.load()}>load ffmpeg (~20mb)</Button>
 					</Match>
 					<Match when={ffmpeg.status() === "loading"}>
@@ -34,13 +70,7 @@ export default function VideoGifConverter() {
 						</Button>
 					</Match>
 					<Match when={ffmpeg.status() === "loaded"}>
-						<input
-							type="file"
-							onChange={(e) =>
-								setFile(() => e.target.files?.item(0) ?? undefined)
-							}
-						/>
-
+						<Dropzone />
 						<Show when={file() && ffmpeg.convertStatus() === "idle"}>
 							{/* biome-ignore lint/a11y/useMediaCaption: it is an user uploaded file */}
 							{/* biome-ignore lint/style/noNonNullAssertion: it is safe */}
