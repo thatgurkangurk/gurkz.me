@@ -4,6 +4,16 @@ import { Button } from "../ui/button";
 import { LoaderCircle, Video } from "lucide-solid";
 import { Progress } from "~/components/ui/progress";
 import { createDropzone } from "@soorria/solid-dropzone";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "../ui/card";
+import { createStore } from "solid-js/store";
+import { A } from "@solidjs/router";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 
 const [file, setFile] = createSignal<File | undefined | null>();
 
@@ -42,12 +52,21 @@ function Dropzone() {
 
 export default function VideoGifConverter() {
 	const ffmpeg = useFFmpeg();
-	const [result, setResult] = createSignal<string | undefined | null>();
+	const [result, setResult] = createStore<{
+		url: string | undefined | null;
+		size: string | undefined | null;
+	}>({
+		url: null,
+		size: null,
+	});
 
 	async function reset() {
 		await ffmpeg.reset();
 		setFile(() => null);
-		setResult(() => null);
+		setResult(() => ({
+			size: null,
+			url: null,
+		}));
 	}
 
 	onMount(async () => {
@@ -60,9 +79,17 @@ export default function VideoGifConverter() {
 			<Show when={ffmpeg.convertStatus() === "idle"}>
 				<Switch>
 					<Match when={ffmpeg.status() === "default"}>
-						<p>you need to download ffmpeg :D</p>
-
-						<Button onClick={() => ffmpeg.load()}>load ffmpeg (~20mb)</Button>
+						<Card>
+							<CardHeader>
+								<CardTitle>hi, you need to download ffmpeg</CardTitle>
+								<CardDescription>file size: ~20mb</CardDescription>
+							</CardHeader>
+							<CardContent>
+								<Button onClick={() => ffmpeg.load()}>
+									load ffmpeg (~20mb)
+								</Button>
+							</CardContent>
+						</Card>
 					</Match>
 					<Match when={ffmpeg.status() === "loading"}>
 						<Button disabled>
@@ -71,10 +98,22 @@ export default function VideoGifConverter() {
 					</Match>
 					<Match when={ffmpeg.status() === "loaded"}>
 						<Dropzone />
+						<br />
+						<Alert class="w-fit pt-4" variant={"destructive"}>
+							<AlertTitle>warning</AlertTitle>
+							<AlertDescription>
+								the resulting file will be a lot larger than the source video
+							</AlertDescription>
+						</Alert>
 						<Show when={file() && ffmpeg.convertStatus() === "idle"}>
 							{/* biome-ignore lint/a11y/useMediaCaption: it is an user uploaded file */}
-							{/* biome-ignore lint/style/noNonNullAssertion: it is safe */}
-							<video controls width="250" src={URL.createObjectURL(file()!)} />
+							<video
+								class="rounded-md"
+								controls
+								width="250"
+								/* biome-ignore lint/style/noNonNullAssertion: it is safe */
+								src={URL.createObjectURL(file()!)}
+							/>
 							<Button
 								onClick={async () =>
 									/* biome-ignore lint/style/noNonNullAssertion: it is safe */
@@ -85,9 +124,21 @@ export default function VideoGifConverter() {
 							</Button>
 						</Show>
 
-						<Show when={result()}>
-							{/* biome-ignore lint/style/noNonNullAssertion: it is safe */}
-							<img width="500" src={result()!} alt="result" />
+						<Show when={result.url}>
+							<p>result:</p>
+							<img
+								class="rounded-md"
+								width="500"
+								/* biome-ignore lint/style/noNonNullAssertion: it is safe */
+								src={result.url!}
+								alt="result"
+							/>
+							<p>file size: {result.size}</p>
+
+							{/* biome-ignore lint/style/noNonNullAssertion: it exists */}
+							<a href={result.url!} download="result.gif">
+								<Button variant={"link"}>download</Button>
+							</a>
 
 							<Button onClick={() => reset()}>reset</Button>
 						</Show>
@@ -97,7 +148,7 @@ export default function VideoGifConverter() {
 
 			<Show when={ffmpeg.progress() !== null && ffmpeg.progress() !== 100}>
 				<div class="w-fit gap-2 flex flex-row">
-					<Progress value={ffmpeg.progress() ?? 0} />
+					<LoaderCircle class="animate-spin h-6 w-6" />
 					<p>{ffmpeg.progress()}%</p>
 				</div>
 			</Show>

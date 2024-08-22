@@ -4,6 +4,16 @@ import type { FFmpeg } from "@ffmpeg/ffmpeg";
 type Status = "loaded" | "loading" | "default";
 type ConvertStatus = "converting" | "idle";
 
+export function bytesToSize(bytes: number): string {
+	const sizes: string[] = ["Bytes", "KB", "MB", "GB", "TB"];
+	if (bytes === 0) return "n/a";
+	const i: number = Number.parseInt(
+		Math.floor(Math.log(bytes) / Math.log(1024)).toString(),
+	);
+	if (i === 0) return `${bytes} ${sizes[i]}`;
+	return `${(bytes / 1024 ** i).toFixed(1)} ${sizes[i]}`;
+}
+
 export const useFFmpeg = () => {
 	const [status, setStatus] = createSignal<Status>("default");
 	const [convertStatus, setConvertStatus] = createSignal<ConvertStatus>("idle");
@@ -12,13 +22,9 @@ export const useFFmpeg = () => {
 	let ffmpeg: FFmpeg;
 
 	const reset = async () => {
-		setStatus(() => "default");
+		setStatus(() => (ffmpeg ? "loaded" : "default"));
 		setProgress(() => null);
 		setConvertStatus(() => "idle");
-
-		if (ffmpeg) {
-			ffmpeg.terminate();
-		}
 	};
 
 	const load = async () => {
@@ -69,13 +75,16 @@ export const useFFmpeg = () => {
 			buffer: Buffer;
 		};
 
-		const url = URL.createObjectURL(
-			new Blob([data.buffer], { type: "image/gif" }),
-		);
+		const blob = new Blob([data.buffer], { type: "image/gif" });
+
+		const url = URL.createObjectURL(blob);
 
 		setConvertStatus(() => "idle");
 
-		return url;
+		return {
+			url: url,
+			size: bytesToSize(blob.size),
+		};
 	};
 
 	return {
