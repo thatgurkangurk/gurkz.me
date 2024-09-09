@@ -1,57 +1,33 @@
 {
-  "name": "example-basic",
-  "type": "module",
-  "scripts": {
-    "dev": "vinxi dev",
-    "build": "vinxi build",
-    "start": "vinxi start",
-    "version": "vinxi version"
-  },
-  "dependencies": {
-    "@fontsource-variable/space-grotesk": "^5.0.18",
-    "@kobalte/core": "^0.13.4",
-    "@lucia-auth/adapter-drizzle": "^1.0.7",
-    "@modular-forms/solid": "^0.22.1",
-    "@solid-mediakit/trpc": "^3.0.3",
-    "@solid-primitives/clipboard": "^1.5.10",
-    "@solid-primitives/event-bus": "^1.0.11",
-    "@solid-primitives/scheduled": "^1.4.3",
-    "@solid-primitives/storage": "^3.8.0",
-    "@solidjs/meta": "^0.29.4",
-    "@solidjs/router": "^0.14.1",
-    "@solidjs/start": "^1.0.6",
-    "@t3-oss/env-core": "^0.11.0",
-    "@tanstack/solid-query": "^5.51.15",
-    "@tanstack/solid-query-devtools": "^5.51.15",
-    "@trpc/client": "^10.45.2",
-    "@trpc/server": "^10.45.2",
-    "@upstash/ratelimit": "^2.0.1",
-    "@upstash/redis": "^1.34.0",
-    "arctic": "^1.9.2",
-    "class-variance-authority": "^0.7.0",
-    "clsx": "^2.1.1",
-    "drizzle-orm": "^0.32.1",
-    "drizzle-pagination": "^1.0.10",
-    "lucia": "^3.2.0",
-    "lucide-solid": "^0.417.0",
-    "postgres": "^3.4.4",
-    "redis": "^4.7.0",
-    "solid-js": "^1.8.18",
-    "solid-sonner": "^0.2.8",
-    "solid-start-trpc": "^0.0.16",
-    "tailwind-merge": "^2.4.0",
-    "tailwindcss": "^3.4.7",
-    "tailwindcss-animate": "^1.0.7",
-    "vinxi": "^0.4.1",
-    "zod": "^3.23.8"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "1.8.3",
-    "autoprefixer": "^10.4.19",
-    "drizzle-kit": "^0.23.0",
-    "postcss": "^8.4.40"
-  }
+	"name": "gurkz.me",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"lint": "prettier --check . && eslint .",
+		"format": "prettier --write ."
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^3.0.0",
+		"@sveltejs/kit": "^2.0.0",
+		"@sveltejs/vite-plugin-svelte": "^4.0.0-next.6",
+		"@types/eslint": "^9.6.0",
+		"eslint": "^9.0.0",
+		"eslint-config-prettier": "^9.1.0",
+		"eslint-plugin-svelte": "^2.36.0",
+		"globals": "^15.0.0",
+		"prettier": "^3.1.1",
+		"prettier-plugin-svelte": "^3.1.2",
+		"svelte": "^5.0.0-next.1",
+		"svelte-adapter-bun": "^0.5.2",
+		"svelte-check": "^4.0.0",
+		"typescript": "^5.5.4",
+		"typescript-eslint": "^8.4.0",
+		"vite": "^5.0.3"
+	},
+	"type": "module"
 }
