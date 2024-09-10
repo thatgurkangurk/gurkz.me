@@ -1,5 +1,5 @@
 <script lang="ts">
-	import ThemeSwitcher from "$lib/components/theme-switcher.svelte";
+	import { Nav } from "$lib/components/nav";
 	import "../app.css";
 	import { ModeWatcher } from "mode-watcher";
 	import type { Snippet } from "svelte";
@@ -12,6 +12,12 @@
 </script>
 
 <ModeWatcher defaultMode="system" />
-{@render children()}
 
-<ThemeSwitcher />
+<div class="flex flex-col min-h-screen">
+	<Nav />
+	<div class="flex-grow min-h-[83dvh] w-full flex flex-col">
+		<main class="flex-grow p-2">
+			{@render children()}
+		</main>
+	</div>
+</div>
