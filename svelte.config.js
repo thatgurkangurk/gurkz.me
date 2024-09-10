@@ -13,6 +13,11 @@ const config = {
 		// See https://kit.svelte.dev/docs/adapters for more information about adapters.
 		adapter: adapter(),
 	},
+	compilerOptions: {
+		warningFilter: (warning) => {
+			if (warning.filename.toLowerCase().startsWith("node_modules")) return false;
+		},
+	},
 };
 
 export default config;
