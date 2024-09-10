@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Nav } from "$lib/components/nav";
+	import { Toaster } from "$lib/components/ui/sonner";
 	import "../app.css";
 	import { ModeWatcher } from "mode-watcher";
 	import type { Snippet } from "svelte";
@@ -12,6 +13,7 @@
 </script>
 
 <ModeWatcher defaultMode="system" />
+<Toaster />
 
 <div class="flex flex-col min-h-screen">
 	<Nav />

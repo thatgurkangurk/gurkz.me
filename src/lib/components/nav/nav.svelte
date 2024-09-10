@@ -5,6 +5,9 @@
 	import NavLink from "./nav-link.svelte";
 	import type { Link } from "./types";
 	import ThemeSwitcher from "../theme-switcher.svelte";
+	import { page } from "$app/stores";
+	import { applyAction, enhance } from "$app/forms";
+	import { toast } from "svelte-sonner";
 
 	let sheetOpen = $state(false);
 
@@ -66,6 +69,55 @@
 	</Sheet>
 	<div class="ml-auto flex-1 sm:flex-initial" />
 	<div class="flex flex-row items-center break-normal gap-2">
+		{#if $page.data.user}
+			<div class="flex flex-row items-center">
+				<p class="flex flex-row gap-1">hello, <span>{$page.data.user.username}</span></p>
+				<form
+					use:enhance={() => {
+						const id = toast.loading("please wait", {
+							description: "you're being logged out",
+						});
+
+						return async ({ result }) => {
+							switch (result.type) {
+								case "redirect": {
+									toast.success("success", {
+										description: "you have now logged out",
+										id: id,
+									});
+									break;
+								}
+								case "failure": {
+									toast.error("error", {
+										description: "something went wrong",
+										id: id,
+									});
+									break;
+								}
+							}
+
+							await applyAction(result);
+						};
+					}}
+					method="POST"
+					action="/auth?/logout"
+				>
+					<input
+						type="hidden"
+						hidden
+						aria-hidden={true}
+						name="redirect"
+						value={$page.url.pathname}
+					/>
+					<Button variant="link" type="submit">log out</Button>
+				</form>
+			</div>
+		{:else}
+			<form use:enhance method="POST" action="/auth?/discord">
+				<input type="hidden" hidden aria-hidden={true} name="redirect" value={$page.url.pathname} />
+				<Button variant="link" type="submit">log in</Button>
+			</form>
+		{/if}
 		<ThemeSwitcher />
 	</div>
 </header>
