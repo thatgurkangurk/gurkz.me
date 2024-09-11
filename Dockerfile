@@ -24,4 +24,4 @@ ENV HOST=0.0.0.0
 ENV PORT=4321
 ENV ORIGIN=https://www.gurkz.me
 EXPOSE 4321/tcp
-RUN ORIGIN=$ORIGIN bun run ./build/index.js
+CMD [ "bun", "run", "build" ]
