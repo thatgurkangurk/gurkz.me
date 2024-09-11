@@ -3,6 +3,7 @@
 	import type { MusicId } from "$lib/music";
 	import { Info } from "lucide-svelte";
 	import type { PageServerData } from "./$types";
+	import CopyButton from "$lib/components/copy-button.svelte";
 
 	type Props = {
 		data: PageServerData;
@@ -20,5 +21,8 @@
 </Alert>
 
 {#each data.ids as id}
-	<p>{id.name} - {id.robloxId}</p>
+	<div class="flex flex-row gap-2 items-center">
+		<p>{id.name} - {id.robloxId}</p>
+		<CopyButton content={id.robloxId} />
+	</div>
 {/each}
