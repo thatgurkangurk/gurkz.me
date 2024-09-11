@@ -26,7 +26,3 @@ ENV PORT=4321
 ENV ORIGIN=https://www.gurkz.me
 EXPOSE 4321/tcp
 CMD [ "node", "build" ]
-
-
-
-CMD [ "bun", "run", "./build/index.js" ]
