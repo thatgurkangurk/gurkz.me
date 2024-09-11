@@ -45,6 +45,7 @@
 	"dependencies": {
 		"bits-ui": "^0.21.13",
 		"clsx": "^2.1.1",
+		"nanoid": "^5.0.7",
 		"svelte-sonner": "^0.3.27",
 		"tailwind-merge": "^2.5.2",
 		"tailwind-variants": "^0.2.1"
