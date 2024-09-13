@@ -36,5 +36,7 @@ const createMusicIdSchema = z.object({
 		}),
 });
 
+type CreateMusicIdSchema = typeof createMusicIdSchema;
+
 export { createMusicIdSchema };
-export type { MusicId };
+export type { MusicId, CreateMusicIdSchema };
