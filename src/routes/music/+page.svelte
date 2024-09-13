@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { Alert, AlertDescription, AlertTitle } from "$lib/components/ui/alert";
-	import { Info } from "lucide-svelte";
 	import type { PageServerData } from "./$types";
 	import CopyButton from "$lib/components/copy-button.svelte";
-	import { Card, CardContent, CardHeader, CardTitle } from "$lib/components/ui/card";
+	import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "$lib/components/ui/card";
 	import CreateMusicForm from "$lib/components/forms/create-music-form.svelte";
+	import type { MusicId } from "$lib/music";
 
 	type Props = {
 		data: PageServerData;
@@ -13,13 +12,24 @@
 	let { data }: Props = $props();
 </script>
 
-<h1 class="text-3xl">music id list</h1>
+{#snippet musicCard({ name, robloxId, creator }: MusicId)}
+	<Card class="w-full h-full">
+		<CardHeader>
+			<CardTitle class="text-xl">{name}</CardTitle>
+		</CardHeader>
+		<CardContent class="flex items-center text-xl">
+			<span>
+				{robloxId}
+			</span>
+			<CopyButton content={robloxId} />
+		</CardContent>
+		<CardFooter class="grid gap-1 grid-cols-1">
+			<p>created by {creator.username}</p>
+		</CardFooter>
+	</Card>
+{/snippet}
 
-<Alert class="w-fit">
-	<Info class="h-5 w-5" />
-	<AlertTitle>note</AlertTitle>
-	<AlertDescription>this will look better (and have a form to add a new id) soon</AlertDescription>
-</Alert>
+<h1 class="text-3xl">music id list</h1>
 
 {#if data.canCreateMusicIds}
 	<Card class="w-full max-w-xs">
@@ -32,9 +42,10 @@
 	</Card>
 {/if}
 
-{#each data.ids as id}
-	<div class="flex flex-row gap-2 items-center">
-		<p>{id.name} - {id.robloxId}</p>
-		<CopyButton content={id.robloxId} />
-	</div>
-{/each}
+<div
+	class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4"
+>
+	{#each data.ids as id}
+		{@render musicCard(id)}
+	{/each}
+</div>
