@@ -15,23 +15,22 @@
 
 <h1 class="text-3xl">music id list</h1>
 
-{#if data.canCreateMusicIds}
-	<Alert class="w-fit">
-		<Info class="h-5 w-5" />
-		<AlertTitle>note</AlertTitle>
-		<AlertDescription>this will look better (and have a form to add a new id) soon</AlertDescription
-		>
-	</Alert>
-{/if}
+<Alert class="w-fit">
+	<Info class="h-5 w-5" />
+	<AlertTitle>note</AlertTitle>
+	<AlertDescription>this will look better (and have a form to add a new id) soon</AlertDescription>
+</Alert>
 
-<Card class="w-full max-w-xs">
-	<CardHeader>
-		<CardTitle>create a new music id</CardTitle>
-	</CardHeader>
-	<CardContent>
-		<CreateMusicForm data={data.form} />
-	</CardContent>
-</Card>
+{#if data.canCreateMusicIds}
+	<Card class="w-full max-w-xs">
+		<CardHeader>
+			<CardTitle>create a new music id</CardTitle>
+		</CardHeader>
+		<CardContent>
+			<CreateMusicForm data={data.form} />
+		</CardContent>
+	</Card>
+{/if}
 
 {#each data.ids as id}
 	<div class="flex flex-row gap-2 items-center">
