@@ -4,10 +4,14 @@
 	import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "$lib/components/ui/card";
 	import CreateMusicForm from "$lib/components/forms/create-music-form.svelte";
 	import type { MusicId } from "$lib/music";
+	import { setIdFormatState } from "$lib/music/id-format.svelte";
+	import IdFormatSelector from "$lib/music/id-format-selector.svelte";
 
 	type Props = {
 		data: PageServerData;
 	};
+
+	const idFormat = setIdFormatState();
 
 	let { data }: Props = $props();
 </script>
@@ -19,7 +23,7 @@
 		</CardHeader>
 		<CardContent class="flex items-center text-xl">
 			<span>
-				{robloxId}
+				{idFormat.formatId(robloxId)}
 			</span>
 			<CopyButton content={robloxId} />
 		</CardContent>
@@ -41,6 +45,8 @@
 		</CardContent>
 	</Card>
 {/if}
+
+<IdFormatSelector />
 
 <div
 	class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4"
