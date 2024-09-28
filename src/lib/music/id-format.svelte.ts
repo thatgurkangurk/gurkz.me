@@ -1,9 +1,10 @@
+import { getLocalStorage, setLocalStorage } from "$lib/localstorage";
 import { getContext, setContext } from "svelte";
 import { z } from "zod";
 
-export const idFormat = z.enum(["NORMAL", "TRAITOR_TOWN"]);
+export const idFormatSchema = z.enum(["NORMAL", "TRAITOR_TOWN"]);
 
-export type IdFormat = z.infer<typeof idFormat>;
+export type IdFormat = z.infer<typeof idFormatSchema>;
 
 const ID_FORMAT_KEY = Symbol("ID_FORMAT");
 
@@ -11,20 +12,17 @@ class MusicIdFormat {
 	private _idFormat = $state<IdFormat>("NORMAL");
 
 	constructor(idFormat: IdFormat = "NORMAL") {
-		this._idFormat = idFormat;
+		const existingIdFormat = getLocalStorage<IdFormat>("ID_FORMAT", idFormatSchema, idFormat);
+		this._idFormat = existingIdFormat;
 	}
 
 	/**
 	 * sets the id format to the provided string (also makes sure it is valid, if it isn't it defaults to NORMAL)
 	 * @param format the format to set it to
 	 */
-	set(format: string) {
-		const isValidIdFormat = idFormat.safeParse(format);
-		if (!isValidIdFormat.success) {
-			this._idFormat = "NORMAL";
-			return;
-		}
-		this._idFormat = isValidIdFormat.data;
+	set(format: IdFormat) {
+		setLocalStorage<IdFormat>("ID_FORMAT", idFormatSchema, format);
+		this._idFormat = format;
 	}
 
 	formatId(id: number): string {
