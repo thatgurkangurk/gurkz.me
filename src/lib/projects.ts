@@ -10,6 +10,11 @@ const projects: Project[] = [
 		description: "portal 2's ending remade in HTML, CSS and JS",
 		slug: "want-you-gone",
 	},
+	{
+		title: "minecraft server status",
+		description: "get any minecraft's server status",
+		slug: "mc-server-status",
+	},
 ];
 
 function getProjectBySlug(slug: string) {
