@@ -85,4 +85,4 @@ type OfflineResponse = {
 
 type ServerStatus = OfflineResponse | OnlineResponse;
 
-export { type ServerStatus };
+export { type ServerStatus, type OnlineResponse };
