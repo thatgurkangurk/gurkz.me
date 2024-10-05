@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Alert, AlertTitle, AlertDescription } from "$lib/components/ui/alert";
+	import * as Table from "$lib/components/ui/table";
 	import { OctagonX } from "lucide-svelte";
 
 	type Error = {
@@ -12,7 +13,7 @@
 	};
 
 	let { errors }: Props = $props();
-	let showDebug = $state(false);
+	let showDebug = $state(true);
 </script>
 
 <Alert class="w-fit" variant="destructive">
@@ -26,25 +27,24 @@
 				showDebug = !showDebug;
 			}}>hide debug information</button
 		>
-		<p class="pt-2">debug information:</p>
-		<table class="table-auto">
-			<thead class="border-b-2">
-				<tr class="text-center">
-					<th class="border-r-2">Type</th>
-					<th>Error message</th>
-				</tr>
-			</thead>
-			<tbody>
-				{#each errors as error}
+		<Table.Root>
+			<Table.Header>
+				<Table.Row>
+					<Table.Head class="w-[100px]">Type</Table.Head>
+					<Table.Head class="w-full">Message</Table.Head>
+				</Table.Row>
+			</Table.Header>
+			<Table.Body>
+				{#each errors as error (error)}
 					{#if error.message}
-						<tr class="border-b-2">
-							<td class="fw-normal border-r-2"><samp>{error.name}</samp></td>
-							<td class="pl-2"><samp>{error.message}</samp></td>
-						</tr>
+						<Table.Row>
+							<Table.Cell class="font-medium">{error.name}</Table.Cell>
+							<Table.Cell>{error.message}</Table.Cell>
+						</Table.Row>
 					{/if}
 				{/each}
-			</tbody>
-		</table>
+			</Table.Body>
+		</Table.Root>
 	{:else}
 		<button
 			onclick={() => {
