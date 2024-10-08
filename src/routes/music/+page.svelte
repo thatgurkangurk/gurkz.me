@@ -25,7 +25,7 @@
 			<span>
 				{idFormat.formatId(robloxId)}
 			</span>
-			<CopyButton content={robloxId} />
+			<CopyButton content={idFormat.formatId(robloxId)} />
 		</CardContent>
 		<CardFooter class="grid gap-1 grid-cols-1">
 			<p>created by {creator.username}</p>
