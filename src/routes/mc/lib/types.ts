@@ -34,6 +34,9 @@ type Mod = {
 type Motd = {
 	raw: string[];
 	clean: string[];
+	/**
+	 * this is sanitised when getting the status, so it's safe to use
+	 */
 	html: string[];
 };
 

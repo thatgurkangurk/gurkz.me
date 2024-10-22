@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Card, CardHeader, CardTitle, CardContent } from "$lib/components/ui/card";
+	import MotdDisplay from "./motd-display.svelte";
 	import type { OnlineResponse } from "./types";
 
 	type Props = {
@@ -40,7 +41,7 @@
 
 		<p>version: <span>{status.version}</span></p>
 		<p>server software: <span>{status.software}</span></p>
-		<p>MOTD: {@html status.motd.html}</p>
-		<!-- TODO: this is technically unsafe, will fix later -->
+		<p>MOTD:</p>
+		<MotdDisplay motd={status.motd.html} />
 	</CardContent>
 </Card>
