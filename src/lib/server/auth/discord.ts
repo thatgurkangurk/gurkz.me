@@ -1,10 +1,11 @@
 import type { DiscordTokens } from "arctic";
 import { eq } from "drizzle-orm";
 import { request } from "undici";
-import { db } from "../db";
-import { users } from "../schema/user";
+import { db } from "$lib/db";
+import { users } from "$lib/schema/user";
 import { discord } from "./clients";
-import { createSession } from "./session";
+import * as auth from "$lib/server/auth/index";
+import type { Session } from "$lib/schema/session";
 
 export async function getDiscordAuthorisationUrl(state: string): Promise<URL> {
 	return await discord.createAuthorizationURL(state, {
@@ -12,18 +13,14 @@ export async function getDiscordAuthorisationUrl(state: string): Promise<URL> {
 	});
 }
 
-export async function createDiscordSession(idToken: string) {
-	const tokens: DiscordTokens =
-		await discord.validateAuthorizationCode(idToken);
-	const discordUserResponse = await request(
-		"https://discord.com/api/users/@me",
-		{
-			method: "GET",
-			headers: {
-				Authorization: `Bearer ${tokens.accessToken}`,
-			},
+export async function createDiscordSession(idToken: string): Promise<Session | null> {
+	const tokens: DiscordTokens = await discord.validateAuthorizationCode(idToken);
+	const discordUserResponse = await request("https://discord.com/api/users/@me", {
+		method: "GET",
+		headers: {
+			Authorization: `Bearer ${tokens.accessToken}`,
 		},
-	);
+	});
 
 	// biome-ignore lint/suspicious/noExplicitAny: the type of this response doesn't really matter
 	const response = (await discordUserResponse.body.json()) as any;
@@ -50,7 +47,7 @@ export async function createDiscordSession(idToken: string) {
 				.set({ username: discordUserResult.username })
 				.where(eq(users.discordId, discordUserResult.id));
 		}
-		const session = await createSession(existingUser.id);
+		const session = await auth.createSession(existingUser.id);
 		return session;
 	}
 
@@ -69,6 +66,6 @@ export async function createDiscordSession(idToken: string) {
 		return null;
 	}
 
-	const session = await createSession(user.id);
+	const session = await auth.createSession(user.id);
 	return session;
 }

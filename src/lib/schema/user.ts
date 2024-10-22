@@ -2,11 +2,7 @@ import { sql } from "drizzle-orm";
 import { pgEnum, pgTable, varchar } from "drizzle-orm/pg-core";
 import { nanoid } from "nanoid";
 
-const permissions = [
-	"DEFAULT",
-	"CREATE_MUSIC_IDS",
-	"MANAGE_MUSIC_IDS",
-] as const;
+const permissions = ["DEFAULT", "CREATE_MUSIC_IDS", "MANAGE_MUSIC_IDS"] as const;
 export const permissionsEnum = pgEnum("permission", permissions);
 
 export type Permission = (typeof permissions)[number];
@@ -35,3 +31,4 @@ export const users = pgTable("user", {
 		.notNull()
 		.default(sql`ARRAY['DEFAULT']::permission[]`),
 });
+export type User = typeof users.$inferSelect;

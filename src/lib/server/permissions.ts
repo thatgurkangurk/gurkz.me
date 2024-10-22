@@ -1,5 +1,4 @@
-import { type Permission } from "$lib/schema/user";
-import type { User } from "lucia";
+import { type Permission, type User } from "$lib/schema/user";
 
 function hasPermission(user: User | null, permission: Permission): boolean {
 	if (!user) return false;
