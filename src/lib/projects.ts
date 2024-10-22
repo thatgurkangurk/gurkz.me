@@ -11,14 +11,9 @@ const projects: Project[] = [
 		slug: "want-you-gone",
 	},
 	{
-		title: "webhook destroyer",
-		description: "a simple tool to destroy discord webhooks",
-		slug: "webhook-destroyer",
-	},
-	{
-		title: "bad apple",
-		description: "bad apple in HTML",
-		slug: "bad-apple",
+		title: "minecraft server status",
+		description: "get any minecraft's server status",
+		slug: "mc-server-status",
 	},
 ];
 

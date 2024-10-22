@@ -1,15 +1,20 @@
-import { cache } from "@solidjs/router";
-import type { InferSelectModel } from "drizzle-orm";
-import type { User } from "lucia";
 import { z } from "zod";
-import { db } from "./db";
-import type { musicIds } from "./schema/music";
 
-export type MusicId = InferSelectModel<typeof musicIds> & {
-	creator: Omit<User, "discordId" | "email" | "permissions">;
+type MusicId = {
+	id: string;
+	name: string;
+	robloxId: number;
+	created: Date;
+	working: boolean;
+	creator: Creator;
 };
 
-export const createIdSchema = z.object({
+type Creator = {
+	username: string;
+	profilePictureUrl?: string;
+};
+
+const createMusicIdSchema = z.object({
 	id: z
 		.string()
 		.min(4, {
@@ -17,6 +22,9 @@ export const createIdSchema = z.object({
 		})
 		.max(24, {
 			message: "id has to be shorter than 24 characters",
+		})
+		.refine((arg) => parseInt(arg), {
+			message: "you have to provide a number",
 		}),
 	name: z
 		.string()
@@ -28,14 +36,7 @@ export const createIdSchema = z.object({
 		}),
 });
 
-export const getMusicIds = cache(async () => {
-	"use server";
-	const ids = await db.query.musicIds.findMany({
-		columns: {
-			id: true,
-		},
-		orderBy: (id, { desc }) => desc(id.created),
-	});
+type CreateMusicIdSchema = typeof createMusicIdSchema;
 
-	return ids;
-}, "music_ids");
+export { createMusicIdSchema };
+export type { MusicId, CreateMusicIdSchema };

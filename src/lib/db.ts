@@ -1,9 +1,9 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
-import { env } from "~/env";
 import * as musicSchema from "./schema/music";
 import * as sessionsSchema from "./schema/session";
 import * as usersSchema from "./schema/user";
+import { env } from "$env/dynamic/private";
 
 const schema = {
 	...usersSchema,
