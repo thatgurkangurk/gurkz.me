@@ -1,9 +1,19 @@
+import { Router } from "@solidjs/router";
+import { Suspense } from "solid-js";
+import { FileRoutes } from "@solidjs/start/router";
+import { Layout } from "~/lib/components/layout";
 import "~/lib/styles.css";
 
 export default function App() {
   return (
-    <main>
-      <h1 class="text-3xl">hello, world!</h1>
-    </main>
+    <Router
+      root={(props) => (
+        <Suspense>
+          <Layout>{props.children}</Layout>
+        </Suspense>
+      )}
+    >
+      <FileRoutes />
+    </Router>
   );
 }
