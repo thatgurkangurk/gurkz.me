@@ -1,0 +1,28 @@
+{
+  "id": "7e7c6c34-5a43-4c63-a5e1-85407fffac14",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {},
+  "enums": {
+    "public.permission": {
+      "name": "permission",
+      "schema": "public",
+      "values": [
+        "DEFAULT",
+        "CREATE_MUSIC_IDS",
+        "MANAGE_MUSIC_IDS"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

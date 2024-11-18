@@ -1,81 +1,135 @@
+import { bigint, pgEnum, varchar } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  timestamp,
+  pgTable,
+  text,
+  primaryKey,
+  integer,
+} from "drizzle-orm/pg-core";
+import type { AdapterAccountType } from "@auth/core/adapters";
 import { relations, sql } from "drizzle-orm";
-import { bigint, boolean, pgEnum, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
 import { nanoid } from "nanoid";
 
-const permissions = ["DEFAULT", "CREATE_MUSIC_IDS", "MANAGE_MUSIC_IDS"] as const;
-export const permissionsEnum = pgEnum("permission", permissions);
+const permissions = [
+  "DEFAULT",
+  "CREATE_MUSIC_IDS",
+  "MANAGE_MUSIC_IDS",
+] as const;
 
 export type Permission = (typeof permissions)[number];
+export const permissionsEnum = pgEnum("permission", permissions);
 
 export const users = pgTable("user", {
-	id: varchar("id", {
-		length: 21,
-	})
-		.$defaultFn(() => nanoid())
-		.notNull()
-		.primaryKey(),
-	username: varchar("username", {
-		length: 48,
-	})
-		.notNull()
-		.unique(),
-	email: varchar("email", {
-		length: 64,
-	})
-		.notNull()
-		.unique(),
-	profilePictureUrl: varchar("profile_picture_url").notNull(),
-	discordId: varchar("discord_id").unique(),
-	permissions: permissionsEnum("permissions")
-		.array()
-		.notNull()
-		.default(sql`ARRAY['DEFAULT']::permission[]`),
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => nanoid(21)),
+  name: text("name"),
+  username: text("username"),
+  email: text("email").unique(),
+  emailVerified: timestamp("emailVerified", { mode: "date" }),
+  image: text("image"),
+  permissions: permissionsEnum("permissions")
+    .array()
+    .notNull()
+    .default(sql`ARRAY['DEFAULT']::permission[]`),
 });
 
+export const accounts = pgTable(
+  "account",
+  {
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    type: text("type").$type<AdapterAccountType>().notNull(),
+    provider: text("provider").notNull(),
+    providerAccountId: text("providerAccountId").notNull(),
+    refresh_token: text("refresh_token"),
+    access_token: text("access_token"),
+    expires_at: integer("expires_at"),
+    token_type: text("token_type"),
+    scope: text("scope"),
+    id_token: text("id_token"),
+    session_state: text("session_state"),
+  },
+  (account) => ({
+    compoundKey: primaryKey({
+      columns: [account.provider, account.providerAccountId],
+    }),
+  })
+);
+
+export const sessions = pgTable("session", {
+  sessionToken: text("sessionToken").primaryKey(),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  expires: timestamp("expires", { mode: "date" }).notNull(),
+});
+
+export const verificationTokens = pgTable(
+  "verificationToken",
+  {
+    identifier: text("identifier").notNull(),
+    token: text("token").notNull(),
+    expires: timestamp("expires", { mode: "date" }).notNull(),
+  },
+  (verificationToken) => ({
+    compositePk: primaryKey({
+      columns: [verificationToken.identifier, verificationToken.token],
+    }),
+  })
+);
+
+export const authenticators = pgTable(
+  "authenticator",
+  {
+    credentialID: text("credentialID").notNull().unique(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    providerAccountId: text("providerAccountId").notNull(),
+    credentialPublicKey: text("credentialPublicKey").notNull(),
+    counter: integer("counter").notNull(),
+    credentialDeviceType: text("credentialDeviceType").notNull(),
+    credentialBackedUp: boolean("credentialBackedUp").notNull(),
+    transports: text("transports"),
+  },
+  (authenticator) => ({
+    compositePK: primaryKey({
+      columns: [authenticator.userId, authenticator.credentialID],
+    }),
+  })
+);
+
 export const musicIds = pgTable("music_id", {
-	id: varchar("id", {
-		length: 21,
-	})
-		.primaryKey()
-		.$defaultFn(() => nanoid(21)),
-	robloxId: bigint("roblox_id", {
-		mode: "number",
-	}).notNull(),
-	createdById: varchar("created_by_id", {
-		length: 21,
-	})
-		.notNull()
-		.references(() => users.id),
-	name: varchar("name", {
-		length: 128,
-	}).notNull(),
-	created: timestamp("created_at", {
-		mode: "date",
-	})
-		.notNull()
-		.defaultNow(),
-	working: boolean("working").notNull().default(true),
+  id: varchar("id", {
+    length: 21,
+  })
+    .primaryKey()
+    .$defaultFn(() => nanoid(21)),
+  robloxId: bigint("roblox_id", {
+    mode: "number",
+  }).notNull(),
+  createdById: varchar("created_by_id", {
+    length: 21,
+  })
+    .notNull()
+    .references(() => users.id),
+  name: varchar("name", {
+    length: 128,
+  }).notNull(),
+  created: timestamp("created_at", {
+    mode: "date",
+  })
+    .notNull()
+    .defaultNow(),
+  working: boolean("working").notNull().default(true),
 });
 
 export const musicIdRelations = relations(musicIds, ({ one }) => ({
-	creator: one(users, {
-		fields: [musicIds.createdById],
-		references: [users.id],
-	}),
+  creator: one(users, {
+    fields: [musicIds.createdById],
+    references: [users.id],
+  }),
 }));
-
-export const sessions = pgTable("session", {
-	id: text("id").primaryKey(),
-	userId: text("user_id")
-		.notNull()
-		.references(() => users.id, {
-			onDelete: "cascade",
-		}),
-	expiresAt: timestamp("expires_at", {
-		withTimezone: true,
-		mode: "date",
-	}).notNull(),
-});
-
-export type Session = typeof sessions.$inferSelect;
-export type User = typeof users.$inferSelect;
