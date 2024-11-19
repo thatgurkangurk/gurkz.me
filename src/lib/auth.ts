@@ -9,10 +9,6 @@ declare module "@solid-mediakit/auth" {
       id: string;
     } & DefaultSession["user"];
   }
-
-  interface User {
-    username: string;
-  }
 }
 
 export const authOpts: SolidAuthConfig = {
@@ -23,10 +19,13 @@ export const authOpts: SolidAuthConfig = {
     Discord({
       clientId: process.env.DISCORD_CLIENT_ID,
       clientSecret: process.env.DISCORD_CLIENT_SECRET,
-      profile: async (profile) => {
+      async profile(profile) {
+        console.table(profile);
         return {
-          username: profile.username,
-          ...profile,
+          id: profile.id,
+          email: profile.email,
+          name: profile.username,
+          image: profile.avatar,
         };
       },
     }),

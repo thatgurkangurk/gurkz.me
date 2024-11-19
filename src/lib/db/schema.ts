@@ -25,7 +25,6 @@ export const users = pgTable("user", {
     .primaryKey()
     .$defaultFn(() => nanoid(21)),
   name: text("name"),
-  username: text("username"),
   email: text("email").unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
