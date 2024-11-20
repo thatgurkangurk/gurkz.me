@@ -4,6 +4,7 @@ import { Sheet, SheetContent } from "./ui/sheet";
 import { Button } from "./ui/button";
 import { Menu } from "lucide-solid";
 import { A } from "@solidjs/router";
+import { ModeToggle } from "./mode-toggle";
 
 type Link = {
   text: string;
@@ -67,6 +68,7 @@ export function Nav(props: { links: Link[] }) {
             <Button onClick={() => auth.signOut()} variant="link">log out</Button>
             </div>}
         </Show>
+        <ModeToggle />
       </div>
     </header>
   );
