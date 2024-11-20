@@ -61,12 +61,33 @@ export function Nav(props: { links: Link[] }) {
         </SheetContent>
       </Sheet>
       <div class="ml-auto flex-1 sm:flex-initial" />
-      <div class="flex flex-row items-center break-normal gap-2">
-        <Show when={auth.session()} fallback={<Button onClick={() => auth.signIn("discord")} variant="link">log in</Button>}>
-          {(session) => <div class="flex gap-2">
-            <p>hello, {session().user.name}</p>
-            <Button onClick={() => auth.signOut()} variant="link">log out</Button>
-            </div>}
+      <div class="flex flex-row items-center gap-2">
+        <Show
+          when={auth.session()}
+          fallback={
+            <Button
+              class="whitespace-nowrap"
+              onClick={() => auth.signIn("discord")}
+              variant="link"
+            >
+              log in
+            </Button>
+          }
+        >
+          {(session) => (
+            <>
+              <p class="flex flex-row gap-1">
+                hello, <span>{session().user.name}</span>
+              </p>
+              <Button
+                class="whitespace-nowrap"
+                onClick={() => auth.signOut()}
+                variant="link"
+              >
+                log out
+              </Button>
+            </>
+          )}
         </Show>
         <ModeToggle />
       </div>
