@@ -28,8 +28,40 @@ function NavLink(props: Link) {
   );
 }
 
-export function Nav(props: { links: Link[] }) {
+function AuthStatus() {
   const auth = useAuth();
+  return (
+    <Show
+      when={auth.session()}
+      fallback={
+        <Button
+          class="whitespace-nowrap"
+          onClick={() => auth.signIn("discord")}
+          variant="link"
+        >
+          log in
+        </Button>
+      }
+    >
+      {(session) => (
+        <>
+          <p class="flex flex-row gap-1">
+            hello, <span>{session().user.name}</span>
+          </p>
+          <Button
+            class="whitespace-nowrap"
+            onClick={() => auth.signOut()}
+            variant="link"
+          >
+            log out
+          </Button>
+        </>
+      )}
+    </Show>
+  )
+}
+
+export function Nav(props: { links: Link[] }) {
   const [sheetOpen, setSheetOpen] = createSignal<boolean>(false);
 
   return (
@@ -62,33 +94,7 @@ export function Nav(props: { links: Link[] }) {
       </Sheet>
       <div class="ml-auto flex-1 sm:flex-initial" />
       <div class="flex flex-row items-center gap-2">
-        <Show
-          when={auth.session()}
-          fallback={
-            <Button
-              class="whitespace-nowrap"
-              onClick={() => auth.signIn("discord")}
-              variant="link"
-            >
-              log in
-            </Button>
-          }
-        >
-          {(session) => (
-            <>
-              <p class="flex flex-row gap-1">
-                hello, <span>{session().user.name}</span>
-              </p>
-              <Button
-                class="whitespace-nowrap"
-                onClick={() => auth.signOut()}
-                variant="link"
-              >
-                log out
-              </Button>
-            </>
-          )}
-        </Show>
+        <AuthStatus />
         <ModeToggle />
       </div>
     </header>
