@@ -3,7 +3,7 @@ import { For } from "solid-js";
 import { getMusicIds } from "~/lib/music";
 
 export const route = {
-  preload: () => getMusicIds.raw({}),
+  preload: () => getMusicIds.raw(),
 } satisfies RouteDefinition;
 
 export default function Music() {
