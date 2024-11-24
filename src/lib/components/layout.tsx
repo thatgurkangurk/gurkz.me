@@ -10,6 +10,7 @@ import {
 } from "@kobalte/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 import { isServer } from "solid-js/web";
+import { SolidQueryDevtools } from "@tanstack/solid-query-devtools";
 
 function getServerCookies() {
   "use server";
@@ -66,6 +67,7 @@ export function Layout(props: ParentProps) {
                   <main class="flex-grow p-2">{props.children}</main>
                 </div>
               </div>
+              <SolidQueryDevtools initialIsOpen={false} />
             </ColorModeProvider>
           </QueryClientProvider>
         </SessionProvider>
