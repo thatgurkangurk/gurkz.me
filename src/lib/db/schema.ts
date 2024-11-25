@@ -110,9 +110,7 @@ export const musicIds = pgTable("music_id", {
   robloxId: bigint("roblox_id", {
     mode: "number",
   }).notNull(),
-  createdById: varchar("created_by_id", {
-    length: 21,
-  })
+  createdById: varchar("created_by_id")
     .notNull()
     .references(() => users.id),
   name: varchar("name", {

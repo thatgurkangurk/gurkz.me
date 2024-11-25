@@ -11,7 +11,8 @@
     "@auth/drizzle-adapter": "^1.7.4",
     "@fontsource-variable/space-grotesk": "^5.1.0",
     "@kobalte/core": "^0.13.7",
-    "@solid-mediakit/auth": "^3.1.1",
+    "@modular-forms/solid": "^0.25.0",
+    "@solid-mediakit/auth": "^3.1.2",
     "@solid-mediakit/prpc": "^2.1.1",
     "@solid-mediakit/prpc-plugin": "^2.1.0",
     "@solidjs/meta": "^0.29.4",
@@ -22,14 +23,15 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.5",
-    "drizzle-orm": "^0.36.2",
+    "drizzle-orm": "^0.36.4",
     "lucide-solid": "^0.460.0",
     "nanoid": "^5.0.8",
     "pg": "^8.13.1",
-    "solid-js": "^1.9.2",
-    "tailwind-merge": "^2.5.4",
+    "solid-js": "^1.9.3",
+    "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
-    "vinxi": "^0.4.3"
+    "vinxi": "^0.4.3",
+    "zod": "^3.23.8"
   },
   "engines": {
     "node": ">=18"
