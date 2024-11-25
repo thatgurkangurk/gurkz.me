@@ -128,7 +128,7 @@ function CreateMusicIdForm() {
             )}
           </Field>
           <Button class="mt-2" type="submit">
-            hai
+            create
           </Button>
         </Form>
       </CardContent>
