@@ -7,7 +7,9 @@ import { musicIds } from "./db/schema";
 export const getMusicIds = createCaller(
   async () => {
     "use server";
-    const musicIds = await db.query.musicIds.findMany();
+    const musicIds = await db.query.musicIds.findMany({
+      orderBy: (table, { desc }) => [desc(table.created)],
+    });
     return musicIds;
   },
   {
