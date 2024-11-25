@@ -7,7 +7,7 @@ const config = withPRPC(
   {
     auth: "authjs",
     authCfg: {
-      source: "./src/lib/auth",
+      source: "~/lib/auth",
       configName: "authOpts",
       protectedMessage: "you need to sign in first",
     },
