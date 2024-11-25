@@ -3,6 +3,9 @@ import { withPRPC } from "@solid-mediakit/prpc-plugin";
 const config = withPRPC(
   {
     ssr: true,
+    server: {
+      preset: "bun",
+    },
   },
   {
     auth: "authjs",

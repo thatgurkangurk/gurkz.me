@@ -7,7 +7,6 @@ import {
   type CreateMusicIdSchema,
   getMusicIds,
 } from "~/lib/music";
-import { getPermissions } from "~/lib/permissions";
 import {
   createForm,
   reset,
@@ -137,14 +136,19 @@ function CreateMusicIdForm() {
 }
 
 export default function Music() {
-  const userPermissions = getPermissions();
+  const auth = useAuth();
   const musicIds = getMusicIds();
 
   return (
     <>
       <h1 class="text-3xl">music id list</h1>
 
-      <Show when={userPermissions.data?.includes("CREATE_MUSIC_IDS")}>
+      <Show
+        when={
+          auth.session() &&
+          auth.session()?.user.permissions.includes("CREATE_MUSIC_IDS")
+        }
+      >
         <CreateMusicIdForm />
       </Show>
 

@@ -1,7 +1,6 @@
 import { createCaller, error$ } from "@solid-mediakit/prpc";
 import { db } from "./db";
 import { z } from "zod";
-import { eq } from "drizzle-orm";
 import { musicIds } from "./db/schema";
 
 export const getMusicIds = createCaller(
@@ -50,19 +49,7 @@ export const createMusicId = createCaller(
       return error$("you need to sign in first");
     }
 
-    const dbUser = await db.query.users.findFirst({
-      where: (user) => eq(user.id, session$.user.id),
-      columns: {
-        permissions: true,
-      },
-    });
-
-    if (!dbUser)
-      return error$(
-        "your user doesn't exist in the database. please sign in again"
-      );
-
-    if (!dbUser.permissions.includes("CREATE_MUSIC_IDS")) {
+    if (!session$.user.permissions.includes("CREATE_MUSIC_IDS")) {
       return error$("you do not have permission to do that");
     }
 
