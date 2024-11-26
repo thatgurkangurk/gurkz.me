@@ -9,7 +9,7 @@ declare module "@auth/core/types" {
     user: {
       id: string;
       permissions: Permission[];
-      role: Role[];
+      role: Role;
     } & DefaultSession["user"];
   }
 }

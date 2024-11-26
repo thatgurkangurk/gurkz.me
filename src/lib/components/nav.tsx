@@ -58,16 +58,20 @@ function AuthStatus() {
         </>
       )}
     </Show>
-  )
+  );
 }
 
 export function Nav(props: { links: Link[] }) {
   const [sheetOpen, setSheetOpen] = createSignal<boolean>(false);
+  const auth = useAuth();
 
   return (
     <header class="z-50 sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 [grid-area:header]">
       <nav class="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm w-full lg:gap-6">
         <For each={props.links}>{(link) => <NavLink {...link} />}</For>
+        <Show when={auth.session() && auth.session()?.user.role === "ADMIN"}>
+          <NavLink text="admin" href="/admin" />
+        </Show>
       </nav>
 
       <Sheet open={sheetOpen()} onOpenChange={setSheetOpen}>
@@ -89,6 +93,15 @@ export function Nav(props: { links: Link[] }) {
                 <NavLink onClick={() => setSheetOpen(false)} {...link} />
               )}
             </For>
+            <Show
+              when={auth.session() && auth.session()?.user.role === "ADMIN"}
+            >
+              <NavLink
+                onClick={() => setSheetOpen(false)}
+                text="admin"
+                href="/admin"
+              />
+            </Show>
           </nav>
         </SheetContent>
       </Sheet>
