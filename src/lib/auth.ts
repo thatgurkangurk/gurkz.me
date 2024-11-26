@@ -57,3 +57,5 @@ export const authOpts: SolidAuthConfig = {
     strategy: "database",
   },
 };
+
+export { authOpts as authOptions }; // stupid workaround for the auth plugin
