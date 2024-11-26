@@ -17,8 +17,16 @@ const permissions = [
   "MANAGE_MUSIC_IDS",
 ] as const;
 
+const roles = [
+  "USER",
+  "ADMIN"
+] as const;
+
 export type Permission = (typeof permissions)[number];
 export const permissionsEnum = pgEnum("permission", permissions);
+
+export type Role = (typeof roles)[number];
+export const rolesEnum = pgEnum("role", roles);
 
 export const users = pgTable("user", {
   id: text("id")
@@ -32,6 +40,9 @@ export const users = pgTable("user", {
     .array()
     .notNull()
     .default(sql`ARRAY['DEFAULT']::permission[]`),
+  role: rolesEnum("role")
+    .notNull()
+    .default("USER")
 });
 
 export const accounts = pgTable(

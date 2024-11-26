@@ -2,13 +2,14 @@ import Discord from "@auth/core/providers/discord";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { DefaultSession, SolidAuthConfig } from "@solid-mediakit/auth";
 import { db } from "./db";
-import { Permission } from "./db/schema";
+import { Permission, Role } from "./db/schema";
 
 declare module "@auth/core/types" {
   interface Session extends DefaultSession {
     user: {
       id: string;
       permissions: Permission[];
+      role: Role[];
     } & DefaultSession["user"];
   }
 }
@@ -38,6 +39,7 @@ export const authOpts: SolidAuthConfig = {
         where: (table, { eq }) => eq(table.id, user.id),
         columns: {
           permissions: true,
+          role: true,
         },
       });
       return {
@@ -45,6 +47,7 @@ export const authOpts: SolidAuthConfig = {
         user: {
           ...session.user,
           permissions: dbUser?.permissions,
+          role: dbUser?.role,
           id: user.id,
         },
       };
