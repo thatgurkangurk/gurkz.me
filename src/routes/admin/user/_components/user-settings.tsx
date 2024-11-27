@@ -17,7 +17,6 @@ function PermissionRow(props: { user: User; permission: Permission }) {
   const getUserUtils = getUser.useUtils();
   const { mutate } = togglePermission(() => ({
     async onSettled() {
-      console.log("RAHH");
       await getUserUtils.invalidate({
         id: props.user.id,
       });
