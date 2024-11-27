@@ -6,6 +6,7 @@ import {
   createMusicIdSchema,
   type CreateMusicIdSchema,
   getMusicIds,
+  MusicId,
 } from "~/lib/music";
 import {
   createForm,
@@ -20,6 +21,7 @@ import {
   TextFieldLabel,
 } from "~/lib/components/ui/text-field";
 import { Button } from "~/lib/components/ui/button";
+import { MusicCard } from "~/lib/components/music/music-card";
 
 function CreateMusicIdForm() {
   const auth = useAuth();
@@ -35,19 +37,17 @@ function CreateMusicIdForm() {
 
       musicIdUtils.setData(undefined, (old) => {
         const currentUser = auth.session()!.user;
-        const newData: {
-          id: string;
-          name: string;
-          robloxId: number;
-          createdById: string;
-          created: Date;
-          working: boolean;
-        } = {
+        const newData: MusicId = {
           ...newId,
           createdById: currentUser.id,
           robloxId: parseInt(newId.id),
           created: new Date(),
           working: true,
+          creator: {
+            name: `${currentUser.name}`,
+            image: `${currentUser.image}`,
+            ...currentUser,
+          },
         };
 
         if (old) return [...old, newData];
@@ -151,17 +151,14 @@ export default function Music() {
       >
         <CreateMusicIdForm />
       </Show>
-
-      <For
-        each={musicIds.data}
-        fallback={<p>no music ids have been created</p>}
-      >
-        {(musicId) => (
-          <p>
-            {musicId.name}: {musicId.robloxId}
-          </p>
-        )}
-      </For>
+      <div class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4">
+        <For
+          each={musicIds.data}
+          fallback={<p>no music ids have been created</p>}
+        >
+          {(musicId) => <MusicCard musicId={musicId} />}
+        </For>
+      </div>
     </>
   );
 }

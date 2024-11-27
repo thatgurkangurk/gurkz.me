@@ -2,11 +2,32 @@ import { createCaller, error$ } from "@solid-mediakit/prpc";
 import { db } from "./db";
 import { z } from "zod";
 import { musicIds } from "./db/schema";
+import { User } from "./user";
+import { eq } from "drizzle-orm";
+
+export type MusicId = {
+  id: string;
+  name: string;
+  robloxId: number;
+  createdById: string;
+  created: Date;
+  working: boolean;
+  creator: Omit<User, "email" | "emailVerified" | "permissions" | "role">;
+};
 
 export const getMusicIds = createCaller(
   async () => {
     "use server";
     const musicIds = await db.query.musicIds.findMany({
+      with: {
+        creator: {
+          columns: {
+            id: true,
+            image: true,
+            name: true,
+          },
+        },
+      },
       orderBy: (table, { desc }) => [desc(table.created)],
     });
     return musicIds;
@@ -63,6 +84,46 @@ export const createMusicId = createCaller(
       console.error(err);
       return error$("something went wrong");
     }
+
+    return true;
+  },
+  {
+    type: "action",
+    method: "POST",
+  }
+);
+
+export const deleteMusicId = createCaller(
+  z.object({
+    id: z.string(),
+  }),
+  async ({ input$, session$, event$ }) => {
+    "use server";
+    if (!session$ || !session$.user) {
+      return error$("you need to sign in first");
+    }
+
+    const musicId = (
+      await db
+        .select()
+        .from(musicIds)
+        .where(eq(musicIds.id, input$.id))
+        .limit(1)
+    )[0];
+
+    if (!musicId)
+      return error$("music id was not found", {
+        status: 404,
+      });
+
+    if (
+      !session$.user.permissions.includes("MANAGE_MUSIC_IDS") ||
+      session$.user.id !== musicId.createdById
+    ) {
+      return error$("you do not have permission to do that");
+    }
+
+    await db.delete(musicIds).where(eq(musicIds.id, input$.id));
 
     return true;
   },
