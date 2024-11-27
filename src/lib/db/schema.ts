@@ -11,16 +11,13 @@ import type { AdapterAccountType } from "@auth/core/adapters";
 import { relations, sql } from "drizzle-orm";
 import { nanoid } from "nanoid";
 
-const permissions = [
+export const permissions = [
   "DEFAULT",
   "CREATE_MUSIC_IDS",
   "MANAGE_MUSIC_IDS",
 ] as const;
 
-const roles = [
-  "USER",
-  "ADMIN"
-] as const;
+export const roles = ["USER", "ADMIN"] as const;
 
 export type Permission = (typeof permissions)[number];
 export const permissionsEnum = pgEnum("permission", permissions);
@@ -40,9 +37,7 @@ export const users = pgTable("user", {
     .array()
     .notNull()
     .default(sql`ARRAY['DEFAULT']::permission[]`),
-  role: rolesEnum("role")
-    .notNull()
-    .default("USER")
+  role: rolesEnum("role").notNull().default("USER"),
 });
 
 export const accounts = pgTable(

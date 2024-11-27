@@ -1,26 +1,32 @@
-import { getSession, protected$ } from "@solid-mediakit/auth";
-import { query, redirect, RouteDefinition } from "@solidjs/router";
-import { getRequestEvent } from "solid-js/web";
-import { authOpts } from "~/lib/auth";
-
-const isAdminQuery = query(async () => {
-  "use server";
-  const event = getRequestEvent()!;
-  const session = await getSession(event, authOpts);
-
-  if (session?.user.role !== "ADMIN") throw redirect("/");
-
-  return true;
-}, "is-admin");
+import { protected$ } from "@solid-mediakit/auth";
+import { RouteDefinition } from "@solidjs/router";
+import { For, Show } from "solid-js/web";
+import { getOtherUsers } from "~/lib/server/user";
+import { UserCard } from "./_components/user-card";
+import { isAdminQuery } from "~/lib/server/admin";
 
 export const route = {
   preload: () => isAdminQuery(),
 } satisfies RouteDefinition;
 
 export default protected$((session$) => {
+  const otherUsers = getOtherUsers();
   return (
-    <p>
-      hi, {session$.user.name}. your role is {session$.user.role}
-    </p>
+    <>
+      <p>
+        hi, {session$.user.name}. your role is {session$.user.role}
+      </p>
+
+      <div>
+        <h2 class="text-2xl">user management</h2>
+        <Show when={otherUsers.data}>
+          {(users) => (
+            <For each={users()} fallback={<p>no other users exist</p>}>
+              {(user) => <UserCard user={user} />}
+            </For>
+          )}
+        </Show>
+      </div>
+    </>
   );
 });
