@@ -1,15 +1,16 @@
-import { For } from "solid-js";
+import { For, Show } from "solid-js";
+import { MusicCard } from "~/lib/components/music/music-card";
 import { Button } from "~/lib/components/ui/button";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "~/lib/components/ui/table";
 import { Permission, permissions } from "~/lib/db/schema";
+import { getMusicIdsByUser } from "~/lib/server/music";
 import { getUser, togglePermission } from "~/lib/server/user";
 import { User } from "~/lib/user";
 
@@ -46,6 +47,26 @@ function PermissionRow(props: { user: User; permission: Permission }) {
   );
 }
 
+function MusicIdsByUser(props: { user: User }) {
+  const musicIds = getMusicIdsByUser(() => ({
+    userId: props.user.id,
+  }));
+  return (
+    <>
+      <Show
+        when={musicIds.data && musicIds.data.length !== 0}
+        fallback={<p>this user haven't created any music ids</p>}
+      >
+        <div class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4">
+          <For each={musicIds.data}>
+            {(musicId) => <MusicCard musicId={musicId} />}
+          </For>
+        </div>
+      </Show>
+    </>
+  );
+}
+
 export function UserSettings(props: { user: User }) {
   return (
     <>
@@ -68,6 +89,9 @@ export function UserSettings(props: { user: User }) {
           </For>
         </TableBody>
       </Table>
+
+      <h3 class="text-xl pt-2">user's music ids</h3>
+      <MusicIdsByUser user={props.user} />
     </>
   );
 }
