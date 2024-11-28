@@ -1,3 +1,3 @@
 export function GET() {
-  return "OK";
+    return "OK";
 }

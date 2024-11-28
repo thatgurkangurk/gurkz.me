@@ -1,50 +1,63 @@
 {
-  "name": "example-bare",
-  "type": "module",
-  "scripts": {
-    "dev": "vinxi dev",
-    "build": "vinxi build",
-    "start": "vinxi start"
-  },
-  "dependencies": {
-    "@auth/core": "^0.37.4",
-    "@auth/drizzle-adapter": "^1.7.4",
-    "@fontsource-variable/space-grotesk": "^5.1.0",
-    "@kobalte/core": "^0.13.7",
-    "@modular-forms/solid": "^0.25.0",
-    "@solid-mediakit/auth": "^3.1.2",
-    "@solid-mediakit/auth-plugin": "^1.2.0",
-    "@solid-mediakit/prpc": "^2.1.1",
-    "@solid-mediakit/prpc-plugin": "^2.1.0",
-    "@solidjs/meta": "^0.29.4",
-    "@solidjs/router": "^0.15.1",
-    "@solidjs/start": "^1.0.10",
-    "@tanstack/solid-query": "^5.60.6",
-    "@tanstack/solid-query-devtools": "^5.61.3",
-    "class-variance-authority": "^0.7.0",
-    "clsx": "^2.1.1",
-    "dotenv": "^16.4.5",
-    "drizzle-orm": "^0.36.4",
-    "lucide-solid": "^0.460.0",
-    "nanoid": "^5.0.8",
-    "pg": "^8.13.1",
-    "solid-js": "^1.9.3",
-    "tailwind-merge": "^2.5.5",
-    "tailwindcss-animate": "^1.0.7",
-    "vinxi": "^0.4.3",
-    "zod": "^3.23.8"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "devDependencies": {
-    "@types/pg": "^8.11.10",
-    "autoprefixer": "^10.4.20",
-    "drizzle-kit": "^0.28.1",
-    "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.15"
-  },
-  "patchedDependencies": {
-    "@solid-mediakit/auth-plugin@1.2.0": "patches/@solid-mediakit%2Fauth-plugin@1.2.0.patch"
-  }
+    "name": "example-bare",
+    "type": "module",
+    "scripts": {
+        "dev": "vinxi dev",
+        "build": "vinxi build",
+        "start": "vinxi start",
+        "prettier:format": "prettier --write \"**/*.{ts,tsx,js,md,mdx,css,yaml}\"",
+        "prettier:check": "prettier --check \"**/*.{ts,tsx,js,md,mdx,css,yaml}\"",
+        "eslint:check": "eslint \"**/*.{ts,tsx,js,md,mdx,css,yaml}\"",
+        "eslint:fix": "eslint --fix \"**/*.{ts,tsx,js,md,mdx,css,yaml}\""
+    },
+    "dependencies": {
+        "@auth/core": "^0.37.4",
+        "@auth/drizzle-adapter": "^1.7.4",
+        "@fontsource-variable/space-grotesk": "^5.1.0",
+        "@kobalte/core": "^0.13.7",
+        "@modular-forms/solid": "^0.25.0",
+        "@solid-mediakit/auth": "^3.1.2",
+        "@solid-mediakit/auth-plugin": "^1.2.0",
+        "@solid-mediakit/prpc": "^2.1.1",
+        "@solid-mediakit/prpc-plugin": "^2.1.0",
+        "@solidjs/meta": "^0.29.4",
+        "@solidjs/router": "^0.15.1",
+        "@solidjs/start": "^1.0.10",
+        "@tanstack/solid-query": "^5.60.6",
+        "@tanstack/solid-query-devtools": "^5.61.3",
+        "class-variance-authority": "^0.7.0",
+        "clsx": "^2.1.1",
+        "dotenv": "^16.4.5",
+        "drizzle-orm": "^0.36.4",
+        "eslint-config-prettier": "^9.1.0",
+        "lucide-solid": "^0.460.0",
+        "nanoid": "^5.0.8",
+        "pg": "^8.13.1",
+        "solid-js": "^1.9.3",
+        "tailwind-merge": "^2.5.5",
+        "tailwindcss-animate": "^1.0.7",
+        "vinxi": "^0.4.3",
+        "zod": "^3.23.8"
+    },
+    "engines": {
+        "node": ">=18"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.15.0",
+        "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+        "@types/pg": "^8.11.10",
+        "autoprefixer": "^10.4.20",
+        "drizzle-kit": "^0.28.1",
+        "eslint": "^9.15.0",
+        "eslint-plugin-solid": "^0.14.4",
+        "globals": "^15.12.0",
+        "postcss": "^8.4.49",
+        "prettier": "3.4.1",
+        "prettier-plugin-tailwindcss": "^0.6.9",
+        "tailwindcss": "^3.4.15",
+        "typescript-eslint": "^8.16.0"
+    },
+    "patchedDependencies": {
+        "@solid-mediakit/auth-plugin@1.2.0": "patches/@solid-mediakit%2Fauth-plugin@1.2.0.patch"
+    }
 }
