@@ -1,4 +1,7 @@
-# Package Managers
-package-lock.json
-pnpm-lock.yaml
-yarn.lock
+.output
+.vinxi
+.vscode
+drizzle
+patches
+public
+bun.lockb

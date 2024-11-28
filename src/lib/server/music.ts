@@ -1,23 +1,42 @@
-import { db } from "$lib/db";
-import type { MusicId } from "$lib/music";
+import { db } from "../db";
+import { users } from "../db/schema";
+import { MusicId } from "../music";
+import { createCaller, error$ } from "@solid-mediakit/prpc";
+import { sql } from "drizzle-orm";
+import { z } from "zod";
 
-async function getMusicIds() {
-	const ids: MusicId[] = await db.query.musicIds.findMany({
-		with: {
-			creator: {
-				columns: {
-					username: true,
-					profilePictureUrl: true,
-				},
-			},
-		},
-		columns: {
-			createdById: false,
-		},
-		orderBy: (id, { desc }) => desc(id.created),
-	});
+export const getMusicIdsByUser = createCaller(
+    z.object({
+        userId: z.string(),
+    }),
+    async ({ input$ }) => {
+        "use server";
 
-	return ids;
-}
+        const user = (
+            await db
+                .select()
+                .from(users)
+                .where(sql`${users.id} = ${input$.userId}`)
+        )[0];
 
-export { getMusicIds };
+        if (!user)
+            return error$("user was not found", {
+                status: 404,
+            });
+
+        const musicIdsByUser: MusicId[] = await db.query.musicIds.findMany({
+            where: (table, { eq }) => eq(table.createdById, input$.userId),
+            with: {
+                creator: {
+                    columns: {
+                        name: true,
+                        id: true,
+                        image: true,
+                    },
+                },
+            },
+        });
+
+        return musicIdsByUser;
+    }
+);
