@@ -70,6 +70,11 @@ export function Layout(props: ParentProps) {
                                     </main>
                                 </div>
                             </div>
+                            <script 
+ defer 
+ data-site-id="www.gurkz.me" 
+ src="https://assets.onedollarstats.com/tracker.js"> 
+</script>
                             <SolidQueryDevtools initialIsOpen={false} />
                         </ColorModeProvider>
                     </QueryClientProvider>
