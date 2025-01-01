@@ -1,7 +1,5 @@
-.output
-.vinxi
-.vscode
+bun.lock
+.astro
 drizzle
-patches
 public
-bun.lockb
+dist
