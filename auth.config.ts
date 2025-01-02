@@ -1,7 +1,11 @@
 import { db } from "./src/db";
 import Discord from "@auth/core/providers/discord";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { DISCORD_CLIENT_ID, DISCORD_CLIENT_SECRET } from "astro:env/server";
+import {
+    AUTH_SECRET,
+    DISCORD_CLIENT_ID,
+    DISCORD_CLIENT_SECRET,
+} from "astro:env/server";
 import { defineConfig } from "auth-astro";
 
 export default defineConfig({
@@ -12,4 +16,5 @@ export default defineConfig({
             clientSecret: DISCORD_CLIENT_SECRET,
         }),
     ],
+    secret: AUTH_SECRET,
 });

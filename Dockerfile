@@ -10,7 +10,7 @@ FROM base AS build
 ENV CI=1
 COPY --from=deps /app/node_modules /app/node_modules
 
-RUN DATABASE_URL="replace me" DISCORD_CLIENT_ID="replace me" DISCORD_CLIENT_SECRET="replace me" bun run build
+RUN AUTH_SECRET="replace me" DATABASE_URL="replace me" DISCORD_CLIENT_ID="replace me" DISCORD_CLIENT_SECRET="replace me" bun run build
 
 FROM base
 RUN addgroup --system --gid 1001 nodejs
