@@ -18,6 +18,14 @@ export default defineConfig({
                 access: "secret",
                 context: "server",
             }),
+            DISCORD_CLIENT_ID: envField.string({
+                access: "secret",
+                context: "server",
+            }),
+            DISCORD_CLIENT_SECRET: envField.string({
+                access: "secret",
+                context: "server",
+            }),
         },
     },
 });
