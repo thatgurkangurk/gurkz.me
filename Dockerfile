@@ -10,7 +10,7 @@ FROM base AS build
 ENV CI=1
 COPY --from=deps /app/node_modules /app/node_modules
 
-RUN bun run build
+RUN DATABASE_URL="" DISCORD_CLIENT_ID="" DISCORD_CLIENT_SECRET="" bun run build
 
 FROM base
 RUN addgroup --system --gid 1001 nodejs
