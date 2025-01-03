@@ -1,1 +1,0 @@
-CREATE TYPE "public"."permission" AS ENUM('DEFAULT', 'CREATE_MUSIC_IDS', 'MANAGE_MUSIC_IDS');

@@ -1,0 +1,42 @@
+---
+import "~/styles/global.css";
+import AuthStatus from "../components/AuthStatus.astro";
+import Header from "../components/Header.astro";
+import Link from "../components/Link.astro";
+import Meta from "../components/Meta.astro";
+
+type Props = {
+    title?: string;
+};
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+    <head>
+        <Meta />
+        <title>
+            {title ? `${title} - gurkan's website` : "gurkan's website"}
+        </title>
+    </head>
+    <body class="pt-2 dark:bg-themeBlack dark:text-white p-2">
+        <nav class="pt-2">
+            <Header>
+                <div slot="row-1">
+                    <Link href="/">home</Link>
+                    <Link href="/music">music ids</Link>
+                </div>
+                <div slot="row-2">
+                    <AuthStatus server:defer>
+                        <p slot="fallback">loading auth status</p>
+                    </AuthStatus>
+                </div>
+            </Header>
+        </nav>
+
+        <main>
+            <slot />
+        </main>
+    </body>
+</html>
