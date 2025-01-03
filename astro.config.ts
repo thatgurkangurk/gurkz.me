@@ -1,11 +1,31 @@
+import type { Permission, Role } from "./src/db/schema";
 import node from "@astrojs/node";
+import solidJs from "@astrojs/solid-js";
 import tailwind from "@astrojs/tailwind";
 import { defineConfig, envField } from "astro/config";
 import auth from "auth-astro";
+import simpleStackForm from "simple-stack-form";
+
+declare module "@auth/core/types" {
+    interface Session extends DefaultSession {
+        user: {
+            id: string;
+            permissions: Permission[];
+            role: Role;
+        } & DefaultSession["user"];
+    }
+}
 
 // https://astro.build/config
 export default defineConfig({
-    integrations: [tailwind(), auth()],
+    integrations: [
+        tailwind({
+            applyBaseStyles: false,
+        }),
+        auth(),
+        simpleStackForm(),
+        solidJs(),
+    ],
     output: "static",
 
     adapter: node({

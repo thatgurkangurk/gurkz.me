@@ -14,7 +14,35 @@ export default defineConfig({
         Discord({
             clientId: DISCORD_CLIENT_ID,
             clientSecret: DISCORD_CLIENT_SECRET,
+            async profile(profile) {
+                return {
+                    id: profile.id,
+                    email: profile.email,
+                    name: profile.username,
+                    image: profile.avatar,
+                };
+            },
         }),
     ],
+    callbacks: {
+        session: async ({ session, user }) => {
+            const dbUser = await db.query.users.findFirst({
+                where: (table, { eq }) => eq(table.id, user.id),
+                columns: {
+                    permissions: true,
+                    role: true,
+                },
+            });
+            return {
+                ...session,
+                user: {
+                    ...session.user,
+                    permissions: dbUser?.permissions,
+                    role: dbUser?.role,
+                    id: user.id,
+                },
+            };
+        },
+    },
     secret: AUTH_SECRET,
 });
