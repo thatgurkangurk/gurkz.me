@@ -51,7 +51,7 @@ function FormContent() {
 export function CreateForm() {
     return (
         <>
-            <Card class="bg-themeGrey w-full max-w-xs">
+            <Card class="w-full max-w-xs">
                 <CardHeader>create a music id</CardHeader>
                 <CardContent>
                     <Form validator={createIdForm.validator}>
