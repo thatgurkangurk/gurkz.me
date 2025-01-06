@@ -5,9 +5,18 @@ import { db } from "../../db";
 import Layout from "../../layouts/Layout.astro";
 import { CreateForm, createIdForm } from "./_Create";
 import { musicIds as musicIdsTable } from "../../db/schema";
+import { MusicList } from "./_List";
+import { IdFormatEnum } from "./_types";
 
 const res = await Astro.locals.form.getData(createIdForm);
 const session = await getSession(Astro.request);
+const idFormat = IdFormatEnum.safeParse(
+    await Astro.cookies.get("id_format")?.value
+);
+
+if (idFormat.error) {
+    await Astro.cookies.set("id_format", "DEFAULT"); // fall back to default
+}
 
 if (res?.data) {
     if (!session || !session.user) {
@@ -41,6 +50,15 @@ if (res?.data) {
 
 const musicIds = await db.query.musicIds.findMany({
     orderBy: (table, { desc }) => [desc(table.created)],
+    with: {
+        creator: {
+            columns: {
+                name: true,
+                id: true,
+                image: true,
+            },
+        },
+    },
 });
 ---
 
@@ -48,11 +66,10 @@ const musicIds = await db.query.musicIds.findMany({
     <h1 class="text-4xl">music id list</h1>
     <CreateForm client:load />
 
-    {
-        musicIds.map((musicId) => (
-            <p>
-                {musicId.name} - {musicId.robloxId}
-            </p>
-        ))
-    }
+    <br />
+    <MusicList
+        defaultFormat={idFormat.success ? idFormat.data : "DEFAULT"}
+        {musicIds}
+        client:load
+    />
 </Layout>
