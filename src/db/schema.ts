@@ -57,18 +57,17 @@ export const accounts = pgTable(
         id_token: text("id_token"),
         session_state: text("session_state"),
     },
-    (account) => ({
-        compoundKey: primaryKey({
+    (account) => [
+        primaryKey({
             columns: [account.provider, account.providerAccountId],
+            name: "compoundKey",
         }),
-    })
+    ]
 );
 
 export const sessions = pgTable("session", {
     sessionToken: text("sessionToken").primaryKey(),
-    userId: text("userId")
-        .notNull()
-        .references(() => users.id, { onDelete: "cascade" }),
+    userId: text("userId").notNull(),
     expires: timestamp("expires", { mode: "date" }).notNull(),
 });
 
@@ -79,11 +78,12 @@ export const verificationTokens = pgTable(
         token: text("token").notNull(),
         expires: timestamp("expires", { mode: "date" }).notNull(),
     },
-    (verificationToken) => ({
-        compositePk: primaryKey({
+    (verificationToken) => [
+        primaryKey({
             columns: [verificationToken.identifier, verificationToken.token],
+            name: "compositePk",
         }),
-    })
+    ]
 );
 
 export const authenticators = pgTable(
@@ -100,11 +100,12 @@ export const authenticators = pgTable(
         credentialBackedUp: boolean("credentialBackedUp").notNull(),
         transports: text("transports"),
     },
-    (authenticator) => ({
-        compositePK: primaryKey({
+    (authenticator) => [
+        primaryKey({
             columns: [authenticator.userId, authenticator.credentialID],
+            name: "compositePK",
         }),
-    })
+    ]
 );
 
 export const musicIds = pgTable("music_id", {
@@ -133,6 +134,17 @@ export const musicIds = pgTable("music_id", {
 export const musicIdRelations = relations(musicIds, ({ one }) => ({
     creator: one(users, {
         fields: [musicIds.createdById],
+        references: [users.id],
+    }),
+}));
+
+export const userRelations = relations(users, ({ many }) => ({
+    sessions: many(sessions),
+}));
+
+export const sessionRelations = relations(sessions, ({ one }) => ({
+    user: one(users, {
+        fields: [sessions.userId],
         references: [users.id],
     }),
 }));

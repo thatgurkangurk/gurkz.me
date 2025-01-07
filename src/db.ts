@@ -1,7 +1,17 @@
 import * as schema from "./db/schema";
 import { DATABASE_URL } from "astro:env/server";
-import { drizzle } from "drizzle-orm/node-postgres";
+import {
+    drizzle,
+    NodePgDatabase,
+    type NodePgClient,
+} from "drizzle-orm/node-postgres";
 
-export const db = drizzle(DATABASE_URL, {
+export type DbSchema = typeof schema;
+
+export type DbType = NodePgDatabase<DbSchema> & {
+    $client: NodePgClient;
+};
+
+export const db: DbType = drizzle(DATABASE_URL, {
     schema: schema,
 });

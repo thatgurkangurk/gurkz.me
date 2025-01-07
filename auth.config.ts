@@ -1,15 +1,16 @@
 import { db } from "./src/db";
+import * as schema from "./src/db/schema";
 import Discord from "@auth/core/providers/discord";
-import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import {
     AUTH_SECRET,
     DISCORD_CLIENT_ID,
     DISCORD_CLIENT_SECRET,
 } from "astro:env/server";
 import { defineConfig } from "auth-astro";
+import { CustomDrizzleAdapter } from "~/lib/auth/adapter";
 
 export default defineConfig({
-    adapter: DrizzleAdapter(db),
+    adapter: CustomDrizzleAdapter(db, schema),
     providers: [
         Discord({
             clientId: DISCORD_CLIENT_ID,
@@ -25,23 +26,8 @@ export default defineConfig({
         }),
     ],
     callbacks: {
-        session: async ({ session, user }) => {
-            const dbUser = await db.query.users.findFirst({
-                where: (table, { eq }) => eq(table.id, user.id),
-                columns: {
-                    permissions: true,
-                    role: true,
-                },
-            });
-            return {
-                ...session,
-                user: {
-                    ...session.user,
-                    permissions: dbUser?.permissions,
-                    role: dbUser?.role,
-                    id: user.id,
-                },
-            };
+        session: async ({ session }) => {
+            return session;
         },
     },
     secret: AUTH_SECRET,
