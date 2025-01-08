@@ -28,9 +28,7 @@ const { title } = Astro.props;
                     <Link href="/music">music ids</Link>
                 </div>
                 <div slot="row-2">
-                    <AuthStatus server:defer>
-                        <p slot="fallback">loading auth status</p>
-                    </AuthStatus>
+                    <AuthStatus />
                 </div>
             </Header>
         </nav>

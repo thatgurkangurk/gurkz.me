@@ -1,12 +1,14 @@
 ---
-export const prerender = false;
 import { getSession } from "auth-astro/server";
 import { db } from "../../db";
 import Layout from "../../layouts/Layout.astro";
-import { CreateForm, createIdForm } from "./_Create";
+import { CreateForm, createIdForm } from "../../components/music/_Create";
 import { musicIds as musicIdsTable } from "../../db/schema";
-import { MusicList } from "./_List";
 import { IdFormatEnum } from "./_types";
+import { FormatSelector } from "../../components/music/_FormatSelector";
+import { idFormatStore } from "./_idFormat";
+import MusicId from "~/components/music/music-id.astro";
+import { actions } from "astro:actions";
 
 const res = await Astro.locals.form.getData(createIdForm);
 const session = await getSession(Astro.request);
@@ -60,6 +62,10 @@ const musicIds = await db.query.musicIds.findMany({
         },
     },
 });
+
+idFormatStore.set(idFormat.data ? idFormat.data : "DEFAULT");
+
+const result = Astro.getActionResult(actions.music.deleteMusicId);
 ---
 
 <Layout title="music">
@@ -73,9 +79,20 @@ const musicIds = await db.query.musicIds.findMany({
                 </>
             )
     }
-    <MusicList
-        defaultFormat={idFormat.success ? idFormat.data : "DEFAULT"}
-        {musicIds}
-        client:load
-    />
+
+    <FormatSelector client:load />
+
+    {
+        result?.error && (
+            <>
+                <div>
+                    <p>something went wrong!</p>
+                    <p>code: {result.error.code}</p>
+                    <p>message: {result.error.message}</p>
+                </div>
+            </>
+        )
+    }
+
+    {musicIds.map((musicId) => <MusicId id={musicId} />)}
 </Layout>

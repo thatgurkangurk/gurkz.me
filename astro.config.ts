@@ -6,6 +6,8 @@ import { defineConfig, envField } from "astro/config";
 import auth from "auth-astro";
 import simpleStackForm from "simple-stack-form";
 
+import inoxToolsRequestNanostores from "@inox-tools/request-nanostores";
+
 declare module "@auth/core/types" {
     interface Session extends DefaultSession {
         user: {
@@ -18,15 +20,10 @@ declare module "@auth/core/types" {
 
 // https://astro.build/config
 export default defineConfig({
-    integrations: [
-        tailwind({
-            applyBaseStyles: false,
-        }),
-        auth(),
-        simpleStackForm(),
-        solidJs(),
-    ],
-    output: "static",
+    integrations: [tailwind({
+        applyBaseStyles: false,
+    }), auth(), simpleStackForm(), solidJs(), inoxToolsRequestNanostores()],
+    output: "server",
 
     adapter: node({
         mode: "standalone",

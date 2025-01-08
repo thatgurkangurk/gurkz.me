@@ -1,4 +1,4 @@
-import { Form, Input, useFormContext } from "../../components/Form";
+import { Form, Input, useFormContext } from "../Form";
 import { createForm } from "simple:form";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
