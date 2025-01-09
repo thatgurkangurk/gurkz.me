@@ -66,6 +66,10 @@ const musicIds = await db.query.musicIds.findMany({
 idFormatStore.set(idFormat.data ? idFormat.data : "DEFAULT");
 
 const result = Astro.getActionResult(actions.music.deleteMusicId);
+
+if (result && !result.error) {
+    return Astro.redirect("/music");
+}
 ---
 
 <Layout title="music">
@@ -93,6 +97,9 @@ const result = Astro.getActionResult(actions.music.deleteMusicId);
             </>
         )
     }
-
-    {musicIds.map((musicId) => <MusicId id={musicId} />)}
+    <div
+        class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4"
+    >
+        {musicIds.map((musicId) => <MusicId id={musicId} />)}
+    </div>
 </Layout>
