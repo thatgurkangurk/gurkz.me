@@ -1,7 +1,13 @@
 import { formatMusicId, useIdFormat } from "../../pages/music/_idFormat";
+import { CopyButton } from "../copy-button";
 
 export function FormattedId(props: { id: number }) {
     const [format] = useIdFormat();
 
-    return <>{formatMusicId(props.id, format())}</>;
+    return (
+        <>
+            <span class="pr-2">{formatMusicId(props.id, format())}</span>
+            <CopyButton content={formatMusicId(props.id, format())} />
+        </>
+    );
 }

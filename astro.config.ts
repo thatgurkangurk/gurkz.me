@@ -2,11 +2,11 @@ import type { Permission, Role } from "./src/db/schema";
 import node from "@astrojs/node";
 import solidJs from "@astrojs/solid-js";
 import tailwind from "@astrojs/tailwind";
+import inoxToolsRequestNanostores from "@inox-tools/request-nanostores";
 import { defineConfig, envField } from "astro/config";
 import auth from "auth-astro";
+import { fileURLToPath } from "node:url";
 import simpleStackForm from "simple-stack-form";
-
-import inoxToolsRequestNanostores from "@inox-tools/request-nanostores";
 
 declare module "@auth/core/types" {
     interface Session extends DefaultSession {
@@ -20,14 +20,33 @@ declare module "@auth/core/types" {
 
 // https://astro.build/config
 export default defineConfig({
-    integrations: [tailwind({
-        applyBaseStyles: false,
-    }), auth(), simpleStackForm(), solidJs(), inoxToolsRequestNanostores()],
+    integrations: [
+        tailwind({
+            applyBaseStyles: false,
+        }),
+        auth(),
+        simpleStackForm(),
+        solidJs(),
+        inoxToolsRequestNanostores(),
+    ],
     output: "server",
 
     adapter: node({
         mode: "standalone",
     }),
+
+    vite: {
+        resolve: {
+            alias: {
+                "lucide-solid/icons": fileURLToPath(
+                    new URL(
+                        "./node_modules/lucide-solid/dist/source/icons",
+                        import.meta.url
+                    )
+                ),
+            },
+        },
+    },
 
     env: {
         schema: {
