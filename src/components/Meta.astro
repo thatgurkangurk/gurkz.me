@@ -1,5 +1,4 @@
 ---
-import { AstroFont } from "astro-font";
 import { ClientRouter } from "astro:transitions";
 ---
 
@@ -8,18 +7,4 @@ import { ClientRouter } from "astro:transitions";
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <meta name="generator" content={Astro.generator} />
 <meta name="description" content="gurkan's website" />
-<AstroFont
-    config={[
-        {
-            src: [],
-            name: "Space Grotesk",
-            googleFontsURL:
-                "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap",
-            preload: true,
-            display: "block",
-            selector: "body",
-            fallback: "sans-serif",
-        },
-    ]}
-/>
 <ClientRouter />
