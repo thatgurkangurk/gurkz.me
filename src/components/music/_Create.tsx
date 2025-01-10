@@ -54,7 +54,7 @@ export function CreateForm() {
             <Card class="w-full max-w-xs">
                 <CardHeader>create a music id</CardHeader>
                 <CardContent>
-                    <Form validator={createIdForm.validator}>
+                    <Form action="/music" validator={createIdForm.validator}>
                         <FormContent />
                     </Form>
                 </CardContent>

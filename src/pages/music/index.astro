@@ -66,10 +66,6 @@ const musicIds = await db.query.musicIds.findMany({
 idFormatStore.set(idFormat.data ? idFormat.data : "DEFAULT");
 
 const result = Astro.getActionResult(actions.music.deleteMusicId);
-
-if (result && !result.error) {
-    return Astro.redirect("/music");
-}
 ---
 
 <Layout title="music">
