@@ -37,8 +37,8 @@ const deleteMusicId = defineAction({
             });
 
         if (
-            musicId.creator.id !== session.user.id ||
-            !session.user.permissions.includes("MANAGE_MUSIC_IDS")
+            !session.user.permissions.includes("MANAGE_MUSIC_IDS") &&
+            session.user.id !== musicId.creator.id
         )
             throw new ActionError({
                 code: "FORBIDDEN",
