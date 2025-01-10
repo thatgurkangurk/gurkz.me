@@ -1,0 +1,45 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Button } from "~/components/ui/button";
+import {
+    Card,
+    CardContent,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "~/components/ui/card";
+import { projects } from "~/lib/projects";
+---
+
+<Layout title="projects">
+    <h2 class="text-3xl pb-3">projects</h2>
+    <div class="grid gap-2 grid-cols-2 md:grid-cols-4">
+        {
+            projects.map((project) => (
+                <Card>
+                    <CardHeader>
+                        <CardTitle>
+                            <p
+                                transition:name={`project_title_${project.title}`}
+                            >
+                                {project.title}
+                            </p>
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p
+                            transition:name={`project_description_${project.description}`}
+                        >
+                            {project.description}
+                        </p>
+                    </CardContent>
+                    <CardFooter>
+                        <a href={`/project/${project.slug}`}>
+                            <Button>open</Button>
+                        </a>
+                    </CardFooter>
+                </Card>
+            ))
+        }
+    </div>
+</Layout>
