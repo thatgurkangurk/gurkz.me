@@ -1,1 +1,0 @@
-ALTER TABLE "music_id" ALTER COLUMN "created_by_id" SET DATA TYPE varchar;

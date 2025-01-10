@@ -1,22 +1,13 @@
 import type { Config } from "tailwindcss";
 
 export default {
-    darkMode: ["variant", [".dark &", '[data-kb-theme="dark"] &']],
-    content: ["./src/**/*.{ts,tsx}"],
-    prefix: "",
+    content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
     theme: {
-        container: {
-            center: true,
-            padding: "2rem",
-            screens: {
-                "2xl": "1400px",
-            },
-        },
         extend: {
-            fontFamily: {
-                sans: ["Space Grotesk Variable", "Space Grotesk Fallback"],
-            },
             colors: {
+                themeColour: "#5EBFA8",
+                themeBlack: "#121212",
+                themeGrey: "#3d3d3d",
                 border: "hsl(var(--border))",
                 input: "hsl(var(--input))",
                 ring: "hsl(var(--ring))",
@@ -102,8 +93,19 @@ export default {
                 "content-hide": "content-hide 0.2s ease-out",
                 "caret-blink": "caret-blink 1.25s ease-out infinite",
             },
+            fontFamily: {
+                sans: ["Space Grotesk Variable", "Space Grotesk Fallback"],
+            },
+        },
+        container: {
+            center: true,
+            padding: "2rem",
+            screens: {
+                "2xl": "1400px",
+            },
         },
     },
     // eslint-disable-next-line @typescript-eslint/no-require-imports -- this is required for tailwind afaik
     plugins: [require("tailwindcss-animate")],
+    darkMode: "selector",
 } satisfies Config;

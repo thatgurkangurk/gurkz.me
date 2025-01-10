@@ -1,0 +1,56 @@
+---
+import type { MusicId } from "~/pages/music/_types";
+import { FormattedId } from "./_FormattedId";
+import { actions } from "astro:actions";
+import { getSession } from "auth-astro/server";
+import {
+    Card,
+    CardContent,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "../ui/card";
+import { Button } from "../ui/button";
+type Props = {
+    id: MusicId;
+};
+
+const { id } = Astro.props;
+
+const session = await getSession(Astro.request);
+
+function canDelete(): boolean {
+    const { user } = session ?? {};
+    if (!user) return false;
+
+    return (
+        user.permissions.includes("MANAGE_MUSIC_IDS") ||
+        user.id === id.creator.id
+    );
+}
+---
+
+<Card class="w-full h-full">
+    <CardHeader>
+        <CardTitle class="text-xl">
+            {id.name}
+        </CardTitle>
+    </CardHeader>
+    <CardContent class="flex items-center text-xl">
+        <FormattedId client:load id={id.robloxId} />
+    </CardContent>
+    <CardFooter class="grid gap-1 grid-cols-1">
+        <p>created by {id.creator.name}</p>
+
+        {
+            canDelete() && (
+                <form method="POST" action={actions.music.deleteMusicId}>
+                    <input name="id" type="hidden" value={id.id} />
+                    <Button class="w-fit" variant={"destructive"} type="submit">
+                        delete
+                    </Button>
+                </form>
+            )
+        }
+    </CardFooter>
+</Card>

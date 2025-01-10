@@ -1,11 +1,11 @@
-import { createStore } from "solid-js/store";
+import { atom } from "nanostores";
 
 type Timeout = {
     scope: string;
     id: number;
 };
 
-const [timeouts, setTimeouts] = createStore<Timeout[]>([]);
+const $timeouts = atom<Timeout[]>([]);
 
 function createTimeout(scope: string, handler: () => void, timeout: number) {
     const id = setTimeout(() => {
@@ -18,15 +18,15 @@ function createTimeout(scope: string, handler: () => void, timeout: number) {
         scope: scope,
     };
 
-    setTimeouts((otherTimeouts) => [...otherTimeouts, newTimeout]);
+    $timeouts.set([...$timeouts.get(), newTimeout]);
 }
 
 function clearTimeouts(scope: string) {
-    for (const value of timeouts) {
+    for (const value of $timeouts.get()) {
         if (value.scope === scope) clearTimeout(value.id);
     }
 
-    setTimeouts([]);
+    $timeouts.set([]);
 }
 
 export { createTimeout, clearTimeouts };

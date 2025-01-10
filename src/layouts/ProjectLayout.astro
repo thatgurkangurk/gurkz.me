@@ -1,0 +1,27 @@
+---
+import { getProjectBySlug } from "~/lib/projects";
+import Layout from "../layouts/Layout.astro";
+import { Button } from "~/components/ui/button";
+import ArrowLeftIcon from "lucide-solid/icons/arrow-left";
+
+const project = getProjectBySlug(Astro.url.pathname.replace("/project/", ""));
+
+if (!project) {
+    return Astro.redirect("/projects");
+}
+---
+
+<Layout title={`${project.title} - projects`}>
+    <a href="/projects">
+        <Button>
+            <ArrowLeftIcon class="mr-2 h-6 w-6" /> back
+        </Button>
+    </a>
+    <h2 class="text-3xl" transition:name={`project_title_${project.title}`}>
+        {project.title}
+    </h2>
+    <p transition:name={`project_description_${project.description}`}>
+        {project.description}
+    </p>
+    <slot />
+</Layout>

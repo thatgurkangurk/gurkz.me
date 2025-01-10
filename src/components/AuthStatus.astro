@@ -1,0 +1,20 @@
+---
+import { SignIn, SignOut } from "auth-astro/components";
+import { getSession } from "auth-astro/server";
+
+const session = await getSession(Astro.request);
+---
+
+{
+    session ? (
+        <div class="flex flex-gap gap-2">
+            <p>welcome, {session.user?.name}</p>
+            <SignOut>log out</SignOut>
+        </div>
+    ) : (
+        <div class="flex flex-gap gap-2">
+            <p>not logged in</p>
+            <SignIn provider={"discord"}>log in</SignIn>
+        </div>
+    )
+}
