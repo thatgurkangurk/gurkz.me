@@ -1,4 +1,4 @@
-bun.lock
+pnpm-lock.yaml
 .astro
 drizzle
 public
