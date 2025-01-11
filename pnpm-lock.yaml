@@ -38,6 +38,9 @@ importers:
       '@solid-primitives/clipboard':
         specifier: ^1.5.10
         version: 1.5.10(solid-js@1.9.4)
+      '@solid-primitives/event-bus':
+        specifier: ^1.0.11
+        version: 1.0.11(solid-js@1.9.4)
       astro:
         specifier: ^5.1.1
         version: 5.1.5(@types/node@22.10.5)(jiti@1.21.7)(rollup@4.30.1)(typescript@5.7.3)(yaml@2.7.0)
@@ -1245,6 +1248,11 @@ packages:
 
   '@solid-primitives/clipboard@1.5.10':
     resolution: {integrity: sha512-ohwlrBP4j+Qjksg01CFWaP/USpzX78dBNVA1DPRZkf/vJgytX0T6KMc2YxF6o8fs6ePIYSI8Nt3sKxF0sh1q+Q==}
+    peerDependencies:
+      solid-js: ^1.6.12
+
+  '@solid-primitives/event-bus@1.0.11':
+    resolution: {integrity: sha512-bSwVA4aI2aNHomSbEroUnisMSyDDXJbrw4U8kFEvrcYdlLrJX5i6QeCFx+vj/zdQQw62KAllrEIyWP8KMpPVnQ==}
     peerDependencies:
       solid-js: ^1.6.12
 
@@ -4409,6 +4417,11 @@ snapshots:
   '@shikijs/vscode-textmate@10.0.1': {}
 
   '@solid-primitives/clipboard@1.5.10(solid-js@1.9.4)':
+    dependencies:
+      '@solid-primitives/utils': 6.2.3(solid-js@1.9.4)
+      solid-js: 1.9.4
+
+  '@solid-primitives/event-bus@1.0.11(solid-js@1.9.4)':
     dependencies:
       '@solid-primitives/utils': 6.2.3(solid-js@1.9.4)
       solid-js: 1.9.4

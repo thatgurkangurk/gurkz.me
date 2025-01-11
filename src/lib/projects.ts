@@ -10,6 +10,11 @@ const projects: Project[] = [
         description: "portal 2's ending remade in HTML, CSS and JS",
         slug: "want-you-gone",
     },
+    {
+        title: "bad apple",
+        description: "bad apple in HTML",
+        slug: "bad-apple",
+    },
 ];
 
 function getProjectBySlug(slug: string) {
