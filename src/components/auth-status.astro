@@ -1,0 +1,46 @@
+---
+import { actions } from "astro:actions";
+import { auth } from "~/lib/auth";
+
+const session = await auth.api.getSession({
+    headers: Astro.request.headers,
+});
+---
+
+<div class="flex flex-gap gap-2">
+    {
+        session?.user ? (
+            <>
+                <p>hello, {session?.user.name}</p>
+                <form
+                    data-auth-signout
+                    method="post"
+                    action={actions.auth.signOut}
+                >
+                    <button>log out</button>
+                </form>
+            </>
+        ) : (
+            <>
+                <p>
+                    not signed in, <a href="/auth/sign-in">sign in here</a>
+                </p>
+            </>
+        )
+    }
+</div>
+
+<script>
+    import { actions } from "astro:actions";
+    import { navigate } from "astro:transitions/client";
+
+    const discordForm = document.querySelector(
+        "[data-auth-signout]"
+    ) as HTMLFormElement;
+
+    discordForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        await actions.auth.signOut(new FormData(discordForm));
+        navigate(window.location.toString());
+    });
+</script>
