@@ -6,9 +6,9 @@ type IdFormat = z.infer<typeof IdFormatEnum>;
 type MusicId = {
     id: string;
     name: string;
-    robloxId: number;
-    createdById: string;
-    created: Date;
+    robloxId: string;
+    creatorId: string;
+    createdAt: Date;
     working: boolean;
     creator: Creator;
 };

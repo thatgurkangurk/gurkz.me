@@ -1,9 +1,6 @@
 import { ActionError, defineAction } from "astro:actions";
 import { z } from "astro:schema";
-import { getSession } from "auth-astro/server";
-import { eq } from "drizzle-orm";
-import { db } from "~/db";
-import { musicIds } from "~/db/schema";
+import { prisma } from "~/db";
 
 const deleteMusicId = defineAction({
     input: z.object({
@@ -11,19 +8,21 @@ const deleteMusicId = defineAction({
     }),
     accept: "form",
     handler: async (input, ctx) => {
-        const session = await getSession(ctx.request);
+        const user = ctx.locals.user;
 
-        if (!session || !session.user)
+        if (!user)
             throw new ActionError({
                 code: "UNAUTHORIZED",
                 message: "you need to be logged in to do this.",
             });
 
-        const musicId = await db.query.musicIds.findFirst({
-            where: (table, { eq }) => eq(table.id, input.id),
-            with: {
+        const musicId = await prisma.musicId.findFirst({
+            where: {
+                id: input.id,
+            },
+            include: {
                 creator: {
-                    columns: {
+                    select: {
                         id: true,
                     },
                 },
@@ -37,15 +36,19 @@ const deleteMusicId = defineAction({
             });
 
         if (
-            !session.user.permissions.includes("MANAGE_MUSIC_IDS") &&
-            session.user.id !== musicId.creator.id
+            !user.permissions.includes("MANAGE_MUSIC_IDS") &&
+            user.id !== musicId.creator.id
         )
             throw new ActionError({
                 code: "FORBIDDEN",
                 message: "you do not have permission to delete this music id",
             });
 
-        await db.delete(musicIds).where(eq(musicIds.id, input.id));
+        await prisma.musicId.delete({
+            where: {
+                id: input.id,
+            },
+        });
     },
 });
 

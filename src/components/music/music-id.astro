@@ -2,7 +2,6 @@
 import type { MusicId } from "~/pages/music/_types";
 import { FormattedId } from "./_FormattedId";
 import { actions } from "astro:actions";
-import { getSession } from "auth-astro/server";
 import {
     Card,
     CardContent,
@@ -17,10 +16,9 @@ type Props = {
 
 const { id } = Astro.props;
 
-const session = await getSession(Astro.request);
+const user = Astro.locals.user;
 
 function canDelete(): boolean {
-    const { user } = session ?? {};
     if (!user) return false;
 
     return (

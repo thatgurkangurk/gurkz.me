@@ -6,7 +6,9 @@
     "pnpm": {
         "onlyBuiltDependencies": [
             "esbuild",
-            "sharp"
+            "sharp",
+            "@prisma/engines",
+            "prisma"
         ]
     },
     "scripts": {
@@ -29,18 +31,17 @@
         "@inox-tools/request-nanostores": "^0.2.2",
         "@kobalte/core": "^0.13.7",
         "@nanostores/solid": "^0.5.0",
+        "@prisma/client": "6.2.1",
         "@solid-primitives/clipboard": "^1.5.10",
         "@solid-primitives/event-bus": "^1.0.11",
         "astro": "^5.1.1",
-        "auth-astro": "^4.2.0",
+        "better-auth": "^1.1.11",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
-        "drizzle-orm": "^0.38.3",
         "js-cookie": "^3.0.5",
         "lucide-solid": "^0.471.0",
         "nanoid": "^5.0.9",
         "nanostores": "^0.11.3",
-        "pg": "^8.13.1",
         "simple-stack-form": "^0.1.12",
         "solid-js": "^1.9.3",
         "tailwind-merge": "^2.6.0",
@@ -53,10 +54,8 @@
         "@trivago/prettier-plugin-sort-imports": "^5.2.0",
         "@types/js-cookie": "^3.0.6",
         "@types/node": "^22.10.3",
-        "@types/pg": "^8.11.10",
         "@typescript-eslint/parser": "^8.19.0",
         "dotenv": "^16.4.7",
-        "drizzle-kit": "^0.30.1",
         "eslint": "^9.17.0",
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-astro": "^1.3.1",
@@ -64,6 +63,7 @@
         "prettier": "^3.4.2",
         "prettier-plugin-astro": "^0.14.1",
         "prettier-plugin-tailwindcss": "^0.6.9",
+        "prisma": "^6.2.1",
         "typescript-eslint": "^8.19.0"
     }
 }

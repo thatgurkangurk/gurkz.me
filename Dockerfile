@@ -13,7 +13,7 @@ FROM base AS build
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 ENV CI=1
 
-RUN AUTH_SECRET="replace me" DATABASE_URL="replace me" DISCORD_CLIENT_ID="replace me" DISCORD_CLIENT_SECRET="replace me" pnpm run build
+RUN BETTER_AUTH_URL="replace me" BETTER_AUTH_SECRET="replace me" DATABASE_URL="replace me" DISCORD_CLIENT_ID="replace me" DISCORD_CLIENT_SECRET="replace me" pnpm run build
 
 FROM base
 RUN addgroup --system --gid 1001 nodejs

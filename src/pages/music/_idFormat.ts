@@ -21,16 +21,16 @@ function useIdFormat(): [Accessor<IdFormat>, (newValue: IdFormat) => void] {
     return [idFormat, setIdFormat];
 }
 
-function formatMusicId(id: number, format: IdFormat): string {
+function formatMusicId(id: string, format: IdFormat): string {
     switch (format) {
         case "DEFAULT": {
-            return id.toString();
+            return id;
         }
         case "TRAITOR_TOWN": {
             return `s/${id}`;
         }
         default: {
-            return id.toString();
+            return id;
         }
     }
 }

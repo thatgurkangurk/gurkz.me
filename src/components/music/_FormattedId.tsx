@@ -1,7 +1,7 @@
 import { formatMusicId, useIdFormat } from "../../pages/music/_idFormat";
 import { CopyButton } from "../copy-button";
 
-export function FormattedId(props: { id: number }) {
+export function FormattedId(props: { id: string }) {
     const [format] = useIdFormat();
 
     return (
