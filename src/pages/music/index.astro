@@ -1,15 +1,13 @@
 ---
 import { prisma } from "../../db";
 import Layout from "../../layouts/Layout.astro";
-import { CreateForm, createIdForm } from "../../components/music/_Create";
+import { CreateForm } from "../../components/music/_Create";
 import { IdFormatEnum } from "./_types";
 import { FormatSelector } from "../../components/music/_FormatSelector";
 import { idFormatStore } from "./_idFormat";
 import MusicId from "~/components/music/music-id.astro";
 import { actions } from "astro:actions";
-import { nanoid } from "nanoid";
 
-const res = await Astro.locals.form.getData(createIdForm);
 const user = Astro.locals.user;
 const idFormat = IdFormatEnum.safeParse(
     await Astro.cookies.get("id_format")?.value
@@ -17,39 +15,6 @@ const idFormat = IdFormatEnum.safeParse(
 
 if (idFormat.error) {
     await Astro.cookies.set("id_format", "DEFAULT"); // fall back to default
-}
-
-if (res?.data) {
-    if (!user) {
-        return new Response(
-            JSON.stringify({
-                message: "you need to be signed in to do that",
-            }),
-            {
-                status: 401,
-            }
-        );
-    }
-
-    if (!user.permissions.includes("CREATE_MUSIC_IDS")) {
-        return new Response(
-            JSON.stringify({
-                message: "you do not have permission to do that",
-            }),
-            {
-                status: 403,
-            }
-        );
-    }
-
-    await prisma.musicId.create({
-        data: {
-            id: nanoid(21),
-            robloxId: res.data.id,
-            name: res.data.name,
-            creatorId: user.id,
-        },
-    });
 }
 
 const musicIds = await prisma.musicId.findMany({
@@ -61,6 +26,9 @@ const musicIds = await prisma.musicId.findMany({
                 image: true,
             },
         },
+    },
+    orderBy: {
+        createdAt: "desc",
     },
 });
 

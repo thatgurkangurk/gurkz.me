@@ -1,6 +1,50 @@
 import { ActionError, defineAction } from "astro:actions";
 import { z } from "astro:schema";
+import { nanoid } from "nanoid";
+import { createIdForm, createIdSchema } from "~/components/music/schema";
 import { prisma } from "~/db";
+
+const createMusicId = defineAction({
+    accept: "form",
+    input: createIdSchema,
+    handler: async (input, ctx) => {
+        const res = await ctx.locals.form.getData(createIdForm);
+        const user = ctx.locals.user;
+
+        if (res?.data) {
+            if (!user) {
+                return new Response(
+                    JSON.stringify({
+                        message: "you need to be signed in to do that",
+                    }),
+                    {
+                        status: 401,
+                    }
+                );
+            }
+
+            if (!user.permissions.includes("CREATE_MUSIC_IDS")) {
+                return new Response(
+                    JSON.stringify({
+                        message: "you do not have permission to do that",
+                    }),
+                    {
+                        status: 403,
+                    }
+                );
+            }
+
+            await prisma.musicId.create({
+                data: {
+                    id: nanoid(21),
+                    robloxId: res.data.id,
+                    name: res.data.name,
+                    creatorId: user.id,
+                },
+            });
+        }
+    },
+});
 
 const deleteMusicId = defineAction({
     input: z.object({
@@ -54,6 +98,7 @@ const deleteMusicId = defineAction({
 
 const music = {
     deleteMusicId,
+    createMusicId,
 };
 
 export { music };
