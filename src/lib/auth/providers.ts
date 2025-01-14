@@ -16,4 +16,6 @@ const socialProvidersSchema = z.enum([
     "reddit",
 ]);
 
-export { socialProvidersSchema };
+type SocialProvider = z.infer<typeof socialProvidersSchema>;
+
+export { socialProvidersSchema, type SocialProvider };

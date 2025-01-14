@@ -1,7 +1,7 @@
 ---
 import { actions } from "astro:actions";
-import { Button } from "~/components/ui/button";
 import Layout from "~/layouts/Layout.astro";
+import { SocialSignIn } from "./_social-sign-in";
 
 const { user } = Astro.locals;
 
@@ -19,27 +19,5 @@ if (socialResponse && !socialResponse.error) {
 <Layout title="sign in">
     <h1 class="text-4xl">welcome!</h1>
     <p>how would you like to sign in?</p>
-    <form data-login-discord method="post" action={actions.auth.signInSocial}>
-        <input type="hidden" name="provider" value="discord" />
-        <Button type="submit">sign in with Discord</Button>
-    </form>
+    <SocialSignIn client:load provider={"discord"} />
 </Layout>
-
-<script>
-    import { actions } from "astro:actions";
-
-    const discordForm = document.querySelector(
-        "[data-login-discord]"
-    ) as HTMLFormElement;
-
-    discordForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const { data, error } = await actions.auth.signInSocial(
-            new FormData(discordForm)
-        );
-
-        if (!error) {
-            window.location.assign(data.url!);
-        }
-    });
-</script>
