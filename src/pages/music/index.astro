@@ -1,12 +1,11 @@
 ---
-import { prisma } from "../../db";
 import Layout from "../../layouts/Layout.astro";
 import { CreateForm } from "../../components/music/_Create";
 import { IdFormatEnum } from "./_types";
 import { FormatSelector } from "../../components/music/_FormatSelector";
 import { idFormatStore } from "./_idFormat";
-import MusicId from "~/components/music/music-id.astro";
 import { actions } from "astro:actions";
+import { MusicList } from "~/components/music/music-list";
 
 const user = Astro.locals.user;
 const idFormat = IdFormatEnum.safeParse(
@@ -16,21 +15,6 @@ const idFormat = IdFormatEnum.safeParse(
 if (idFormat.error) {
     await Astro.cookies.set("id_format", "DEFAULT"); // fall back to default
 }
-
-const musicIds = await prisma.musicId.findMany({
-    include: {
-        creator: {
-            select: {
-                id: true,
-                name: true,
-                image: true,
-            },
-        },
-    },
-    orderBy: {
-        createdAt: "desc",
-    },
-});
 
 idFormatStore.set(idFormat.data ? idFormat.data : "DEFAULT");
 
@@ -61,9 +45,6 @@ const result = Astro.getActionResult(actions.music.deleteMusicId);
             </>
         )
     }
-    <div
-        class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4"
-    >
-        {musicIds.map((musicId) => <MusicId id={musicId} />)}
-    </div>
+
+    <MusicList client:load />
 </Layout>

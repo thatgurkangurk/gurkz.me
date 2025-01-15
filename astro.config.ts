@@ -2,6 +2,7 @@ import node from "@astrojs/node";
 import solidJs from "@astrojs/solid-js";
 import tailwind from "@astrojs/tailwind";
 import inoxToolsRequestNanostores from "@inox-tools/request-nanostores";
+import typedApi from "astro-typed-api";
 import { defineConfig, envField } from "astro/config";
 import { fileURLToPath } from "node:url";
 import simpleStackForm from "simple-stack-form";
@@ -15,6 +16,9 @@ export default defineConfig({
         simpleStackForm(),
         solidJs(),
         inoxToolsRequestNanostores(),
+        typedApi({
+            serialization: "devalue",
+        }),
     ],
     output: "server",
 

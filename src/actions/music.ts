@@ -4,6 +4,25 @@ import { nanoid } from "nanoid";
 import { createIdForm, createIdSchema } from "~/components/music/schema";
 import { prisma } from "~/db";
 
+const getMusicIds = defineAction({
+    handler: async () => {
+        return await prisma.musicId.findMany({
+            include: {
+                creator: {
+                    select: {
+                        id: true,
+                        name: true,
+                        image: true,
+                    },
+                },
+            },
+            orderBy: {
+                createdAt: "desc",
+            },
+        });
+    },
+});
+
 const createMusicId = defineAction({
     accept: "form",
     input: createIdSchema,
@@ -97,6 +116,7 @@ const deleteMusicId = defineAction({
 });
 
 const music = {
+    getMusicIds,
     deleteMusicId,
     createMusicId,
 };
