@@ -21,7 +21,7 @@
         "prettier:check": "prettier --check \"**/*.{ts,tsx,js,md,mdx,css,yaml}\"",
         "eslint:check": "eslint \"**/*.{ts,tsx,js,md,mdx,css,yaml}\"",
         "eslint:fix": "eslint --fix \"**/*.{ts,tsx,js,md,mdx,css,yaml}\"",
-        "postinstall": "prisma generate"
+        "postinstall": "if [ \"$NODE_ENV\" != \"production\" ]; then prisma generate; fi"
     },
     "dependencies": {
         "@fontsource-variable/space-grotesk": "^5.1.1",
@@ -43,7 +43,8 @@
         "tailwindcss-animate": "^1.0.7",
         "vinxi": "^0.4.3",
         "zod": "^3.24.1",
-        "zod-form-data": "^2.0.5"
+        "zod-form-data": "^2.0.5",
+        "prisma": "^6.2.1"
     },
     "engines": {
         "node": ">=18"
@@ -59,7 +60,6 @@
         "globals": "^15.14.0",
         "prettier": "^3.4.2",
         "prettier-plugin-tailwindcss": "^0.6.10",
-        "prisma": "^6.2.1",
         "typescript-eslint": "^8.21.0",
         "vite-plugin-lucide-preprocess": "^1.2.4"
     },
