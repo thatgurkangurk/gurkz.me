@@ -14,9 +14,9 @@ export default [
     eslintConfigPrettier,
     {
         files: ["**/*.{ts,tsx}"],
-        ...solid,
+        ...solid.configs["flat/typescript"],
         languageOptions: {
-            parser: tsParser,
+            parser: tseslint.parser,
             parserOptions: {
                 project: "tsconfig.json",
             },
