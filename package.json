@@ -1,17 +1,6 @@
 {
     "name": "gurkz.me",
     "type": "module",
-    "packageManager": "pnpm@10.0.0",
-    "pnpm": {
-        "onlyBuiltDependencies": [
-            "@parcel/watcher",
-            "@swc/core",
-            "esbuild",
-            "prisma",
-            "@prisma/engines",
-            "@prisma/client"
-        ]
-    },
     "scripts": {
         "dev": "vinxi dev",
         "build": "vinxi build",
@@ -77,5 +66,13 @@
             "clsx",
             "cn"
         ]
-    }
+    },
+    "trustedDependencies": [
+        "@parcel/watcher",
+        "@swc/core",
+        "esbuild",
+        "prisma",
+        "@prisma/engines",
+        "@prisma/client"
+    ]
 }

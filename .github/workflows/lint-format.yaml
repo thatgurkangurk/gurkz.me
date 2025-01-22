@@ -17,42 +17,20 @@ jobs:
     eslint:
         name: ESLint
         runs-on: ubuntu-22.04
-        strategy:
-            matrix:
-                node-version: [22]
         steps:
             - uses: actions/checkout@v4
-            - name: Install pnpm
-              uses: pnpm/action-setup@v4
-              with:
-                  version: 10.0.0
-            - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v4
-              with:
-                  node-version: ${{ matrix.node-version }}
-                  cache: "pnpm"
+            - uses: oven-sh/setup-bun@v2
             - name: Install dependencies
-              run: pnpm install
+              run: bun i --frozen-lockfile -D
             - name: Check linting with ESLint
-              run: pnpm run eslint:check
+              run: bun run eslint:check
     prettier:
         name: Prettier
         runs-on: ubuntu-22.04
-        strategy:
-            matrix:
-                node-version: [22]
         steps:
             - uses: actions/checkout@v4
-            - name: Install pnpm
-              uses: pnpm/action-setup@v4
-              with:
-                  version: 10.0.0
-            - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v4
-              with:
-                  node-version: ${{ matrix.node-version }}
-                  cache: "pnpm"
+            - uses: oven-sh/setup-bun@v2
             - name: Install dependencies
-              run: pnpm install
+              run: bun i --frozen-lockfile -D
             - name: Check formatting with Prettier
-              run: pnpm run prettier:check
+              run: bun run prettier:check
