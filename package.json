@@ -9,13 +9,11 @@
         "prettier:format": "prettier --write \"**/*.{ts,tsx,js,md,mdx,css,yaml}\"",
         "prettier:check": "prettier --check \"**/*.{ts,tsx,js,md,mdx,css,yaml}\"",
         "eslint:check": "eslint \"**/*.{ts,tsx,js,md,mdx,css,yaml}\"",
-        "eslint:fix": "eslint --fix \"**/*.{ts,tsx,js,md,mdx,css,yaml}\"",
-        "postinstall": "if [ \"$NODE_ENV\" != \"production\" ]; then prisma generate; fi"
+        "eslint:fix": "eslint --fix \"**/*.{ts,tsx,js,md,mdx,css,yaml}\""
     },
     "dependencies": {
         "@fontsource-variable/space-grotesk": "^5.1.1",
         "@kobalte/core": "^0.13.7",
-        "@prisma/client": "^6.2.1",
         "@solidjs/meta": "^0.29.4",
         "@solidjs/router": "^0.15.3",
         "@solidjs/start": "^1.0.11",
@@ -25,15 +23,17 @@
         "better-auth": "^1.1.14",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
+        "drizzle-orm": "^0.38.4",
         "lucide-solid": "^0.473.0",
+        "nanoid": "^5.0.9",
+        "pg": "^8.13.1",
         "solid-js": "^1.9.4",
         "tailwind-merge": "^2.6.0",
         "tailwindcss": "^4.0.0",
         "tailwindcss-animate": "^1.0.7",
         "vinxi": "^0.4.3",
         "zod": "^3.24.1",
-        "zod-form-data": "^2.0.5",
-        "prisma": "^6.2.1"
+        "zod-form-data": "^2.0.5"
     },
     "engines": {
         "node": ">=18"
@@ -42,6 +42,9 @@
         "@eslint/js": "^9.18.0",
         "@tailwindcss/postcss": "^4.0.0",
         "@trivago/prettier-plugin-sort-imports": "^5.2.1",
+        "@types/bun": "^1.2.0",
+        "@types/pg": "^8.11.10",
+        "drizzle-kit": "^0.30.2",
         "eslint": "^9.18.0",
         "eslint-config-prettier": "^10.0.1",
         "eslint-plugin": "^1.0.1",
@@ -70,9 +73,6 @@
     "trustedDependencies": [
         "@parcel/watcher",
         "@swc/core",
-        "esbuild",
-        "prisma",
-        "@prisma/engines",
-        "@prisma/client"
+        "esbuild"
     ]
 }
