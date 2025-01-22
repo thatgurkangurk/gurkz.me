@@ -5,7 +5,7 @@ import "~/styles/app.css";
 
 export default function App() {
     return (
-        <Router root={(props) => <Layout children={props.children} />}>
+        <Router root={Layout}>
             <FileRoutes />
         </Router>
     );
