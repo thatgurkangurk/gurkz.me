@@ -13,6 +13,7 @@
         "eslint:fix": "eslint --fix \"**/*.{ts,tsx,js,md,mdx,css,yaml}\""
     },
     "dependencies": {
+        "@fontsource-variable/space-grotesk": "^5.1.1",
         "@solidjs/meta": "^0.29.4",
         "@solidjs/router": "^0.15.3",
         "@solidjs/start": "^1.0.11",
@@ -36,5 +37,20 @@
         "prettier": "^3.4.2",
         "prettier-plugin-tailwindcss": "^0.6.10",
         "typescript-eslint": "^8.21.0"
+    },
+    "prettier": {
+        "trailingComma": "es5",
+        "tabWidth": 4,
+        "semi": true,
+        "singleQuote": false,
+        "jsxSingleQuote": false,
+        "plugins": [
+            "prettier-plugin-tailwindcss",
+            "@trivago/prettier-plugin-sort-imports"
+        ],
+        "tailwindFunctions": [
+            "clsx",
+            "cn"
+        ]
     }
 }
