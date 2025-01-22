@@ -1,37 +1,11 @@
-import {
-    ColorModeProvider,
-    ColorModeScript,
-    cookieStorageManagerSSR,
-} from "@kobalte/core";
-import { MetaProvider } from "@solidjs/meta";
+import { Layout } from "./components/layout";
 import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
-import { Suspense } from "solid-js";
-import { isServer } from "solid-js/web";
-import { getCookie } from "vinxi/http";
 import "~/styles/app.css";
 
-function getServerCookies() {
-    "use server";
-    const colorMode = getCookie("kb-color-mode");
-    return colorMode ? `kb-color-mode=${colorMode}` : "";
-}
-
 export default function App() {
-    const storageManager = cookieStorageManagerSSR(
-        isServer ? getServerCookies() : document.cookie
-    );
     return (
-        <Router
-            root={(props) => (
-                <MetaProvider>
-                    <ColorModeScript storageType={storageManager.type} />
-                    <ColorModeProvider storageManager={storageManager}>
-                        <Suspense>{props.children}</Suspense>
-                    </ColorModeProvider>
-                </MetaProvider>
-            )}
-        >
+        <Router root={(props) => <Layout children={props.children} />}>
             <FileRoutes />
         </Router>
     );
