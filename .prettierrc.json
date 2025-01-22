@@ -6,16 +6,7 @@
     "jsxSingleQuote": false,
     "plugins": [
         "prettier-plugin-tailwindcss",
-        "@trivago/prettier-plugin-sort-imports",
-        "prettier-plugin-astro"
+        "@trivago/prettier-plugin-sort-imports"
     ],
-    "tailwindFunctions": ["clsx", "cn"],
-    "overrides": [
-        {
-            "files": "*.astro",
-            "options": {
-                "parser": "astro"
-            }
-        }
-    ]
+    "tailwindFunctions": ["clsx", "cn"]
 }
