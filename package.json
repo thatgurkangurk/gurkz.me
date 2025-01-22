@@ -6,7 +6,10 @@
         "onlyBuiltDependencies": [
             "@parcel/watcher",
             "@swc/core",
-            "esbuild"
+            "esbuild",
+            "prisma",
+            "@prisma/engines",
+            "@prisma/client"
         ]
     },
     "scripts": {
@@ -17,14 +20,20 @@
         "prettier:format": "prettier --write \"**/*.{ts,tsx,js,md,mdx,css,yaml}\"",
         "prettier:check": "prettier --check \"**/*.{ts,tsx,js,md,mdx,css,yaml}\"",
         "eslint:check": "eslint \"**/*.{ts,tsx,js,md,mdx,css,yaml}\"",
-        "eslint:fix": "eslint --fix \"**/*.{ts,tsx,js,md,mdx,css,yaml}\""
+        "eslint:fix": "eslint --fix \"**/*.{ts,tsx,js,md,mdx,css,yaml}\"",
+        "postinstall": "prisma generate"
     },
     "dependencies": {
         "@fontsource-variable/space-grotesk": "^5.1.1",
         "@kobalte/core": "^0.13.7",
+        "@prisma/client": "^6.2.1",
         "@solidjs/meta": "^0.29.4",
         "@solidjs/router": "^0.15.3",
         "@solidjs/start": "^1.0.11",
+        "@t3-oss/env-core": "^0.11.1",
+        "@tanstack/solid-query": "^5.64.2",
+        "@tanstack/solid-query-devtools": "^5.64.2",
+        "better-auth": "^1.1.14",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
         "lucide-solid": "^0.473.0",
@@ -33,7 +42,8 @@
         "tailwindcss": "^4.0.0",
         "tailwindcss-animate": "^1.0.7",
         "vinxi": "^0.4.3",
-        "zod": "^3.24.1"
+        "zod": "^3.24.1",
+        "zod-form-data": "^2.0.5"
     },
     "engines": {
         "node": ">=18"
@@ -49,6 +59,7 @@
         "globals": "^15.14.0",
         "prettier": "^3.4.2",
         "prettier-plugin-tailwindcss": "^0.6.10",
+        "prisma": "^6.2.1",
         "typescript-eslint": "^8.21.0",
         "vite-plugin-lucide-preprocess": "^1.2.4"
     },
