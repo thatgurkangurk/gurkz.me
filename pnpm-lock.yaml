@@ -23,6 +23,9 @@ importers:
       '@solidjs/start':
         specifier: ^1.0.11
         version: 1.0.11(solid-js@1.9.4)(vinxi@0.4.3(@types/node@22.10.7)(db0@0.2.1)(ioredis@5.4.2)(lightningcss@1.29.1)(terser@5.37.0)(typescript@5.7.3))(vite@5.4.14(@types/node@22.10.7)(lightningcss@1.29.1)(terser@5.37.0))
+      '@tailwindcss/vite':
+        specifier: ^4.0.0
+        version: 4.0.0(vite@5.4.14(@types/node@22.10.7)(lightningcss@1.29.1)(terser@5.37.0))
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -32,9 +35,6 @@ importers:
       lucide-solid:
         specifier: ^0.473.0
         version: 0.473.0(solid-js@1.9.4)
-      magic-string:
-        specifier: ^0.30.17
-        version: 0.30.17
       solid-js:
         specifier: ^1.9.4
         version: 1.9.4
@@ -54,9 +54,6 @@ importers:
       '@eslint/js':
         specifier: ^9.18.0
         version: 9.18.0
-      '@tailwindcss/postcss':
-        specifier: ^4.0.0
-        version: 4.0.0
       '@trivago/prettier-plugin-sort-imports':
         specifier: ^5.2.1
         version: 5.2.1(prettier@3.4.2)
@@ -75,9 +72,6 @@ importers:
       globals:
         specifier: ^15.14.0
         version: 15.14.0
-      postcss:
-        specifier: ^8.5.1
-        version: 8.5.1
       prettier:
         specifier: ^3.4.2
         version: 3.4.2
@@ -92,10 +86,6 @@ importers:
         version: 1.2.4(vite@5.4.14(@types/node@22.10.7)(lightningcss@1.29.1)(terser@5.37.0))
 
 packages:
-
-  '@alloc/quick-lru@5.2.0':
-    resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
-    engines: {node: '>=10'}
 
   '@ampproject/remapping@2.3.0':
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
@@ -1195,8 +1185,10 @@ packages:
     resolution: {integrity: sha512-W3FjpJgy4VV1JiL7iBYDf2n/WkeDg1Il+0Q7eWnqPyvkPPCo/Mbwc5BiaT7dfBNV6tQKAhVE34rU5xl8pSl50w==}
     engines: {node: '>= 10'}
 
-  '@tailwindcss/postcss@4.0.0':
-    resolution: {integrity: sha512-lI2bPk4TvwavHdehjr5WiC6HnZ59hacM6ySEo4RM/H7tsjWd8JpqiNW9ThH7rO/yKtrn4mGBoXshpvn8clXjPg==}
+  '@tailwindcss/vite@4.0.0':
+    resolution: {integrity: sha512-4uukMiU9gHui8KMPMdWic5SP1O/tmQ1NFSRNrQWmcop5evAVl/LZ6/LuWL3quEiecp2RBcRWwqJrG+mFXlRlew==}
+    peerDependencies:
+      vite: ^5.2.0 || ^6
 
   '@trivago/prettier-plugin-sort-imports@5.2.1':
     resolution: {integrity: sha512-NDZndt0fmVThIx/8cExuJHLZagUVzfGCoVrwH9x6aZvwfBdkrDFTYujecek6X2WpG4uUFsVaPg5+aNQPSyjcmw==}
@@ -3341,8 +3333,6 @@ packages:
 
 snapshots:
 
-  '@alloc/quick-lru@5.2.0': {}
-
   '@ampproject/remapping@2.3.0':
     dependencies:
       '@jridgewell/gen-mapping': 0.3.8
@@ -4232,14 +4222,13 @@ snapshots:
       '@tailwindcss/oxide-win32-arm64-msvc': 4.0.0
       '@tailwindcss/oxide-win32-x64-msvc': 4.0.0
 
-  '@tailwindcss/postcss@4.0.0':
+  '@tailwindcss/vite@4.0.0(vite@5.4.14(@types/node@22.10.7)(lightningcss@1.29.1)(terser@5.37.0))':
     dependencies:
-      '@alloc/quick-lru': 5.2.0
       '@tailwindcss/node': 4.0.0
       '@tailwindcss/oxide': 4.0.0
       lightningcss: 1.29.1
-      postcss: 8.5.1
       tailwindcss: 4.0.0
+      vite: 5.4.14(@types/node@22.10.7)(lightningcss@1.29.1)(terser@5.37.0)
 
   '@trivago/prettier-plugin-sort-imports@5.2.1(prettier@3.4.2)':
     dependencies:
