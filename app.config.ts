@@ -1,16 +1,16 @@
 import { withPRPC } from "@solid-mediakit/prpc-plugin";
-import tailwindcss from "@tailwindcss/postcss";
+import tailwindcss from "@tailwindcss/vite";
 import lucidePreprocess from "vite-plugin-lucide-preprocess";
 
 const config = withPRPC({
     ssr: true,
     vite: {
-        css: {
-            postcss: {
-                plugins: [tailwindcss],
-            },
-        },
-        plugins: [lucidePreprocess()],
+        plugins: [
+            tailwindcss(),
+            lucidePreprocess({
+                importMode: "esm",
+            }),
+        ],
     },
 });
 
