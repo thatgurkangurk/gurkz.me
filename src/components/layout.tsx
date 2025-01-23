@@ -9,6 +9,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 import { SolidQueryDevtools } from "@tanstack/solid-query-devtools";
 import { ParentProps, Show, Suspense } from "solid-js";
 import { isServer } from "solid-js/web";
+import { Toaster } from "~/components/ui/sonner";
 import { getColourMode } from "~/lib/colour-mode";
 
 export function Layout(props: ParentProps) {
@@ -74,6 +75,7 @@ export function Layout(props: ParentProps) {
                             client={queryClient}
                             initialIsOpen={false}
                         />
+                        <Toaster />
                     </Suspense>
                 </QueryClientProvider>
             </ColorModeProvider>

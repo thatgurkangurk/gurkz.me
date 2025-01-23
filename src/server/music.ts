@@ -8,7 +8,7 @@ const getMusicIds = createCaller(
         return musicIds;
     },
     {
-        cache: false,
+        cache: true,
     }
 );
 

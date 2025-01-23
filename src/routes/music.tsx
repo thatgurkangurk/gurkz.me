@@ -1,5 +1,6 @@
 import { RouteDefinition } from "@solidjs/router";
 import { ErrorBoundary, For, Show, Suspense } from "solid-js";
+import { CreateMusicIdForm } from "~/components/music/create-form";
 import { Title } from "~/components/title";
 import { Button } from "~/components/ui/button";
 import { getMusicIds } from "~/server/music";
@@ -17,6 +18,9 @@ export default function MusicPage() {
         <>
             <Title>music ids</Title>
             <h1 class="text-3xl">music id list</h1>
+
+            <CreateMusicIdForm />
+
             <Suspense fallback={<p>loading music ids...</p>}>
                 <ErrorBoundary
                     fallback={(_, retry) => (
