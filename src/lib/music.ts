@@ -5,6 +5,22 @@ import { db } from "~/server/db";
 import { musicId } from "~/server/db/schema";
 import { getSession } from "~/server/session";
 
+export type MusicId = {
+    id: string;
+    name: string;
+    robloxId: string;
+    createdById: string;
+    created: Date;
+    working: boolean;
+    creator: Creator;
+};
+
+export type Creator = {
+    id: string;
+    name: string | null;
+    image: string | null;
+};
+
 const id = z
     .string()
     .min(4, {

@@ -4,7 +4,18 @@ import { createCaller } from "@solid-mediakit/prpc";
 const getMusicIds = createCaller(
     async () => {
         "use server";
-        const musicIds = await db.query.musicId.findMany();
+        const musicIds = await db.query.musicId.findMany({
+            with: {
+                creator: {
+                    columns: {
+                        id: true,
+                        name: true,
+                        image: true,
+                    },
+                },
+            },
+            orderBy: (table, { desc }) => desc(table.created),
+        });
         return musicIds;
     },
     {

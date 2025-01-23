@@ -8,6 +8,7 @@
         "@kobalte/core": "^0.13.7",
         "@solid-mediakit/prpc": "^2.1.1",
         "@solid-mediakit/prpc-plugin": "^2.1.0",
+        "@solid-primitives/clipboard": "^1.6.0",
         "@solid-primitives/storage": "4.2.1",
         "@solidjs/meta": "^0.29.4",
         "@solidjs/router": "^0.15.3",
@@ -461,6 +462,8 @@
     "@solid-mediakit/prpc-plugin": ["@solid-mediakit/prpc-plugin@2.1.0", "", { "dependencies": { "@babel/core": "^7.25.2", "@babel/preset-typescript": "^7.24.7", "@rollup/pluginutils": "^5.1.0", "@solid-mediakit/shared": "0.0.6" }, "peerDependencies": { "@solidjs/start": "^1.0.9", "vinxi": "^0.4.3" } }, "sha512-SQuaGI/Bg6wv6SW0l1SalNl+nqC9FSSt6G9/vNmcQVW13AWsUyHrhfwQF7sP+KXFiBtPweAbkQYrwIadllqoKw=="],
 
     "@solid-mediakit/shared": ["@solid-mediakit/shared@0.0.6", "", { "dependencies": { "@babel/core": "7.25.2", "@rollup/pluginutils": "^5.1.0" } }, "sha512-OFy6QAS9fXQicV4+FmLtOzgWAjYuO1FjQlta09qBjgpRENr+xZqiPP8gUlRT0nph/dr7NP18b1cWiCzThZWqkw=="],
+
+    "@solid-primitives/clipboard": ["@solid-primitives/clipboard@1.6.0", "", { "dependencies": { "@solid-primitives/utils": "^6.3.0" }, "peerDependencies": { "solid-js": "^1.6.12" } }, "sha512-mZQVAqyXt1Cp9zZieGhKwSRMoNQg9z3ErqtnVxAxw5LAheAC09Z5OHr1Ln0kLjRDhC+r6GiNzOKzFVuTH+ERyQ=="],
 
     "@solid-primitives/event-listener": ["@solid-primitives/event-listener@2.3.3", "", { "dependencies": { "@solid-primitives/utils": "^6.2.3" }, "peerDependencies": { "solid-js": "^1.6.12" } }, "sha512-DAJbl+F0wrFW2xmcV8dKMBhk9QLVLuBSW+TR4JmIfTaObxd13PuL7nqaXnaYKDWOYa6otB00qcCUIGbuIhSUgQ=="],
 
