@@ -58,6 +58,10 @@ export function Layout(props: ParentProps) {
                                         href: "/",
                                         text: "home",
                                     },
+                                    {
+                                        href: "/music",
+                                        text: "music id list",
+                                    },
                                 ]}
                             />
                             <div class="flex-grow min-h-83dvh w-full flex flex-col">

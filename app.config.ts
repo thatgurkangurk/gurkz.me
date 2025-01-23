@@ -1,8 +1,8 @@
-import { defineConfig } from "@solidjs/start/config";
+import { withPRPC } from "@solid-mediakit/prpc-plugin";
 import tailwindcss from "@tailwindcss/postcss";
 import lucidePreprocess from "vite-plugin-lucide-preprocess";
 
-export default defineConfig({
+const config = withPRPC({
     ssr: true,
     vite: {
         css: {
@@ -13,3 +13,11 @@ export default defineConfig({
         plugins: [lucidePreprocess()],
     },
 });
+
+declare module "@solid-mediakit/prpc" {
+    interface Settings {
+        config: typeof config;
+    }
+}
+
+export default config;
