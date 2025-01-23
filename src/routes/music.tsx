@@ -1,6 +1,8 @@
 import { RouteDefinition } from "@solidjs/router";
 import { ErrorBoundary, For, Show, Suspense } from "solid-js";
 import { CreateMusicIdForm } from "~/components/music/create-form";
+import { FormatSelector } from "~/components/music/format-selector";
+import { FormattedId } from "~/components/music/formatted-id";
 import { Title } from "~/components/title";
 import { Button } from "~/components/ui/button";
 import { getMusicIds } from "~/server/music";
@@ -21,6 +23,8 @@ export default function MusicPage() {
 
             <CreateMusicIdForm />
 
+            <FormatSelector />
+
             <Suspense fallback={<p>loading music ids...</p>}>
                 <ErrorBoundary
                     fallback={(_, retry) => (
@@ -40,7 +44,8 @@ export default function MusicPage() {
                             >
                                 {(musicId) => (
                                     <p>
-                                        {musicId.name} - {musicId.robloxId}
+                                        {musicId.name} -{" "}
+                                        <FormattedId id={musicId.robloxId} />
                                     </p>
                                 )}
                             </For>
