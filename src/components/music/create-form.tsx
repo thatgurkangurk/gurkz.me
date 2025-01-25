@@ -1,16 +1,16 @@
 import { Form, Input } from "../form";
 import { Button } from "../ui/button";
+import { useAuth } from "@solid-mediakit/auth/client";
 import { LoaderCircle } from "lucide-solid";
 import { Show, Suspense } from "solid-js";
 import { toast } from "solid-sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
-import { useSession } from "~/lib/auth";
 import { useFormState } from "~/lib/form";
 import { createIdForm, createMusicIdAction } from "~/lib/music";
 import { getMusicIds } from "~/server/music";
 
 export function CreateMusicIdForm() {
-    const session = useSession();
+    const auth = useAuth();
     let buttonRef: HTMLButtonElement;
     const submission = useFormState(createMusicIdAction);
     const musicIdQueryUtils = getMusicIds.useUtils();
@@ -19,8 +19,11 @@ export function CreateMusicIdForm() {
         <Suspense>
             <Show
                 when={
-                    session.data?.user &&
-                    session.data.user.permissions.includes("CREATE_MUSIC_IDS")
+                    auth.status() === "authenticated" &&
+                    auth.session()?.user &&
+                    auth
+                        .session()
+                        ?.user?.permissions.includes("CREATE_MUSIC_IDS")
                 }
             >
                 <Card class="w-full max-w-xs">

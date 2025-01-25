@@ -4,7 +4,7 @@ import { createCaller } from "@solid-mediakit/prpc";
 const getMusicIds = createCaller(
     async () => {
         "use server";
-        const musicIds = await db.query.musicId.findMany({
+        const musicIds = await db.query.musicIds.findMany({
             with: {
                 creator: {
                     columns: {

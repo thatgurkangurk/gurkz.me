@@ -1,7 +1,17 @@
-import { drizzle } from "drizzle-orm/node-postgres";
+import * as schema from "./db/schema";
+import {
+    drizzle,
+    NodePgDatabase,
+    type NodePgClient,
+} from "drizzle-orm/node-postgres";
 import { env } from "~/env";
-import * as schema from "~/server/db/schema";
 
-export const db = drizzle(env.DATABASE_URL, {
-    schema,
+export type DbSchema = typeof schema;
+
+export type DbType = NodePgDatabase<DbSchema> & {
+    $client: NodePgClient;
+};
+
+export const db: DbType = drizzle(env.DATABASE_URL, {
+    schema: schema,
 });

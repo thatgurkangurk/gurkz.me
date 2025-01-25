@@ -2,7 +2,7 @@ import { action } from "@solidjs/router";
 import { createForm, validateForm } from "simple-stack-form/module";
 import { z } from "zod";
 import { db } from "~/server/db";
-import { musicId } from "~/server/db/schema";
+import { musicIds } from "~/server/db/schema";
 import { getSession } from "~/server/session";
 
 export type MusicId = {
@@ -70,7 +70,7 @@ export const createMusicIdAction = action(async (formData: FormData) => {
     }
 
     if (parsed.data) {
-        await db.insert(musicId).values({
+        await db.insert(musicIds).values({
             name: parsed.data.name,
             robloxId: parsed.data.id,
             createdById: session.user.id,

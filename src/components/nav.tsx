@@ -1,12 +1,10 @@
 import { ModeToggle } from "./mode-toggle";
 import { Button } from "./ui/button";
 import { Sheet, SheetContent } from "./ui/sheet";
-import { A, useAction } from "@solidjs/router";
-import { useQueryClient } from "@tanstack/solid-query";
+import { useAuth } from "@solid-mediakit/auth/client";
+import { A } from "@solidjs/router";
 import { Menu } from "lucide-solid";
 import { createSignal, For, Show, Suspense } from "solid-js";
-import { useSession } from "~/lib/auth";
-import { signOutAction, socialLoginAction } from "~/server/actions/auth";
 
 type Link = {
     text: string;
@@ -16,53 +14,38 @@ type Link = {
 };
 
 function AuthStatus() {
-    const session = useSession();
-    const queryClient = useQueryClient();
-    const signOut = useAction(signOutAction);
+    const auth = useAuth();
     return (
         <Suspense
             fallback={<p class="w-fit whitespace-nowrap">loading auth...</p>}
         >
             <Show
-                when={session.data}
+                when={auth.status() === "authenticated" && auth.session()}
                 fallback={
-                    <form method="post" action={socialLoginAction}>
-                        <input type="hidden" name="provider" value="discord" />
-                        <Button
-                            class="whitespace-nowrap"
-                            variant="link"
-                            type="submit"
-                        >
-                            log in
-                        </Button>
-                    </form>
+                    <Button
+                        onClick={() => auth.signIn("discord")}
+                        class="whitespace-nowrap"
+                        variant="link"
+                        type="submit"
+                    >
+                        log in
+                    </Button>
                 }
             >
                 {(session) => (
                     <>
                         <p class="flex flex-row gap-1">
-                            hello, <span>{session().user.name}</span>
+                            hello, <span>{session().user?.name}</span>
                         </p>
-                        <form
-                            method="post"
-                            onSubmit={async (e) => {
-                                e.preventDefault();
 
-                                await signOut();
-                                await queryClient.invalidateQueries({
-                                    queryKey: ["auth", "session"],
-                                });
-                            }}
-                            action={signOutAction}
+                        <Button
+                            onClick={() => auth.signOut()}
+                            class="whitespace-nowrap"
+                            variant="link"
+                            type="submit"
                         >
-                            <Button
-                                class="whitespace-nowrap"
-                                variant="link"
-                                type="submit"
-                            >
-                                log out
-                            </Button>
-                        </form>
+                            log out
+                        </Button>
                     </>
                 )}
             </Show>
