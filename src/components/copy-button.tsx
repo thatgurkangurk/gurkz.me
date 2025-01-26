@@ -1,8 +1,7 @@
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { writeClipboard } from "@solid-primitives/clipboard";
-import CheckIcon from "lucide-solid/icons/check";
-import ClipboardIcon from "lucide-solid/icons/clipboard";
+import { CheckIcon, ClipboardIcon } from "lucide-solid";
 import { createSignal, Match, Switch } from "solid-js";
 
 function CopyButton(props: { content: string }) {

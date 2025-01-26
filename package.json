@@ -1,73 +1,90 @@
 {
-    "name": "astro",
+    "name": "gurkz.me",
     "type": "module",
-    "version": "0.0.1",
-    "packageManager": "pnpm@10.0.0",
-    "pnpm": {
-        "onlyBuiltDependencies": [
-            "esbuild",
-            "sharp",
-            "@prisma/engines",
-            "prisma",
-            "@prisma/client"
-        ]
-    },
     "scripts": {
-        "dev": "astro dev",
-        "build": "astro build",
-        "preview": "astro preview",
-        "astro": "astro",
-        "prettier:format": "prettier --write \"**/*.{astro,ts,tsx,js,md,mdx,css,yaml}\"",
-        "prettier:check": "prettier --check \"**/*.{astro,ts,tsx,js,md,mdx,css,yaml}\"",
-        "eslint:check": "eslint \"**/*.{astro,ts,tsx,js,md,mdx,css,yaml}\"",
-        "eslint:fix": "eslint --fix \"**/*.{astro,ts,tsx,js,md,mdx,css,yaml}\""
+        "dev": "vinxi dev",
+        "build": "vinxi build",
+        "start": "vinxi start",
+        "version": "vinxi version",
+        "prettier:format": "prettier --write \"**/*.{ts,tsx,js,md,mdx,css,yaml}\"",
+        "prettier:check": "prettier --check \"**/*.{ts,tsx,js,md,mdx,css,yaml}\"",
+        "eslint:check": "eslint \"**/*.{ts,tsx,js,md,mdx,css,yaml}\"",
+        "eslint:fix": "eslint --fix \"**/*.{ts,tsx,js,md,mdx,css,yaml}\""
     },
     "dependencies": {
-        "@astrojs/node": "^9.0.0",
-        "@astrojs/solid-js": "^5.0.1",
-        "@astrojs/tailwind": "^5.1.4",
         "@auth/core": "^0.37.4",
         "@auth/drizzle-adapter": "^1.7.4",
         "@fontsource-variable/space-grotesk": "^5.1.1",
-        "@inox-tools/request-nanostores": "^0.2.2",
         "@kobalte/core": "^0.13.7",
         "@nanostores/solid": "^0.5.0",
-        "@prisma/client": "6.2.1",
-        "@solid-primitives/clipboard": "^1.5.10",
-        "@solid-primitives/event-bus": "^1.0.11",
-        "@tanstack/solid-query": "^5.64.1",
-        "@tanstack/solid-query-devtools": "^5.64.1",
-        "astro": "^5.1.1",
-        "astro-typed-api": "^0.5.0",
-        "better-auth": "^1.1.11",
+        "@solid-mediakit/auth": "^3.1.2",
+        "@solid-mediakit/auth-plugin": "^1.2.1",
+        "@solid-mediakit/prpc": "^2.1.1",
+        "@solid-mediakit/prpc-plugin": "^2.1.0",
+        "@solid-primitives/clipboard": "^1.6.0",
+        "@solid-primitives/storage": "4.2.1",
+        "@solidjs/meta": "^0.29.4",
+        "@solidjs/router": "^0.15.3",
+        "@solidjs/start": "^1.0.11",
+        "@t3-oss/env-core": "^0.11.1",
+        "@tailwindcss/postcss": "^4.0.0",
+        "@tanstack/solid-query": "^5.64.2",
+        "@tanstack/solid-query-devtools": "^5.64.2",
+        "better-auth": "^1.1.14",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
-        "js-cookie": "^3.0.5",
-        "lucide-solid": "^0.471.0",
+        "drizzle-orm": "^0.36.4",
+        "lucide-solid": "^0.473.0",
         "nanoid": "^5.0.9",
         "nanostores": "^0.11.3",
+        "pg": "^8.13.1",
         "simple-stack-form": "^0.1.12",
-        "solid-js": "^1.9.3",
+        "solid-js": "^1.9.4",
+        "solid-sonner": "^0.2.8",
         "tailwind-merge": "^2.6.0",
-        "tailwindcss": "^3.4.17",
+        "tailwindcss": "^4.0.0",
         "tailwindcss-animate": "^1.0.7",
-        "zod": "^3.24.1"
+        "vinxi": "^0.4.3",
+        "zod": "^3.24.1",
+        "zod-form-data": "^2.0.5"
+    },
+    "engines": {
+        "node": ">=18"
     },
     "devDependencies": {
-        "@eslint/js": "^9.17.0",
-        "@trivago/prettier-plugin-sort-imports": "^5.2.0",
-        "@types/js-cookie": "^3.0.6",
-        "@types/node": "^22.10.3",
-        "@typescript-eslint/parser": "^8.19.0",
-        "dotenv": "^16.4.7",
-        "eslint": "^9.17.0",
-        "eslint-config-prettier": "^9.1.0",
-        "eslint-plugin-astro": "^1.3.1",
+        "@eslint/js": "^9.19.0",
+        "@trivago/prettier-plugin-sort-imports": "^5.2.1",
+        "@types/bun": "^1.2.0",
+        "@types/pg": "^8.11.11",
+        "drizzle-kit": "^0.28.1",
+        "eslint": "^9.19.0",
+        "eslint-config-prettier": "^10.0.1",
+        "eslint-plugin": "^1.0.1",
+        "eslint-plugin-solid": "^0.14.5",
         "globals": "^15.14.0",
         "prettier": "^3.4.2",
-        "prettier-plugin-astro": "^0.14.1",
-        "prettier-plugin-tailwindcss": "^0.6.9",
-        "prisma": "^6.2.1",
-        "typescript-eslint": "^8.19.0"
-    }
+        "prettier-plugin-tailwindcss": "^0.6.11",
+        "typescript-eslint": "^8.21.0",
+        "vite-plugin-lucide-preprocess": "^1.2.4"
+    },
+    "prettier": {
+        "trailingComma": "es5",
+        "tabWidth": 4,
+        "semi": true,
+        "singleQuote": false,
+        "jsxSingleQuote": false,
+        "plugins": [
+            "prettier-plugin-tailwindcss",
+            "@trivago/prettier-plugin-sort-imports"
+        ],
+        "tailwindFunctions": [
+            "clsx",
+            "cn"
+        ]
+    },
+    "trustedDependencies": [
+        "@parcel/watcher",
+        "@swc/core",
+        "esbuild"
+    ]
 }
