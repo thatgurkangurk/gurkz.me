@@ -1,12 +1,9 @@
-import { authOptions } from "../auth";
-import { getSession } from "@solid-mediakit/auth";
+import { getSession } from "../session";
 import { query, redirect } from "@solidjs/router";
-import { getRequestEvent } from "solid-js/web";
 
 export const isAdminQuery = query(async () => {
     "use server";
-    const event = getRequestEvent()!;
-    const session = await getSession(event, authOptions);
+    const session = await getSession();
 
     if (session?.user.role !== "ADMIN") throw redirect("/");
 

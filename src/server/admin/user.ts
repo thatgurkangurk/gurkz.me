@@ -1,7 +1,9 @@
 import { db } from "../db";
 import { users } from "../db/schema";
 import { createCaller, error$ } from "@solid-mediakit/prpc";
-import { sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
+import { z } from "zod";
+import { Permission, permissionsSchema } from "~/lib/permissions";
 
 export const getOtherUsers = createCaller(async ({ session$ }) => {
     "use server";
@@ -18,3 +20,87 @@ export const getOtherUsers = createCaller(async ({ session$ }) => {
 
     return otherUsers;
 });
+
+export const getUser = createCaller(
+    z.object({
+        id: z.string(),
+    }),
+    async ({ session$, input$ }) => {
+        "use server";
+
+        if (session$.user.role !== "ADMIN") {
+            return error$("unauthorised", {
+                status: 403,
+            });
+        }
+
+        const user = await db
+            .select()
+            .from(users)
+            .where(eq(users.id, input$.id));
+
+        return user[0];
+    },
+    {
+        protected: true,
+        cache: false,
+    }
+);
+
+export const togglePermission = createCaller(
+    z.object({
+        userId: z.string(),
+        permission: permissionsSchema,
+    }),
+    async ({ input$, session$ }) => {
+        "use server";
+        if (!session$ || !session$.user || session$.user.role !== "ADMIN") {
+            return error$("unauthorised", {
+                status: 403,
+            });
+        }
+
+        const user = (
+            await db
+                .select()
+                .from(users)
+                .where(eq(users.id, input$.userId))
+                .limit(1)
+        )[0];
+
+        if (!user)
+            return error$("user not found", {
+                status: 404,
+            });
+
+        const updatedPermissions: Permission[] = [...user.permissions];
+
+        const permissionIndex = updatedPermissions.indexOf(input$.permission);
+
+        if (permissionIndex === -1) {
+            // if permission is not in the array, add it
+            updatedPermissions.push(input$.permission);
+        } else {
+            // if permission is in the array, remove it
+            updatedPermissions.splice(permissionIndex, 1);
+        }
+
+        const updatedUser = await db
+            .update(users)
+            .set({ permissions: updatedPermissions })
+            .where(eq(users.id, input$.userId))
+            .returning()
+            .catch((err) => {
+                console.error(err);
+                return error$("unexpected error", {
+                    status: 500,
+                });
+            });
+
+        return updatedUser;
+    },
+    {
+        type: "action",
+        method: "POST",
+    }
+);

@@ -1,6 +1,9 @@
 import { User } from "@solid-mediakit/auth";
+import { A } from "@solidjs/router";
+import { Button } from "~/components/ui/button";
 import {
     Card,
+    CardContent,
     CardDescription,
     CardFooter,
     CardHeader,
@@ -14,6 +17,11 @@ export function UserCard(props: { user: User }) {
                 <CardTitle>{props.user.name}</CardTitle>
                 <CardDescription>{props.user.email}</CardDescription>
             </CardHeader>
+            <CardContent>
+                <Button as={A} href={`/admin/user/${props.user.id}`}>
+                    edit
+                </Button>
+            </CardContent>
             <CardFooter>
                 <CardDescription>user id: {props.user.id}</CardDescription>
             </CardFooter>
