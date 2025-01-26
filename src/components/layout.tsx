@@ -58,6 +58,10 @@ export function Layout(props: ParentProps) {
                                             text: "home",
                                         },
                                         {
+                                            href: "/projects",
+                                            text: "projects",
+                                        },
+                                        {
                                             href: "/music",
                                             text: "music id list",
                                         },
