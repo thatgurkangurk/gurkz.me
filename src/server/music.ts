@@ -19,7 +19,8 @@ const getMusicIds = createCaller(
         return musicIds;
     },
     {
-        cache: true,
+        cache: false,
+        method: "GET",
     }
 );
 

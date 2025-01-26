@@ -17,22 +17,16 @@ export function Layout(props: ParentProps) {
     const storageManager = cookieStorageManagerSSR(
         isServer ? getColourMode() : document.cookie
     );
-    const queryClient = new QueryClient({
-        defaultOptions: {
-            queries: {
-                experimental_prefetchInRender: true,
-            },
-        },
-    });
+    const queryClient = new QueryClient();
 
     return (
         <MetaProvider>
-            <ColorModeScript storageType={storageManager.type} />
+            <Suspense>
+                <QueryClientProvider client={queryClient}>
+                    <ColorModeScript storageType={storageManager.type} />
 
-            <ColorModeProvider storageManager={storageManager}>
-                <SessionProvider>
-                    <QueryClientProvider client={queryClient}>
-                        <Suspense>
+                    <ColorModeProvider storageManager={storageManager}>
+                        <SessionProvider>
                             <div class="flex flex-col min-h-screen">
                                 <Show
                                     when={
@@ -80,10 +74,10 @@ export function Layout(props: ParentProps) {
                                 initialIsOpen={false}
                             />
                             <Toaster />
-                        </Suspense>
-                    </QueryClientProvider>
-                </SessionProvider>
-            </ColorModeProvider>
+                        </SessionProvider>
+                    </ColorModeProvider>
+                </QueryClientProvider>
+            </Suspense>
         </MetaProvider>
     );
 }

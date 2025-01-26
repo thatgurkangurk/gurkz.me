@@ -47,7 +47,7 @@ export const auth = betterAuth({
     },
 });
 
-export const authOpts: SolidAuthConfig = {
+export const authOptions: SolidAuthConfig = {
     providers: [
         Discord({
             clientId: env.DISCORD_CLIENT_ID,
