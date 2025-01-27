@@ -1,5 +1,6 @@
 // @refresh reload
 import { createHandler, StartServer } from "@solidjs/start/server";
+import { Assets } from "solid-js/web";
 
 export default createHandler(() => (
     <StartServer
@@ -13,6 +14,13 @@ export default createHandler(() => (
                     />
                     <link rel="icon" href="/favicon.ico" />
                     {assets}
+                    <Assets>
+                        <script
+                            defer
+                            src="https://assets.onedollarstats.com/stonks.js"
+                            id="stonks"
+                        />
+                    </Assets>
                 </head>
                 <body>
                     <div id="app">{children}</div>
