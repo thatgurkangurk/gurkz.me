@@ -1,17 +1,14 @@
 import * as schema from "./db/schema";
-import {
-    drizzle,
-    NodePgDatabase,
-    type NodePgClient,
-} from "drizzle-orm/node-postgres";
+import type { SQL } from "bun";
+import { drizzle, BunSQLDatabase } from "drizzle-orm/bun-sql";
 import { env } from "~/env";
 
 export type DbSchema = typeof schema;
 
-export type DbType = NodePgDatabase<DbSchema> & {
-    $client: NodePgClient;
+export type DbType = BunSQLDatabase<DbSchema> & {
+    $client: SQL;
 };
 
-export const db: DbType = drizzle(env.DATABASE_URL, {
+export const db = drizzle(env.DATABASE_URL, {
     schema: schema,
 });
