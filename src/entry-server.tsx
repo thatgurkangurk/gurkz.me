@@ -15,11 +15,7 @@ export default createHandler(() => (
                     <link rel="icon" href="/favicon.ico" />
                     {assets}
                     <Assets>
-                        <script
-                            defer
-                            src="https://assets.onedollarstats.com/stonks.js"
-                            id="stonks"
-                        />
+                        <script defer src="/analytics.js" id="stonks" />
                     </Assets>
                 </head>
                 <body>
