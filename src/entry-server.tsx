@@ -15,7 +15,7 @@ export default createHandler(() => (
                     <link rel="icon" href="/favicon.ico" />
                     {assets}
                     <Assets>
-                        <script defer src="/analytics.js" id="stonks" />
+                        <script defer src="/api/analytics.js" id="stonks" />
                     </Assets>
                 </head>
                 <body>
