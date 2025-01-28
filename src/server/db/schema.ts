@@ -122,6 +122,29 @@ export const musicIds = pgTable("music_id", {
     working: boolean("working").notNull().default(true),
 });
 
+export const shortLinks = pgTable("short_link", {
+    id: varchar("id", {
+        length: 48,
+    })
+        .primaryKey()
+        .$defaultFn(() => nanoid(48)),
+    slug: varchar("slug", {
+        length: 32,
+    }).unique(),
+    redirectTo: text("redirect_to"),
+    creatorId: varchar("creator_id")
+        .notNull()
+        .references(() => users.id),
+    clicks: integer("clicks").notNull().default(0),
+});
+
+export const shortLinkRelations = relations(shortLinks, ({ one }) => ({
+    creator: one(users, {
+        fields: [shortLinks.creatorId],
+        references: [users.id],
+    }),
+}));
+
 export const musicIdRelations = relations(musicIds, ({ one }) => ({
     creator: one(users, {
         fields: [musicIds.createdById],
