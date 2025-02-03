@@ -7,7 +7,6 @@ import {
 import { SessionProvider } from "@solid-mediakit/auth/client";
 import { MetaProvider } from "@solidjs/meta";
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
-import { SolidQueryDevtools } from "@tanstack/solid-query-devtools";
 import { ParentProps, Show, Suspense } from "solid-js";
 import { isServer } from "solid-js/web";
 import { Toaster } from "~/components/ui/sonner";
@@ -73,10 +72,6 @@ export function Layout(props: ParentProps) {
                                     </main>
                                 </div>
                             </div>
-                            <SolidQueryDevtools
-                                client={queryClient}
-                                initialIsOpen={false}
-                            />
                             <Toaster />
                         </SessionProvider>
                     </ColorModeProvider>

@@ -14,9 +14,7 @@ const [idFormat, setIdFormat] = makePersisted(
     }
 );
 
-function formatId(id: string) {
-    const format = idFormat();
-
+function formatId(id: string, format: IdFormat) {
     switch (format) {
         case "DEFAULT": {
             return id;
