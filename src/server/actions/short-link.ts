@@ -41,7 +41,7 @@ export const createShortLink = createCaller(
             });
         }
 
-        const existingSlug = await db
+        const [existingSlug] = await db
             .select()
             .from(shortLinks)
             .where(eq(shortLinks.slug, input$.slug));
