@@ -4,6 +4,11 @@ import { FormatSelector } from "~/components/music/format-selector";
 import { MusicCard } from "~/components/music/music-card";
 import { Title } from "~/components/title";
 import { getMusicIds } from "~/server/music";
+import type { RouteDefinition} from "@solidjs/router";
+
+export const route = {
+    preload: () => void getMusicIds(),
+} satisfies RouteDefinition;
 
 export default function MusicPage() {
     const musicIds = getMusicIds();
