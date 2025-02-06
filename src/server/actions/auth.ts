@@ -1,44 +1,18 @@
-import { action, json, redirect } from "@solidjs/router";
-import { getWebRequest } from "vinxi/http";
-import { z } from "zod";
-import { zfd } from "zod-form-data";
-import { auth } from "~/server/auth";
+import { createCaller, error$ } from "@solid-mediakit/prpc";
+import { auth } from "~/lib/auth/actions";
 
-const socialProviders = z.enum(["discord"]);
+const protectedCaller = createCaller.use(async () => {
+    "use server";
+    const user = await auth();
 
-const socialLoginSchema = zfd.formData({
-    provider: zfd.text(socialProviders),
+    if (!user)
+        return error$("you need to be signed in to do this", {
+            status: 403,
+        });
+
+    return {
+        user: user,
+    };
 });
 
-const socialLoginAction = action(async (formData: FormData) => {
-    "use server";
-    const result = await socialLoginSchema.spa(formData);
-
-    if (!result.success) {
-        return json({
-            error: {
-                type: "validation",
-                message: result.error.message,
-            },
-        });
-    }
-
-    const res = await auth.api.signInSocial({
-        body: {
-            provider: result.data.provider,
-        },
-    });
-
-    return redirect(res.url!);
-}, "social-login-action");
-
-const signOutAction = action(async () => {
-    "use server";
-    await auth.api.signOut({
-        headers: getWebRequest().headers,
-    });
-
-    return;
-}, "sign-out-action");
-
-export { socialLoginAction, signOutAction };
+export { protectedCaller };

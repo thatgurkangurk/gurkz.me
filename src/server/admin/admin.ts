@@ -1,11 +1,11 @@
-import { getSession } from "../session";
 import { query, redirect } from "@solidjs/router";
+import { auth } from "~/lib/auth/actions";
 
 export const isAdminQuery = query(async () => {
     "use server";
-    const session = await getSession();
+    const user = await auth();
 
-    if (session?.user.role !== "ADMIN") throw redirect("/");
+    if (!user || user.role !== "ADMIN") throw redirect("/");
 
     return true;
 }, "is-admin");

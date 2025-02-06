@@ -1,13 +1,14 @@
+import { protectedCaller } from "../actions/auth";
 import { db } from "../db";
 import { users } from "../db/schema";
-import { createCaller, error$ } from "@solid-mediakit/prpc";
+import { error$ } from "@solid-mediakit/prpc";
 import { eq, sql } from "drizzle-orm";
 import { z } from "zod";
 import { Permission, permissionsSchema } from "~/lib/permissions";
 
-export const getOtherUsers = createCaller(async ({ session$ }) => {
+export const getOtherUsers = protectedCaller(async ({ ctx$ }) => {
     "use server";
-    if (!session$ || !session$.user || session$.user.role !== "ADMIN") {
+    if (!ctx$.user || ctx$.user.role !== "ADMIN") {
         return error$("unauthorised", {
             status: 403,
         });
@@ -16,19 +17,19 @@ export const getOtherUsers = createCaller(async ({ session$ }) => {
     const otherUsers = await db
         .select()
         .from(users)
-        .where(sql`${users.id} != ${session$.user.id}`);
+        .where(sql`${users.id} != ${ctx$.user.id}`);
 
     return otherUsers;
 });
 
-export const getUser = createCaller(
+export const getUser = protectedCaller(
     z.object({
         id: z.string(),
     }),
-    async ({ session$, input$ }) => {
+    async ({ ctx$, input$ }) => {
         "use server";
 
-        if (session$.user.role !== "ADMIN") {
+        if (ctx$.user.role !== "ADMIN") {
             return error$("unauthorised", {
                 status: 403,
             });
@@ -42,19 +43,18 @@ export const getUser = createCaller(
         return user[0];
     },
     {
-        protected: true,
         cache: false,
     }
 );
 
-export const togglePermission = createCaller(
+export const togglePermission = protectedCaller(
     z.object({
         userId: z.string(),
         permission: permissionsSchema,
     }),
-    async ({ input$, session$ }) => {
+    async ({ input$, ctx$ }) => {
         "use server";
-        if (!session$ || !session$.user || session$.user.role !== "ADMIN") {
+        if (!ctx$.user || ctx$.user.role !== "ADMIN") {
             return error$("unauthorised", {
                 status: 403,
             });

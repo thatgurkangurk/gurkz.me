@@ -1,10 +1,10 @@
 import { ModeToggle } from "./mode-toggle";
 import { Button } from "./ui/button";
 import { Sheet, SheetContent } from "./ui/sheet";
-import { useAuth } from "@solid-mediakit/auth/client";
-import { A } from "@solidjs/router";
+import { A, createAsync } from "@solidjs/router";
 import { Menu } from "lucide-solid";
 import { createSignal, For, Show, Suspense } from "solid-js";
+import { auth, login, logout } from "~/lib/auth/actions";
 
 type Link = {
     text: string;
@@ -14,38 +14,40 @@ type Link = {
 };
 
 function AuthStatus() {
-    const auth = useAuth();
+    const user = createAsync(() => auth());
     return (
         <Suspense
             fallback={<p class="w-fit whitespace-nowrap">loading auth...</p>}
         >
             <Show
-                when={auth.status() === "authenticated" && auth.session()}
+                when={user()}
                 fallback={
-                    <Button
-                        onClick={() => auth.signIn("discord")}
-                        class="whitespace-nowrap"
-                        variant="link"
-                        type="submit"
-                    >
-                        log in
-                    </Button>
+                    <form action={login} method="post">
+                        <Button
+                            class="whitespace-nowrap"
+                            variant="link"
+                            type="submit"
+                        >
+                            log in
+                        </Button>
+                    </form>
                 }
             >
                 {(session) => (
                     <>
                         <p class="flex flex-row gap-1">
-                            hello, <span>{session().user?.name}</span>
+                            hello, <span>{session().name}</span>
                         </p>
 
-                        <Button
-                            onClick={() => auth.signOut()}
-                            class="whitespace-nowrap"
-                            variant="link"
-                            type="submit"
-                        >
-                            log out
-                        </Button>
+                        <form action={logout} method="post">
+                            <Button
+                                class="whitespace-nowrap"
+                                variant="link"
+                                type="submit"
+                            >
+                                log out
+                            </Button>
+                        </form>
                     </>
                 )}
             </Show>
@@ -70,23 +72,30 @@ function NavLink(props: Link) {
 
 export function Nav(props: { links: Link[] }) {
     const [sheetOpen, setSheetOpen] = createSignal<boolean>(false);
-    const auth = useAuth();
+    const user = createAsync(() => auth());
 
     return (
         <header class="z-50 sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6 [grid-area:header]">
             <nav class="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm w-full lg:gap-6">
                 <For each={props.links}>{(link) => <NavLink {...link} />}</For>
-                <Show when={auth.status() === "authenticated"}>
-                    <Show
-                        when={auth
-                            .session()
-                            ?.user.permissions.includes("CREATE_SHORT_LINKS")}
-                    >
-                        <NavLink href="/short-links" text="link shortener" />
-                    </Show>
-                    <Show when={auth.session()?.user.role === "ADMIN"}>
-                        <NavLink href="/admin" text="admin" />
-                    </Show>
+                <Show when={user()}>
+                    {(user) => (
+                        <>
+                            <Show
+                                when={user().permissions.includes(
+                                    "CREATE_SHORT_LINKS"
+                                )}
+                            >
+                                <NavLink
+                                    href="/short-links"
+                                    text="link shortener"
+                                />
+                            </Show>
+                            <Show when={user().role === "ADMIN"}>
+                                <NavLink href="/admin" text="admin" />
+                            </Show>
+                        </>
+                    )}
                 </Show>
             </nav>
 
@@ -112,27 +121,24 @@ export function Nav(props: { links: Link[] }) {
                                 />
                             )}
                         </For>
-                        <Show when={auth.status() === "authenticated"}>
-                            <Show
-                                when={auth
-                                    .session()
-                                    ?.user.permissions.includes(
-                                        "CREATE_SHORT_LINKS"
-                                    )}
-                            >
-                                <NavLink
-                                    onClick={() => setSheetOpen(false)}
-                                    href="/short-links"
-                                    text="link shortener"
-                                />
-                            </Show>
-                            <Show when={auth.session()?.user.role === "ADMIN"}>
-                                <NavLink
-                                    onClick={() => setSheetOpen(false)}
-                                    href="/admin"
-                                    text="admin"
-                                />
-                            </Show>
+                        <Show when={user()}>
+                            {(user) => (
+                                <>
+                                    <Show
+                                        when={user().permissions.includes(
+                                            "CREATE_SHORT_LINKS"
+                                        )}
+                                    >
+                                        <NavLink
+                                            href="/short-links"
+                                            text="link shortener"
+                                        />
+                                    </Show>
+                                    <Show when={user().role === "ADMIN"}>
+                                        <NavLink href="/admin" text="admin" />
+                                    </Show>
+                                </>
+                            )}
                         </Show>
                     </nav>
                 </SheetContent>

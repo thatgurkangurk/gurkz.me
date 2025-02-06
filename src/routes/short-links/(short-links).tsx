@@ -1,4 +1,3 @@
-import { protected$ } from "@solid-mediakit/auth";
 import { RouteDefinition } from "@solidjs/router";
 import { createForm } from "@tanstack/solid-form";
 import { createSignal, Show } from "solid-js";
@@ -12,7 +11,7 @@ export const route = {
     preload: () => canCreateShortLinks(),
 } satisfies RouteDefinition;
 
-export default protected$(() => {
+export default function () {
     const [submitErrors, setSubmitErrors] = createSignal<string[]>([]);
     const form = createForm(() => ({
         defaultValues: {
@@ -86,4 +85,4 @@ export default protected$(() => {
             </Card>
         </>
     );
-});
+}

@@ -1,6 +1,7 @@
 import { db } from "../db";
 import { shortLinks } from "../db/schema";
-import { createCaller, error$ } from "@solid-mediakit/prpc";
+import { protectedCaller } from "./auth";
+import { error$ } from "@solid-mediakit/prpc";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
@@ -31,11 +32,11 @@ export const createShortLinkSchema = z.object({
     redirectTo: shortLinkSchemas.redirect,
 });
 
-export const createShortLink = createCaller(
+export const createShortLink = protectedCaller(
     createShortLinkSchema,
-    async ({ input$, session$ }) => {
+    async ({ input$, ctx$ }) => {
         "use server";
-        if (!session$.user.permissions.includes("CREATE_SHORT_LINKS")) {
+        if (!ctx$.user.permissions.includes("CREATE_SHORT_LINKS")) {
             return error$("not allowed", {
                 status: 403,
             });
@@ -50,7 +51,7 @@ export const createShortLink = createCaller(
 
         await db.insert(shortLinks).values({
             ...input$,
-            creatorId: session$.user.id,
+            creatorId: ctx$.user.id,
         });
 
         return;
@@ -58,6 +59,5 @@ export const createShortLink = createCaller(
     {
         type: "action",
         method: "POST",
-        protected: true,
     }
 );

@@ -8,6 +8,8 @@ export const env = createEnv({
         BETTER_AUTH_URL: z.string(),
         DISCORD_CLIENT_ID: z.string(),
         DISCORD_CLIENT_SECRET: z.string(),
+        REMOTE_AUTH_HOST: z.string().url(),
+        PASSPORT_CLIENT_ID: z.string(),
     },
 
     clientPrefix: "VITE_",

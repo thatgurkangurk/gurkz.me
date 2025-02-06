@@ -134,7 +134,9 @@ export const shortLinks = pgTable("short_link", {
     redirectTo: text("redirect_to"),
     creatorId: varchar("creator_id")
         .notNull()
-        .references(() => users.id),
+        .references(() => users.id, {
+            onUpdate: "cascade",
+        }),
     clicks: integer("clicks").notNull().default(0),
 });
 
