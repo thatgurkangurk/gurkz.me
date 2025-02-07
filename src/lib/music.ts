@@ -1,9 +1,9 @@
 import { action } from "@solidjs/router";
 import { createForm, validateForm } from "simple-stack-form/module";
 import { z } from "zod";
+import { auth } from "~/lib/auth/actions";
 import { db } from "~/server/db";
 import { musicIds } from "~/server/db/schema";
-import { getSession } from "~/server/session";
 
 export type MusicId = {
     id: string;
@@ -49,17 +49,14 @@ export const createIdForm = createForm({
 
 export const createMusicIdAction = action(async (formData: FormData) => {
     "use server";
-    const session = await getSession();
+    const user = await auth();
 
     const parsed = await validateForm({
         formData,
         validator: createIdForm.validator,
     });
 
-    if (
-        !session?.user ||
-        !session.user?.permissions.includes("CREATE_MUSIC_IDS")
-    ) {
+    if (!user || !user.permissions.includes("CREATE_MUSIC_IDS")) {
         //? a bit weird, but works
         parsed.fieldErrors = {
             name: ["not allowed"],
@@ -73,7 +70,7 @@ export const createMusicIdAction = action(async (formData: FormData) => {
         await db.insert(musicIds).values({
             name: parsed.data.name,
             robloxId: parsed.data.id,
-            createdById: session.user.id,
+            createdById: user.id,
         });
         return parsed;
     }

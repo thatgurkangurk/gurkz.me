@@ -1,6 +1,6 @@
 import { setTokens } from ".";
 import { client } from "./client";
-import { action, query, redirect } from "@solidjs/router";
+import { action, query, redirect, reload } from "@solidjs/router";
 import { eq } from "drizzle-orm";
 import * as v from "valibot";
 import { deleteCookie, getCookie, getEvent } from "vinxi/http";
@@ -105,5 +105,5 @@ export const logout = action(async () => {
     deleteCookie(event, "access_token");
     deleteCookie(event, "refresh_token");
 
-    return redirect("/", { revalidate: "openauth-get-auth" });
+    return redirect("/", { revalidate: auth.keyFor() });
 }, "openauth-logout");
