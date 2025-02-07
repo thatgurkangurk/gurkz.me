@@ -120,6 +120,7 @@ export const musicIds = pgTable("music_id", {
         .notNull()
         .defaultNow(),
     working: boolean("working").notNull().default(true),
+    verified: boolean("verified").notNull().default(false),
 });
 
 export const shortLinks = pgTable("short_link", {

@@ -19,45 +19,39 @@ export function CreateMusicIdForm() {
     return (
         <Suspense>
             <Show when={user()}>
-                {(user) => (
-                    <Show
-                        when={user().permissions.includes("CREATE_MUSIC_IDS")}
-                    >
-                        <Card class="w-full max-w-xs">
-                            <CardHeader>
-                                <CardTitle>create a music id</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <Form
-                                    onSuccess={() => {
-                                        toast.success("created");
-                                        musicIdQueryUtils.invalidate();
-                                    }}
-                                    class="flex flex-col gap-2 items-start"
-                                    fieldErrors={submission.result?.fieldErrors}
-                                    validator={createIdForm.validator}
-                                    action={createMusicIdAction}
+                <Card class="w-full max-w-xs">
+                    <CardHeader>
+                        <CardTitle>create a music id</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <Form
+                            onSuccess={() => {
+                                toast.success("created");
+                                musicIdQueryUtils.invalidate();
+                            }}
+                            class="flex flex-col gap-2 items-start"
+                            fieldErrors={submission.result?.fieldErrors}
+                            validator={createIdForm.validator}
+                            action={createMusicIdAction}
+                        >
+                            <Input {...createIdForm.inputProps.id} />
+                            <Input {...createIdForm.inputProps.name} />
+                            <Button
+                                ref={buttonRef!}
+                                disabled={submission.pending}
+                                type="submit"
+                            >
+                                <Show
+                                    when={submission.pending}
+                                    fallback={<>submit</>}
                                 >
-                                    <Input {...createIdForm.inputProps.id} />
-                                    <Input {...createIdForm.inputProps.name} />
-                                    <Button
-                                        ref={buttonRef!}
-                                        disabled={submission.pending}
-                                        type="submit"
-                                    >
-                                        <Show
-                                            when={submission.pending}
-                                            fallback={<>submit</>}
-                                        >
-                                            <LoaderCircle class="animate-spin" />{" "}
-                                            submitting
-                                        </Show>
-                                    </Button>
-                                </Form>
-                            </CardContent>
-                        </Card>
-                    </Show>
-                )}
+                                    <LoaderCircle class="animate-spin" />{" "}
+                                    submitting
+                                </Show>
+                            </Button>
+                        </Form>
+                    </CardContent>
+                </Card>
             </Show>
         </Suspense>
     );

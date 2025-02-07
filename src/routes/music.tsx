@@ -1,17 +1,23 @@
+import type { RouteDefinition } from "@solidjs/router";
 import { For, Show } from "solid-js";
 import { CreateMusicIdForm } from "~/components/music/create-form";
 import { FormatSelector } from "~/components/music/format-selector";
 import { MusicCard } from "~/components/music/music-card";
+import { VerifiedSelector } from "~/components/music/verified-selector";
 import { Title } from "~/components/title";
+import { verifiedOnly } from "~/lib/music/verified-only";
 import { getMusicIds } from "~/server/music";
-import type { RouteDefinition} from "@solidjs/router";
 
 export const route = {
-    preload: () => void getMusicIds(),
+    preload: () => {
+        // just to be safe
+        void getMusicIds(() => true);
+        void getMusicIds(() => false);
+    },
 } satisfies RouteDefinition;
 
 export default function MusicPage() {
-    const musicIds = getMusicIds();
+    const musicIds = getMusicIds(verifiedOnly);
 
     return (
         <>
@@ -19,6 +25,8 @@ export default function MusicPage() {
             <h1 class="text-3xl">music id list</h1>
 
             <CreateMusicIdForm />
+
+            <VerifiedSelector />
 
             <FormatSelector />
 

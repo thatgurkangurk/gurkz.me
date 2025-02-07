@@ -1,10 +1,11 @@
 import { db } from "./db";
 import { createCaller } from "@solid-mediakit/prpc";
+import { z } from "zod";
 
-const getMusicIds = createCaller(
-    async () => {
-        "use server";
-        const musicIds = await db.query.musicIds.findMany({
+async function getMusicIdsFromDb(verifiedOnly: boolean) {
+    "use server";
+    if (verifiedOnly)
+        return await db.query.musicIds.findMany({
             with: {
                 creator: {
                     columns: {
@@ -14,9 +15,30 @@ const getMusicIds = createCaller(
                     },
                 },
             },
+            where: (table, { eq }) => eq(table.verified, true),
             orderBy: (table, { desc }) => desc(table.created),
         });
-        return musicIds;
+
+    return await db.query.musicIds.findMany({
+        with: {
+            creator: {
+                columns: {
+                    id: true,
+                    name: true,
+                    image: true,
+                },
+            },
+        },
+
+        orderBy: (table, { desc }) => desc(table.created),
+    });
+}
+
+const getMusicIds = createCaller(
+    z.boolean().default(true),
+    async ({ input$ }) => {
+        "use server";
+        return await getMusicIdsFromDb(input$);
     },
     {
         cache: false,

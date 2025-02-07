@@ -56,7 +56,7 @@ export const createMusicIdAction = action(async (formData: FormData) => {
         validator: createIdForm.validator,
     });
 
-    if (!user || !user.permissions.includes("CREATE_MUSIC_IDS")) {
+    if (!user) {
         //? a bit weird, but works
         parsed.fieldErrors = {
             name: ["not allowed"],
@@ -71,6 +71,7 @@ export const createMusicIdAction = action(async (formData: FormData) => {
             name: parsed.data.name,
             robloxId: parsed.data.id,
             createdById: user.id,
+            verified: user.permissions.includes("CREATE_MUSIC_IDS"),
         });
         return parsed;
     }
