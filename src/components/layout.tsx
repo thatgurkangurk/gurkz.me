@@ -6,6 +6,7 @@ import {
 } from "@kobalte/core";
 import { MetaProvider } from "@solidjs/meta";
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
+import { SolidQueryDevtools } from "@tanstack/solid-query-devtools";
 import { ParentProps, Show, Suspense } from "solid-js";
 import { isServer } from "solid-js/web";
 import { Toaster } from "~/components/ui/sonner";
@@ -70,6 +71,8 @@ export function Layout(props: ParentProps) {
                         </div>
                         <Toaster />
                     </ColorModeProvider>
+
+                    <SolidQueryDevtools />
                 </QueryClientProvider>
             </Suspense>
         </MetaProvider>

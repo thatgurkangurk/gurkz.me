@@ -1,6 +1,6 @@
 import type { RouteDefinition } from "@solidjs/router";
 import { For, Show } from "solid-js";
-import { CreateMusicIdForm } from "~/components/music/create-form";
+import { CreateMusicForm } from "~/components/music/create-form";
 import { FormatSelector } from "~/components/music/format-selector";
 import { MusicCard } from "~/components/music/music-card";
 import { VerifiedSelector } from "~/components/music/verified-selector";
@@ -24,7 +24,7 @@ export default function MusicPage() {
             <Title>music ids</Title>
             <h1 class="text-3xl">music id list</h1>
 
-            <CreateMusicIdForm />
+            <CreateMusicForm />
 
             <VerifiedSelector />
 

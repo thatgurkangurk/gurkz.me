@@ -1,20 +1,33 @@
-import { Form, Input } from "../form";
+import { TextInput } from "../form/text-input";
 import { Button } from "../ui/button";
+import { createForm, SubmitHandler, zodForm } from "@modular-forms/solid";
 import { createAsync } from "@solidjs/router";
 import { LoaderCircle } from "lucide-solid";
 import { Show, Suspense } from "solid-js";
-import { toast } from "solid-sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { auth } from "~/lib/auth/actions";
-import { useFormState } from "~/lib/form";
-import { createIdForm, createMusicIdAction } from "~/lib/music";
-import { getMusicIds } from "~/server/music";
+import {
+    createMusicId,
+    CreateMusicIdForm,
+    CreateMusicIdSchema,
+    getMusicIds,
+} from "~/server/music";
 
-export function CreateMusicIdForm() {
+export function CreateMusicForm() {
     const user = createAsync(() => auth());
-    let buttonRef: HTMLButtonElement;
-    const submission = useFormState(createMusicIdAction);
     const musicIdQueryUtils = getMusicIds.useUtils();
+    const [musicForm, { Form, Field }] = createForm<CreateMusicIdForm>({
+        validate: zodForm(CreateMusicIdSchema),
+    });
+    const musicIdMutation = createMusicId(() => ({
+        onSuccess: () => {
+            musicIdQueryUtils.invalidate();
+        },
+    }));
+
+    const handleSubmit: SubmitHandler<CreateMusicIdForm> = async (values) => {
+        await musicIdMutation.mutateAsync(values).catch((e) => console.log(e));
+    };
 
     return (
         <Suspense>
@@ -24,25 +37,35 @@ export function CreateMusicIdForm() {
                         <CardTitle>create a music id</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <Form
-                            onSuccess={() => {
-                                toast.success("created");
-                                musicIdQueryUtils.invalidate();
-                            }}
-                            class="flex flex-col gap-2 items-start"
-                            fieldErrors={submission.result?.fieldErrors}
-                            validator={createIdForm.validator}
-                            action={createMusicIdAction}
-                        >
-                            <Input {...createIdForm.inputProps.id} />
-                            <Input {...createIdForm.inputProps.name} />
+                        <Form onSubmit={handleSubmit}>
+                            <Field name="id">
+                                {(field, props) => (
+                                    <TextInput
+                                        {...props}
+                                        type="text"
+                                        label="roblox id"
+                                        value={field.value}
+                                        error={field.error}
+                                    />
+                                )}
+                            </Field>
+                            <Field name="name">
+                                {(field, props) => (
+                                    <TextInput
+                                        {...props}
+                                        type="text"
+                                        label="name"
+                                        value={field.value}
+                                        error={field.error}
+                                    />
+                                )}
+                            </Field>
                             <Button
-                                ref={buttonRef!}
-                                disabled={submission.pending}
+                                disabled={musicForm.submitting}
                                 type="submit"
                             >
                                 <Show
-                                    when={submission.pending}
+                                    when={musicForm.submitting}
                                     fallback={<>submit</>}
                                 >
                                     <LoaderCircle class="animate-spin" />{" "}
