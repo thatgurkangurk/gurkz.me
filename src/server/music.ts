@@ -70,6 +70,18 @@ const CreateMusicIdSchema = z.object({
         .max(128, {
             message: "the name has to be shorter than 128 characters",
         }),
+    tags: z
+        .array(
+            z
+                .string({
+                    message: "you need to provide a tag value",
+                })
+                .nonempty("you have to provide a tag value")
+        )
+        .max(4, {
+            message: "you can only include a maximum of 4 tags",
+        })
+        .optional(),
 });
 
 const createMusicId = protectedCaller(
@@ -95,6 +107,7 @@ const createMusicId = protectedCaller(
             robloxId: input$.id,
             createdById: ctx$.user.id,
             verified: ctx$.user.permissions.includes("CREATE_MUSIC_IDS"),
+            tags: input$.tags,
         });
 
         return true;

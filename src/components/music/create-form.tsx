@@ -1,9 +1,15 @@
 import { TextInput } from "../form/text-input";
 import { Button } from "../ui/button";
-import { createForm, SubmitHandler, zodForm } from "@modular-forms/solid";
+import {
+    createForm,
+    insert,
+    remove,
+    SubmitHandler,
+    zodForm,
+} from "@modular-forms/solid";
 import { createAsync } from "@solidjs/router";
-import { LoaderCircle } from "lucide-solid";
-import { Show, Suspense } from "solid-js";
+import { LoaderCircle, TrashIcon } from "lucide-solid";
+import { createSignal, For, Show, Suspense } from "solid-js";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { auth } from "~/lib/auth/actions";
 import {
@@ -16,9 +22,11 @@ import {
 export function CreateMusicForm() {
     const user = createAsync(() => auth());
     const musicIdQueryUtils = getMusicIds.useUtils();
-    const [musicForm, { Form, Field }] = createForm<CreateMusicIdForm>({
-        validate: zodForm(CreateMusicIdSchema),
-    });
+    const [tagsLength, setTagsLength] = createSignal<number>(0);
+    const [musicForm, { Form, Field, FieldArray }] =
+        createForm<CreateMusicIdForm>({
+            validate: zodForm(CreateMusicIdSchema),
+        });
     const musicIdMutation = createMusicId(() => ({
         onSuccess: () => {
             musicIdQueryUtils.invalidate();
@@ -28,6 +36,8 @@ export function CreateMusicForm() {
     const handleSubmit: SubmitHandler<CreateMusicIdForm> = async (values) => {
         await musicIdMutation.mutateAsync(values).catch((e) => console.log(e));
     };
+
+    const hasReachedMaxTags = () => tagsLength() > 3;
 
     return (
         <Suspense>
@@ -60,18 +70,86 @@ export function CreateMusicForm() {
                                     />
                                 )}
                             </Field>
-                            <Button
-                                disabled={musicForm.submitting}
-                                type="submit"
-                            >
-                                <Show
-                                    when={musicForm.submitting}
-                                    fallback={<>submit</>}
+
+                            <FieldArray name="tags">
+                                {(fieldArray) => (
+                                    <div class="py-2 grid grid-cols-2 gap-2">
+                                        <For each={fieldArray.items}>
+                                            {(_, index) => (
+                                                <>
+                                                    <Field
+                                                        name={`tags.${index()}`}
+                                                    >
+                                                        {(field, props) => (
+                                                            <>
+                                                                <TextInput
+                                                                    {...props}
+                                                                    type="text"
+                                                                    label={`tag ${index() + 1}`}
+                                                                    value={
+                                                                        field.value
+                                                                    }
+                                                                    error={
+                                                                        field.error
+                                                                    }
+                                                                />
+                                                                <Button
+                                                                    class="mt-4.5 w-fit"
+                                                                    onClick={() => {
+                                                                        remove(
+                                                                            musicForm,
+                                                                            "tags",
+                                                                            {
+                                                                                at: index(),
+                                                                            }
+                                                                        );
+                                                                        setTagsLength(
+                                                                            tagsLength() -
+                                                                                1
+                                                                        );
+                                                                    }}
+                                                                >
+                                                                    <TrashIcon />
+                                                                </Button>
+                                                            </>
+                                                        )}
+                                                    </Field>
+                                                </>
+                                            )}
+                                        </For>
+                                    </div>
+                                )}
+                            </FieldArray>
+                            <div class="flex gap-2">
+                                <Button
+                                    disabled={hasReachedMaxTags()}
+                                    onClick={() => {
+                                        insert(musicForm, "tags", {
+                                            value: "",
+                                        });
+                                        setTagsLength(tagsLength() + 1);
+                                    }}
                                 >
-                                    <LoaderCircle class="animate-spin" />{" "}
-                                    submitting
-                                </Show>
-                            </Button>
+                                    <Show
+                                        when={hasReachedMaxTags()}
+                                        fallback={<>add a tag</>}
+                                    >
+                                        maximum tags reached
+                                    </Show>
+                                </Button>
+                                <Button
+                                    disabled={musicForm.submitting}
+                                    type="submit"
+                                >
+                                    <Show
+                                        when={musicForm.submitting}
+                                        fallback={<>submit</>}
+                                    >
+                                        <LoaderCircle class="animate-spin" />{" "}
+                                        submitting
+                                    </Show>
+                                </Button>
+                            </div>
                         </Form>
                     </CardContent>
                 </Card>

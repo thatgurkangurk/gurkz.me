@@ -15,6 +15,7 @@ export type MusicId = {
     created: Date;
     working: boolean;
     creator: Creator;
+    tags: string[];
 };
 
 export type Creator = {
