@@ -16,7 +16,7 @@ export default createHandler(() => (
                     <link rel="icon" href="/favicon.ico" />
                     {assets}
                     <Assets>
-                        <script defer src="/api/analytics.js" id="stonks" />
+                        <script defer data-domain="gurkz.me" src="https://plausible.gurkz.me/js/script.file-downloads.outbound-links.pageview-props.tagged-events.js" />
                     </Assets>
                 </head>
                 <body>
