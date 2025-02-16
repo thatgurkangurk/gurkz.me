@@ -1,9 +1,8 @@
 import type { RouteDefinition } from "@solidjs/router";
 import { For, Show } from "solid-js";
 import { CreateMusicForm } from "~/components/music/create-form";
-import { FormatSelector } from "~/components/music/format-selector";
 import { MusicCard } from "~/components/music/music-card";
-import { VerifiedSelector } from "~/components/music/verified-selector";
+import { MusicOptions } from "~/components/music/music-options";
 import { Title } from "~/components/title";
 import { verifiedOnly } from "~/lib/music/verified-only";
 import { getMusicIds } from "~/server/music";
@@ -26,9 +25,7 @@ export default function MusicPage() {
 
             <CreateMusicForm />
 
-            <VerifiedSelector />
-
-            <FormatSelector />
+            <MusicOptions />
 
             <Show when={musicIds.data}>
                 {(data) => (
