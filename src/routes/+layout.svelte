@@ -7,4 +7,11 @@
 
 <ModeWatcher />
 <LightSwitch />
+
+<div class="flex gap-2">
+	<p class="font-bold">the makeshift navbar</p>
+	<a href="/">home</a>
+	<a href="/music">music id list</a>
+</div>
+
 {@render children?.()}
