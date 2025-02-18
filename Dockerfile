@@ -22,6 +22,8 @@ COPY --from=build --chown=gurkz:nodejs /app/build /app/build
 
 ENV HOST=0.0.0.0
 ENV PORT=4321
+ENV PROTOCOL_HEADER=x-forwarded-proto
+ENV HOST_HEADER=x-forwarded-host
 EXPOSE 4321/tcp
 
-CMD [ "PROTOCOL_HEADER=x-forwarded-proto HOST_HEADER=x-forwarded-host bun", "run", "build/index.js" ]
+CMD [ "bun", "run", "build/index.js" ]
