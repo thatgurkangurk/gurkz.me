@@ -1,7 +1,7 @@
 import { createEnv } from "@t3-oss/env-core";
 import * as v from "valibot";
 import { process } from "std-env";
-import { env } from '$env/dynamic/private';
+import { env as privateEnv } from '$env/dynamic/private';
 
 export const env = createEnv({
 	server: {
@@ -10,9 +10,9 @@ export const env = createEnv({
 		PASSPORT_CLIENT_ID: v.string()
 	},
 	runtimeEnvStrict: {
-		DATABASE_URL: env.DATABASE_URL,
-		REMOTE_AUTH_HOST: env.REMOTE_AUTH_HOST,
-		PASSPORT_CLIENT_ID: env.PASSPORT_CLIENT_ID
+		DATABASE_URL: privateEnv.DATABASE_URL,
+		REMOTE_AUTH_HOST: privateEnv.REMOTE_AUTH_HOST,
+		PASSPORT_CLIENT_ID: privateEnv.PASSPORT_CLIENT_ID
 	},
 	skipValidation: process.env.CI === "1"
 });
