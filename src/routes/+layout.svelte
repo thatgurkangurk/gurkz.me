@@ -3,7 +3,7 @@
 	import { ModeWatcher } from "mode-watcher";
 	import type { LayoutProps } from "./$types";
 	import Nav from "$lib/components/nav/nav.svelte";
-	import { Toaster } from "svelte-sonner";
+	import { Toaster } from "$lib/components/ui/sonner";
 	let { children, data }: LayoutProps = $props();
 </script>
 

@@ -1,11 +1,34 @@
 <script lang="ts">
+	import { safeParse } from "valibot";
 	import type { PageProps } from "./$types";
+	import { getFormatState, setFormatState } from "./components/format-context";
+	import { idFormatSchema, type IdFormat } from "./components/format.svelte";
+	import FormattedId from "./components/formatted-id.svelte";
+	import Options from "./components/options.svelte";
 
 	let { data }: PageProps = $props();
+
+	setFormatState<IdFormat>("id_format", data.idFormat ?? "DEFAULT");
+
+	const format = getFormatState();
+
+	$effect(() => {
+		const parseResult = safeParse(idFormatSchema, format.current);
+
+		if (parseResult.success) return;
+
+		console.warn("id format was invalid. reverting to DEFAULT");
+
+		format.current = "DEFAULT";
+	});
 </script>
+
+<h1 class="text-4xl">music id list</h1>
+
+<Options />
 
 {#each data.musicIds as musicId}
 	{#if musicId.verified}
-		<p>{musicId.name} - <span>{musicId.robloxId}</span></p>
+		<p>{musicId.name} - <FormattedId id={musicId.robloxId} /></p>
 	{/if}
 {/each}
