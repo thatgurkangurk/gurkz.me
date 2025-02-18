@@ -10,7 +10,7 @@ FROM base AS build
 ENV CI=1
 COPY --from=deps /app/node_modules /app/node_modules
 
-RUN REMOTE_AUTH_HOST="change me" DATABASE_URL="change me" PASSPORT_CLIENT_ID="change me" bun run build
+RUN CI="1" REMOTE_AUTH_HOST="change me" DATABASE_URL="https://change.me" PASSPORT_CLIENT_ID="change me" bun run build
 
 FROM base
 RUN addgroup --system --gid 1001 nodejs
