@@ -5,5 +5,7 @@
 </script>
 
 {#each data.musicIds as musicId}
-	<p>{musicId.name}</p>
+	{#if musicId.verified}
+		<p>{musicId.name} - <span>{musicId.robloxId}</span></p>
+	{/if}
 {/each}

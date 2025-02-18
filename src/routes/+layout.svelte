@@ -1,17 +1,20 @@
 <script lang="ts">
-	import LightSwitch from "$lib/components/light-switch.svelte";
 	import "../app.css";
 	import { ModeWatcher } from "mode-watcher";
-	let { children } = $props();
+	import type { LayoutProps } from "./$types";
+	import Nav from "$lib/components/nav/nav.svelte";
+	import { Toaster } from "svelte-sonner";
+	let { children, data }: LayoutProps = $props();
 </script>
 
 <ModeWatcher />
-<LightSwitch />
+<Toaster />
 
-<div class="flex gap-2">
-	<p class="font-bold">the makeshift navbar</p>
-	<a href="/">home</a>
-	<a href="/music">music id list</a>
+<div class="flex flex-col min-h-screen">
+	<Nav />
+	<div class="flex-grow min-h-[83dvh] w-full flex flex-col">
+		<main class="flex-grow p-2">
+			{@render children()}
+		</main>
+	</div>
 </div>
-
-{@render children?.()}
