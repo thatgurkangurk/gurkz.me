@@ -12,5 +12,6 @@ export const env = createEnv({
 		DATABASE_URL: process.env.DATABASE_URL,
 		REMOTE_AUTH_HOST: process.env.REMOTE_AUTH_HOST,
 		PASSPORT_CLIENT_ID: process.env.PASSPORT_CLIENT_ID
-	}
+	},
+	skipValidation: process.env.CI === "1"
 });
