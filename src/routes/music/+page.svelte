@@ -5,6 +5,7 @@
 	import { idFormatSchema, type IdFormat } from "./components/format.svelte";
 	import FormattedId from "./components/formatted-id.svelte";
 	import Options from "./components/options.svelte";
+	import MusicCard from "./components/music-card.svelte";
 
 	let { data }: PageProps = $props();
 
@@ -26,9 +27,12 @@
 <h1 class="text-4xl">music id list</h1>
 
 <Options />
-
-{#each data.musicIds as musicId}
-	{#if musicId.verified}
-		<p>{musicId.name} - <FormattedId id={musicId.robloxId} /></p>
-	{/if}
-{/each}
+<div
+	class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4"
+>
+	{#each data.musicIds as musicId}
+		{#if musicId.verified}
+			<MusicCard id={musicId} />
+		{/if}
+	{/each}
+</div>
