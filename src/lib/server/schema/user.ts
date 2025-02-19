@@ -9,7 +9,7 @@ export const users = pgTable("user", {
 	id: text("id")
 		.primaryKey()
 		.$defaultFn(() => nanoid(21)),
-	name: text("name"),
+	name: text("name").notNull(),
 	email: text("email").unique(),
 	emailVerified: timestamp("emailVerified", { mode: "date" }),
 	image: text("image"),
