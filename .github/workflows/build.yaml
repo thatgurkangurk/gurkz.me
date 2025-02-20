@@ -22,7 +22,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: thatgurkangurk # might be bad to use my own username, but i'll see if there is another solution
+          username: thatgurkangurk
           password: ${{ env.GHCR_TOKEN }}
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
