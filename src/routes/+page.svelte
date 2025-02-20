@@ -5,6 +5,10 @@
 	let { data }: PageProps = $props();
 </script>
 
+<svelte:head>
+    <title>home - gurkan's website</title>
+</svelte:head>
+
 <h1 class="text-4xl">hello world</h1>
 {#if data.subject}
 	<p>hello, {data.subject.username}</p>
