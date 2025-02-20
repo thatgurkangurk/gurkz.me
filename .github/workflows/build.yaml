@@ -35,7 +35,7 @@ jobs:
           file: Dockerfile
           context: .
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-      - name: Build and push (latest)
+      - name: Build and push (commit sha)
         uses: docker/build-push-action@v6
         with:
           push: true
