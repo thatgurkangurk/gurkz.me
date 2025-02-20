@@ -1,25 +1,34 @@
-import pluginJs from "@eslint/js";
-import eslintConfigPrettier from "eslint-config-prettier";
-import solid from "eslint-plugin-solid";
+import prettier from "eslint-config-prettier";
+import js from "@eslint/js";
+import { includeIgnoreFile } from "@eslint/compat";
+import svelte from "eslint-plugin-svelte";
 import globals from "globals";
-import tseslint from "typescript-eslint";
+import { fileURLToPath } from "node:url";
+import ts from "typescript-eslint";
+const gitignorePath = fileURLToPath(new URL("./.gitignore", import.meta.url));
 
-/** @type {import("eslint").Linter.Config} */
-export default [
-    { ignores: [".vinxi/*", ".output/*"] },
-    { files: ["**/*.{js,mjs,cjs,ts,tsx,jsx}"] },
-    { languageOptions: { globals: globals.browser } },
-    pluginJs.configs.recommended,
-    ...tseslint.configs.recommended,
-    eslintConfigPrettier,
-    {
-        files: ["**/*.{ts,tsx}"],
-        ...solid.configs["flat/typescript"],
-        languageOptions: {
-            parser: tseslint.parser,
-            parserOptions: {
-                project: "tsconfig.json",
-            },
-        },
-    },
-];
+export default ts.config(
+	includeIgnoreFile(gitignorePath),
+	js.configs.recommended,
+	...ts.configs.recommended,
+	...svelte.configs["flat/recommended"],
+	prettier,
+	...svelte.configs["flat/prettier"],
+	{
+		languageOptions: {
+			globals: {
+				...globals.browser,
+				...globals.node
+			}
+		}
+	},
+	{
+		files: ["**/*.svelte"],
+
+		languageOptions: {
+			parserOptions: {
+				parser: ts.parser
+			}
+		}
+	}
+);

@@ -1,5 +1,5 @@
-import { z } from "zod";
+import * as v from "valibot";
 
-export const rolesSchema = z.enum(["USER", "ADMIN"]);
+export const rolesSchema = v.picklist(["USER", "ADMIN"]);
 
-export type Role = z.infer<typeof rolesSchema>;
+export type Role = v.InferOutput<typeof rolesSchema>;

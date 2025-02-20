@@ -1,5 +1,4 @@
+# Package Managers
+package-lock.json
 pnpm-lock.yaml
-.astro
-drizzle
-public
-dist
+yarn.lock
