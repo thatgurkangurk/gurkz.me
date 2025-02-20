@@ -1,4 +1,5 @@
 <script lang="ts">
+	import CopyButton from "$lib/components/copy-button.svelte";
 	import { getFormatState } from "./format-context";
 	import { formattedId } from "./format.svelte";
 
@@ -14,3 +15,4 @@
 </script>
 
 <span class="pr-2">{formatted}</span>
+<CopyButton content={formatted} />
