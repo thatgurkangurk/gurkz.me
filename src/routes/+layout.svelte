@@ -4,11 +4,16 @@
 	import type { LayoutProps } from "./$types";
 	import Nav from "$lib/components/nav/nav.svelte";
 	import { Toaster } from "$lib/components/ui/sonner";
+	import { page } from "$app/state";
 	let { children, data }: LayoutProps = $props();
 </script>
 
 <ModeWatcher />
 <Toaster />
+
+<svelte:head>
+	<title>{page.data.meta?.title ?? "gurkan's website"}</title>
+</svelte:head>
 
 <div class="flex flex-col min-h-screen">
 	<Nav />

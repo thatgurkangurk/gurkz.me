@@ -9,7 +9,9 @@ declare global {
 		interface Locals {
 			session: InferOutput<typeof user> | undefined | null;
 		}
-		// interface PageData {}
+		interface PageData {
+			meta?: import("$lib/meta").Meta;
+		}
 		// interface PageState {}
 		// interface Platform {}
 

@@ -24,10 +24,6 @@
 	});
 </script>
 
-<svelte:head>
-   <title>music ids - gurkan's website</title>
-</svelte:head>
-
 <h1 class="text-4xl">music id list</h1>
 
 <Options />

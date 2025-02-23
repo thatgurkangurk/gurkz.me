@@ -7,6 +7,7 @@ import { createMusicIdSchema } from "./form.js";
 import type { Actions } from "./$types.js";
 import { fail } from "@sveltejs/kit";
 import { musicIds } from "$lib/server/schema/music-id.js";
+import { defineMeta } from "$lib/meta.js";
 
 export async function load({ parent, cookies }) {
 	const musicIds = await db.query.musicIds.findMany({
@@ -29,7 +30,15 @@ export async function load({ parent, cookies }) {
 		{ errors: false }
 	);
 
-	return { musicIds, idFormat, subject, createMusicIdForm };
+	return {
+		musicIds,
+		idFormat,
+		subject,
+		createMusicIdForm,
+		meta: defineMeta({
+			title: "music id list"
+		})
+	};
 }
 
 export const actions: Actions = {
