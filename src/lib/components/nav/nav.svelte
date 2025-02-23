@@ -24,6 +24,10 @@
 		{
 			href: "/music",
 			text: "music id list"
+		},
+		{
+			href: "/projects",
+			text: "projects"
 		}
 	];
 </script>
