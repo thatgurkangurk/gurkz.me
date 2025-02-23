@@ -19,7 +19,7 @@
 	<Nav />
 	<div class="flex-grow min-h-[83dvh] w-full flex flex-col">
 		<main class="flex-grow p-2">
-			{@render children()}
+			{@render children?.()}
 		</main>
 	</div>
 </div>

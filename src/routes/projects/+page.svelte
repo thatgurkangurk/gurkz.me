@@ -1,28 +1,9 @@
-<script module lang="ts">
-	export type Project = {
-		title: string;
-		description: string;
-		slug: string;
-	};
-
-	export const projects: Project[] = [
-		{
-			title: "want you gone",
-			description: "portal 2's ending remade in HTML, CSS and JS",
-			slug: "want-you-gone"
-		}
-	];
-
-	export function getProjectBySlug(slug: string) {
-		return projects.find((project) => project.slug === slug);
-	}
-</script>
-
 <script lang="ts">
 	import { Alert, AlertTitle, AlertDescription } from "$lib/components/ui/alert";
 	import { OctagonAlert } from "lucide-svelte";
 	import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "$lib/components/ui/card";
 	import { Button } from "$lib/components/ui/button";
+	import { projects, type Project } from "./projects";
 </script>
 
 <h1 class="text-3xl">projects</h1>

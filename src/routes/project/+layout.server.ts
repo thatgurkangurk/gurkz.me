@@ -1,5 +1,5 @@
 import type { LayoutServerLoad } from "./$types";
-import { getProjectBySlug } from "../projects/+page.svelte";
+import { getProjectBySlug } from "../projects/projects.js";
 import { error } from "@sveltejs/kit";
 
 export const load: LayoutServerLoad = async (event) => {
