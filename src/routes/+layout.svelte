@@ -5,7 +5,10 @@
 	import Nav from "$lib/components/nav/nav.svelte";
 	import { Toaster } from "$lib/components/ui/sonner";
 	import { page } from "$app/state";
+	import { setTimeoutState } from "$lib/utils/timeouts.svelte";
 	let { children, data }: LayoutProps = $props();
+
+	setTimeoutState();
 </script>
 
 <ModeWatcher />

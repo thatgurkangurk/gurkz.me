@@ -3,7 +3,7 @@
 	import { onMount } from "svelte";
 	import musicmp3 from "./lib/music.mp3";
 	import Ui from "./lib/ui.svelte";
-	import { clearTimeouts } from "$lib/utils/timeouts.svelte.js";
+	import { getTimeoutState } from "$lib/utils/timeouts.svelte.js";
 
 	let hasStarted = $state(false);
 	let audio: HTMLAudioElement;
@@ -12,13 +12,21 @@
 	let lyricsText: HTMLDivElement;
 	let creditsText: HTMLDivElement;
 
+	const timeouts = getTimeoutState();
+
 	onMount(() => {
-		clearTimeouts("want-you-gone");
+		timeouts.clear("want-you-gone");
 		hasStarted = false;
+
+		return () => {
+			setTimeout(() => {
+				timeouts.clear("want-you-gone");
+			}, 0);
+		};
 	});
 
 	function start() {
-		const cake = new Cake(lyricsDiv, creditsDiv, lyricsText, creditsText, audio);
+		const cake = new Cake(lyricsDiv, creditsDiv, lyricsText, creditsText, audio, timeouts);
 		cake.start();
 	}
 </script>

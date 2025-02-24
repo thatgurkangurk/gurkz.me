@@ -1,6 +1,6 @@
 import { lyrics } from "./lyrics";
 import { credits } from "./credits";
-import { createTimeout } from "$lib/utils/timeouts.svelte";
+import { TimeoutState } from "$lib/utils/timeouts.svelte";
 
 export class Cake {
 	private delayMultiplier = 1000;
@@ -11,6 +11,7 @@ export class Cake {
 	private firstLyricsIndex = 0;
 	private lastCreditsIndex = 0;
 	private creditsDelay = 0;
+	private timeouts: TimeoutState;
 
 	lyricsDiv: HTMLDivElement;
 	creditsDiv: HTMLDivElement;
@@ -26,13 +27,15 @@ export class Cake {
 		creditsDiv: HTMLDivElement,
 		lyricsText: HTMLDivElement,
 		creditsText: HTMLDivElement,
-		player: HTMLAudioElement
+		player: HTMLAudioElement,
+		timeouts: TimeoutState
 	) {
 		this.lyricsDiv = lyricsDiv;
 		this.creditsDiv = creditsDiv;
 		this.player = player;
 		this.lyricsText = lyricsText;
 		this.creditsText = creditsText;
+		this.timeouts = timeouts;
 	}
 
 	public start() {
@@ -62,7 +65,7 @@ export class Cake {
 		if (nextChar == "_") newChar = "&nbsp;";
 		if (nextChar == "&nbsp;") newChar = "_";
 		cursor.innerHTML = newChar;
-		createTimeout(
+		this.timeouts.create(
 			"want-you-gone",
 			() => {
 				this.blink(cursor);
@@ -130,14 +133,14 @@ export class Cake {
 				letterdelay = delay / (text.length + 1);
 			}
 			for (let x = 0; x < text.length; x++) {
-				createTimeout(
+				this.timeouts.create(
 					"want-you-gone",
 					() => this.processLetter("lyrics", idx, text.substring(x, x + 1)),
 					letterdelay * x
 				);
 			}
 			if (curlyric["newLine"] === true) {
-				createTimeout(
+				this.timeouts.create(
 					"want-you-gone",
 					() => this.processLetter("lyrics", idx, "newline"),
 					letterdelay * text.length
@@ -149,7 +152,7 @@ export class Cake {
 	processLyricLines() {
 		let delay = 0;
 		for (let idx = 0; idx < lyrics.length; idx++) {
-			createTimeout("want-you-gone", () => this.processLyricLine(idx), delay);
+			this.timeouts.create("want-you-gone", () => this.processLyricLine(idx), delay);
 			delay += lyrics[idx]["delay"] * this.delayMultiplier;
 		}
 	}
@@ -199,7 +202,7 @@ export class Cake {
 
 		const text = credits[idx];
 		for (let x = 0; x < text.length; x++) {
-			createTimeout(
+			this.timeouts.create(
 				"want-you-gone",
 				() => this.processLetter("credits", idx, text.substring(x, x + 1)),
 				this.creditsDelay * x
@@ -207,7 +210,7 @@ export class Cake {
 		}
 
 		if (idx < credits.length - 1)
-			createTimeout(
+			this.timeouts.create(
 				"want-you-gone",
 				() => this.processLetter("credits", idx, "newline"),
 				this.creditsDelay * text.length
@@ -223,7 +226,7 @@ export class Cake {
 
 		let delay = this.creditsStartTime * this.delayMultiplier;
 		for (let idx = 0; idx < credits.length; idx++) {
-			createTimeout("want-you-gone", () => this.processCreditLine(idx), delay);
+			this.timeouts.create("want-you-gone", () => this.processCreditLine(idx), delay);
 			delay += credits[idx].length * this.creditsDelay;
 		}
 	}

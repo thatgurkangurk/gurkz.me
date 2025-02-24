@@ -1,33 +1,49 @@
+import { getContext, setContext } from "svelte";
+
 type Timeout = {
 	scope: string;
 	id: number;
 };
 
-const timeouts = $state<Timeout[]>([]);
+class TimeoutState {
+	#timeouts = $state<Timeout[]>([]);
 
-function createTimeout(scope: string, handler: () => void, timeout: number) {
-	const id = setTimeout(() => {
-		handler();
-	}, timeout);
+	constructor() {}
 
-	const newTimeout: Timeout = {
-		// @ts-expect-error it's fine
-		id: id,
-		scope: scope
-	};
+	create(scope: string, handler: () => void, timeout: number) {
+		const id = setTimeout(() => {
+			handler();
+		}, timeout);
 
-	timeouts.push(newTimeout);
+		const newTimeout: Timeout = {
+			// @ts-expect-error it's fine
+			id: id,
+			scope: scope
+		};
 
-	return newTimeout;
+		this.#timeouts.push(newTimeout);
+
+		return newTimeout;
+	}
+
+	clear(scope: string) {
+		this.#timeouts.forEach((value, index) => {
+			if (value.scope === scope) {
+				clearTimeout(value.id);
+				this.#timeouts.splice(index, 1);
+			}
+		});
+	}
 }
 
-function clearTimeouts(scope: string) {
-	timeouts.forEach((value, index) => {
-		if (value.scope === scope) {
-			clearTimeout(value.id); // Clear the timeout
-			timeouts.splice(index, 1); // Remove the timeout from the array
-		}
-	});
+const TIMEOUT_CONTEXT_KEY = Symbol("FORMAT_CTX");
+
+export function setTimeoutState() {
+	return setContext(TIMEOUT_CONTEXT_KEY, new TimeoutState());
 }
 
-export { createTimeout, timeouts, clearTimeouts };
+export function getTimeoutState() {
+	return getContext<ReturnType<typeof setTimeoutState>>(TIMEOUT_CONTEXT_KEY);
+}
+
+export { TimeoutState };
