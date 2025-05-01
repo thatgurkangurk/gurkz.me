@@ -59,5 +59,17 @@
 		"valibot": "^1.0.0-rc.1",
 		"vite": "^6.0.0",
 		"zod": "^3.24.2"
+	},
+	"dependencies": {
+		"@orpc/client": "^1.1.1",
+		"@orpc/openapi": "^1.1.1",
+		"@orpc/server": "^1.1.1",
+		"@orpc/svelte-query": "^1.1.1",
+		"@orpc/zod": "^1.1.1",
+		"@tanstack/svelte-query": "^5.74.9",
+		"@tanstack/svelte-query-devtools": "^5.74.9"
+	},
+	"patchedDependencies": {
+		"@tanstack/svelte-query@5.74.9": "patches/@tanstack%2Fsvelte-query@5.74.9.patch"
 	}
 }

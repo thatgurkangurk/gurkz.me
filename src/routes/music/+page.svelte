@@ -6,12 +6,18 @@
 	import Options from "./components/options.svelte";
 	import MusicCard from "./components/music-card.svelte";
 	import CreateForm from "./components/create-form.svelte";
+	import { createQuery } from "@tanstack/svelte-query";
+	import { orpc } from "$lib/orpc";
+	import { Alert, AlertDescription, AlertTitle } from "$lib/components/ui/alert";
+	import { Info } from "lucide-svelte";
 
 	let { data }: PageProps = $props();
 
 	setFormatState<IdFormat>("id_format", data.idFormat ?? "DEFAULT");
 
 	const format = getFormatState();
+
+	const query = createQuery(orpc.music.getMusicIds.queryOptions());
 
 	$effect(() => {
 		const parseResult = safeParse(idFormatSchema, format.current);
@@ -35,9 +41,17 @@
 <div
 	class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4"
 >
-	{#each data.musicIds as musicId}
-		{#if musicId.verified}
-			<MusicCard id={musicId} />
-		{/if}
-	{/each}
+	{#if $query.data?.length}
+		{#each $query.data as musicId}
+			{#if musicId.verified}
+				<MusicCard id={musicId} />
+			{/if}
+		{/each}
+	{:else}
+		<Alert variant={"default"}>
+			<Info class="h-4 w-4" />
+			<AlertTitle>no data</AlertTitle>
+			<AlertDescription>no music ids have been created</AlertDescription>
+		</Alert>
+	{/if}
 </div>
