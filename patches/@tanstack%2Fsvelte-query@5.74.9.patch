@@ -1,0 +1,27 @@
+diff --git a/dist/HydrationBoundary.svelte b/dist/HydrationBoundary.svelte
+index 330984311f18359a0267c237af3f1b0d6b8d71a3..6ad18f6045761d25f8d9b6c3ea345ac6715f55ec 100644
+--- a/dist/HydrationBoundary.svelte
++++ b/dist/HydrationBoundary.svelte
+@@ -1,16 +1,12 @@
+ <script lang="ts">
+-  import { useHydrate } from './useHydrate.js'
+-  import type {
+-    DehydratedState,
+-    HydrateOptions,
+-    QueryClient,
+-  } from '@tanstack/query-core'
++	import { useHydrate } from "./useHydrate.js";
++	import type { DehydratedState, HydrateOptions, QueryClient } from "@tanstack/query-core";
+ 
+-  export let state: DehydratedState
+-  export let options: HydrateOptions | undefined = undefined
+-  export let queryClient: QueryClient | undefined = undefined
++	export let state: DehydratedState;
++	export let options: HydrateOptions | undefined = undefined;
++	export let queryClient: QueryClient | undefined = undefined;
+ 
+-  useHydrate(state, options, queryClient)
++	useHydrate(state, options, queryClient);
+ </script>
+ 
+ <slot />

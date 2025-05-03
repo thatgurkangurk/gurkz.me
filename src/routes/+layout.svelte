@@ -6,6 +6,8 @@
 	import { Toaster } from "$lib/components/ui/sonner";
 	import { page } from "$app/state";
 	import { setTimeoutState } from "$lib/utils/timeouts.svelte";
+	import { QueryClientProvider } from "@tanstack/svelte-query";
+	import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
 	let { children, data }: LayoutProps = $props();
 
 	setTimeoutState();
@@ -18,11 +20,14 @@
 	<title>{page.data.meta?.title ?? "gurkan's website"}</title>
 </svelte:head>
 
-<div class="flex flex-col min-h-screen">
-	<Nav />
-	<div class="flex-grow min-h-[83dvh] w-full flex flex-col">
-		<main class="flex-grow p-2">
-			{@render children?.()}
-		</main>
+<QueryClientProvider client={data.queryClient}>
+	<div class="flex flex-col min-h-screen">
+		<Nav />
+		<div class="flex-grow min-h-[83dvh] w-full flex flex-col">
+			<main class="flex-grow p-2">
+				{@render children?.()}
+			</main>
+		</div>
 	</div>
-</div>
+	<SvelteQueryDevtools position="bottom" buttonPosition="bottom-left" />
+</QueryClientProvider>
