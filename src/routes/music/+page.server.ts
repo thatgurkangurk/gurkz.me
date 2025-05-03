@@ -10,11 +10,6 @@ import { musicIds } from "$lib/server/schema/music-id.js";
 import { defineMeta } from "$lib/meta.js";
 
 export async function load({ parent, cookies }) {
-	const musicIds = await db.query.musicIds.findMany({
-		with: { creator: { columns: { id: true, name: true, image: true } } },
-		where: (table, { eq }) => eq(table.verified, true),
-		orderBy: (table, { desc }) => desc(table.created)
-	});
 	const idFormatCookie = cookies.get("id_format") ?? `"DEFAULT"`;
 	const parseResult = safeParse(idFormatSchema, JSON.parse(idFormatCookie));
 
@@ -31,7 +26,6 @@ export async function load({ parent, cookies }) {
 	);
 
 	return {
-		musicIds,
 		idFormat,
 		subject,
 		createMusicIdForm,
