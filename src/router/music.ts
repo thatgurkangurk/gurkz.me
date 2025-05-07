@@ -1,5 +1,8 @@
 import { z } from "zod";
 import { pub } from "../orpc";
+import { eq, desc } from "drizzle-orm";
+import { musicIds } from "$lib/server/schema/music-id";
+import { users } from "$lib/server/schema/user";
 
 export const getMusicIds = pub
 	.route({
@@ -8,6 +11,11 @@ export const getMusicIds = pub
 		summary: "get music ids",
 		tags: ["music-id"]
 	})
+	.input(
+		z.object({
+			verifiedOnly: z.boolean().default(true)
+		})
+	)
 	.output(
 		z.array(
 			z.object({
@@ -27,12 +35,28 @@ export const getMusicIds = pub
 			})
 		)
 	)
-	.handler(async ({ context }) => {
-		const musicIds = await context.db.query.musicIds.findMany({
-			with: { creator: { columns: { id: true, name: true, image: true } } },
-			where: (table, { eq }) => eq(table.verified, true),
-			orderBy: (table, { desc }) => desc(table.created)
-		});
+	.handler(async ({ context, input }) => {
+		const baseQuery = context.db
+			.select({
+				id: musicIds.id,
+				name: musicIds.name,
+				robloxId: musicIds.robloxId,
+				createdById: musicIds.createdById,
+				created: musicIds.created,
+				working: musicIds.working,
+				verified: musicIds.verified,
+				tags: musicIds.tags,
+				creator: {
+					id: users.id,
+					name: users.name,
+					image: users.image
+				}
+			})
+			.from(musicIds)
+			.innerJoin(users, eq(musicIds.createdById, users.id))
+			.orderBy(desc(musicIds.created));
 
-		return musicIds;
+		const results = input.verifiedOnly ? baseQuery.where(eq(musicIds.verified, true)) : baseQuery;
+
+		return results;
 	});

@@ -10,14 +10,25 @@
 	import { orpc } from "$lib/orpc";
 	import { Alert, AlertDescription, AlertTitle } from "$lib/components/ui/alert";
 	import { Info } from "lucide-svelte";
+	import { CookieState } from "$lib/cookie-state.svelte";
+	import { setVerifiedOnlyState } from "./components/verified-context.svelte";
 
 	let { data }: PageProps = $props();
 
 	setFormatState<IdFormat>("id_format", data.idFormat ?? "DEFAULT");
+	setVerifiedOnlyState<boolean>(true);
 
 	const format = getFormatState();
 
-	const query = createQuery(orpc.music.getMusicIds.queryOptions());
+	let verifiedOnly = $state<boolean>(true);
+
+	const query = createQuery(() =>
+		orpc.music.getMusicIds.queryOptions({
+			input: {
+				verifiedOnly: verifiedOnly
+			}
+		})
+	);
 
 	$effect(() => {
 		const parseResult = safeParse(idFormatSchema, format.current);
@@ -41,11 +52,9 @@
 <div
 	class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4"
 >
-	{#if $query.data?.length}
-		{#each $query.data as musicId}
-			{#if musicId.verified}
-				<MusicCard id={musicId} />
-			{/if}
+	{#if query.data?.length}
+		{#each query.data as musicId}
+			<MusicCard id={musicId} />
 		{/each}
 	{:else}
 		<Alert variant={"default"}>
