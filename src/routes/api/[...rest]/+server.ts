@@ -4,6 +4,7 @@ import type { RequestHandler } from "./$types";
 import { ZodSmartCoercionPlugin, ZodToJsonSchemaConverter } from "@orpc/zod";
 import { onError } from "@orpc/server";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
+import { CORSPlugin } from "@orpc/server/plugins";
 
 const handler = new OpenAPIHandler(router, {
 	interceptors: [
@@ -12,6 +13,10 @@ const handler = new OpenAPIHandler(router, {
 		})
 	],
 	plugins: [
+		new CORSPlugin({
+			origin: (origin) => origin,
+			allowMethods: ["GET", "HEAD", "PUT", "POST", "DELETE", "PATCH"]
+		}),
 		new ZodSmartCoercionPlugin(),
 		new OpenAPIReferencePlugin({
 			schemaConverters: [new ZodToJsonSchemaConverter()],
