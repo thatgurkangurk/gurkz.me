@@ -68,6 +68,8 @@
 		"@orpc/svelte-query": "^1.2.0",
 		"@orpc/zod": "^1.2.0",
 		"@tanstack/svelte-query": "https://pkg.pr.new/@tanstack/svelte-query@ee9346a",
-		"@tanstack/svelte-query-devtools": "https://pkg.pr.new/@tanstack/svelte-query-devtools@ee9346a"
+		"@tanstack/svelte-query-devtools": "https://pkg.pr.new/@tanstack/svelte-query-devtools@ee9346a",
+		"drizzle-pagination": "^1.0.12",
+		"ulid": "^3.0.0"
 	}
 }

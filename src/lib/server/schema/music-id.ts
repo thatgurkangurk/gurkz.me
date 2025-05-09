@@ -1,12 +1,12 @@
 import { boolean, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
-import { nanoid } from "nanoid";
 import { users } from "./user";
 import { relations } from "drizzle-orm";
+import { ulid } from "ulid";
 
 export const musicIds = pgTable("music_id", {
 	id: varchar("id", { length: 21 })
 		.primaryKey()
-		.$defaultFn(() => nanoid(21)),
+		.$defaultFn(() => ulid()),
 	robloxId: text("roblox_id").notNull(),
 	createdById: varchar("created_by_id")
 		.notNull()
