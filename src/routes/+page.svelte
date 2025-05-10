@@ -1,14 +1,29 @@
 <script lang="ts">
-	import { enhance } from "$app/forms";
-	import type { PageProps } from "./$types";
+	import { applyAction, enhance } from "$app/forms";
+	import { createQuery, useQueryClient } from "@tanstack/svelte-query";
+	import { orpc } from "$lib/orpc";
 
-	let { data }: PageProps = $props();
+	const queryClient = useQueryClient();
+
+	const query = createQuery(() => orpc.auth.getSession.queryOptions());
 </script>
 
 <h1 class="text-4xl">hello world</h1>
-{#if data.subject}
-	<p>hello, {data.subject.username}</p>
-	<form use:enhance method="POST" action="/auth?/logout">
+{#if query.data}
+	<p>hello, {query.data.username}</p>
+	<form
+		use:enhance={async () => {
+			return async ({ result }) => {
+				await queryClient.invalidateQueries({
+					queryKey: orpc.auth.getSession.key()
+				});
+
+				await applyAction(result);
+			};
+		}}
+		method="POST"
+		action="/auth?/logout"
+	>
 		<button type="submit">log out</button>
 	</form>
 {:else}

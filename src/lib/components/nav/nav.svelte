@@ -8,8 +8,12 @@
 	import { applyAction, enhance } from "$app/forms";
 	import { toast } from "svelte-sonner";
 	import { page } from "$app/state";
+	import { useQueryClient } from "@tanstack/svelte-query";
+	import { orpc } from "$lib/orpc";
 
 	let sheetOpen = $state(false);
+
+	const queryClient = useQueryClient();
 
 	const links: Link[] = [
 		{
@@ -91,6 +95,10 @@
 									break;
 								}
 							}
+
+							await queryClient.invalidateQueries({
+								queryKey: orpc.auth.getSession.key()
+							});
 
 							await applyAction(result);
 						};

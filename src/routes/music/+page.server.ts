@@ -6,8 +6,9 @@ import { valibot } from "sveltekit-superforms/adapters";
 import { createMusicIdSchema } from "./form.js";
 import type { Actions } from "./$types.js";
 import { fail } from "@sveltejs/kit";
-import { musicIds } from "$lib/server/schema/music-id.js";
 import { defineMeta } from "$lib/meta.js";
+import { call } from "@orpc/server";
+import { createMusicId } from "../../router/music.js";
 
 export async function load({ parent, cookies }) {
 	const idFormatCookie = cookies.get("id_format") ?? `"DEFAULT"`;
@@ -56,27 +57,35 @@ export const actions: Actions = {
 			);
 		}
 
-		await db
-			.insert(musicIds)
-			.values({
+		await call(
+			createMusicId,
+			{
 				name: form.data.name,
-				robloxId: form.data.id,
-				createdById: locals.session.id,
-				verified: locals.session.permissions.includes("CREATE_MUSIC_IDS")
-			})
-			.catch((err) => {
-				console.error(err);
-				return message(
-					form,
-					{
-						type: "error",
-						text: "could not create the music id"
-					},
-					{
-						status: 500
+				id: form.data.id,
+				tags: form.data.tags
+			},
+			{
+				context: {
+					db: db,
+					session: {
+						name: locals.session.username,
+						...locals.session
 					}
-				);
-			});
+				}
+			}
+		).catch((err) => {
+			console.error(err);
+			return message(
+				form,
+				{
+					type: "error",
+					text: "could not create the music id"
+				},
+				{
+					status: 500
+				}
+			);
+		});
 
 		return message(form, {
 			text: "successfully created the music id",

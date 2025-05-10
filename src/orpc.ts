@@ -1,4 +1,8 @@
 import { os } from "@orpc/server";
-import { dbProviderMiddleware } from "./middlewares/db";
+import type { Context } from "$lib/context";
 
-export const pub = os.use(dbProviderMiddleware);
+const or = os.$context<Context>();
+
+export const pub = or;
+
+export { or };

@@ -9,6 +9,8 @@
 	import { TrashIcon } from "lucide-svelte";
 	import * as Card from "$lib/components/ui/card/index.js";
 	import { dev } from "$app/environment";
+	import { useQueryClient } from "@tanstack/svelte-query";
+	import { orpc } from "$lib/orpc";
 
 	let {
 		subject,
@@ -18,8 +20,17 @@
 		createMusicIdForm: SuperValidated<Infer<CreateMusicIdSchema>>;
 	} = $props();
 
+	const queryClient = useQueryClient();
+
 	const form = superForm(createMusicIdForm, {
-		validators: valibotClient(createMusicIdSchema)
+		validators: valibotClient(createMusicIdSchema),
+		onResult: (res) => {
+			if ((res.result.type = "success")) {
+				queryClient.invalidateQueries({
+					queryKey: orpc.music.getMusicIds.key()
+				});
+			}
+		}
 	});
 
 	const { form: formData, enhance, submitting, message, errors } = form;

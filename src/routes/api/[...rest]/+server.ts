@@ -4,7 +4,9 @@ import type { RequestHandler } from "./$types";
 import { ZodSmartCoercionPlugin, ZodToJsonSchemaConverter } from "@orpc/zod";
 import { onError } from "@orpc/server";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
-import { CORSPlugin } from "@orpc/server/plugins";
+import { CORSPlugin, ResponseHeadersPlugin } from "@orpc/server/plugins";
+import { createContext } from "$lib/context";
+import { experimental_ValibotToJsonSchemaConverter } from "@orpc/valibot";
 
 const handler = new OpenAPIHandler(router, {
 	interceptors: [
@@ -19,7 +21,10 @@ const handler = new OpenAPIHandler(router, {
 		}),
 		new ZodSmartCoercionPlugin(),
 		new OpenAPIReferencePlugin({
-			schemaConverters: [new ZodToJsonSchemaConverter()],
+			schemaConverters: [
+				new ZodToJsonSchemaConverter(),
+				new experimental_ValibotToJsonSchemaConverter()
+			],
 			specGenerateOptions: {
 				info: {
 					title: "gurkan's website api",
@@ -27,13 +32,18 @@ const handler = new OpenAPIHandler(router, {
 				},
 				security: []
 			}
-		})
+		}),
+		new ResponseHeadersPlugin()
 	]
 });
 
-const handle: RequestHandler = async ({ request }) => {
-	const { response } = await handler.handle(request, {
-		prefix: "/api"
+const handle: RequestHandler = async (event) => {
+	const context = await createContext({
+		event: event
+	});
+	const { response } = await handler.handle(event.request, {
+		prefix: "/api",
+		context: context
 	});
 
 	return response ?? new Response("Not Found", { status: 404 });

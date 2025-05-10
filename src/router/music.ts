@@ -3,6 +3,10 @@ import { pub } from "../orpc";
 import { eq } from "drizzle-orm";
 import { musicIds } from "$lib/server/schema/music-id";
 import { withCursorPagination } from "drizzle-pagination";
+import { authed } from "../middlewares/auth";
+import { createMusicIdSchema } from "../routes/music/form";
+import { ORPCError } from "@orpc/client";
+import * as v from "valibot";
 
 export const getMusicIds = pub
 	.route({
@@ -73,5 +77,39 @@ export const getMusicIds = pub
 		return {
 			data: results,
 			nextCursor: results.length ? results[results.length - 1].id : null
+		};
+	});
+
+export const createMusicId = authed
+	.route({
+		method: "POST",
+		path: "/music/create",
+		summary: "create a music id",
+		tags: ["music-id"]
+	})
+	.input(createMusicIdSchema)
+	.output(
+		v.object({
+			message: v.string()
+		})
+	)
+	.handler(async ({ input, context }) => {
+		await context.db
+			.insert(musicIds)
+			.values({
+				name: input.name,
+				robloxId: input.id,
+				createdById: context.session.id,
+				verified: context.session.permissions.includes("CREATE_MUSIC_IDS")
+			})
+			.catch((err) => {
+				console.error(err);
+				throw new ORPCError("INTERNAL_SERVER_ERROR", {
+					message: "could not create the music id"
+				});
+			});
+
+		return {
+			message: "ok"
 		};
 	});
