@@ -1,10 +1,12 @@
-import * as v from "valibot";
+import { type } from "arktype";
 
-export const permissionsSchema = v.picklist([
+export const options = [
 	"DEFAULT",
 	"CREATE_MUSIC_IDS",
 	"MANAGE_MUSIC_IDS",
 	"CREATE_SHORT_LINKS"
-]);
+] as const;
 
-export type Permission = v.InferOutput<typeof permissionsSchema>;
+export const Permissions = type("===", options);
+
+export type Permission = type.infer<typeof Permissions>;

@@ -1,16 +1,16 @@
 import { createORPCClient } from "@orpc/client";
 import { RPCLink } from "@orpc/client/fetch";
-import type { RouterClient } from "@orpc/server";
-import type { router } from "../router";
-import { createORPCSvelteQueryUtils } from "@orpc/svelte-query";
+import { RouterClient } from "@orpc/server";
+import { router } from "~/server/router";
+import { createORPCSolidQueryUtils } from "@orpc/solid-query";
 
 const rpcLink = new RPCLink({
 	url: new URL(
 		"/rpc",
-		typeof window !== "undefined" ? window.location.href : "http://localhost:5173"
+		typeof window !== "undefined" ? window.location.href : "http://localhost:3000"
 	)
 });
 
 export const client: RouterClient<typeof router> = createORPCClient(rpcLink);
 
-export const orpc = createORPCSvelteQueryUtils(client);
+export const orpc = createORPCSolidQueryUtils(client);

@@ -1,5 +1,7 @@
-import * as v from "valibot";
+import { type } from "arktype";
 
-export const rolesSchema = v.picklist(["USER", "ADMIN"]);
+export const options = ["USER", "ADMIN"] as const;
 
-export type Role = v.InferOutput<typeof rolesSchema>;
+export const Roles = type("===", options);
+
+export type Role = type.infer<typeof Roles>;

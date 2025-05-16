@@ -4,5 +4,5 @@ import { env } from "std-env";
 export default defineConfig({
 	dialect: "postgresql",
 	dbCredentials: { url: env.DATABASE_URL! },
-	schema: "./src/lib/server/schema/**"
+	schema: "./src/server/schema/**"
 });
