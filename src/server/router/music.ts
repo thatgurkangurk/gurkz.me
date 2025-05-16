@@ -12,31 +12,31 @@ export const getMusicIds = pub
 		tags: ["music-id"]
 	})
 	.input(
-        type({
-            limit: type.keywords.number.integer.atLeast(1).atMost(50).default(10),
-            cursor: "string | null | undefined",
-            verifiedOnly: type.keywords.boolean.default(true)
-        })
+		type({
+			limit: type.keywords.number.integer.atLeast(1).atMost(50).default(10),
+			cursor: "string | null | undefined",
+			verifiedOnly: type.keywords.boolean.default(true)
+		})
 	)
 	.output(
-        type({
-            nextCursor: "string | null | undefined",
-            data: type({
-                id: "string",
-                name: "string",
-                robloxId: "string",
-                createdById: "string",
-                created: "Date",
-                working: "boolean",
-                verified: "boolean",
-                tags: "string[]",
-                creator: type({
-                    id: "string",
-                    name: "string",
-                    image: "string | null"
-                })
-            }).array()
-        })
+		type({
+			nextCursor: "string | null | undefined",
+			data: type({
+				id: "string",
+				name: "string",
+				robloxId: "string",
+				createdById: "string",
+				created: "Date",
+				working: "boolean",
+				verified: "boolean",
+				tags: "string[]",
+				creator: type({
+					id: "string",
+					name: "string",
+					image: "string | null"
+				})
+			}).array()
+		})
 	)
 	.handler(async ({ context, input }) => {
 		const { cursor } = input;

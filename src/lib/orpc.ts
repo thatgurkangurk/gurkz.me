@@ -5,10 +5,10 @@ import { router } from "~/server/router";
 import { createORPCSolidQueryUtils } from "@orpc/solid-query";
 
 const rpcLink = new RPCLink({
-    url: new URL(
-        "/rpc",
+	url: new URL(
+		"/rpc",
 		typeof window !== "undefined" ? window.location.href : "http://localhost:3000"
-    )
+	)
 });
 
 export const client: RouterClient<typeof router> = createORPCClient(rpcLink);

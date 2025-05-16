@@ -1,9 +1,6 @@
 import { type } from "arktype";
 
-export const options = [
-  "USER",
-  "ADMIN"
-] as const;
+export const options = ["USER", "ADMIN"] as const;
 
 export const Roles = type("===", options);
 

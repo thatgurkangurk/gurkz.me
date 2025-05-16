@@ -6,17 +6,19 @@ import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
 import { SolidQueryDevtools } from "@tanstack/solid-query-devtools";
 
 export default function App() {
-  const queryClient = new QueryClient();
-  return (
-    <Router root={(props) => 
-        <Suspense>
-          <QueryClientProvider client={queryClient}>
-              {props.children}
-            <SolidQueryDevtools />
-          </QueryClientProvider>
-        </Suspense>
-    }>
-      <FileRoutes />
-    </Router>
-  );
+	const queryClient = new QueryClient();
+	return (
+		<Router
+			root={(props) => (
+				<Suspense>
+					<QueryClientProvider client={queryClient}>
+						{props.children}
+						<SolidQueryDevtools />
+					</QueryClientProvider>
+				</Suspense>
+			)}
+		>
+			<FileRoutes />
+		</Router>
+	);
 }

@@ -6,14 +6,14 @@ import { db } from "~/server/db";
 const handler = new RPCHandler(router);
 
 async function handle({ request }: APIEvent) {
-    const { response } = await handler.handle(request, {
-        prefix: "/rpc",
-        context: {
-            db: db
-        }
-    });
+	const { response } = await handler.handle(request, {
+		prefix: "/rpc",
+		context: {
+			db: db
+		}
+	});
 
-    return response ?? new Response("Not Found", { status: 404 });
+	return response ?? new Response("Not Found", { status: 404 });
 }
 
 export const GET = handle;
