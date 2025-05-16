@@ -1,6 +1,25 @@
-import { useInfiniteQuery } from "@tanstack/solid-query";
+import { RouteDefinition } from "@solidjs/router";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/solid-query";
 import { createSignal, For, Show } from "solid-js";
 import { orpc } from "~/lib/orpc";
+
+export const route = {
+	load: () => {
+		const queryClient = useQueryClient();
+
+		queryClient.prefetchInfiniteQuery(
+			orpc.music.getMusicIds.infiniteOptions({
+				input: (pageParam: string | null) => ({
+					cursor: pageParam,
+					limit: 10,
+					verifiedOnly: true
+				}),
+				getNextPageParam: (lastPage) => lastPage.nextCursor,
+				initialPageParam: null
+			})
+		)
+	}
+} satisfies RouteDefinition;
 
 export default function Home() {
 	const query = useInfiniteQuery(() =>
