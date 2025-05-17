@@ -14,6 +14,7 @@
 		"@orpc/openapi": "^1.2.0",
 		"@orpc/server": "^1.2.0",
 		"@orpc/solid-query": "^1.2.0",
+		"@solid-primitives/storage": "^4.3.2",
 		"@solidjs/router": "^0.15.3",
 		"@solidjs/start": "^1.1.0",
 		"@t3-oss/env-core": "^0.13.4",

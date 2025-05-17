@@ -1,6 +1,7 @@
 import { RouteDefinition } from "@solidjs/router";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/solid-query";
 import { createSignal, For, Show } from "solid-js";
+import { cookieStorage, makePersisted } from "@solid-primitives/storage"
 import { orpc } from "~/lib/orpc";
 
 export const route = {
@@ -21,7 +22,21 @@ export const route = {
 	}
 } satisfies RouteDefinition;
 
+function formatId(id: string, format: "DEFAULT" | "TRAITOR_TOWN"): string {
+	switch (format) {
+		case "DEFAULT":
+			return id;
+		case "TRAITOR_TOWN":
+			return `s/${id}`
+	}
+}
+
 export default function Home() {
+	const [format, setFormat] = makePersisted(createSignal<"DEFAULT" | "TRAITOR_TOWN">("DEFAULT"), {
+		storage: cookieStorage,
+		name: "id_format"
+	});
+
 	const query = useInfiniteQuery(() =>
 		orpc.music.getMusicIds.infiniteOptions({
 			input: (pageParam: string | null) => ({
@@ -39,7 +54,14 @@ export default function Home() {
 				<h3>hello</h3>
 				<p>i'm restructuring a bit so the website will be a bit bare-bones for a while</p>
 			</div>
-			<Show when={query.isFetched && query.data}>
+
+			<div class="flex gap-2 bg-gray-200 w-fit p-2">
+				<button disabled={format() === "DEFAULT"} class="p-2 bg-green-200 disabled:bg-green-500" onClick={() => setFormat("DEFAULT")}>default</button>
+				<button disabled={format() === "TRAITOR_TOWN"} class="p-2 bg-green-200 disabled:bg-green-500" onClick={() => setFormat("TRAITOR_TOWN")}>traitor</button>
+			</div>
+
+
+			<Show when={query.isFetched && query.data} fallback={<p>loading...</p>}>
 				<For each={query.data?.pages}>
 					{(page) => (
 						<For each={page.data}>
@@ -48,11 +70,11 @@ export default function Home() {
 
 								return (
 									<p>
-										{musicId.name} - {musicId.robloxId}
+										{musicId.name} - {formatId(musicId.robloxId, format())}
 										<button
 											onClick={() => {
 												setIsCopying(true);
-												navigator.clipboard.writeText(musicId.robloxId);
+												navigator.clipboard.writeText(formatId(musicId.robloxId, format()));
 												setTimeout(() => {
 													setIsCopying(false);
 												}, 300);
