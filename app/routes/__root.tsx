@@ -1,4 +1,5 @@
 import { Header } from "../components/header";
+import { QueryProvider } from "../components/tanstack-query";
 import styles from "../styles/app.css?url";
 import { Outlet, createRootRoute } from "@tanstack/solid-router";
 
@@ -29,9 +30,9 @@ export const Route = createRootRoute({
 
 function RootComponent() {
 	return (
-		<>
+		<QueryProvider>
 			<Header />
 			<Outlet />
-		</>
+		</QueryProvider>
 	);
 }
