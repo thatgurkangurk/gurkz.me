@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { pub } from "../orpc";
-import { musicIds } from "../schema/music-id";
+import { musicIds } from "../../../app/server/schema/music-id";
 import { type } from "arktype";
 import { withCursorPagination } from "drizzle-pagination";
 

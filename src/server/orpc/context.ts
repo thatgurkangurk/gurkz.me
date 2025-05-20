@@ -1,5 +1,5 @@
 import { ResponseHeadersPluginContext } from "@orpc/server/plugins";
-import { db } from "../db";
+import { db } from "../../../app/server/db";
 
 export async function createContext() {
 	return {
