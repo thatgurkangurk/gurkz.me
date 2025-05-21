@@ -1,7 +1,19 @@
+import { createServerFn } from "@tanstack/solid-start";
 import { Header } from "../components/header";
 import { QueryProvider } from "../components/tanstack-query";
+import { getSession } from "../server/auth";
 import styles from "../styles/app.css?url";
 import { Outlet, createRootRoute } from "@tanstack/solid-router";
+
+export const getUser = createServerFn({
+	method: "GET"
+})
+	.type("dynamic")
+	.handler(async () => {
+		const session = await getSession();
+
+		return session;
+	});
 
 export const Route = createRootRoute({
 	head: () => ({
@@ -24,8 +36,10 @@ export const Route = createRootRoute({
 			}
 		]
 	}),
+	beforeLoad: () => getUser(),
 	notFoundComponent: () => <p>not found, sorry :(</p>,
-	component: RootComponent
+	component: RootComponent,
+	wrapInSuspense: true
 });
 
 function RootComponent() {

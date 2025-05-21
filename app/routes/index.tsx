@@ -5,6 +5,8 @@ import { createSignal, For, Show } from "solid-js";
 import { makePersisted } from "@solid-primitives/storage";
 import { isServer } from "solid-js/web";
 import localforage from "localforage";
+import { getUser } from "./__root";
+import { signIn, signOut } from "../actions/auth";
 
 export const Route = createFileRoute("/")({
 	head: () => ({
@@ -14,6 +16,7 @@ export const Route = createFileRoute("/")({
 			}
 		]
 	}),
+	loader: () => getUser(),
 	component: RouteComponent
 });
 
@@ -42,10 +45,26 @@ function RouteComponent() {
 			initialPageParam: null
 		})
 	);
+	const data = Route.useLoaderData();
 
 	return (
 		<>
 			<p>hello, world!</p>
+			<Show
+				when={data()}
+				fallback={
+					<>
+						<form action={signIn.url} method="post">
+							<button type="submit">sign in</button>
+						</form>
+					</>
+				}
+			>
+				<p>hi, {data()?.username}</p>
+				<form action={signOut.url} method="post">
+					<button type="submit">sign out</button>
+				</form>
+			</Show>
 
 			<div class="flex gap-2 bg-gray-200 w-fit p-2">
 				<button
