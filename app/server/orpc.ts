@@ -1,7 +1,7 @@
 import { os } from "@orpc/server";
-import { Context } from "./orpc/context";
+import { authMiddleware, dbMiddleware } from "./orpc/middleware";
 
-const or = os.$context<Context>();
+const or = os.use(dbMiddleware).use(authMiddleware);
 
 export const pub = or;
 

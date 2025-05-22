@@ -1,16 +1,18 @@
 import { createServerFn } from "@tanstack/solid-start";
 import { Header } from "../components/header";
 import { QueryProvider } from "../components/tanstack-query";
-import { getSession } from "../server/auth";
 import styles from "../styles/app.css?url";
 import { Outlet, createRootRoute } from "@tanstack/solid-router";
+import { orpc } from "../lib/orpc";
 
 export const getUser = createServerFn({
 	method: "GET"
 })
 	.type("dynamic")
-	.handler(async () => {
-		const session = await getSession();
+	.handler(async ({ signal }) => {
+		const session = await orpc.auth.getUser.call(null, {
+			signal: signal
+		});
 
 		return session;
 	});

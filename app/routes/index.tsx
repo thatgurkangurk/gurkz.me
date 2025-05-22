@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from "@tanstack/solid-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/solid-query";
 import { createFileRoute } from "@tanstack/solid-router";
 import { orpc } from "../lib/orpc";
 import { createSignal, For, Show } from "solid-js";
@@ -46,12 +46,19 @@ function RouteComponent() {
 		})
 	);
 	const data = Route.useLoaderData();
+	const userQuery = useQuery(() =>
+		orpc.auth.getUser.queryOptions({
+			initialData: {
+				user: data().user
+			}
+		})
+	);
 
 	return (
 		<>
 			<p>hello, world!</p>
 			<Show
-				when={data()}
+				when={userQuery.isSuccess && userQuery.data.user}
 				fallback={
 					<>
 						<form action={signIn.url} method="post">
@@ -60,7 +67,7 @@ function RouteComponent() {
 					</>
 				}
 			>
-				<p>hi, {data()?.username}</p>
+				<p>hi, {userQuery.data?.user?.username}</p>
 				<form action={signOut.url} method="post">
 					<button type="submit">sign out</button>
 				</form>

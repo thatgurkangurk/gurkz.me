@@ -28,7 +28,6 @@ export const signIn = createServerFn({
 
 	const headers = getHeaders();
 	const host = headers.host;
-	console.log(host);
 	const protocol = host?.includes("localhost") ? "http" : "https";
 	const { url } = await client.authorize(`${protocol}://${host}/api/callback`, "code");
 	await sendRedirect(url, 302);

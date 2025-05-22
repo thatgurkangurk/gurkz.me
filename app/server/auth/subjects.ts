@@ -9,7 +9,7 @@ export const userSubject = z.object({
 
 export const user = userSubject.extend({
 	email: z.nullable(z.email()),
-	emailVerified: z.nullable(z.string()),
+	emailVerified: z.nullable(z.date()),
 	image: z.nullable(z.string()),
 	permissions: z.array(Permissions),
 	role: Roles
