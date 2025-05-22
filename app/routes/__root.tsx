@@ -47,8 +47,10 @@ export const Route = createRootRoute({
 function RootComponent() {
 	return (
 		<QueryProvider>
-			<Header />
-			<Outlet />
+			<div class="bg-black text-white min-h-screen">
+				<Header />
+				<Outlet />
+			</div>
 		</QueryProvider>
 	);
 }
