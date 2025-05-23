@@ -1,11 +1,9 @@
 import { QueryClient, useInfiniteQuery } from "@tanstack/solid-query";
 import { createFileRoute } from "@tanstack/solid-router";
 import { orpc } from "../lib/orpc";
-import { makePersisted } from "@solid-primitives/storage";
 import { createSignal, For, Show } from "solid-js";
-import localforage from "localforage";
-import { isServer } from "solid-js/web";
 import { createServerFn } from "@tanstack/solid-start";
+import { FormatProvider, useMusicIdFormat } from "../lib/music";
 
 const prefetchMusicIds = createServerFn().handler(async () => {
 	const queryClient = new QueryClient();
@@ -34,24 +32,18 @@ export const Route = createFileRoute("/music")({
 		]
 	}),
 	loader: () => prefetchMusicIds(),
-	component: RouteComponent
+	component: () => {
+		return (
+			<FormatProvider initial="DEFAULT">
+				<RouteComponent />
+			</FormatProvider>
+		);
+	}
 });
 
-function formatId(id: string, format: "DEFAULT" | "TRAITOR_TOWN"): string {
-	switch (format) {
-		case "DEFAULT":
-			return id;
-		case "TRAITOR_TOWN":
-			return `s/${id}`;
-	}
-}
-
 function RouteComponent() {
+	const { format, setFormat, formatId } = useMusicIdFormat();
 	const data = Route.useLoaderData();
-	const [format, setFormat] = makePersisted(createSignal<"DEFAULT" | "TRAITOR_TOWN">("DEFAULT"), {
-		storage: !isServer ? localforage : undefined,
-		name: "id_format"
-	});
 	const query = useInfiniteQuery(() =>
 		orpc.music.getMusicIds.infiniteOptions({
 			input: (pageParam: string | null) => ({
@@ -92,11 +84,11 @@ function RouteComponent() {
 
 								return (
 									<p>
-										{musicId.name} - {formatId(musicId.robloxId, format())}
+										{musicId.name} - {formatId(musicId.robloxId)}
 										<button
 											onClick={() => {
 												setIsCopying(true);
-												navigator.clipboard.writeText(formatId(musicId.robloxId, format()));
+												navigator.clipboard.writeText(formatId(musicId.robloxId));
 												setTimeout(() => {
 													setIsCopying(false);
 												}, 300);

@@ -10,6 +10,7 @@
         "@orpc/openapi": "^1.2.0",
         "@orpc/server": "^1.2.0",
         "@orpc/solid-query": "^1.2.0",
+        "@solid-primitives/context": "^0.3.1",
         "@solid-primitives/storage": "^4.3.2",
         "@solidjs/router": "^0.15.3",
         "@solidjs/start": "^1.1.0",
@@ -385,6 +386,8 @@
     "@solid-devtools/shared": ["@solid-devtools/shared@0.19.1", "", { "dependencies": { "@nothing-but/utils": "~0.17.0", "@solid-primitives/event-listener": "^2.4.0", "@solid-primitives/media": "^2.3.0", "@solid-primitives/refs": "^1.1.0", "@solid-primitives/rootless": "^1.5.0", "@solid-primitives/scheduled": "^1.5.0", "@solid-primitives/static-store": "^0.1.0", "@solid-primitives/styles": "^0.1.0", "@solid-primitives/utils": "^6.3.0" }, "peerDependencies": { "solid-js": "^1.9.0" } }, "sha512-bkPrp3dlDveEHqeOyO4v6XqikKCla0A4bGQ3uoYiilPv54LcDUKqrEvQjeSfw26oO8QbGSChetY8OUpT727yug=="],
 
     "@solid-primitives/bounds": ["@solid-primitives/bounds@0.1.1", "", { "dependencies": { "@solid-primitives/event-listener": "^2.4.1", "@solid-primitives/resize-observer": "^2.1.1", "@solid-primitives/static-store": "^0.1.1", "@solid-primitives/utils": "^6.3.1" }, "peerDependencies": { "solid-js": "^1.6.12" } }, "sha512-b4s8JClkRq2RQlU3K4qeCVASdtct5gfg3HNfWGeD7oPjWlSkp2RyDHJwt9ZtPaXOEOIHhNBbLgjtLax/4B6VUQ=="],
+
+    "@solid-primitives/context": ["@solid-primitives/context@0.3.1", "", { "peerDependencies": { "solid-js": "^1.6.12" } }, "sha512-Be8wI8G2XJdH3vivVDxmOlFai5j0ojmvcTqwCiAazlSfLaqQaLACAR8dePBxuG49MzMBerZfikWeI5jpREp0DA=="],
 
     "@solid-primitives/event-listener": ["@solid-primitives/event-listener@2.4.1", "", { "dependencies": { "@solid-primitives/utils": "^6.3.1" }, "peerDependencies": { "solid-js": "^1.6.12" } }, "sha512-Xc/lBCeuh9LwzR4lYbMDtopwWK7N9b4o+FmI4uoI8DOtVGYi0Ip20DG8PtwHk+g31lHgvwtFFVKfnUx2UaqZJg=="],
 
