@@ -11,9 +11,16 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as MusicImport } from './routes/music'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
+
+const MusicRoute = MusicImport.update({
+  id: '/music',
+  path: '/music',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -32,6 +39,13 @@ declare module '@tanstack/solid-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/music': {
+      id: '/music'
+      path: '/music'
+      fullPath: '/music'
+      preLoaderRoute: typeof MusicImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -39,32 +53,37 @@ declare module '@tanstack/solid-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/music': typeof MusicRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/music': typeof MusicRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/music': typeof MusicRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/music'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/music'
+  id: '__root__' | '/' | '/music'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  MusicRoute: typeof MusicRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  MusicRoute: MusicRoute,
 }
 
 export const routeTree = rootRoute
@@ -77,11 +96,15 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/",
+        "/music"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/music": {
+      "filePath": "music.tsx"
     }
   }
 }

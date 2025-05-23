@@ -38,7 +38,6 @@ export const Route = createRootRoute({
 			}
 		]
 	}),
-	beforeLoad: () => getUser(),
 	notFoundComponent: () => <p>not found, sorry :(</p>,
 	component: RootComponent,
 	wrapInSuspense: true
