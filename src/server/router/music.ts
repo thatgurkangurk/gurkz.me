@@ -1,9 +1,8 @@
 import { eq } from "drizzle-orm";
-import { pub } from "../server/orpc";
-import { musicIds } from "../server/schema/music-id";
+import { pub } from "../orpc";
+import { musicIds } from "../schema/music-id";
 import { type } from "arktype";
 import { withCursorPagination } from "drizzle-pagination";
-import { db } from "../server/db";
 
 export const getMusicIds = pub
 	.route({
@@ -39,10 +38,10 @@ export const getMusicIds = pub
 			}).array()
 		})
 	)
-	.handler(async ({ input }) => {
+	.handler(async ({ context, input }) => {
 		const { cursor } = input;
 
-		const results = await db.query.musicIds.findMany({
+		const results = await context.db.query.musicIds.findMany({
 			...withCursorPagination({
 				where: input.verifiedOnly ? eq(musicIds.verified, true) : undefined,
 				limit: input.limit,

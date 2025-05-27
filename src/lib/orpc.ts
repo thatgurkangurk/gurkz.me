@@ -1,7 +1,7 @@
 import { createORPCClient } from "@orpc/client";
 import { RPCLink } from "@orpc/client/fetch";
 import { RouterClient } from "@orpc/server";
-import { router } from "../../app/router/index";
+import { router } from "~/server/router";
 import { createORPCSolidQueryUtils } from "@orpc/solid-query";
 
 const rpcLink = new RPCLink({

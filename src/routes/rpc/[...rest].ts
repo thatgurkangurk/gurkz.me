@@ -1,7 +1,7 @@
 import type { APIEvent } from "@solidjs/start/server";
 import { RPCHandler } from "@orpc/server/fetch";
-import { router } from "../../../app/router";
-import { db } from "../../../app/server/db";
+import { router } from "~/server/router";
+import { db } from "~/server/db";
 
 const handler = new RPCHandler(router);
 
