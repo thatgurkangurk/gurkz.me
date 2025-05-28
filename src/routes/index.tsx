@@ -1,14 +1,14 @@
 import { RouteDefinition } from "@solidjs/router";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/solid-query";
 import { createSignal, For, Show } from "solid-js";
-import { cookieStorage, makePersisted } from "@solid-primitives/storage"
+import { cookieStorage, makePersisted } from "@solid-primitives/storage";
 import { orpc } from "~/lib/orpc";
 
 export const route = {
-	load: () => {
+	preload: async () => {
 		const queryClient = useQueryClient();
 
-		queryClient.prefetchInfiniteQuery(
+		await queryClient.ensureInfiniteQueryData(
 			orpc.music.getMusicIds.infiniteOptions({
 				input: (pageParam: string | null) => ({
 					cursor: pageParam,
@@ -18,7 +18,7 @@ export const route = {
 				getNextPageParam: (lastPage) => lastPage.nextCursor,
 				initialPageParam: null
 			})
-		)
+		);
 	}
 } satisfies RouteDefinition;
 
@@ -27,7 +27,7 @@ function formatId(id: string, format: "DEFAULT" | "TRAITOR_TOWN"): string {
 		case "DEFAULT":
 			return id;
 		case "TRAITOR_TOWN":
-			return `s/${id}`
+			return `s/${id}`;
 	}
 }
 
@@ -56,12 +56,23 @@ export default function Home() {
 			</div>
 
 			<div class="flex gap-2 bg-gray-200 w-fit p-2">
-				<button disabled={format() === "DEFAULT"} class="p-2 bg-green-200 disabled:bg-green-500" onClick={() => setFormat("DEFAULT")}>default</button>
-				<button disabled={format() === "TRAITOR_TOWN"} class="p-2 bg-green-200 disabled:bg-green-500" onClick={() => setFormat("TRAITOR_TOWN")}>traitor</button>
+				<button
+					disabled={format() === "DEFAULT"}
+					class="p-2 bg-green-200 disabled:bg-green-500"
+					onClick={() => setFormat("DEFAULT")}
+				>
+					default
+				</button>
+				<button
+					disabled={format() === "TRAITOR_TOWN"}
+					class="p-2 bg-green-200 disabled:bg-green-500"
+					onClick={() => setFormat("TRAITOR_TOWN")}
+				>
+					traitor
+				</button>
 			</div>
 
-
-			<Show when={query.isFetched && query.data} fallback={<p>loading...</p>}>
+			<Show when={query.isSuccess} fallback={<p>loading...</p>}>
 				<For each={query.data?.pages}>
 					{(page) => (
 						<For each={page.data}>
