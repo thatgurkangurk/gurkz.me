@@ -45,7 +45,8 @@ export default function Home() {
 				verifiedOnly: true
 			}),
 			getNextPageParam: (lastPage) => lastPage.nextCursor,
-			initialPageParam: null
+			initialPageParam: null,
+			deferStream: true
 		})
 	);
 	return (
