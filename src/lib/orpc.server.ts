@@ -1,6 +1,6 @@
 import { createRouterClient } from "@orpc/server";
 import { getRequestEvent, isServer } from "solid-js/web";
-import { db } from "~/server/db";
+import { getDB } from "~/server/db";
 import { router } from "~/server/router";
 
 if (!isServer) {
@@ -17,6 +17,7 @@ globalThis.$client = createRouterClient(router, {
 	 */
 	context: async () => {
 		const headers = getRequestEvent()?.request.headers;
+		const db = getDB();
 
 		return {
 			headers,

@@ -1,7 +1,7 @@
 import type { APIEvent } from "@solidjs/start/server";
 import { RPCHandler } from "@orpc/server/fetch";
 import { router } from "~/server/router";
-import { db } from "~/server/db";
+import { getDB } from "~/server/db";
 
 const handler = new RPCHandler(router);
 
@@ -9,7 +9,7 @@ async function handle({ request }: APIEvent) {
 	const { response } = await handler.handle(request, {
 		prefix: "/rpc",
 		context: {
-			db: db
+			db: getDB()
 		}
 	});
 

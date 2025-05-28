@@ -1,4 +1,5 @@
-import { drizzle } from "drizzle-orm/bun-sql";
+"use server";
+import { BunSQLDatabase, drizzle } from "drizzle-orm/bun-sql";
 import * as musicSchema from "./schema/music-id";
 import * as permissionSchema from "./schema/permission";
 import * as roleSchema from "./schema/role";
@@ -16,4 +17,16 @@ export const schema = {
 	...shortLinkSchema
 };
 
-export const db = drizzle(env.DATABASE_URL, { schema: schema });
+declare global {
+	// eslint-disable-next-line no-var
+	var $db: BunSQLDatabase<typeof schema> | undefined;
+}
+
+export function getDB(): BunSQLDatabase<typeof schema> {
+	if (!globalThis.$db) {
+		globalThis.$db = drizzle(env.DATABASE_URL, { schema: schema });
+		return globalThis.$db;
+	}
+
+	return globalThis.$db;
+}
