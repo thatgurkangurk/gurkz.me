@@ -1,11 +1,11 @@
-if (!isServer) {
-	throw new Error("This file should not be imported in the browser");
-}
-
 import { createRouterClient } from "@orpc/server";
 import { getRequestEvent, isServer } from "solid-js/web";
 import { db } from "~/server/db";
 import { router } from "~/server/router";
+
+if (!isServer) {
+	throw new Error("This file should not be imported in the browser");
+}
 
 globalThis.$client = createRouterClient(router, {
 	/**
