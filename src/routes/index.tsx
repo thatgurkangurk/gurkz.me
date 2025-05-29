@@ -1,26 +1,7 @@
-import { RouteDefinition } from "@solidjs/router";
-import { useInfiniteQuery, useQueryClient } from "@tanstack/solid-query";
+import { useInfiniteQuery } from "@tanstack/solid-query";
 import { createSignal, For, Show } from "solid-js";
 import { cookieStorage, makePersisted } from "@solid-primitives/storage";
 import { orpc } from "~/lib/orpc";
-
-export const route = {
-	preload: async () => {
-		const queryClient = useQueryClient();
-
-		await queryClient.ensureInfiniteQueryData(
-			orpc.music.getMusicIds.infiniteOptions({
-				input: (pageParam: string | null) => ({
-					cursor: pageParam,
-					limit: 10,
-					verifiedOnly: true
-				}),
-				getNextPageParam: (lastPage) => lastPage.nextCursor,
-				initialPageParam: null
-			})
-		);
-	}
-} satisfies RouteDefinition;
 
 function formatId(id: string, format: "DEFAULT" | "TRAITOR_TOWN"): string {
 	switch (format) {
@@ -45,7 +26,8 @@ export default function Home() {
 				verifiedOnly: true
 			}),
 			getNextPageParam: (lastPage) => lastPage.nextCursor,
-			initialPageParam: null
+			initialPageParam: null,
+			deferStream: true
 		})
 	);
 	return (
