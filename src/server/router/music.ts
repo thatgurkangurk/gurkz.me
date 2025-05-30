@@ -3,6 +3,8 @@ import { pub } from "../orpc";
 import { musicIds } from "../schema/music-id";
 import { type } from "arktype";
 import { withCursorPagination } from "drizzle-pagination";
+import { z } from "zod/v4";
+import { MusicId } from "~/lib/schema/music";
 
 export const getMusicIds = pub
 	.route({
@@ -19,23 +21,9 @@ export const getMusicIds = pub
 		})
 	)
 	.output(
-		type({
-			nextCursor: "string | null | undefined",
-			data: type({
-				id: "string",
-				name: "string",
-				robloxId: "string",
-				createdById: "string",
-				created: "Date",
-				working: "boolean",
-				verified: "boolean",
-				tags: "string[]",
-				creator: type({
-					id: "string",
-					name: "string",
-					image: "string | null"
-				})
-			}).array()
+		z.object({
+			nextCursor: z.string().nullish(),
+			data: z.array(MusicId)
 		})
 	)
 	.handler(async ({ context, input }) => {
