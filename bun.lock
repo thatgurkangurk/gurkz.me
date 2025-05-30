@@ -20,6 +20,7 @@
         "drizzle-pagination": "^1.0.12",
         "nanoid": "^5.1.5",
         "solid-js": "^1.9.5",
+        "solid-use": "^0.9.1",
         "std-env": "^3.9.0",
         "ulid": "^3.0.0",
         "vinxi": "^0.5.3",

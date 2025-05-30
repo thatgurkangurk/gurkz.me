@@ -2,6 +2,8 @@ import { useInfiniteQuery } from "@tanstack/solid-query";
 import { createSignal, For, Show } from "solid-js";
 import { cookieStorage, makePersisted } from "@solid-primitives/storage";
 import { orpc } from "~/lib/orpc";
+import { QueryBoundary } from "~/components/query-boundary";
+import { ClientOnly } from "solid-use/client-only";
 
 function formatId(id: string, format: "DEFAULT" | "TRAITOR_TOWN"): string {
 	switch (format) {
@@ -25,11 +27,11 @@ export default function Home() {
 				limit: 10,
 				verifiedOnly: true
 			}),
-			getNextPageParam: (lastPage) => lastPage.nextCursor,
-			initialPageParam: null,
-			deferStream: true
+			getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
+			initialPageParam: null
 		})
 	);
+
 	return (
 		<>
 			<div class="bg-amber-500 p-2">
@@ -54,43 +56,60 @@ export default function Home() {
 				</button>
 			</div>
 
-			<Show when={query.isSuccess} fallback={<p>loading...</p>}>
-				<For each={query.data?.pages}>
-					{(page) => (
-						<For each={page.data}>
-							{(musicId) => {
-								const [isCopying, setIsCopying] = createSignal<boolean>(false);
+			<div>
+				<QueryBoundary query={query}>
+					{(data) => (
+						<>
+							<For each={data.pages}>
+								{(page) => (
+									<For each={page.data}>
+										{(musicId) => {
+											const [isCopying, setIsCopying] = createSignal<boolean>(false);
 
-								return (
-									<p>
-										{musicId.name} - {formatId(musicId.robloxId, format())}
-										<button
-											onClick={() => {
-												setIsCopying(true);
-												navigator.clipboard.writeText(formatId(musicId.robloxId, format()));
-												setTimeout(() => {
-													setIsCopying(false);
-												}, 300);
-											}}
-											class="underline"
-										>
-											<Show when={isCopying()} fallback="copy">
-												copied
-											</Show>
-										</button>
-									</p>
-								);
-							}}
-						</For>
+											return (
+												<p>
+													{musicId.name} - {formatId(musicId.robloxId, format())}
+													<button
+														onClick={() => {
+															setIsCopying(true);
+															navigator.clipboard.writeText(formatId(musicId.robloxId, format()));
+															setTimeout(() => {
+																setIsCopying(false);
+															}, 300);
+														}}
+														class="underline"
+													>
+														<Show when={isCopying()} fallback="copy">
+															copied
+														</Show>
+													</button>
+												</p>
+											);
+										}}
+									</For>
+								)}
+							</For>
+
+							{/* this is to prevent hydration mismatches since query.hasNextPage is false initially */}
+							<ClientOnly fallback={<button class="p-2 border-2 rounded-xl">load more</button>}>
+								<Show when={query.hasNextPage}>
+									<button
+										onClick={() => {
+											if (query.hasNextPage) {
+												query.fetchNextPage();
+												return;
+											}
+										}}
+										class="p-2 border-2 rounded-xl"
+									>
+										load more
+									</button>
+								</Show>
+							</ClientOnly>
+						</>
 					)}
-				</For>
-
-				<Show when={query.hasNextPage}>
-					<button onClick={() => query.fetchNextPage()} class="p-2 border-2 rounded-xl">
-						fetch more
-					</button>
-				</Show>
-			</Show>
+				</QueryBoundary>
+			</div>
 		</>
 	);
 }
