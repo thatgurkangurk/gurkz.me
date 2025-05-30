@@ -6,6 +6,7 @@ import { For, Show } from "solid-js";
 import { FormattedId } from "./_lib/formatted-id";
 import { ClientOnly } from "solid-use/client-only";
 import { FormatSelector } from "./_lib/format-selector";
+import { Button } from "~/components/ui/button";
 
 export default function MusicPage() {
 	const query = useInfiniteQuery(() =>
@@ -36,19 +37,19 @@ export default function MusicPage() {
 						</For>
 
 						{/* this is to prevent hydration mismatches since query.hasNextPage is false initially */}
-						<ClientOnly fallback={<button class="p-2 border-2 rounded-xl">load more</button>}>
+						<ClientOnly fallback={<Button disabled>load more</Button>}>
 							<Show when={query.hasNextPage}>
-								<button
+								<Button
+									disabled={query.isFetchingNextPage || !query.hasNextPage}
 									onClick={() => {
 										if (query.hasNextPage) {
 											query.fetchNextPage();
 											return;
 										}
 									}}
-									class="p-2 border-2 rounded-xl"
 								>
 									load more
-								</button>
+								</Button>
 							</Show>
 						</ClientOnly>
 					</>

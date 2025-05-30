@@ -9,6 +9,8 @@
 		"lint": "prettier --check . && eslint ."
 	},
 	"dependencies": {
+		"@fontsource-variable/space-grotesk": "^5.2.7",
+		"@kobalte/core": "^0.13.10",
 		"@orpc/arktype": "^1.2.0",
 		"@orpc/client": "^1.2.0",
 		"@orpc/openapi": "^1.2.0",
@@ -22,12 +24,16 @@
 		"@tanstack/solid-query": "^5.76.0",
 		"@tanstack/solid-query-devtools": "^5.76.0",
 		"arktype": "^2.1.20",
+		"class-variance-authority": "^0.7.1",
+		"clsx": "^2.1.1",
 		"drizzle-orm": "^0.43.1",
 		"drizzle-pagination": "^1.0.12",
 		"nanoid": "^5.1.5",
 		"solid-js": "^1.9.5",
 		"solid-use": "^0.9.1",
 		"std-env": "^3.9.0",
+		"tailwind-merge": "^3.3.0",
+		"tailwindcss-animate": "^1.0.7",
 		"ulid": "^3.0.0",
 		"vinxi": "^0.5.3",
 		"zod": "^3.25.42"
