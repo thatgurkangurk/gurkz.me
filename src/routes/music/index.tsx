@@ -7,6 +7,7 @@ import { FormattedId } from "./_lib/formatted-id";
 import { ClientOnly } from "solid-use/client-only";
 import { FormatSelector } from "./_lib/format-selector";
 import { Button } from "~/components/ui/button";
+import LoaderCircle from "lucide-solid/icons/loader-circle";
 
 export default function MusicPage() {
 	const query = useInfiniteQuery(() =>
@@ -27,7 +28,10 @@ export default function MusicPage() {
 
 			<FormatSelector />
 
-			<QueryBoundary query={query}>
+			<QueryBoundary
+				query={query}
+				loadingFallback={<LoaderCircle size={48} class="animate-spin" />}
+			>
 				{(data) => (
 					<>
 						<For each={data.pages}>
