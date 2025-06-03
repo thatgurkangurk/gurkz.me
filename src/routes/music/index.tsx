@@ -3,11 +3,39 @@ import { FormatProvider } from "./_lib/format";
 import { orpc } from "~/lib/orpc";
 import { QueryBoundary } from "~/components/query-boundary";
 import { For, Show } from "solid-js";
-import { FormattedId } from "./_lib/formatted-id";
 import { ClientOnly } from "solid-use/client-only";
 import { FormatSelector } from "./_lib/format-selector";
 import { Button } from "~/components/ui/button";
 import LoaderCircle from "lucide-solid/icons/loader-circle";
+import { MusicCard } from "./_lib/music-card";
+
+function LoadMoreButton(props: {
+	hasNextPage: boolean;
+	isFetchingNextPage: boolean;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- its fine since it doesnt need the result
+	fetchNextPage: (...args: any[]) => any;
+}) {
+	return (
+		<>
+			{/* this is to prevent hydration mismatches since query.hasNextPage is false initially */}
+			<ClientOnly fallback={<Button disabled>load more</Button>}>
+				<Show when={props.hasNextPage}>
+					<Button
+						disabled={props.isFetchingNextPage || !props.hasNextPage}
+						onClick={() => {
+							if (props.hasNextPage) {
+								props.fetchNextPage();
+								return;
+							}
+						}}
+					>
+						load more
+					</Button>
+				</Show>
+			</ClientOnly>
+		</>
+	);
+}
 
 export default function MusicPage() {
 	const query = useInfiniteQuery(() =>
@@ -33,30 +61,21 @@ export default function MusicPage() {
 				loadingFallback={<LoaderCircle size={48} class="animate-spin" />}
 			>
 				{(data) => (
-					<>
-						<For each={data.pages}>
-							{(page) => (
-								<For each={page.data}>{(musicId) => <FormattedId musicId={musicId} />}</For>
-							)}
-						</For>
+					<div class="px-2">
+						<div class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4">
+							<For each={data.pages}>
+								{(page) => (
+									<For each={page.data}>{(musicId) => <MusicCard musicId={musicId} />}</For>
+								)}
+							</For>
+						</div>
 
-						{/* this is to prevent hydration mismatches since query.hasNextPage is false initially */}
-						<ClientOnly fallback={<Button disabled>load more</Button>}>
-							<Show when={query.hasNextPage}>
-								<Button
-									disabled={query.isFetchingNextPage || !query.hasNextPage}
-									onClick={() => {
-										if (query.hasNextPage) {
-											query.fetchNextPage();
-											return;
-										}
-									}}
-								>
-									load more
-								</Button>
-							</Show>
-						</ClientOnly>
-					</>
+						<LoadMoreButton
+							hasNextPage={query.hasNextPage}
+							isFetchingNextPage={query.isFetchingNextPage}
+							fetchNextPage={query.fetchNextPage}
+						/>
+					</div>
 				)}
 			</QueryBoundary>
 		</FormatProvider>

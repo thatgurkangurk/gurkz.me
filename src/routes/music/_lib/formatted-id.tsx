@@ -1,12 +1,15 @@
 import type { MusicId } from "~/lib/schema/music";
 import { useMusicIdFormat } from "./format";
 import { createSignal, Show } from "solid-js";
+import { Button } from "~/components/ui/button";
+import Check from "lucide-solid/icons/check";
+import Clipboard from "lucide-solid/icons/clipboard";
 
 function CopyButton(props: { content: string }) {
 	const ctx = useMusicIdFormat();
 	const [copying, setCopying] = createSignal(false);
 	return (
-		<button
+		<Button
 			disabled={copying()}
 			onClick={() => {
 				setCopying(true);
@@ -15,20 +18,22 @@ function CopyButton(props: { content: string }) {
 					setCopying(false);
 				}, 300);
 			}}
+			size="icon"
+			variant="outline"
 		>
-			<Show when={copying()} fallback={<>copy</>}>
-				copied
+			<Show when={copying()} fallback={<Clipboard />}>
+				<Check />
 			</Show>
-		</button>
+		</Button>
 	);
 }
 
 export function FormattedId(props: { musicId: MusicId }) {
 	const ctx = useMusicIdFormat();
 	return (
-		<p class="flex gap-1">
-			<span>{props.musicId.name}</span> - <span>{ctx.formatId(props.musicId.robloxId)}</span>
+		<>
+			<span class="pr-2">{ctx.formatId(props.musicId.robloxId)}</span>
 			<CopyButton content={props.musicId.robloxId} />
-		</p>
+		</>
 	);
 }
