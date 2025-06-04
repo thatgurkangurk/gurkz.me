@@ -1,57 +1,61 @@
 {
-	"name": "example-bare",
-	"type": "module",
-	"scripts": {
-		"dev": "vinxi dev",
-		"build": "vinxi build",
-		"start": "vinxi start",
-		"format": "prettier --write .",
-		"lint": "prettier --check . && eslint ."
-	},
-	"dependencies": {
-		"@fontsource-variable/space-grotesk": "^5.2.7",
-		"@kobalte/core": "^0.13.10",
-		"@orpc/arktype": "^1.2.0",
-		"@orpc/client": "^1.2.0",
-		"@orpc/openapi": "^1.2.0",
-		"@orpc/server": "^1.2.0",
-		"@orpc/solid-query": "^1.2.0",
-		"@solid-primitives/context": "^0.3.1",
-		"@solid-primitives/storage": "^4.3.2",
-		"@solidjs/router": "^0.15.3",
-		"@solidjs/start": "^1.1.0",
-		"@t3-oss/env-core": "^0.13.4",
-		"@tanstack/solid-query": "^5.76.0",
-		"@tanstack/solid-query-devtools": "^5.76.0",
-		"arktype": "^2.1.20",
-		"class-variance-authority": "^0.7.1",
-		"clsx": "^2.1.1",
-		"drizzle-orm": "^0.43.1",
-		"drizzle-pagination": "^1.0.12",
-		"lucide-solid": "^0.511.0",
-		"nanoid": "^5.1.5",
-		"solid-js": "^1.9.5",
-		"solid-use": "^0.9.1",
-		"std-env": "^3.9.0",
-		"tailwind-merge": "^3.3.0",
-		"tailwindcss-animate": "^1.0.7",
-		"ulid": "^3.0.0",
-		"vinxi": "^0.5.3",
-		"zod": "^3.25.42"
-	},
-	"engines": {
-		"node": ">=22"
-	},
-	"devDependencies": {
-		"@eslint/compat": "^1.2.9",
-		"@eslint/js": "^9.27.0",
-		"@tailwindcss/vite": "^4.1.7",
-		"drizzle-kit": "^0.31.1",
-		"eslint": "^9.27.0",
-		"eslint-config-prettier": "^10.1.5",
-		"globals": "^16.1.0",
-		"pg": "^8.16.0",
-		"prettier": "^3.5.3",
-		"typescript-eslint": "^8.32.1"
-	}
+  "name": "example-bare",
+  "type": "module",
+  "scripts": {
+    "dev": "vinxi dev",
+    "build": "vinxi build",
+    "start": "vinxi start",
+    "format": "prettier --write .",
+    "lint": "prettier --check . && eslint ."
+  },
+  "dependencies": {
+    "@fontsource-variable/space-grotesk": "^5.2.8",
+    "@kobalte/core": "^0.13.10",
+    "@orpc/arktype": "^1.4.1",
+    "@orpc/client": "^1.4.1",
+    "@orpc/openapi": "^1.4.1",
+    "@orpc/server": "^1.4.1",
+    "@orpc/solid-query": "^1.4.1",
+    "@solid-primitives/context": "^0.3.1",
+    "@solid-primitives/storage": "^4.3.2",
+    "@solidjs/router": "^0.15.3",
+    "@solidjs/start": "^1.1.4",
+    "@t3-oss/env-core": "^0.13.6",
+    "@tanstack/solid-query": "^5.80.2",
+    "@tanstack/solid-query-devtools": "^5.80.2",
+    "arktype": "^2.1.20",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "drizzle-orm": "^0.43.1",
+    "drizzle-pagination": "^1.0.12",
+    "lucide-solid": "^0.511.0",
+    "nanoid": "^5.1.5",
+    "solid-js": "^1.9.7",
+    "solid-use": "^0.9.1",
+    "std-env": "^3.9.0",
+    "tailwind-merge": "^3.3.0",
+    "tailwindcss-animate": "^1.0.7",
+    "ulid": "^3.0.0",
+    "vinxi": "^0.5.6",
+    "zod": "^3.25.51"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@eslint/compat": "^1.2.9",
+    "@eslint/js": "^9.28.0",
+    "@tailwindcss/vite": "^4.1.8",
+    "drizzle-kit": "^0.31.1",
+    "eslint": "^9.28.0",
+    "eslint-config-prettier": "^10.1.5",
+    "globals": "^16.2.0",
+    "pg": "^8.16.0",
+    "prettier": "^3.5.3",
+    "typescript-eslint": "^8.33.1"
+  },
+  "trustedDependencies": [
+    "@parcel/watcher",
+    "@tailwindcss/oxide"
+  ]
 }
