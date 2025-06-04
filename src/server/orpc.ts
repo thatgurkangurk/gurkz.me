@@ -1,8 +1,6 @@
-import { os } from "@orpc/server";
-import { Context } from "./orpc/context";
+import { dbMiddleware } from "./orpc/middleware/db";
+import { base } from "./orpc/base";
 
-const or = os.$context<Context>();
+export const or = base.use(dbMiddleware);
 
 export const pub = or;
-
-export { or };
