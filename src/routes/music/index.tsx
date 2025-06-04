@@ -1,29 +1,25 @@
-import { useInfiniteQuery } from "@tanstack/solid-query";
+import { useInfiniteQuery, type UseInfiniteQueryResult } from "@tanstack/solid-query";
 import { FormatProvider } from "./_lib/format";
 import { orpc } from "~/lib/orpc";
-import { ErrorBoundary, For, Show, Suspense } from "solid-js";
+import { For, Show } from "solid-js";
 import { ClientOnly } from "solid-use/client-only";
 import { FormatSelector } from "./_lib/format-selector";
 import { Button } from "~/components/ui/button";
 import LoaderCircle from "lucide-solid/icons/loader-circle";
 import { MusicCard } from "./_lib/music-card";
+import { QueryBoundary } from "~/components/query-boundary";
 
-function LoadMoreButton(props: {
-	hasNextPage: boolean;
-	isFetchingNextPage: boolean;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any -- its fine since it doesnt need the result
-	fetchNextPage: (...args: any[]) => any;
-}) {
+function LoadMoreButton(props: { query: UseInfiniteQueryResult<unknown, Error> }) {
 	return (
 		<>
 			{/* this is to prevent hydration mismatches since query.hasNextPage is false initially */}
 			<ClientOnly fallback={<Button disabled>load more</Button>}>
-				<Show when={props.hasNextPage}>
+				<Show when={props.query.hasNextPage}>
 					<Button
-						disabled={props.isFetchingNextPage || !props.hasNextPage}
+						disabled={props.query.isFetchingNextPage || !props.query.hasNextPage}
 						onClick={() => {
-							if (props.hasNextPage) {
-								props.fetchNextPage();
+							if (props.query.hasNextPage) {
+								props.query.fetchNextPage();
 								return;
 							}
 						}}
@@ -55,30 +51,24 @@ export default function MusicPage() {
 
 			<FormatSelector />
 
-			<Suspense fallback={<LoaderCircle size={48} class="animate-spin" />}>
-				<ErrorBoundary fallback={() => <p>something went wrong</p>}>
-					<Show
-						when={query.isSuccess && query.data}
-						fallback={<LoaderCircle size={48} class="animate-spin" />}
-					>
-						<div class="px-2">
-							<div class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4">
-								<For each={query.data?.pages}>
-									{(page) => (
-										<For each={page.data}>{(musicId) => <MusicCard musicId={musicId} />}</For>
-									)}
-								</For>
-							</div>
-
-							<LoadMoreButton
-								hasNextPage={query.hasNextPage}
-								isFetchingNextPage={query.isFetchingNextPage}
-								fetchNextPage={query.fetchNextPage}
-							/>
+			<QueryBoundary
+				loadingFallback={<LoaderCircle size={48} class="animate-spin" />}
+				query={query}
+			>
+				{(data) => (
+					<div class="px-2">
+						<div class="pt-4 grid grid-cols-1 sm:grid-cols-2 w-full place-items-center md:grid-cols-3 xl:grid-cols-5 gap-4">
+							<For each={data.pages}>
+								{(page) => (
+									<For each={page.data}>{(musicId) => <MusicCard musicId={musicId} />}</For>
+								)}
+							</For>
 						</div>
-					</Show>
-				</ErrorBoundary>
-			</Suspense>
+
+						<LoadMoreButton query={query} />
+					</div>
+				)}
+			</QueryBoundary>
 		</FormatProvider>
 	);
 }
