@@ -11,6 +11,7 @@
   "dependencies": {
     "@fontsource-variable/space-grotesk": "^5.2.8",
     "@kobalte/core": "^0.13.10",
+    "@openauthjs/openauth": "^0.4.3",
     "@orpc/client": "^1.4.1",
     "@orpc/openapi": "^1.4.1",
     "@orpc/server": "^1.4.1",
