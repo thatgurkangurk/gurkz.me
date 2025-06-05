@@ -1,4 +1,4 @@
-import { getSession } from "./auth";
+import { getSession, login, logout } from "./auth";
 import { getMusicIds } from "./music";
 
 export const router = {
@@ -6,6 +6,8 @@ export const router = {
 		getMusicIds: getMusicIds
 	},
 	session: {
-		get: getSession
+		get: getSession,
+		logout: logout,
+		login: login
 	}
 };
