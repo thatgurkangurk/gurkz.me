@@ -1,4 +1,4 @@
-import { type } from "arktype";
+import { z } from "zod/v4";
 
 export const options = [
 	"DEFAULT",
@@ -7,6 +7,6 @@ export const options = [
 	"CREATE_SHORT_LINKS"
 ] as const;
 
-export const Permissions = type("===", options);
+export const Permissions = z.enum(options);
 
-export type Permission = type.infer<typeof Permissions>;
+export type Permission = z.infer<typeof Permissions>;

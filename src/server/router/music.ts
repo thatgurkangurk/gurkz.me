@@ -1,7 +1,6 @@
 import { eq } from "drizzle-orm";
 import { pub } from "../orpc";
 import { musicIds } from "../schema/music-id";
-import { type } from "arktype";
 import { withCursorPagination } from "drizzle-pagination";
 import { z } from "zod/v4";
 import { MusicId } from "~/lib/schema/music";
@@ -14,10 +13,10 @@ export const getMusicIds = pub
 		tags: ["music-id"]
 	})
 	.input(
-		type({
-			limit: type.keywords.number.integer.atLeast(1).atMost(50).default(10),
-			cursor: "string | null | undefined",
-			verifiedOnly: type.keywords.boolean.default(true)
+		z.object({
+			limit: z.int().min(1).max(50).default(10),
+			cursor: z.nullish(z.string()),
+			verifiedOnly: z.boolean().default(true)
 		})
 	)
 	.output(

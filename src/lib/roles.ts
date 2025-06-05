@@ -1,7 +1,7 @@
-import { type } from "arktype";
+import { z } from "zod/v4";
 
 export const options = ["USER", "ADMIN"] as const;
 
-export const Roles = type("===", options);
+export const Roles = z.enum(options);
 
-export type Role = type.infer<typeof Roles>;
+export type Role = z.infer<typeof Roles>;
