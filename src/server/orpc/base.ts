@@ -1,6 +1,6 @@
 import { os } from "@orpc/server";
 
-type Context = {
+export type Context = {
 	headers: Headers;
 };
 

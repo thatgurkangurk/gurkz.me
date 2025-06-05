@@ -25,6 +25,7 @@
     "@tanstack/solid-query-devtools": "^5.80.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cookie": "^1.0.2",
     "drizzle-orm": "^0.43.1",
     "drizzle-pagination": "^1.0.12",
     "lucide-solid": "^0.511.0",
