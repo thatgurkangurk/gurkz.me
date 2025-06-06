@@ -8,6 +8,7 @@ import { SolidQueryDevtools } from "@tanstack/solid-query-devtools";
 import { isServer } from "solid-js/web";
 import { Nav } from "./components/nav";
 import { getCookie } from "vinxi/http";
+import { orpc } from "./lib/orpc";
 
 if (isServer) {
 	await import("~/lib/orpc.server");
@@ -30,6 +31,9 @@ export default function App() {
 	});
 	return (
 		<Router
+			rootPreload={async () => {
+				await queryClient.ensureQueryData(orpc.session.get.queryOptions());
+			}}
 			root={(props) => (
 				<Suspense>
 					<QueryClientProvider client={queryClient}>
