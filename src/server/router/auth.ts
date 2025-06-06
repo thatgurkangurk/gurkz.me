@@ -7,7 +7,9 @@ import { client } from "~/lib/auth/client";
 import { subjects } from "~/lib/auth/subjects";
 
 export const getSession = pub.handler(async ({ context }) => {
-	return context.user;
+	return {
+		user: context.user
+	};
 });
 
 export const logout = protectedProcedure.input(z.void()).handler(async () => {

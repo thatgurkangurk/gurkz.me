@@ -1,5 +1,6 @@
 import { RouteDefinition, useNavigate } from "@solidjs/router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/solid-query";
+import { Show } from "solid-js";
 import { QueryBoundary } from "~/components/query-boundary";
 import { Button } from "~/components/ui/button";
 import { orpc } from "~/lib/orpc";
@@ -37,19 +38,19 @@ export default function Home() {
 	return (
 		<>
 			<h1 class="text-3xl">home</h1>
-			<QueryBoundary
-				query={query}
-				notFoundFallback={
-					<>
-						<Button onClick={() => loginMutation.mutate()}>log in</Button>
-					</>
-				}
-			>
+			<QueryBoundary query={query}>
 				{(data) => (
-					<>
-						<p>hi, {data.name}</p>
-						<Button onClick={() => logoutMutation.mutate()}>log out</Button>
-					</>
+					<Show
+						when={data.user}
+						fallback={<Button onClick={() => loginMutation.mutate()}>log in</Button>}
+					>
+						{(user) => (
+							<>
+								<p>hi, {user().name}</p>
+								<Button onClick={() => logoutMutation.mutate()}>log out</Button>
+							</>
+						)}
+					</Show>
 				)}
 			</QueryBoundary>
 		</>
