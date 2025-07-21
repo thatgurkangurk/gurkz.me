@@ -15,6 +15,7 @@ export const auth = betterAuth({
 			clientSecret: env.DISCORD_CLIENT_SECRET
 		}
 	},
+	trustedOrigins: ["https://www.gurkz.me", "https://gurkz.me"],
 	plugins: [
 		adminPlugin({
 			ac,
