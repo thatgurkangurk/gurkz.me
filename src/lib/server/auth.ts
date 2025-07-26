@@ -1,8 +1,7 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "./db";
-import { admin as adminPlugin } from "better-auth/plugins";
-import { ac, admin, user } from "../permissions";
+import { Permissions } from "../permissions";
 import { env } from "$env/dynamic/private";
 
 export const auth = betterAuth({
@@ -16,13 +15,21 @@ export const auth = betterAuth({
 		}
 	},
 	trustedOrigins: ["https://www.gurkz.me", "https://gurkz.me"],
-	plugins: [
-		adminPlugin({
-			ac,
-			roles: {
-				admin,
-				user
+	user: {
+		additionalFields: {
+			permissions: {
+				type: "string[]",
+				required: true,
+				defaultValue: ["DEFAULT"],
+				input: false,
+				fieldName: "permissions",
+				validator: {
+					input: Permissions.array(),
+					output: Permissions.array()
+				}
 			}
-		})
-	]
+		}
+	}
 });
+
+export type User = typeof auth.$Infer.Session.user;

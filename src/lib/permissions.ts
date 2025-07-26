@@ -1,19 +1,17 @@
-import { createAccessControl } from "better-auth/plugins/access";
-import { adminAc, defaultStatements, userAc } from "better-auth/plugins/admin/access";
+import { z } from "zod/v4";
+import type { User } from "./server/auth";
 
-const statement = {
-    ...defaultStatements,
-    music: ["create", "create.instant_verified", "verify", "delete"]
-} as const;
+export const permissions = [
+	"DEFAULT",
+	"CREATE_MUSIC_IDS",
+	"CREATE_AUTO_VERIFIED_MUSIC_IDS",
+	"MANAGE_MUSIC_IDS"
+] as const;
 
-export const ac = createAccessControl(statement);
+export const Permissions = z.enum(permissions);
 
-export const user = ac.newRole({
-    music: ["create"],
-    ...userAc.statements
-});
+export type Permission = z.infer<typeof Permissions>;
 
-export const admin = ac.newRole({
-    music: ["create", "create.instant_verified", "delete", "verify"],
-    ...adminAc.statements
-})
+export function hasPermission(user: User, permission: Permission) {
+	return user.permissions.includes(permission);
+}
