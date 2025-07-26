@@ -3,6 +3,7 @@
 	import { schema, type CreateMusicIdSchema } from "../form";
 	import { Control, ElementField, Field, FieldErrors, Fieldset, Label, Legend } from "formsnap";
 	import { zod4Client } from "sveltekit-superforms/adapters";
+	import { dev } from "$app/environment";
 
 	type Props = {
 		data: SuperValidated<Infer<CreateMusicIdSchema>>;
@@ -70,4 +71,7 @@
 	</Fieldset>
 	<button disabled={$submitting}>{$submitting ? "submitting" : "submit"}</button>
 </form>
-<SuperDebug data={$formData} />
+
+{#if dev}
+	<SuperDebug data={$formData} />
+{/if}
