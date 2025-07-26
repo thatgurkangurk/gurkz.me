@@ -1,15 +1,16 @@
 <script lang="ts">
 	import { authClient } from "$lib/auth-client";
 	import Link from "./link.svelte";
+	import ModeToggle from "./mode-toggle.svelte";
 
 	const session = authClient.useSession();
 </script>
 
-<nav class="flex w-full items-center gap-2 px-2">
+<nav class="flex w-full items-center gap-2 p-2">
 	<Link href="/">home</Link>
 	<Link href="/music">music id list</Link>
 
-	<div class="ml-auto">
+	<div class="ml-auto flex gap-2">
 		{#if $session.data}
 			<div class="flex items-center-safe gap-2">
 				<p>hello, {$session.data.user.name}</p>
@@ -26,6 +27,7 @@
 				log in
 			</button>
 		{/if}
+		<ModeToggle />
 	</div>
 </nav>
 
