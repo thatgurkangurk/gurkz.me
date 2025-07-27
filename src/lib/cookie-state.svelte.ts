@@ -11,7 +11,13 @@ export class CookieState<T> {
 		this.#persistedState = new PersistedState(this.#key, initialValue);
 
 		watch.pre([() => this.#persistedState, () => this.#persistedState.current], (e) => {
-			const localStorageItem = JSON.parse(localStorage.getItem(this.#key) ?? `""`);
+			let localStorageItem;
+			try {
+				localStorageItem = JSON.parse(localStorage.getItem(this.#key) ?? `""`);
+			} catch (error) {
+				console.error(`Error parsing localStorage item "${this.#key}":`, error);
+				localStorageItem = null;
+			}
 
 			if (localStorageItem !== this.#persistedState.current) {
 				console.warn("local storage and cookie isn't synchronised. syncing them now");
@@ -30,8 +36,14 @@ export class CookieState<T> {
 				return;
 			}
 
-			const parsedResult = JSON.parse(existingCookie);
-			this.#persistedState.current = parsedResult;
+			try {
+				const parsedResult = JSON.parse(existingCookie);
+				this.#persistedState.current = parsedResult;
+			} catch (error) {
+				console.error(`Error parsing cookie "${key}":`, error);
+				this.#persistedState.current = initialValue;
+			}
+
 			return;
 		}
 
