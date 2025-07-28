@@ -6,7 +6,7 @@ export async function load({ cookies }) {
 	const parsedCookie = await Promise.try<string, unknown[]>(() => JSON.parse(idFormatCookie)).catch(
 		() => {
 			cookies.set("id_format", JSON.stringify("DEFAULT"), {
-				maxAge: new Date(+new Date() + 3e10), // never
+				maxAge: new Date(+new Date() + 3e10), // 1 year
 				path: "/",
 				httpOnly: false,
 				sameSite: "lax"
