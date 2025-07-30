@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { authClient } from "$lib/auth-client";
+	import CopyButton from "$lib/components/copy-button.svelte";
 	import { hasPermission } from "$lib/permissions";
 	import type { PageProps } from "./$types";
 	import CreateForm from "./components/create-form.svelte";
@@ -18,6 +19,18 @@
 
 <FormatSelector />
 
-{#each data.musicIds as musicId (musicId.id)}
-	<p>{musicId.name} - {format(musicId.robloxId)}</p>
-{/each}
+<div class="grid grid-cols-1 gap-2">
+	{#each data.musicIds as musicId (musicId.id)}
+		<div class="flex items-center gap-2">
+			<p class="pb-1">{musicId.name} - {format(musicId.robloxId)}</p>
+			<CopyButton content={format(musicId.robloxId)} variant="secondary">
+				{#snippet idle()}
+					copy
+				{/snippet}
+				{#snippet copied()}
+					copied
+				{/snippet}
+			</CopyButton>
+		</div>
+	{/each}
+</div>
