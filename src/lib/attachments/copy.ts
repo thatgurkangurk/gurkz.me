@@ -13,7 +13,10 @@ export function copy({
 		element.addEventListener(
 			"click",
 			() => {
-				navigator.clipboard.writeText(content);
+				navigator.clipboard.writeText(content).catch((error) => {
+					console.error("Failed to copy to clipboard:", error);
+					return;
+				});
 				onCopy?.();
 			},
 			{

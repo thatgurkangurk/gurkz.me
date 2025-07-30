@@ -15,6 +15,7 @@
 </script>
 
 <Button
+	{...rest}
 	disabled={isCopying}
 	{@attach copy({
 		content: content,
@@ -25,7 +26,6 @@
 			}, 500);
 		}
 	})}
-	{...rest}
 >
 	{#if isCopying}
 		{@render copied()}

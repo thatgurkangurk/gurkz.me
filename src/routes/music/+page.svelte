@@ -23,7 +23,11 @@
 	{#each data.musicIds as musicId (musicId.id)}
 		<div class="flex items-center gap-2">
 			<p class="pb-1">{musicId.name} - {format(musicId.robloxId)}</p>
-			<CopyButton content={format(musicId.robloxId)} variant="secondary">
+			<CopyButton
+				content={format(musicId.robloxId)}
+				variant="secondary"
+				aria-label="copy roblox id {format(musicId.robloxId)} for {musicId.name}"
+			>
 				{#snippet idle()}
 					copy
 				{/snippet}
