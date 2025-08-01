@@ -7,13 +7,14 @@ import { fail } from "sveltekit-superforms";
 import { auth } from "$lib/server/auth";
 import { hasPermission } from "$lib/permissions";
 import { musicIds } from "$lib/server/db/schema/music";
+import { desc } from "drizzle-orm";
 
 export async function load() {
-	const musicIds = await db.query.musicIds.findMany();
+	const ids = await db.select().from(musicIds).orderBy(desc(musicIds.id));
 	const form = await superValidate(zod4(schema));
 
 	return {
-		musicIds: musicIds,
+		musicIds: ids,
 		form: form
 	};
 }
@@ -28,18 +29,46 @@ export const actions: Actions = {
 			headers: request.headers
 		});
 
-		if (!session) return fail(403, { form });
+		if (!session)
+			return message(
+				form,
+				{
+					type: "error",
+					text: "you need to be signed in to do this"
+				},
+				{
+					status: 403
+				}
+			);
 
 		if (!hasPermission(session.user, "CREATE_MUSIC_IDS")) return fail(403, { form });
 
-		await db.insert(musicIds).values({
-			verified: hasPermission(session.user, "CREATE_AUTO_VERIFIED_MUSIC_IDS") ? true : false,
-			createdById: session.user.id,
-			name: form.data.name,
-			robloxId: form.data.robloxId,
-			tags: form.data.tags
-		});
+		await db
+			.insert(musicIds)
+			.values({
+				verified: hasPermission(session.user, "CREATE_AUTO_VERIFIED_MUSIC_IDS") ? true : false,
+				createdById: session.user.id,
+				name: form.data.name,
+				robloxId: form.data.robloxId,
+				tags: form.data.tags
+			})
+			.catch((err) => {
+				console.error(err);
+				return message(
+					form,
+					{
+						type: "error",
+						text: "could not create the music id"
+					},
+					{
+						status: 500
+					}
+				);
+			});
 
-		return message(form, "done");
+		return message(form, {
+			text: "successfully created the music id",
+			type: "success"
+		});
 	}
 };
