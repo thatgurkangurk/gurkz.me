@@ -10,4 +10,6 @@
 <ModeWatcher />
 <ViewTransitions />
 <Nav />
-{@render children()}
+<main class="p-2">
+	{@render children()}
+</main>

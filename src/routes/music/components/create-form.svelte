@@ -4,6 +4,7 @@
 	import { Control, ElementField, Field, FieldErrors, Fieldset, Label, Legend } from "formsnap";
 	import { zod4Client } from "sveltekit-superforms/adapters";
 	import { dev } from "$app/environment";
+	import Button from "$lib/components/ui/button/button.svelte";
 
 	type Props = {
 		data: SuperValidated<Infer<CreateMusicIdSchema>>;
@@ -59,17 +60,18 @@
 						<div class="flex flex-row gap-2">
 							<Label class="sr-only">tag {i + 1}</Label>
 							<input {...props} class="w-fit" bind:value={$formData.tags[i]} />
-							<button type="button" onclick={() => removeTagByIndex(i)}>delete</button>
+							<Button type="button" onclick={() => removeTagByIndex(i)}>delete</Button>
 						</div>
 					{/snippet}
 				</Control>
 				<FieldErrors />
 			</ElementField>
 		{/each}
-		<button disabled={maxTagsReached} type="button" onclick={addTag}>add tag</button>
+		<Button disabled={maxTagsReached} type="button" onclick={addTag}>add tag</Button>
 		<FieldErrors />
 	</Fieldset>
-	<button disabled={$submitting}>{$submitting ? "submitting" : "submit"}</button>
+	<br />
+	<Button disabled={$submitting}>{$submitting ? "submitting" : "submit"}</Button>
 </form>
 
 {#if dev}
