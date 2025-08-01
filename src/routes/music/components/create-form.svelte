@@ -16,7 +16,7 @@
 	import Button from "$lib/components/ui/button/button.svelte";
 	import { Card, CardContent, CardHeader, CardTitle } from "$lib/components/ui/card/index.js";
 	import { Input } from "$lib/components/ui/input/index.js";
-	import TrashIcon from "@lucide/svelte/icons/trash";
+	import TrashIcon from "virtual:icons/lucide/trash";
 
 	type Props = {
 		data: SuperValidated<Infer<CreateMusicIdSchema>>;
