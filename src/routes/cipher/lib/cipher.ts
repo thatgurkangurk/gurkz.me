@@ -8,7 +8,9 @@ const UP_KEY = "vwuyzxabcdefghijklmnopqrst";
 const DOWN_KEY = "ghijklmnopqrstuvwxyzcabfde";
 
 function mapTypeForIndex(i: number): 0 | 1 | 2 {
-	return i % 2 === 1 ? 0 : i % 3 === 0 ? 1 : 2;
+	if (i % 2 === 1) return 0;
+	if (i % 3 === 0) return 1;
+	return 2;
 }
 
 function transform(text: string, decode = false): string {
@@ -31,18 +33,13 @@ function transform(text: string, decode = false): string {
 				mapped = key[pos];
 			} else {
 				if (!decode) {
-					if (pos === 24) mapped = "x";
-					else if (pos === 25) mapped = "a";
-					else mapped = ALPHABET[pos + 1];
+					mapped = ALPHABET[(pos + 1) % 26];
 				} else {
-					const back = (pos + 25) % 26;
-					mapped = ALPHABET[back];
+					mapped = ALPHABET[(pos + 25) % 26];
 				}
 			}
 
 			out += ch === lower ? mapped : mapped.toUpperCase();
-		} else if (ch === " " || ch === "," || ch === "." || ch === "'") {
-			out += ch;
 		} else {
 			out += ch;
 		}
