@@ -20,7 +20,7 @@
 	}
 </script>
 
-<h1 class="text-3xl">jester's cipher - by kiwiman</h1>
+<h1 class="text-3xl">jester's cipher - by kiwiman and ghoufer</h1>
 
 <div class="w-full max-w-xs pt-2">
 	<Label>input</Label>
