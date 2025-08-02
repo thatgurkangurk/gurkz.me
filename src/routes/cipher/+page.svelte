@@ -33,7 +33,7 @@
 	<br />
 	<h2 class="text-2xl">questions you might have</h2>
 
-	<Accordion type="single" class="w-full sm:max-w-[70%]" value="item-1">
+	<Accordion type="single" class="w-full sm:max-w-[70%]" value="why">
 		<AccordionItem value="why">
 			<AccordionTrigger>why?</AccordionTrigger>
 			<AccordionContent class="flex flex-col gap-4 text-balance">
