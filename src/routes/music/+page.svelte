@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { authClient } from "$lib/auth-client";
-	import CopyButton from "$lib/components/copy-button.svelte";
 	import { hasPermission } from "$lib/permissions";
 	import type { PageProps } from "./$types";
 	import CreateForm from "./components/create-form.svelte";
 	import FormatSelector from "./components/format-selector.svelte";
-	import { format } from "./format";
+	import MusicCard from "./components/music-card.svelte";
 
 	let { data }: PageProps = $props();
 	const session = authClient.useSession();
@@ -19,22 +18,12 @@
 
 <FormatSelector />
 
-<div class="grid grid-cols-1 gap-2">
+<div
+	class="grid w-full grid-cols-1 place-items-center gap-4 pt-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5"
+>
 	{#each data.musicIds as musicId (musicId.id)}
-		<div class="flex items-center gap-2">
-			<p class="pb-1">{musicId.name} - {format(musicId.robloxId)}</p>
-			<CopyButton
-				content={format(musicId.robloxId)}
-				variant="secondary"
-				aria-label="copy roblox id {format(musicId.robloxId)} for {musicId.name}"
-			>
-				{#snippet idle()}
-					copy
-				{/snippet}
-				{#snippet copied()}
-					copied
-				{/snippet}
-			</CopyButton>
-		</div>
+		{#if musicId.verified}
+			<MusicCard {musicId} />
+		{/if}
 	{/each}
 </div>
