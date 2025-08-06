@@ -4,6 +4,8 @@
 	import { Card, CardContent, CardHeader, CardTitle } from "$lib/components/ui/card";
 	import { format } from "../format";
 	import type { MusicId } from "../types";
+	import Clipboard from "virtual:icons/lucide/clipboard";
+	import Check from "virtual:icons/lucide/check";
 
 	type Props = {
 		musicId: MusicId;
@@ -20,12 +22,12 @@
 	<CardContent>
 		<div class="flex items-center text-xl">
 			<span class="pr-2">{formattedId}</span>
-			<CopyButton content={formattedId}>
+			<CopyButton size={"icon"} content={formattedId}>
 				{#snippet idle()}
-					copy
+					<Clipboard />
 				{/snippet}
 				{#snippet copied()}
-					copied
+					<Check />
 				{/snippet}
 			</CopyButton>
 		</div>
