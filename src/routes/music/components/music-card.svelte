@@ -1,14 +1,14 @@
 <script lang="ts">
 	import CopyButton from "$lib/components/copy-button.svelte";
 	import { Badge } from "$lib/components/ui/badge";
-	import { Card, CardContent, CardHeader, CardTitle } from "$lib/components/ui/card";
+	import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "$lib/components/ui/card";
 	import { format } from "../format";
-	import type { MusicId } from "../types";
 	import Clipboard from "virtual:icons/lucide/clipboard";
 	import Check from "virtual:icons/lucide/check";
+	import type { MusicIdWithCreator } from "$lib/schemas/music";
 
 	type Props = {
-		musicId: MusicId;
+		musicId: MusicIdWithCreator;
 	};
 
 	let { musicId }: Props = $props();
@@ -39,4 +39,9 @@
 			</div>
 		{/if}
 	</CardContent>
+	<CardFooter class="grid grid-cols-1 gap-1">
+		<p>
+			created by <span>{musicId.creator.name}</span>
+		</p>
+	</CardFooter>
 </Card>

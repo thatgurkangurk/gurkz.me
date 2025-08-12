@@ -7,14 +7,11 @@ import { fail } from "sveltekit-superforms";
 import { auth } from "$lib/server/auth";
 import { hasPermission } from "$lib/permissions";
 import { musicIds } from "$lib/server/db/schema/music";
-import { desc } from "drizzle-orm";
 
 export async function load() {
-	const ids = await db.select().from(musicIds).orderBy(desc(musicIds.id));
 	const form = await superValidate(zod4(schema));
 
 	return {
-		musicIds: ids,
 		form: form
 	};
 }
