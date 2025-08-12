@@ -6,8 +6,8 @@ if (browser) {
 	throw new Error("This file should not be imported in the browser");
 }
 
-globalThis.$client = createRouterClient(router, {
-	context: async () => {
-		return {};
-	}
-});
+(globalThis as any).$client =
+	(globalThis as any).$client ??
+	createRouterClient(router, {
+		context: async () => ({})
+	});

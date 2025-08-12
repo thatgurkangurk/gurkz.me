@@ -2,8 +2,9 @@ import type { RouterClient } from "@orpc/server";
 import { RPCLink } from "@orpc/client/fetch";
 import { createORPCClient } from "@orpc/client";
 import { createORPCSvelteQueryUtils } from "@orpc/svelte-query";
-import { browser } from "$app/environment";
 import type { router } from "./server/router";
+import { base } from "$app/paths";
+import { browser } from "$app/environment";
 
 declare global {
 	// eslint-disable-next-line no-var
@@ -12,11 +13,11 @@ declare global {
 
 const link = new RPCLink({
 	url: () => {
-		if (typeof window === "undefined") {
+		if (!browser) {
 			throw new Error("RPCLink is not allowed on the server side.");
 		}
 
-		return new URL("/rpc", window.location.href);
+		return new URL(`${base}/rpc`, location.origin);
 	}
 });
 
