@@ -6,8 +6,10 @@ if (browser) {
 	throw new Error("This file should not be imported in the browser");
 }
 
-(globalThis as any).$client =
-	(globalThis as any).$client ??
-	createRouterClient(router, {
-		context: async () => ({})
+export function createServerClient(headers: () => Headers) {
+	return createRouterClient(router, {
+		context: async () => ({
+			reqHeaders: headers()
+		})
 	});
+}

@@ -3,9 +3,11 @@ import { router } from "$lib/server/router";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
+import { RequestHeadersPlugin } from "@orpc/server/plugins";
 
 const handler = new OpenAPIHandler(router, {
 	plugins: [
+		new RequestHeadersPlugin(),
 		new OpenAPIReferencePlugin({
 			schemaConverters: [new ZodToJsonSchemaConverter()],
 			specGenerateOptions: {

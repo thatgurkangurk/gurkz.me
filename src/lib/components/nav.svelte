@@ -2,8 +2,10 @@
 	import { authClient } from "$lib/auth-client";
 	import Link from "./link.svelte";
 	import ModeToggle from "./mode-toggle.svelte";
+	import { orpc } from "$lib/orpc";
+	import { createQuery } from "@tanstack/svelte-query";
 
-	const session = authClient.useSession();
+	const session = createQuery(() => orpc.session.get.queryOptions());
 </script>
 
 <nav class="flex w-full items-center gap-2 p-2">
@@ -12,9 +14,9 @@
 	<Link href="/tools">tools</Link>
 
 	<div class="ml-auto flex gap-2">
-		{#if $session.data}
+		{#if session.data}
 			<div class="flex items-center-safe gap-2">
-				<p>hello, {$session.data.user.name}</p>
+				<p>hello, {session.data.user.name}</p>
 				<button onclick={async () => await authClient.signOut()}>log out</button>
 			</div>
 		{:else}

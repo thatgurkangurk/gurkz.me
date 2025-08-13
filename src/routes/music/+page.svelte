@@ -9,14 +9,15 @@
 	import { orpc } from "$lib/orpc";
 
 	let { data }: PageProps = $props();
-	const session = authClient.useSession();
+
+	const session = createQuery(() => orpc.session.get.queryOptions());
 
 	const query = createQuery(() => orpc.music.get.queryOptions());
 </script>
 
 <h1 class="text-3xl">music id list</h1>
 
-{#if $session.data && hasPermission($session.data.user, "CREATE_MUSIC_IDS")}
+{#if session.data && hasPermission(session.data.user, "CREATE_MUSIC_IDS")}
 	<CreateForm data={data.form} />
 {/if}
 

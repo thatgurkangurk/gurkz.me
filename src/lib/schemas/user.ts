@@ -11,3 +11,14 @@ export const User = z.object({
 	updatedAt: z.date().default(() => new Date()),
 	permissions: Permissions.array().default(["DEFAULT"])
 });
+
+export const Session = z.object({
+	expiresAt: z.date(),
+	token: z.string(),
+	createdAt: z.date(),
+	updatedAt: z.date(),
+	ipAddress: z.string().nullish(),
+	userAgent: z.string().nullish(),
+	userId: z.string(),
+	id: z.string()
+});
