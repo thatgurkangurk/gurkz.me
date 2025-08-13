@@ -3,9 +3,10 @@
 	import Link from "./link.svelte";
 	import ModeToggle from "./mode-toggle.svelte";
 	import { orpc } from "$lib/orpc";
-	import { createQuery } from "@tanstack/svelte-query";
+	import { createQuery, useQueryClient } from "@tanstack/svelte-query";
 
 	const session = createQuery(() => orpc.session.get.queryOptions());
+	const queryClient = useQueryClient();
 </script>
 
 <nav class="flex w-full items-center gap-2 p-2">
@@ -17,7 +18,14 @@
 		{#if session.data}
 			<div class="flex items-center-safe gap-2">
 				<p>hello, {session.data.user.name}</p>
-				<button onclick={async () => await authClient.signOut()}>log out</button>
+				<button
+					onclick={async () => {
+						await authClient.signOut();
+						await queryClient.refetchQueries({
+							queryKey: orpc.session.get.key()
+						});
+					}}>log out</button
+				>
 			</div>
 		{:else}
 			<button
