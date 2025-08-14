@@ -1,11 +1,21 @@
 <script lang="ts">
-	import { authClient } from "$lib/auth-client";
 	import Link from "./link.svelte";
 	import ModeToggle from "./mode-toggle.svelte";
 	import { orpc } from "$lib/orpc";
-	import { createQuery, useQueryClient } from "@tanstack/svelte-query";
+	import { createMutation, createQuery, useQueryClient } from "@tanstack/svelte-query";
 
 	const session = createQuery(() => orpc.session.get.queryOptions());
+	const { mutateAsync: signOutAsync } = createMutation(() =>
+		orpc.session.signOut.mutationOptions()
+	);
+	const { mutateAsync: signInAsync } = createMutation(() => ({
+		...orpc.session.signIn.mutationOptions(),
+		onSuccess(data) {
+			if (data.redirect && data.url) {
+				location.replace(data.url);
+			}
+		}
+	}));
 	const queryClient = useQueryClient();
 </script>
 
@@ -20,7 +30,7 @@
 				<p>hello, {session.data.user.name}</p>
 				<button
 					onclick={async () => {
-						await authClient.signOut();
+						await signOutAsync(null);
 						await queryClient.refetchQueries({
 							queryKey: orpc.session.get.key()
 						});
@@ -30,7 +40,7 @@
 		{:else}
 			<button
 				onclick={async () => {
-					await authClient.signIn.social({
+					await signInAsync({
 						provider: "discord"
 					});
 				}}
