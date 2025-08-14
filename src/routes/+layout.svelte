@@ -1,16 +1,17 @@
 <script lang="ts">
+	import { Toaster } from "$lib/components/ui/sonner";
 	import Nav from "$lib/components/nav.svelte";
 	import ViewTransitions from "$lib/components/view-transitions.svelte";
 	import { ModeWatcher } from "mode-watcher";
 	import "../app.css";
-	import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
+	import { QueryClientProvider } from "@tanstack/svelte-query";
 	import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
-	import { browser } from "$app/environment";
 
 	let { children, data } = $props();
 </script>
 
 <QueryClientProvider client={data.queryClient}>
+	<Toaster />
 	<ModeWatcher />
 	<ViewTransitions />
 	<Nav />

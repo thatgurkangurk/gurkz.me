@@ -4,6 +4,7 @@ import { sveltekit } from "@sveltejs/kit/vite";
 import { defineConfig } from "vite";
 import { visualizer } from "rollup-plugin-visualizer";
 import icons from "unplugin-icons/vite";
+import { MagicRegExpTransformPlugin } from "magic-regexp/transform";
 
 export default defineConfig({
 	plugins: [
@@ -13,6 +14,7 @@ export default defineConfig({
 		visualizer(),
 		icons({
 			compiler: "svelte"
-		})
+		}),
+		MagicRegExpTransformPlugin.vite()
 	]
 });
