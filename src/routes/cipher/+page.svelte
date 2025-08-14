@@ -9,6 +9,7 @@
 		AccordionContent,
 		AccordionTrigger
 	} from "$lib/components/ui/accordion";
+	import Meta from "$lib/components/meta.svelte";
 
 	let input = $state<string>("");
 
@@ -19,6 +20,8 @@
 		input = decode(input);
 	}
 </script>
+
+<Meta title="cipher" />
 
 <h1 class="text-3xl">jester's cipher - by kiwiman and ghoufer</h1>
 

@@ -1,4 +1,5 @@
 <script>
+	import Meta from "$lib/components/meta.svelte";
 	import Button from "$lib/components/ui/button/button.svelte";
 	import {
 		Card,
@@ -8,6 +9,8 @@
 		CardDescription
 	} from "$lib/components/ui/card";
 </script>
+
+<Meta title="tools" />
 
 <h1 class="text-3xl">random tools</h1>
 

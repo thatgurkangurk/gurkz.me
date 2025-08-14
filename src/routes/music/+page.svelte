@@ -7,6 +7,7 @@
 	import FormatSelector from "./components/format-selector.svelte";
 	import MusicCard from "./components/music-card.svelte";
 	import { orpc } from "$lib/orpc";
+	import Meta from "$lib/components/meta.svelte";
 
 	let { data }: PageProps = $props();
 
@@ -14,6 +15,8 @@
 
 	const query = createQuery(() => orpc.music.get.queryOptions());
 </script>
+
+<Meta title="music id list" />
 
 <h1 class="text-3xl">music id list</h1>
 

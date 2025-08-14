@@ -1,10 +1,13 @@
 <script lang="ts">
+	import Meta from "$lib/components/meta.svelte";
 	import { useSession, useSignIn, useSignOut } from "$lib/hooks/session";
 
 	const session = useSession();
 	const { mutateAsync: signOutAsync } = useSignOut();
 	const { mutateAsync: signInAsync } = useSignIn();
 </script>
+
+<Meta title="home" />
 
 <h1 class="text-3xl">welcome</h1>
 
