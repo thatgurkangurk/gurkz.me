@@ -3,6 +3,7 @@ import { ORPCError } from "@orpc/client";
 import { auth } from "../auth";
 import { or } from "../orpc";
 import { z } from "zod/v4";
+import { SocialProvider } from "$lib/schemas/auth";
 
 const getSessionSchema = z
 	.object({
@@ -34,7 +35,7 @@ export const signIn = or
 	.route({ method: "POST" })
 	.input(
 		z.object({
-			provider: z.enum(["discord"])
+			provider: SocialProvider
 		})
 	)
 	.output(

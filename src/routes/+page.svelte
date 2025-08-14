@@ -1,20 +1,9 @@
 <script lang="ts">
-	import { orpc } from "$lib/orpc";
-	import { createQuery, useQueryClient, createMutation } from "@tanstack/svelte-query";
+	import { useSession, useSignIn, useSignOut } from "$lib/hooks/session";
 
-	const session = createQuery(() => orpc.session.get.queryOptions());
-	const { mutateAsync: signOutAsync } = createMutation(() =>
-		orpc.session.signOut.mutationOptions()
-	);
-	const { mutateAsync: signInAsync } = createMutation(() => ({
-		...orpc.session.signIn.mutationOptions(),
-		onSuccess(data) {
-			if (data.redirect && data.url) {
-				location.replace(data.url);
-			}
-		}
-	}));
-	const queryClient = useQueryClient();
+	const session = useSession();
+	const { mutateAsync: signOutAsync } = useSignOut();
+	const { mutateAsync: signInAsync } = useSignIn();
 </script>
 
 <h1 class="text-3xl">welcome</h1>
@@ -25,9 +14,6 @@
 		<button
 			onclick={async () => {
 				await signOutAsync(null);
-				await queryClient.refetchQueries({
-					queryKey: orpc.session.get.key()
-				});
 			}}>log out</button
 		>
 	</div>
@@ -36,9 +22,6 @@
 		onclick={async () => {
 			await signInAsync({
 				provider: "discord"
-			});
-			await queryClient.refetchQueries({
-				queryKey: orpc.session.get.key()
 			});
 		}}
 	>
