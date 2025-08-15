@@ -15,8 +15,6 @@
 	let { form } = $derived(state);
 </script>
 
-<Meta title="tools" />
-
 <Tool tool="webhook-destroyer">
 	{#snippet children(tool)}
 		<h1 class="text-3xl">{tool.title}</h1>
