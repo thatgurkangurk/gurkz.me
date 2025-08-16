@@ -5,7 +5,6 @@ import { defineConfig } from "vite";
 import { visualizer } from "rollup-plugin-visualizer";
 import icons from "unplugin-icons/vite";
 import { MagicRegExpTransformPlugin } from "magic-regexp/transform";
-import { partytownVite } from "@qwik.dev/partytown/utils";
 
 export default defineConfig({
 	plugins: [
@@ -16,7 +15,6 @@ export default defineConfig({
 		icons({
 			compiler: "svelte"
 		}),
-		MagicRegExpTransformPlugin.vite(),
-		partytownVite({})
+		MagicRegExpTransformPlugin.vite()
 	]
 });

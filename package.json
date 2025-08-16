@@ -4,8 +4,9 @@
 	"version": "0.0.1",
 	"type": "module",
 	"scripts": {
+		"partytown": "partytown copylib 'static/~partytown'",
 		"dev": "vite dev",
-		"build": "vite build",
+		"build": "bun run partytown && vite build",
 		"preview": "vite preview",
 		"svelte:sync": "bun run --bun svelte-kit sync",
 		"prepare": "bun run svelte:sync || echo ''",
