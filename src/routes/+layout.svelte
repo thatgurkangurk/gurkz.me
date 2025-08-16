@@ -6,9 +6,17 @@
 	import "../app.css";
 	import { QueryClientProvider } from "@tanstack/svelte-query";
 	import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
+	import { partytownSnippet } from "@qwik.dev/partytown/integration";
 
 	let { children, data } = $props();
+
+	const snippet = `<script>${partytownSnippet()}<\/script>`;
 </script>
+
+<svelte:head>
+	{@html snippet}
+	<script type="text/partytown" defer src="https://assets.onedollarstats.com/stonks.js"></script>
+</svelte:head>
 
 <QueryClientProvider client={data.queryClient}>
 	<Toaster />
