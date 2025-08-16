@@ -19,7 +19,7 @@ export default defineConfig({
 		}),
 		MagicRegExpTransformPlugin.vite(),
 		partytownVite({
-			dest: path.join(__dirname, "dist", "~partytown")
+			dest: path.join(__dirname, "build", "client", "~partytown")
 		})
 	]
 });
