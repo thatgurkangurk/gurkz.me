@@ -41,8 +41,8 @@
 					<AccordionTrigger>why?</AccordionTrigger>
 					<AccordionContent class="flex flex-col gap-4 text-balance">
 						<p>
-							why not? kiwiman, a friend of mine made this using godot to secretly talk to guiggur
-							(another friend), and i translated it to a web page for easier access
+							why not? kiwiman, a friend of mine made this using godot to secretly talk to another friend,
+							and i translated it to a web page for easier access
 						</p>
 					</AccordionContent>
 				</AccordionItem>

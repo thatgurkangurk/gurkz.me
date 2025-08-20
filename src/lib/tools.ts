@@ -7,7 +7,7 @@ export const TOOLS = [
 	{
 		slug: "cipher",
 		title: "jester's cipher",
-		description: "a simple cipher by kiwiman and ghoufer"
+		description: "a simple cipher by kiwiman"
 	}
 ] as const;
 
