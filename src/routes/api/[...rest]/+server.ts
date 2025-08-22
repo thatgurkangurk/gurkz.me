@@ -3,10 +3,14 @@ import { router } from "$lib/server/router";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
-import { RequestHeadersPlugin } from "@orpc/server/plugins";
+import { RequestHeadersPlugin, CORSPlugin } from "@orpc/server/plugins";
 
 const handler = new OpenAPIHandler(router, {
 	plugins: [
+		new CORSPlugin({
+			origin: (origin, options) => origin,
+			allowMethods: ["GET", "HEAD", "PUT", "POST", "DELETE", "PATCH"]
+		}),
 		new RequestHeadersPlugin(),
 		new OpenAPIReferencePlugin({
 			schemaConverters: [new ZodToJsonSchemaConverter()],
