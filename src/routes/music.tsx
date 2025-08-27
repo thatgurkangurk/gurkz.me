@@ -1,7 +1,7 @@
+import { MusicCard } from "@/components/music/music-card";
 import { orpc } from "@/lib/orpc";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { Fragment } from "react";
 
 export const Route = createFileRoute("/music")({
   component: RouteComponent,
@@ -13,13 +13,12 @@ function RouteComponent() {
   const { data } = useQuery(orpc.music.get.queryOptions());
   return (
     <>
-      {data?.map((musicId) => (
-        <Fragment key={musicId.id}>
-          <p>
-            {musicId.name} - {musicId.robloxId}
-          </p>
-        </Fragment>
-      ))}
+      <h1 className="text-3xl">music id list</h1>
+      <div className="grid w-full grid-cols-1 place-items-center gap-4 pt-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
+        {data?.map((musicId) => (
+          <MusicCard musicId={musicId} />
+        ))}
+      </div>
     </>
   );
 }
