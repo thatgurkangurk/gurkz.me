@@ -1,4 +1,4 @@
-import { ORPCError } from "@orpc/client";
+import { ORPCError } from "@orpc/server";
 import { auth } from "../../lib/auth";
 import { or } from "../orpc";
 import { z } from "zod/v4";

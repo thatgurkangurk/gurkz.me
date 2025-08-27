@@ -27,4 +27,4 @@ ENV HOST_HEADER=x-forwarded-host
 ENV ORIGIN="https://www.gurkz.me/"
 EXPOSE 4321/tcp
 
-CMD [ "bun", "run", "./.output/server/index.mjs" ]
+CMD [ "bun", "./.output/server/index.mjs" ]
