@@ -18,7 +18,7 @@ RUN adduser --system --uid 1001 gurkz
 ENV NODE_ENV="production"
 
 COPY --from=deps --chown=gurkz:nodejs /app/node_modules /app/node_modules
-COPY --from=build --chown=gurkz:nodejs /app/build /app/build
+COPY --from=build --chown=gurkz:nodejs /app/.output /app/.output
 
 ENV HOST=0.0.0.0
 ENV PORT=4321
@@ -27,4 +27,4 @@ ENV HOST_HEADER=x-forwarded-host
 ENV ORIGIN="https://www.gurkz.me/"
 EXPOSE 4321/tcp
 
-CMD [ "bun", "run", "./build/index.js" ]
+CMD [ "bun", "./.output/server/index.mjs" ]
