@@ -4,6 +4,8 @@ import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import tailwind from "@tailwindcss/vite";
 
+const ReactCompilerConfig = {};
+
 export default defineConfig({
   server: {
     port: 3000,
@@ -12,6 +14,10 @@ export default defineConfig({
     tailwind(),
     tsConfigPaths(),
     tanstackStart({ customViteReactPlugin: true, target: "bun" }),
-    viteReact(),
+    viteReact({
+      babel: {
+        plugins: [["babel-plugin-react-compiler", ReactCompilerConfig]],
+      },
+    }),
   ],
 });
