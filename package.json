@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/thatgurkangurk/gurkz.me#readme",
   "dependencies": {
+    "@radix-ui/react-slot": "^1.2.3",
     "@t3-oss/env-core": "^0.13.8",
     "@tailwindcss/vite": "^4.1.12",
     "@tanstack/react-devtools": "^0.5.3",
@@ -26,6 +27,7 @@
     "@tanstack/react-start": "^1.131.28",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "jotai": "^2.13.1",
     "lucide-react": "^0.542.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",

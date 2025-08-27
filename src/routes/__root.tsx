@@ -9,6 +9,9 @@ import {
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import appCss from "@/styles/app.css?url";
+import { useSyncThemeClass } from "@/hooks/useThemeSync";
+import { themeScript } from "@/lib/theme";
+import Header from "@/components/header";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -45,12 +48,19 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: { children: ReactNode }) {
+  useSyncThemeClass();
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: themeScript,
+          }}
+        />
         <HeadContent />
       </head>
       <body>
+        <Header />
         {children}
         <TanStackDevtools
           config={{
