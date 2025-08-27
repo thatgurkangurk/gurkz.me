@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ModeToggle } from "./mode-toggle";
+import { AuthStatus } from "./auth-status";
 
 export default function Header() {
   return (
@@ -8,8 +9,12 @@ export default function Header() {
         <div className="px-2 font-bold">
           <Link to="/">home</Link>
         </div>
+        <div className="px-2 font-bold">
+          <Link to="/music">music id list</Link>
+        </div>
 
-        <div className="ml-auto">
+        <div className="ml-auto flex flex-row gap-2 items-center">
+          <AuthStatus />
           <ModeToggle />
         </div>
       </nav>

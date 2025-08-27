@@ -2,7 +2,7 @@
 import type { ReactNode } from "react";
 import {
   Outlet,
-  createRootRoute,
+  createRootRouteWithContext,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -13,8 +13,15 @@ import { useSyncThemeClass } from "@/hooks/useThemeSync";
 import { themeScript } from "@/lib/theme";
 import Header from "@/components/header";
 import { Provider } from "jotai";
+import { QueryClient } from "@tanstack/react-query";
+import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
+import { orpc } from "@/lib/orpc";
 
-export const Route = createRootRoute({
+type RouterContext = {
+  queryClient: QueryClient;
+};
+
+export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({
     meta: [
       {
@@ -36,6 +43,8 @@ export const Route = createRootRoute({
     ],
   }),
   component: RootComponent,
+  loader: async ({ context }) =>
+    await context.queryClient.ensureQueryData(orpc.session.get.queryOptions()),
 });
 
 function RootComponent() {
@@ -71,6 +80,10 @@ function RootDocument({ children }: { children: ReactNode }) {
             {
               name: "Tanstack Router",
               render: <TanStackRouterDevtoolsPanel />,
+            },
+            {
+              name: "TanStack Query",
+              render: <ReactQueryDevtoolsPanel />,
             },
           ]}
         />
