@@ -12,6 +12,7 @@ import appCss from "@/styles/app.css?url";
 import { useSyncThemeClass } from "@/hooks/useThemeSync";
 import { themeScript } from "@/lib/theme";
 import Header from "@/components/header";
+import { Provider } from "jotai";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -39,11 +40,11 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   return (
-    <>
+    <Provider>
       <RootDocument>
         <Outlet />
       </RootDocument>
-    </>
+    </Provider>
   );
 }
 
