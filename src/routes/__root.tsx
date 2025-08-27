@@ -45,6 +45,12 @@ export const Route = createRootRouteWithContext<RouterContext>()({
   component: RootComponent,
   loader: async ({ context }) =>
     await context.queryClient.ensureQueryData(orpc.session.get.queryOptions()),
+  onError: (err) => {
+    console.error(err);
+  },
+  errorComponent: (ctx) => {
+    return <p>error: {ctx.error.message}</p>;
+  },
 });
 
 function RootComponent() {
