@@ -1,14 +1,15 @@
 FROM oven/bun:1.2.16 AS base
 LABEL org.opencontainers.image.source="https://github.com/thatgurkangurk/gurkz.me"
-COPY . /app
 WORKDIR /app
 
 FROM base AS deps
+COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile
 
 FROM base AS build
 ENV CI=1
 COPY --from=deps /app/node_modules /app/node_modules
+COPY . .
 
 RUN CI="1" DATABASE_URL="postgres://changeme" bun run build
 
@@ -27,4 +28,4 @@ ENV HOST_HEADER=x-forwarded-host
 ENV ORIGIN="https://www.gurkz.me/"
 EXPOSE 4321/tcp
 
-CMD [ "bun", "./.output/server/index.mjs" ]
+CMD [ "bun", ".output/server/index.mjs" ]
