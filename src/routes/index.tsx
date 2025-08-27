@@ -3,6 +3,13 @@ import underConstruction from "@/assets/under-construction.gif";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
+  head: () => ({
+    meta: [
+      {
+        title: "home - gurkan's website",
+      },
+    ],
+  }),
 });
 
 function RouteComponent() {
