@@ -11,7 +11,7 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import appCss from "@/styles/app.css?url";
 import { useSyncThemeClass } from "@/hooks/useThemeSync";
 import { themeScript } from "@/lib/theme";
-import Header from "@/components/header";
+import { Header } from "@/components/header";
 import { Provider } from "jotai";
 import { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
@@ -76,7 +76,18 @@ function RootDocument({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        <Header />
+        <Header
+          links={[
+            {
+              label: "home",
+              to: "/",
+            },
+            {
+              label: "music id list",
+              to: "/music",
+            },
+          ]}
+        />
         <main className="p-2">{children}</main>
         <TanStackDevtools
           config={{

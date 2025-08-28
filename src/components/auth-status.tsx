@@ -29,7 +29,7 @@ export function AuthStatus() {
     <>
       {data?.user ? (
         <>
-          <p>hello, {data.user.name}</p>
+          <p className="whitespace-nowrap">hello, {data.user.name}</p>
           <Button variant={"link"} onClick={() => signOut(null)}>
             log out
           </Button>
