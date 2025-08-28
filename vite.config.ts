@@ -3,6 +3,9 @@ import tsConfigPaths from "vite-tsconfig-paths";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
 import tailwind from "@tailwindcss/vite";
+import devtoolsJson from "vite-plugin-devtools-json";
+import jotaiDebugLabel from "jotai/babel/plugin-debug-label";
+import jotaiReactRefresh from "jotai/babel/plugin-react-refresh";
 
 const ReactCompilerConfig = {};
 
@@ -11,12 +14,17 @@ export default defineConfig({
     port: 3000,
   },
   plugins: [
+    devtoolsJson(),
     tailwind(),
     tsConfigPaths(),
     tanstackStart({ customViteReactPlugin: true, target: "bun" }),
     viteReact({
       babel: {
-        plugins: [["babel-plugin-react-compiler", ReactCompilerConfig]],
+        plugins: [
+          ["babel-plugin-react-compiler", ReactCompilerConfig],
+          jotaiDebugLabel,
+          jotaiReactRefresh,
+        ],
       },
     }),
   ],
