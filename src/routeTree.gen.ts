@@ -13,6 +13,7 @@ import { createServerRootRoute } from '@tanstack/react-start/server'
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as MusicRouteImport } from './routes/music'
 import { Route as IndexRouteImport } from './routes/index'
+import { ServerRoute as ApiStonksDotjsServerRouteImport } from './routes/api.stonks[.]js'
 import { ServerRoute as ApiSplatServerRouteImport } from './routes/api.$'
 import { ServerRoute as ApiRpcSplatServerRouteImport } from './routes/api.rpc.$'
 import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api.auth.$'
@@ -28,6 +29,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStonksDotjsServerRoute = ApiStonksDotjsServerRouteImport.update({
+  id: '/api/stonks.js',
+  path: '/api/stonks.js',
+  getParentRoute: () => rootServerRouteImport,
 } as any)
 const ApiSplatServerRoute = ApiSplatServerRouteImport.update({
   id: '/api/$',
@@ -72,30 +78,34 @@ export interface RootRouteChildren {
 }
 export interface FileServerRoutesByFullPath {
   '/api/$': typeof ApiSplatServerRoute
+  '/api/stonks.js': typeof ApiStonksDotjsServerRoute
   '/api/auth/$': typeof ApiAuthSplatServerRoute
   '/api/rpc/$': typeof ApiRpcSplatServerRoute
 }
 export interface FileServerRoutesByTo {
   '/api/$': typeof ApiSplatServerRoute
+  '/api/stonks.js': typeof ApiStonksDotjsServerRoute
   '/api/auth/$': typeof ApiAuthSplatServerRoute
   '/api/rpc/$': typeof ApiRpcSplatServerRoute
 }
 export interface FileServerRoutesById {
   __root__: typeof rootServerRouteImport
   '/api/$': typeof ApiSplatServerRoute
+  '/api/stonks.js': typeof ApiStonksDotjsServerRoute
   '/api/auth/$': typeof ApiAuthSplatServerRoute
   '/api/rpc/$': typeof ApiRpcSplatServerRoute
 }
 export interface FileServerRouteTypes {
   fileServerRoutesByFullPath: FileServerRoutesByFullPath
-  fullPaths: '/api/$' | '/api/auth/$' | '/api/rpc/$'
+  fullPaths: '/api/$' | '/api/stonks.js' | '/api/auth/$' | '/api/rpc/$'
   fileServerRoutesByTo: FileServerRoutesByTo
-  to: '/api/$' | '/api/auth/$' | '/api/rpc/$'
-  id: '__root__' | '/api/$' | '/api/auth/$' | '/api/rpc/$'
+  to: '/api/$' | '/api/stonks.js' | '/api/auth/$' | '/api/rpc/$'
+  id: '__root__' | '/api/$' | '/api/stonks.js' | '/api/auth/$' | '/api/rpc/$'
   fileServerRoutesById: FileServerRoutesById
 }
 export interface RootServerRouteChildren {
   ApiSplatServerRoute: typeof ApiSplatServerRoute
+  ApiStonksDotjsServerRoute: typeof ApiStonksDotjsServerRoute
   ApiAuthSplatServerRoute: typeof ApiAuthSplatServerRoute
   ApiRpcSplatServerRoute: typeof ApiRpcSplatServerRoute
 }
@@ -120,6 +130,13 @@ declare module '@tanstack/react-router' {
 }
 declare module '@tanstack/react-start/server' {
   interface ServerFileRoutesByPath {
+    '/api/stonks.js': {
+      id: '/api/stonks.js'
+      path: '/api/stonks.js'
+      fullPath: '/api/stonks.js'
+      preLoaderRoute: typeof ApiStonksDotjsServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
     '/api/$': {
       id: '/api/$'
       path: '/api/$'
@@ -153,6 +170,7 @@ export const routeTree = rootRouteImport
   ._addFileTypes<FileRouteTypes>()
 const rootServerRouteChildren: RootServerRouteChildren = {
   ApiSplatServerRoute: ApiSplatServerRoute,
+  ApiStonksDotjsServerRoute: ApiStonksDotjsServerRoute,
   ApiAuthSplatServerRoute: ApiAuthSplatServerRoute,
   ApiRpcSplatServerRoute: ApiRpcSplatServerRoute,
 }

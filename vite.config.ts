@@ -6,6 +6,8 @@ import tailwind from "@tailwindcss/vite";
 import devtoolsJson from "vite-plugin-devtools-json";
 import jotaiDebugLabel from "jotai/babel/plugin-debug-label";
 import jotaiReactRefresh from "jotai/babel/plugin-react-refresh";
+import { join } from "node:path";
+import { partytownVite } from "@qwik.dev/partytown/utils";
 
 const ReactCompilerConfig = {};
 
@@ -26,6 +28,16 @@ export default defineConfig({
           jotaiReactRefresh,
         ],
       },
+    }),
+    partytownVite({
+      dest: join(
+        __dirname,
+        ".tanstack",
+        "start",
+        "build",
+        "client-dist",
+        "~partytown"
+      ),
     }),
   ],
 });

@@ -1,5 +1,5 @@
 /// <reference types="vite/client" />
-import type { ReactNode } from "react";
+import { type ReactNode } from "react";
 import {
   Outlet,
   createRootRouteWithContext,
@@ -16,6 +16,7 @@ import { Provider } from "jotai";
 import { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { orpc } from "@/lib/orpc";
+import { Partytown } from "@qwik.dev/partytown/react";
 
 type RouterContext = {
   queryClient: QueryClient;
@@ -68,6 +69,13 @@ function RootDocument({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <Partytown />
+        <script
+          suppressHydrationWarning
+          type="text/partytown"
+          defer
+          src="/api/stonks.js"
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: themeScript,
