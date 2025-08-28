@@ -1,29 +1,8 @@
-import { orpc } from "@/lib/orpc";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "./ui/button";
+import { useSession } from "@/hooks/useSession";
 
 export function AuthStatus() {
-  const queryClient = useQueryClient();
-  const { data } = useQuery(orpc.session.get.queryOptions());
-  const { mutate: signIn } = useMutation(
-    orpc.session.signIn.mutationOptions({
-      onSuccess: (data) => {
-        if (data.redirect && data.url) {
-          location.replace(data.url);
-        }
-      },
-    })
-  );
-
-  const { mutate: signOut } = useMutation(
-    orpc.session.signOut.mutationOptions({
-      onSuccess: async () => {
-        await queryClient.refetchQueries({
-          queryKey: orpc.session.key(),
-        });
-      },
-    })
-  );
+  const { data, signIn, signOut } = useSession();
 
   return (
     <>
