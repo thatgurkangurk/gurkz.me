@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { FormattedId } from "./formatted-id";
 
 export function MusicCard({ musicId }: { musicId: MusicIdWithCreator }) {
   return (
@@ -16,7 +17,7 @@ export function MusicCard({ musicId }: { musicId: MusicIdWithCreator }) {
       </CardHeader>
       <CardContent>
         <div className="flex items-center text-xl">
-          <span className="pr-2">{musicId.robloxId}</span>
+          <FormattedId robloxId={musicId.robloxId} />
         </div>
 
         {musicId.tags && musicId.tags.length > 0 && (
