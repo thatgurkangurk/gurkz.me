@@ -17,6 +17,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
 import { orpc } from "@/lib/orpc";
 import { Partytown } from "@qwik.dev/partytown/react";
+import { Toaster } from "@/components/ui/sonner";
 
 type RouterContext = {
   queryClient: QueryClient;
@@ -97,6 +98,7 @@ function RootDocument({ children }: { children: ReactNode }) {
           ]}
         />
         <main className="p-2">{children}</main>
+        <Toaster />
         <TanStackDevtools
           config={{
             position: "bottom-left",
