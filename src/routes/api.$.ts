@@ -7,6 +7,7 @@ import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
 import { RequestHeadersPlugin, CORSPlugin } from "@orpc/server/plugins";
+import { createRPCContext } from "@/server/orpc";
 
 const handler = new OpenAPIHandler(router, {
   plugins: [
@@ -14,7 +15,6 @@ const handler = new OpenAPIHandler(router, {
       origin: (origin, options) => origin,
       allowMethods: ["GET", "HEAD", "PUT", "POST", "DELETE", "PATCH"],
     }),
-    new RequestHeadersPlugin(),
     new OpenAPIReferencePlugin({
       schemaConverters: [new ZodToJsonSchemaConverter()],
       specGenerateOptions: {
@@ -30,6 +30,7 @@ const handler = new OpenAPIHandler(router, {
 const handle: RequestHandler = async ({ request }) => {
   const { response } = await handler.handle(request, {
     prefix: "/api",
+    context: await createRPCContext({ headers: request.headers }),
   });
 
   return response ?? new Response("Not Found", { status: 404 });

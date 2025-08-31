@@ -1,16 +1,17 @@
+import { createRPCContext } from "@/server/orpc";
 import { router } from "@/server/router";
 import { RPCHandler } from "@orpc/server/fetch";
 import { RequestHeadersPlugin } from "@orpc/server/plugins";
 import { createServerFileRoute } from "@tanstack/react-start/server";
 
 const handler = new RPCHandler(router, {
-  plugins: [new RequestHeadersPlugin()],
+  plugins: [],
 });
 
 async function handle({ request }: { request: Request }) {
   const { response } = await handler.handle(request, {
     prefix: "/api/rpc",
-    context: {}, // Provide initial context if needed
+    context: await createRPCContext({ headers: request.headers }),
   });
 
   return response ?? new Response("Not Found", { status: 404 });

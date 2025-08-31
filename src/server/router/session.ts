@@ -5,7 +5,7 @@ import { z } from "zod/v4";
 import { Session, User } from "../../lib/schemas/user";
 import { SocialProvider } from "../../lib/schemas/auth";
 
-const getSessionSchema = z
+export const getSessionSchema = z
   .object({
     session: Session,
     user: User,
@@ -16,12 +16,12 @@ export const getSession = or
   .route({ method: "GET" })
   .output(getSessionSchema)
   .handler(async ({ context }) => {
-    const { reqHeaders } = context;
+    const { headers } = context;
 
-    if (!reqHeaders) return null;
+    if (!headers) return null;
 
     const res = await auth.api.getSession({
-      headers: reqHeaders,
+      headers: headers,
     });
 
     const data = await getSessionSchema.safeParseAsync(res);
@@ -77,7 +77,7 @@ export const signOut = or
     })
   )
   .handler(async ({ context }) => {
-    const headers = context.reqHeaders;
+    const { headers } = context;
 
     if (!headers) throw new ORPCError("BAD_REQUEST");
 
