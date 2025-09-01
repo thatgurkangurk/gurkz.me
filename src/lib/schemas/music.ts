@@ -1,5 +1,6 @@
 import { z } from "zod/v4";
 import { User } from "./user";
+import { schema } from "@/components/music/form/schema";
 
 export const MusicId = z.object({
   id: z.ulid(),
@@ -24,5 +25,12 @@ export const MusicIdWithCreator = MusicId.extend({
   }),
 });
 
+export const UpdateMusicIdInput = schema.partial().extend({
+  id: z.ulid(),
+  working: z.boolean().optional(),
+  verified: z.boolean().optional(),
+});
+
 export type MusicId = z.infer<typeof MusicId>;
 export type MusicIdWithCreator = z.infer<typeof MusicIdWithCreator>;
+export type UpdateMusicIdInput = z.infer<typeof UpdateMusicIdInput>;

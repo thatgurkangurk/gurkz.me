@@ -1,7 +1,7 @@
 import { hasPermission } from "@/lib/permissions";
 import { requireAuthMiddleware } from "../middleware/auth";
 import { or } from "../orpc";
-import { MusicIdWithCreator } from "@/lib/schemas/music";
+import { MusicIdWithCreator, UpdateMusicIdInput } from "@/lib/schemas/music";
 import { ORPCError } from "@orpc/client";
 import { musicIds } from "@/lib/db/schema/music";
 import { schema } from "@/components/music/form/schema";
@@ -105,6 +105,49 @@ export const deleteMusicId = or
       await db.delete(musicIds).where(eq(musicIds.id, input.id));
     } catch (err) {
       console.error("FAILED TO DELETE", err);
+      throw new ORPCError("INTERNAL_SERVER_ERROR");
+    }
+
+    return {
+      success: true,
+    };
+  });
+
+export const editMusicId = or
+  .input(UpdateMusicIdInput)
+  .use(requireAuthMiddleware)
+  .route({ method: "PATCH" })
+  .handler(async ({ input, context }) => {
+    const { session, db } = context;
+    const { id, ...updates } = input;
+    const cleanUpdates = Object.fromEntries(
+      Object.entries(updates).filter(([_, v]) => v !== undefined)
+    );
+    const [musicIdToEdit] = await db
+      .select()
+      .from(musicIds)
+      .where(eq(musicIds.id, id))
+      .limit(1);
+
+    if (!musicIdToEdit)
+      throw new ORPCError("NOT_FOUND", {
+        message: `Music ID ${id} not found`,
+      });
+
+    const canManage =
+      !!session.user &&
+      (session.user.id === musicIdToEdit.createdById ||
+        hasPermission(session.user, "MANAGE_MUSIC_IDS"));
+
+    if (!canManage)
+      throw new ORPCError("FORBIDDEN", {
+        message: "you are not allowed to do that",
+      });
+
+    try {
+      await db.update(musicIds).set(cleanUpdates).where(eq(musicIds.id, id));
+    } catch (err) {
+      console.error("FAILED TO UPDATE", err);
       throw new ORPCError("INTERNAL_SERVER_ERROR");
     }
 

@@ -19,8 +19,8 @@ export const schema = z.object({
     .max(24, {
       error: "id has to be shorter than 24 characters",
     })
-    .refine((input) => !Number.isNaN(Number.parseInt(input)), {
-      error: "you have to provide a number",
+    .regex(/^\d+$/, {
+      message: "you have to provide only numbers",
     }),
   tags: z
     .array(

@@ -1,4 +1,9 @@
-import { createMusicId, deleteMusicId, getMusicIds } from "./music";
+import {
+  createMusicId,
+  deleteMusicId,
+  editMusicId,
+  getMusicIds,
+} from "./music";
 import { getSession, signIn, signOut } from "./session";
 
 export const router = {
@@ -6,6 +11,7 @@ export const router = {
     get: getMusicIds,
     create: createMusicId,
     delete: deleteMusicId,
+    update: editMusicId,
   },
   session: {
     get: getSession,

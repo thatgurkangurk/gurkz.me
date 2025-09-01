@@ -15,6 +15,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { orpc } from "@/lib/orpc";
 import { LoaderCircle } from "lucide-react";
 import { toast } from "sonner";
+import { EditMusicIdForm } from "./edit-form";
 
 function Delete({ musicId }: { musicId: MusicIdWithCreator }) {
   const [open, setOpen] = useState(false);
@@ -77,8 +78,9 @@ function Delete({ musicId }: { musicId: MusicIdWithCreator }) {
 
 export function ManageMusicId({ musicId }: { musicId: MusicIdWithCreator }) {
   return (
-    <div>
+    <div className="flex flex-row gap-2">
       <Delete musicId={musicId} />
+      <EditMusicIdForm musicId={musicId} />
     </div>
   );
 }
