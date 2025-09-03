@@ -134,15 +134,25 @@ export const editMusicId = or
         message: `Music ID ${id} not found`,
       });
 
-    const canManage =
-      !!session.user &&
-      (session.user.id === musicIdToEdit.createdById ||
-        hasPermission(session.user, "MANAGE_MUSIC_IDS"));
+    const isOwner = session?.user?.id === musicIdToEdit.createdById;
+    const isManager =
+      !!session?.user && hasPermission(session.user, "MANAGE_MUSIC_IDS");
 
-    if (!canManage)
+    if (
+      "verified" in cleanUpdates &&
+      cleanUpdates.verified !== musicIdToEdit.verified &&
+      !isManager
+    ) {
+      throw new ORPCError("FORBIDDEN", {
+        message: "you are not allowed to change the verified status",
+      });
+    }
+
+    if (!(isOwner || isManager)) {
       throw new ORPCError("FORBIDDEN", {
         message: "you are not allowed to do that",
       });
+    }
 
     try {
       await db.update(musicIds).set(cleanUpdates).where(eq(musicIds.id, id));

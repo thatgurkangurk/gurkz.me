@@ -17,6 +17,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { orpc } from "@/lib/orpc";
 import { toast } from "sonner";
 import { useStore } from "@tanstack/react-form";
+import { useSession } from "@/hooks/useSession";
 
 function FormWrapper({
   children,
@@ -57,6 +58,7 @@ function deepEqual(a: any, b: any): boolean {
 }
 
 export function EditMusicIdForm({ musicId }: { musicId: MusicIdWithCreator }) {
+  const { data: user } = useSession();
   const [open, setOpen] = useState(false);
   const { mutateAsync, isPending } = useMutation(
     orpc.music.update.mutationOptions({
@@ -182,15 +184,17 @@ export function EditMusicIdForm({ musicId }: { musicId: MusicIdWithCreator }) {
               )}
             />
 
-            <form.AppField
-              name="verified"
-              children={(field) => (
-                <>
-                  <field.SwitchField label="verified" />
-                  <FieldInfo field={field} />
-                </>
-              )}
-            />
+            {user?.user.permissions.includes("MANAGE_MUSIC_IDS") && (
+              <form.AppField
+                name="verified"
+                children={(field) => (
+                  <>
+                    <field.SwitchField label="verified" />
+                    <FieldInfo field={field} />
+                  </>
+                )}
+              />
+            )}
           </form.AppForm>
         </form>
       </div>
