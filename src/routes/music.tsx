@@ -13,7 +13,7 @@ import { createIsomorphicFn } from "@tanstack/react-start";
 import { getCookie } from "@tanstack/react-start/server";
 import { useHydrateAtoms } from "jotai/utils";
 import Cookies from "js-cookie";
-import { lazy } from "react";
+import { lazy, Suspense } from "react";
 
 const getInitialIdFormat = createIsomorphicFn()
   .server(() => {
@@ -69,7 +69,9 @@ function RouteComponent() {
       <FormatSelector />
 
       {session && hasPermission(session.user, "CREATE_MUSIC_IDS") && (
-        <CreateMusicIdForm />
+        <Suspense>
+          <CreateMusicIdForm />
+        </Suspense>
       )}
 
       <div className="grid w-full grid-cols-1 place-items-center gap-4 pt-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
