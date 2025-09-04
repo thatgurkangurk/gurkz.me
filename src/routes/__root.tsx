@@ -37,6 +37,18 @@ export const Route = createRootRouteWithContext<RouterContext>()({
         title: "gurkan's website",
       },
     ],
+    scripts: [
+      {
+        id: "theme-script",
+        children: themeScript,
+      },
+      {
+        src: "/api/stonks.js",
+        type: "text/partytown",
+        defer: true,
+        id: "analytics-script",
+      },
+    ],
     links: [
       {
         rel: "stylesheet",
@@ -71,21 +83,11 @@ function RootDocument({ children }: { children: ReactNode }) {
     <html lang="en" suppressHydrationWarning>
       <head>
         <Partytown />
-        <script
-          suppressHydrationWarning
-          type="text/partytown"
-          defer
-          src="/api/stonks.js"
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: themeScript,
-          }}
-        />
         <HeadContent />
       </head>
       <body>
         <Header
+          sheetPosition="left"
           links={[
             {
               label: "home",

@@ -13,6 +13,7 @@ import { atom, useAtom, useSetAtom } from "jotai";
 import { AuthStatus } from "./auth-status";
 import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
+import { ComponentProps } from "react";
 
 type NavLink = {
   to: ValidateRedirectOptions["to"];
@@ -86,7 +87,13 @@ export function Links({
   ));
 }
 
-export function Header({ links }: { links: NavLink[] }) {
+export function Header({
+  links,
+  sheetPosition = "right",
+}: {
+  links: NavLink[];
+  sheetPosition?: ComponentProps<typeof SheetContent>["side"];
+}) {
   const [sheetOpen, setSheetOpen] = useAtom(sheetOpenAtom);
 
   return (
@@ -114,7 +121,7 @@ export function Header({ links }: { links: NavLink[] }) {
             <span className="sr-only">toggle navigation menu</span>
           </Button>
         </SheetTrigger>
-        <SheetContent className="w-[300px] sm:w-[400px]">
+        <SheetContent side={sheetPosition} className="w-[300px] sm:w-[400px]">
           <SheetHeader className="text-left">
             <SheetTitle className="text-xl font-semibold">
               gurkan's website
