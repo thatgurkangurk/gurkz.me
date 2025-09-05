@@ -13,6 +13,8 @@ import { createServerRootRoute } from '@tanstack/react-start/server'
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as MusicRouteImport } from './routes/music'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ToolsIndexRouteImport } from './routes/tools/index'
+import { Route as ToolsWebhookDestroyerRouteImport } from './routes/tools/webhook-destroyer'
 import { ServerRoute as ApiStonksDotjsServerRouteImport } from './routes/api.stonks[.]js'
 import { ServerRoute as ApiSplatServerRouteImport } from './routes/api.$'
 import { ServerRoute as ApiRpcSplatServerRouteImport } from './routes/api.rpc.$'
@@ -28,6 +30,16 @@ const MusicRoute = MusicRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ToolsIndexRoute = ToolsIndexRouteImport.update({
+  id: '/tools/',
+  path: '/tools/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ToolsWebhookDestroyerRoute = ToolsWebhookDestroyerRouteImport.update({
+  id: '/tools/webhook-destroyer',
+  path: '/tools/webhook-destroyer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiStonksDotjsServerRoute = ApiStonksDotjsServerRouteImport.update({
@@ -54,27 +66,35 @@ const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/music': typeof MusicRoute
+  '/tools/webhook-destroyer': typeof ToolsWebhookDestroyerRoute
+  '/tools': typeof ToolsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/music': typeof MusicRoute
+  '/tools/webhook-destroyer': typeof ToolsWebhookDestroyerRoute
+  '/tools': typeof ToolsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/music': typeof MusicRoute
+  '/tools/webhook-destroyer': typeof ToolsWebhookDestroyerRoute
+  '/tools/': typeof ToolsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/music'
+  fullPaths: '/' | '/music' | '/tools/webhook-destroyer' | '/tools'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/music'
-  id: '__root__' | '/' | '/music'
+  to: '/' | '/music' | '/tools/webhook-destroyer' | '/tools'
+  id: '__root__' | '/' | '/music' | '/tools/webhook-destroyer' | '/tools/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   MusicRoute: typeof MusicRoute
+  ToolsWebhookDestroyerRoute: typeof ToolsWebhookDestroyerRoute
+  ToolsIndexRoute: typeof ToolsIndexRoute
 }
 export interface FileServerRoutesByFullPath {
   '/api/$': typeof ApiSplatServerRoute
@@ -126,6 +146,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tools/': {
+      id: '/tools/'
+      path: '/tools'
+      fullPath: '/tools'
+      preLoaderRoute: typeof ToolsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tools/webhook-destroyer': {
+      id: '/tools/webhook-destroyer'
+      path: '/tools/webhook-destroyer'
+      fullPath: '/tools/webhook-destroyer'
+      preLoaderRoute: typeof ToolsWebhookDestroyerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 declare module '@tanstack/react-start/server' {
@@ -164,6 +198,8 @@ declare module '@tanstack/react-start/server' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   MusicRoute: MusicRoute,
+  ToolsWebhookDestroyerRoute: ToolsWebhookDestroyerRoute,
+  ToolsIndexRoute: ToolsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

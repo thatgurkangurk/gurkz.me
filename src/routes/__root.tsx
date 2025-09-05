@@ -97,6 +97,10 @@ function RootDocument({ children }: { children: ReactNode }) {
               label: "music id list",
               to: "/music",
             },
+            {
+              label: "tools",
+              to: "/tools",
+            },
           ]}
         />
         <main className="p-2">{children}</main>

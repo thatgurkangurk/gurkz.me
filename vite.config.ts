@@ -8,6 +8,7 @@ import jotaiDebugLabel from "jotai/babel/plugin-debug-label";
 import jotaiReactRefresh from "jotai/babel/plugin-react-refresh";
 import { join } from "node:path";
 import { partytownVite } from "@qwik.dev/partytown/utils";
+import { MagicRegExpTransformPlugin } from "magic-regexp/transform";
 
 const ReactCompilerConfig = {};
 
@@ -16,6 +17,7 @@ export default defineConfig({
     port: 3000,
   },
   plugins: [
+    MagicRegExpTransformPlugin.vite(),
     devtoolsJson(),
     tailwind(),
     tsConfigPaths(),
