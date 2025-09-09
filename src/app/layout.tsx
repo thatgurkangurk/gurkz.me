@@ -25,6 +25,10 @@ export default function RootLayout({
               label: "home",
               to: "/",
             },
+            {
+              label: "music id list",
+              to: "/music",
+            },
           ]}
         />
         <main className="p-2">{children}</main>
