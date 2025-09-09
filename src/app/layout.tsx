@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/header";
+import Providers from "@/components/providers";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -19,19 +20,21 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${spaceGrotesk.className} antialiased`}>
-        <Header
-          links={[
-            {
-              label: "home",
-              to: "/",
-            },
-            {
-              label: "music id list",
-              to: "/music",
-            },
-          ]}
-        />
-        <main className="p-2">{children}</main>
+        <Providers>
+          <Header
+            links={[
+              {
+                label: "home",
+                to: "/",
+              },
+              {
+                label: "music id list",
+                to: "/music",
+              },
+            ]}
+          />
+          <main className="p-2">{children}</main>
+        </Providers>
       </body>
     </html>
   );
