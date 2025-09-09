@@ -9,6 +9,7 @@ node_modules
 /build
 /.nitro
 /.tanstack
+/.next
 
 # OS
 .DS_Store
