@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { getQueryClient } from "@/lib/get-query-client";
 import { orpc } from "@/lib/orpc";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
+import { Toaster } from "@/components/ui/sonner";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -50,6 +51,7 @@ export default async function RootLayout({
             </HydrationBoundary>
 
             <main className="p-2">{children}</main>
+            <Toaster />
           </Providers>
         </ThemeProvider>
       </body>

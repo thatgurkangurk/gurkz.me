@@ -41,3 +41,9 @@ export const schema = z.object({
 });
 
 export type CreateMusicIdFormValues = z.infer<typeof schema>;
+
+export const defaultValues: CreateMusicIdFormValues = {
+  name: "",
+  robloxId: "",
+  tags: [],
+};
