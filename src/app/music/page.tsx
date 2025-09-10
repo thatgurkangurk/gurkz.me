@@ -5,7 +5,7 @@ import { MusicList } from "./list";
 
 export default function MusicPage() {
   const queryClient = getQueryClient();
-  void queryClient.prefetchQuery(orpc.getMusicIds.queryOptions());
+  void queryClient.prefetchQuery(orpc.music.get.queryOptions());
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

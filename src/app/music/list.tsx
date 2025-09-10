@@ -5,7 +5,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { Fragment } from "react";
 
 export function MusicList() {
-  const { data } = useSuspenseQuery(orpc.getMusicIds.queryOptions());
+  const { data } = useSuspenseQuery(orpc.music.get.queryOptions());
 
   return (
     <div>
