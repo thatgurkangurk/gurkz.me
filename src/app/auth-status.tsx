@@ -1,15 +1,15 @@
 "use client";
 
-import { authClient } from "@/lib/auth-client";
+import { useSession } from "@/lib/hooks/session";
 
 export function AuthStatus() {
-  const { data } = authClient.useSession();
+  const { data, signOut, signIn } = useSession();
 
   if (data && data.user) {
     return (
       <div>
         <p>hi, {data.user.name}</p>
-        <button onClick={() => authClient.signOut()}>log out</button>
+        <button onClick={() => signOut(null)}>log out</button>
       </div>
     );
   }
@@ -17,7 +17,7 @@ export function AuthStatus() {
   return (
     <button
       onClick={() =>
-        authClient.signIn.social({
+        signIn({
           provider: "discord",
         })
       }
