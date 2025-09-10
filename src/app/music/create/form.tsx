@@ -169,7 +169,7 @@ function Form() {
                     isPending || !hasChanges || !canSubmit || isSubmitting
                   }
                   type="submit"
-                  variant={"destructive"}
+                  variant={"default"}
                 >
                   {isPending && <LoaderCircle className="animate-spin" />}{" "}
                   create
