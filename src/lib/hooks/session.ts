@@ -1,10 +1,14 @@
 import { orpc } from "@/lib/orpc";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
 
 export function useSession() {
   const queryClient = useQueryClient();
 
-  const { data, isLoading } = useQuery(orpc.session.get.queryOptions());
+  const { data, isLoading } = useSuspenseQuery(orpc.session.get.queryOptions());
 
   const { mutate: signIn, isPending: signingIn } = useMutation(
     orpc.session.signIn.mutationOptions({

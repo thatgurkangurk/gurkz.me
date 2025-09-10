@@ -15,20 +15,16 @@ const getSessionSchema = z
 const getSession = base
   .route({ method: "GET" })
   .output(getSessionSchema)
-  .handler(async ({ context }) => {
-    const { headers } = context;
+  .handler(({ context }) => {
+    const { session } = context;
 
-    if (!headers) return null;
+    if (!session) return null;
 
-    const res = await auth.api.getSession({
-      headers: headers,
-    });
+    const parsedSession = getSessionSchema.safeParse(session);
 
-    const data = await getSessionSchema.safeParseAsync(res);
+    if (!parsedSession.success) return null;
 
-    if (!data.success) return null;
-
-    return data.data;
+    return parsedSession.data;
   });
 
 const signIn = base
