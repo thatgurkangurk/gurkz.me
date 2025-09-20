@@ -19,6 +19,7 @@ import { ServerRoute as ApiStonksDotjsServerRouteImport } from './routes/api.sto
 import { ServerRoute as ApiSplatServerRouteImport } from './routes/api.$'
 import { ServerRoute as ApiRpcSplatServerRouteImport } from './routes/api.rpc.$'
 import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api.auth.$'
+import { ServerRoute as UpdaterSoundpadTargetVersionServerRouteImport } from './routes/updater.soundpad.$target.$version'
 
 const rootServerRouteImport = createServerRootRoute()
 
@@ -62,6 +63,12 @@ const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootServerRouteImport,
 } as any)
+const UpdaterSoundpadTargetVersionServerRoute =
+  UpdaterSoundpadTargetVersionServerRouteImport.update({
+    id: '/updater/soundpad/$target/$version',
+    path: '/updater/soundpad/$target/$version',
+    getParentRoute: () => rootServerRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -101,12 +108,14 @@ export interface FileServerRoutesByFullPath {
   '/api/stonks.js': typeof ApiStonksDotjsServerRoute
   '/api/auth/$': typeof ApiAuthSplatServerRoute
   '/api/rpc/$': typeof ApiRpcSplatServerRoute
+  '/updater/soundpad/$target/$version': typeof UpdaterSoundpadTargetVersionServerRoute
 }
 export interface FileServerRoutesByTo {
   '/api/$': typeof ApiSplatServerRoute
   '/api/stonks.js': typeof ApiStonksDotjsServerRoute
   '/api/auth/$': typeof ApiAuthSplatServerRoute
   '/api/rpc/$': typeof ApiRpcSplatServerRoute
+  '/updater/soundpad/$target/$version': typeof UpdaterSoundpadTargetVersionServerRoute
 }
 export interface FileServerRoutesById {
   __root__: typeof rootServerRouteImport
@@ -114,13 +123,30 @@ export interface FileServerRoutesById {
   '/api/stonks.js': typeof ApiStonksDotjsServerRoute
   '/api/auth/$': typeof ApiAuthSplatServerRoute
   '/api/rpc/$': typeof ApiRpcSplatServerRoute
+  '/updater/soundpad/$target/$version': typeof UpdaterSoundpadTargetVersionServerRoute
 }
 export interface FileServerRouteTypes {
   fileServerRoutesByFullPath: FileServerRoutesByFullPath
-  fullPaths: '/api/$' | '/api/stonks.js' | '/api/auth/$' | '/api/rpc/$'
+  fullPaths:
+    | '/api/$'
+    | '/api/stonks.js'
+    | '/api/auth/$'
+    | '/api/rpc/$'
+    | '/updater/soundpad/$target/$version'
   fileServerRoutesByTo: FileServerRoutesByTo
-  to: '/api/$' | '/api/stonks.js' | '/api/auth/$' | '/api/rpc/$'
-  id: '__root__' | '/api/$' | '/api/stonks.js' | '/api/auth/$' | '/api/rpc/$'
+  to:
+    | '/api/$'
+    | '/api/stonks.js'
+    | '/api/auth/$'
+    | '/api/rpc/$'
+    | '/updater/soundpad/$target/$version'
+  id:
+    | '__root__'
+    | '/api/$'
+    | '/api/stonks.js'
+    | '/api/auth/$'
+    | '/api/rpc/$'
+    | '/updater/soundpad/$target/$version'
   fileServerRoutesById: FileServerRoutesById
 }
 export interface RootServerRouteChildren {
@@ -128,6 +154,7 @@ export interface RootServerRouteChildren {
   ApiStonksDotjsServerRoute: typeof ApiStonksDotjsServerRoute
   ApiAuthSplatServerRoute: typeof ApiAuthSplatServerRoute
   ApiRpcSplatServerRoute: typeof ApiRpcSplatServerRoute
+  UpdaterSoundpadTargetVersionServerRoute: typeof UpdaterSoundpadTargetVersionServerRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -192,6 +219,13 @@ declare module '@tanstack/react-start/server' {
       preLoaderRoute: typeof ApiAuthSplatServerRouteImport
       parentRoute: typeof rootServerRouteImport
     }
+    '/updater/soundpad/$target/$version': {
+      id: '/updater/soundpad/$target/$version'
+      path: '/updater/soundpad/$target/$version'
+      fullPath: '/updater/soundpad/$target/$version'
+      preLoaderRoute: typeof UpdaterSoundpadTargetVersionServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
   }
 }
 
@@ -209,6 +243,8 @@ const rootServerRouteChildren: RootServerRouteChildren = {
   ApiStonksDotjsServerRoute: ApiStonksDotjsServerRoute,
   ApiAuthSplatServerRoute: ApiAuthSplatServerRoute,
   ApiRpcSplatServerRoute: ApiRpcSplatServerRoute,
+  UpdaterSoundpadTargetVersionServerRoute:
+    UpdaterSoundpadTargetVersionServerRoute,
 }
 export const serverRouteTree = rootServerRouteImport
   ._addFileChildren(rootServerRouteChildren)
