@@ -1,6 +1,7 @@
 <script lang="ts" module>
 	import type { Snippet } from "svelte";
 	import type { ClassValue } from "svelte/elements";
+
 	export type NavLinkProps = {
 		href: string;
 		class?: ClassValue;
