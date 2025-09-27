@@ -3,18 +3,16 @@
 	import { IdFormatContext, type IdFormat } from "../context";
 
 	const format = IdFormatContext.get();
-
-	function setFormat(newFormat: IdFormat) {
-		format.current = newFormat;
-	}
 </script>
 
+{#snippet selectorButton(newFormat: IdFormat, label: string)}
+	<Button disabled={format.current === newFormat} onclick={() => (format.current = newFormat)}>
+		{label}
+	</Button>
+{/snippet}
+
 <p>current format: {format.current}</p>
-<div class="flex flex-row gap-2">
-	<Button disabled={format.current === "DEFAULT"} onclick={() => setFormat("DEFAULT")}>
-		default
-	</Button>
-	<Button disabled={format.current === "TRAITOR_TOWN"} onclick={() => setFormat("TRAITOR_TOWN")}>
-		traitor town
-	</Button>
+<div class="flex flex-row gap-2 select-none">
+	{@render selectorButton("DEFAULT", "default")}
+	{@render selectorButton("TRAITOR_TOWN", "traitor town")}
 </div>
