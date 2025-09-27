@@ -21,7 +21,7 @@
 		<CardTitle class="text-xl">{musicId.name}</CardTitle>
 	</CardHeader>
 	<CardContent>
-		<div class="flex items-center text-xl">
+		<div class="flex items-center gap-2 text-xl">
 			<FormattedId robloxId={musicId.robloxId} />
 			<CopyButton variant={"outline"} text={formatId(musicId.robloxId, format.current)} />
 		</div>
