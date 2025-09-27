@@ -1,20 +1,17 @@
 <script lang="ts">
-	import CopyButton from "$lib/components/copy-button.svelte";
 	import FormatSelector from "./components/format-selector.svelte";
-	import FormattedId, { formatId } from "./components/formatted-id.svelte";
-	import { IdFormatContext } from "./context";
+	import MusicCard from "./components/music-card.svelte";
 	import { getMusicIds } from "./music.remote";
-
-	const format = IdFormatContext.get();
 </script>
 
 <p>music id list</p>
 
 <FormatSelector />
 
-{#each await getMusicIds() as musicId (musicId.id)}
-	<div class="flex items-center gap-2">
-		<p>{musicId.name} - <FormattedId robloxId={musicId.robloxId} /></p>
-		<CopyButton variant={"outline"} text={formatId(musicId.robloxId, format.current)} />
-	</div>
-{/each}
+<div
+	class="grid w-full grid-cols-1 place-items-center gap-4 pt-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5"
+>
+	{#each await getMusicIds() as musicId (musicId.id)}
+		<MusicCard {musicId} />
+	{/each}
+</div>
