@@ -27,13 +27,13 @@
 		</div>
 
 		{#if musicId.tags && musicId.tags.length > 0}
-			{#each musicId.tags as tag}
-				<div class="mt-2 grid grid-cols-2 gap-2">
+			<div class="mt-2 flex flex-row gap-2">
+				{#each musicId.tags as tag}
 					<Badge variant="outline">
 						{tag}
 					</Badge>
-				</div>
-			{/each}
+				{/each}
+			</div>
 		{/if}
 	</CardContent>
 	<CardFooter class="grid grid-cols-1 gap-1">
