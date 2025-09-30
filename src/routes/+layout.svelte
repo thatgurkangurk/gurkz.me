@@ -6,17 +6,9 @@
 	import { TooltipProvider } from "$lib/components/ui/tooltip";
 	import { dehydrate, QueryClientProvider } from "@tanstack/svelte-query";
 	import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
-	import { browser } from "$app/environment";
-	import { createDehydratedScript } from "$lib/utils/query";
 
 	let { children, data }: LayoutProps = $props();
 </script>
-
-<svelte:head>
-	{#if !browser}
-		{@html createDehydratedScript(dehydrate(data.queryClient))}
-	{/if}
-</svelte:head>
 
 <QueryClientProvider client={data.queryClient}>
 	<ModeWatcher />
