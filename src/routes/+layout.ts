@@ -1,4 +1,5 @@
 import { browser } from "$app/environment";
+import { orpc } from "$lib/orpc";
 import { QueryClient } from "@tanstack/svelte-query";
 
 export async function load() {
@@ -9,6 +10,8 @@ export async function load() {
 			}
 		}
 	});
+
+	await queryClient.ensureQueryData(orpc.session.get.queryOptions());
 
 	return { queryClient };
 }
