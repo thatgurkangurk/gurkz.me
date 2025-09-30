@@ -1,12 +1,31 @@
 import { browser } from "$app/environment";
 import { orpc } from "$lib/orpc";
-import { QueryClient } from "@tanstack/svelte-query";
+import { serializer } from "$lib/serialiser";
+import { defaultShouldDehydrateQuery, QueryClient } from "@tanstack/svelte-query";
 
 export async function load() {
 	const queryClient = new QueryClient({
 		defaultOptions: {
 			queries: {
-				enabled: browser
+				enabled: browser,
+				queryKeyHashFn(queryKey) {
+					const [json, meta] = serializer.serialize(queryKey);
+					return JSON.stringify({ json, meta });
+				},
+				staleTime: 60 * 1000
+			},
+			dehydrate: {
+				shouldDehydrateQuery: (query) =>
+					defaultShouldDehydrateQuery(query) || query.state.status === "pending",
+				serializeData(data) {
+					const [json, meta] = serializer.serialize(data);
+					return { json, meta };
+				}
+			},
+			hydrate: {
+				deserializeData(data) {
+					return serializer.deserialize(data.json, data.meta);
+				}
 			}
 		}
 	});
