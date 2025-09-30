@@ -1,31 +1,31 @@
 <script lang="ts">
 	import { authClient } from "$lib/auth";
+	import { useSession, useSignIn, useSignOut } from "$lib/session";
 
-	const session = authClient.useSession();
-
-	async function login() {
-		await authClient.signIn.social({
-			provider: "discord"
-		});
-	}
-
-	async function logout() {
-		await authClient.signOut();
-	}
+	const session = useSession();
+	const { mutateAsync: signOutAsync } = useSignOut();
+	const { mutateAsync: signInAsync } = useSignIn();
 </script>
 
 <p>hi</p>
 
-{#if $session.isPending}
-	<p>loading</p>
-{:else if $session.data}
-	{@const user = $session.data.user}
-	<div>
-		<p>hello, {user.name}</p>
-		<button onclick={logout}>log out</button>
+{#if session.data}
+	<div class="flex items-center-safe gap-2">
+		<p>hello, {session.data.user.name}</p>
+		<button
+			onclick={async () => {
+				await signOutAsync(null);
+			}}>log out</button
+		>
 	</div>
 {:else}
-	<div>
-		<button onclick={login}>log in</button>
-	</div>
+	<button
+		onclick={async () => {
+			await signInAsync({
+				provider: "discord"
+			});
+		}}
+	>
+		log in
+	</button>
 {/if}
