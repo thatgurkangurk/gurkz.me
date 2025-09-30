@@ -3,16 +3,14 @@ import { RPCLink } from "@orpc/client/fetch";
 import { createORPCClient } from "@orpc/client";
 import { createORPCSvelteQueryUtils } from "@orpc/svelte-query";
 import type { router } from "./server/router";
-import { base } from "$app/paths";
+import { BatchLinkPlugin } from "@orpc/client/plugins";
 import { browser } from "$app/environment";
 
-declare global {
-	var $client: RouterClient<typeof router> | undefined;
-}
-
 const link = new RPCLink({
-	url: () => new URL(`${base}/rpc`, location.origin),
-
+	url: () => {
+		if (!browser) throw new Error("RPCLink cannot be used on the server");
+		return `${window.location.origin}/rpc`;
+	},
 	method: (_, path) => {
 		if (!browser) {
 			return "GET";
@@ -24,7 +22,12 @@ const link = new RPCLink({
 		}
 
 		return "POST";
-	}
+	},
+	plugins: [
+		new BatchLinkPlugin({
+			groups: [{ condition: () => true, context: {} }]
+		})
+	]
 });
 
 /**
