@@ -3,7 +3,6 @@ import { RPCLink } from "@orpc/client/fetch";
 import { createORPCClient } from "@orpc/client";
 import { createORPCSvelteQueryUtils } from "@orpc/svelte-query";
 import type { router } from "./server/router";
-import { BatchLinkPlugin } from "@orpc/client/plugins";
 import { browser } from "$app/environment";
 
 const link = new RPCLink({
@@ -23,11 +22,7 @@ const link = new RPCLink({
 
 		return "POST";
 	},
-	plugins: [
-		new BatchLinkPlugin({
-			groups: [{ condition: () => true, context: {} }]
-		})
-	]
+	plugins: []
 });
 
 /**
