@@ -24,15 +24,14 @@
 		input,
 		errors,
 		button,
+		type,
 		...fieldProps
 	}: Props = $props();
 
 	let value: string | number | undefined = $state();
 
 	$effect(() => {
-		value = type === 'number' && typeof input === 'string'
-			? Number(input)
-			: input;
+		value = type === "number" && typeof input === "string" ? Number(input) : input;
 	});
 </script>
 
@@ -43,6 +42,7 @@
 			<Input
 				{...fieldProps}
 				id={name}
+				{type}
 				{name}
 				{value}
 				{required}
