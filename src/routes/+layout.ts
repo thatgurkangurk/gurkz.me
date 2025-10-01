@@ -11,8 +11,7 @@ export async function load() {
 				queryKeyHashFn(queryKey) {
 					const [json, meta] = serializer.serialize(queryKey);
 					return JSON.stringify({ json, meta });
-				},
-				staleTime: 60 * 1000
+				}
 			},
 			dehydrate: {
 				shouldDehydrateQuery: (query) =>

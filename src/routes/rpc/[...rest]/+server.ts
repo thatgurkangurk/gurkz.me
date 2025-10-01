@@ -1,15 +1,16 @@
 import { RPCHandler } from "@orpc/server/fetch";
 import type { RequestHandler } from "./$types";
 import { router } from "$lib/server/router";
-import { RequestHeadersPlugin } from "@orpc/server/plugins";
+import { createRPCContext } from "$lib/server/orpc";
 
 const handler = new RPCHandler(router, {
-	plugins: [new RequestHeadersPlugin()]
+	plugins: []
 });
 
 const handle: RequestHandler = async ({ request }) => {
 	const { response } = await handler.handle(request, {
-		prefix: "/rpc"
+		prefix: "/rpc",
+		context: await createRPCContext({ headers: request.headers })
 	});
 
 	return response ?? new Response("Not Found", { status: 404 });

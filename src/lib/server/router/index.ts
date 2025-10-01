@@ -1,4 +1,4 @@
-import { getMusicIds } from "./music";
+import { createMusicId, getMusicIds } from "./music";
 import { getSession, signIn, signOut } from "./session";
 
 export const router = {
@@ -8,6 +8,7 @@ export const router = {
 		signOut: signOut
 	},
 	music: {
-		get: getMusicIds
+		get: getMusicIds,
+		create: createMusicId
 	}
 };

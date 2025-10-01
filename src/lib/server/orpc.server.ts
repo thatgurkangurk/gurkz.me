@@ -1,12 +1,12 @@
 import { createRouterClient } from "@orpc/server";
 import { router } from "./router";
 import { getRequestEvent } from "$app/server";
+import { createRPCContext } from "./orpc";
 
 globalThis.$client = createRouterClient(router, {
-	context: () => {
+	context: async () => {
 		const reqEvent = getRequestEvent();
-		return {
-			reqHeaders: reqEvent.request.headers
-		};
+		const ctx = await createRPCContext({ headers: reqEvent.request.headers });
+		return ctx;
 	}
 });

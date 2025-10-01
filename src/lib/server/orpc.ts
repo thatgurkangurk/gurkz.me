@@ -1,7 +1,28 @@
 import { os } from "@orpc/server";
 import { dbMiddleware } from "./middleware/db";
-import type { RequestHeadersPluginContext } from "@orpc/server/plugins";
+import { auth } from "./auth";
 
-type ORPCContext = RequestHeadersPluginContext;
+export async function createRPCContext(opts: { headers: Headers }) {
+	const authCtx = await auth.api.getSession({
+		headers: opts.headers
+	});
 
-export const or = os.$context<ORPCContext>().use(dbMiddleware);
+	if (!authCtx) {
+		return {
+			headers: opts.headers,
+			session: null
+		};
+	}
+
+	return {
+		headers: opts.headers,
+		session: {
+			session: authCtx.session,
+			user: authCtx.user
+		}
+	};
+}
+
+export const o = os.$context<Awaited<ReturnType<typeof createRPCContext>>>();
+
+export const or = o.use(dbMiddleware);

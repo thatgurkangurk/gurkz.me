@@ -3,7 +3,8 @@ import { router } from "$lib/server/router";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { experimental_ValibotToJsonSchemaConverter } from "@orpc/valibot";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
-import { RequestHeadersPlugin, CORSPlugin } from "@orpc/server/plugins";
+import { CORSPlugin } from "@orpc/server/plugins";
+import { createRPCContext } from "$lib/server/orpc";
 
 const handler = new OpenAPIHandler(router, {
 	plugins: [
@@ -11,7 +12,6 @@ const handler = new OpenAPIHandler(router, {
 			origin: (origin) => origin,
 			allowMethods: ["GET", "HEAD", "PUT", "POST", "DELETE", "PATCH"]
 		}),
-		new RequestHeadersPlugin(),
 		new OpenAPIReferencePlugin({
 			schemaConverters: [new experimental_ValibotToJsonSchemaConverter()],
 			specGenerateOptions: {
@@ -26,7 +26,8 @@ const handler = new OpenAPIHandler(router, {
 
 const handle: RequestHandler = async ({ request }) => {
 	const { response } = await handler.handle(request, {
-		prefix: "/api"
+		prefix: "/api",
+		context: await createRPCContext({ headers: request.headers })
 	});
 
 	return response ?? new Response("Not Found", { status: 404 });

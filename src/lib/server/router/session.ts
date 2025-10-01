@@ -17,15 +17,15 @@ export const getSession = or
 	.route({ method: "GET" })
 	.output(getSessionSchema)
 	.handler(async ({ context }) => {
-		const { reqHeaders } = context;
+		const { headers } = context;
 
-		if (!reqHeaders) {
+		if (!headers) {
 			console.log("no headers");
 			return null;
 		}
 
 		const res = await auth.api.getSession({
-			headers: reqHeaders
+			headers: headers
 		});
 
 		const data = await v.safeParseAsync(getSessionSchema, res);
@@ -84,7 +84,7 @@ export const signOut = or
 		})
 	)
 	.handler(async ({ context }) => {
-		const headers = context.reqHeaders;
+		const { headers } = context;
 
 		if (!headers) throw new ORPCError("BAD_REQUEST");
 
