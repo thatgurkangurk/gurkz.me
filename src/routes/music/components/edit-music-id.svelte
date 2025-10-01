@@ -57,124 +57,43 @@
 		})
 	);
 
-	const maxTags = $derived(
-		getInput(form, {
-			path: ["tags"]
-		}).length > 3
-	);
-	const noTags = $derived(
-		!(
-			getInput(form, {
-				path: ["tags"]
-			}).length > 0
-		)
-	);
+<script>
+  // Enforce a hard cap of 3 tags
+  const maxTags = $derived(
+    getInput(form, {
+      path: ["tags"]
+    }).length >= 3
+  );
+  const noTags = $derived(
+    !(
+      getInput(form, {
+        path: ["tags"]
+      }).length > 0
+    )
+  );
 </script>
 
-<Dialog bind:open>
-	<DialogTrigger class={cn(buttonVariants({ variant: "secondary" }), "w-fit")}>edit</DialogTrigger>
+<!-- … -->
 
-	<DialogContent>
-		<DialogHeader>
-			<DialogTitle>
-				editing "{musicId.name}"?
-			</DialogTitle>
-		</DialogHeader>
-		<Form
-			of={form}
-			onsubmit={async (output) => {
-				const promise = mutation.mutateAsync(output);
-				toast.promise(promise, {
-					loading: "creating...",
-					success: "successfully created",
-					error: "something went wrong"
-				});
-			}}
-		>
-			<div class="flex items-center gap-2">
-				<div class="space-y-4">
-					<Field of={form} path={["name"]}>
-						{#snippet children(field)}
-							<TextInput
-								{...field.props}
-								input={field.input}
-								errors={field.errors}
-								type="text"
-								label="name"
-								placeholder="a very nice song"
-								required
-							/>
-						{/snippet}
-					</Field>
-
-					<Field of={form} path={["robloxId"]}>
-						{#snippet children(field)}
-							<TextInput
-								{...field.props}
-								input={field.input}
-								errors={field.errors}
-								type="text"
-								label="roblox id"
-								placeholder="1273"
-								required
-							/>
-						{/snippet}
-					</Field>
-
-					<FieldArray of={form} path={["tags"]}>
-						{#snippet children(fieldArray)}
-							<div {@attach autoAnimate({ duration: 100 })} class="space-y-2">
-								{#each fieldArray.items as item, index (item)}
-									<Field of={form} path={["tags", index]}>
-										{#snippet children(field)}
-											<TextInput
-												{...field.props}
-												input={field.input}
-												errors={field.errors}
-												type="text"
-												label="tag {index + 1}"
-												placeholder="a tag"
-												required
-											>
-												{#snippet button()}
-													<Button
-														onclick={() =>
-															remove(form, {
-																path: ["tags"],
-																at: index
-															})}
-														type="button"
-														variant="destructive"
-														size="icon"
-													>
-														<Trash />
-													</Button>
-												{/snippet}
-											</TextInput>
-										{/snippet}
-									</Field>
-								{/each}
-							</div>
-						{/snippet}
-					</FieldArray>
-
-					<div class="flex gap-2">
-						<Button
-							type="button"
-							disabled={maxTags}
-							class="w-fit"
-							onclick={() =>
-								insert(form, {
-									path: ["tags"],
-									initialInput: ""
-								})}
-						>
-							{#if maxTags}
-								max tags reached
-							{:else}
-								add tag
-							{/if}
-						</Button>
+<div class="flex gap-2">
+  <Button
+    type="button"
+    disabled={maxTags}
+    class="w-fit"
+    onclick={() => {
+      if (maxTags) return;
+      insert(form, {
+        path: ["tags"],
+        initialInput: ""
+      });
+    }}
+  >
+    {#if maxTags}
+      max tags reached
+    {:else}
+      add tag
+    {/if}
+  </Button>
 						<Button
 							type="button"
 							disabled={noTags}
