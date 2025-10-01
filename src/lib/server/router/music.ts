@@ -1,7 +1,7 @@
 import { hasPermission } from "$lib/permissions";
 import { MusicIdWithCreator } from "$lib/schemas/music";
 import { ORPCError } from "@orpc/server";
-import { CreateMusicIdSchema } from "../../../routes/music/forms";
+import { CreateMusicIdSchema, EditMusicIdSchema } from "../../../routes/music/forms";
 import { requireAuthMiddleware } from "../middleware/auth";
 import { or } from "../orpc";
 import * as v from "valibot";
@@ -102,6 +102,55 @@ export const deleteMusicId = or
 			await db.delete(musicIds).where(eq(musicIds.id, input.id));
 		} catch (err) {
 			console.error("FAILED TO DELETE", err);
+			throw new ORPCError("INTERNAL_SERVER_ERROR");
+		}
+
+		return {
+			success: true
+		};
+	});
+
+export const editMusicId = or
+	.input(EditMusicIdSchema)
+	.use(requireAuthMiddleware)
+	.route({ method: "PATCH" })
+	.handler(async ({ input, context }) => {
+		const { session, db } = context;
+		const { id, ...updates } = input;
+		const cleanUpdates = Object.fromEntries(
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			Object.entries(updates).filter(([_, v]) => v !== undefined)
+		);
+		const [musicIdToEdit] = await db.select().from(musicIds).where(eq(musicIds.id, id)).limit(1);
+
+		if (!musicIdToEdit)
+			throw new ORPCError("NOT_FOUND", {
+				message: `Music ID ${id} not found`
+			});
+
+		const isOwner = session?.user?.id === musicIdToEdit.createdById;
+		const isManager = !!session?.user && hasPermission(session.user, "MANAGE_MUSIC_IDS");
+
+		if (
+			"verified" in cleanUpdates &&
+			cleanUpdates.verified !== musicIdToEdit.verified &&
+			!isManager
+		) {
+			throw new ORPCError("FORBIDDEN", {
+				message: "you are not allowed to change the verified status"
+			});
+		}
+
+		if (!(isOwner || isManager)) {
+			throw new ORPCError("FORBIDDEN", {
+				message: "you are not allowed to do that"
+			});
+		}
+
+		try {
+			await db.update(musicIds).set(cleanUpdates).where(eq(musicIds.id, id));
+		} catch (err) {
+			console.error("FAILED TO UPDATE", err);
 			throw new ORPCError("INTERNAL_SERVER_ERROR");
 		}
 
