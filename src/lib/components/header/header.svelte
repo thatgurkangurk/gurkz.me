@@ -83,7 +83,7 @@
 	<div class="ml-auto flex items-center gap-2">
 		{#if session.data}
 			<div class="flex items-center-safe gap-2">
-				<p>hello, {session.data.user.name}</p>
+				<p class="whitespace-nowrap">hello, {session.data.user.name}</p>
 				<Button
 					variant="link"
 					onclick={async () => {
