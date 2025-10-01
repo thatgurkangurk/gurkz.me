@@ -17,21 +17,20 @@ export const getSession = or
 	.route({ method: "GET" })
 	.output(getSessionSchema)
 	.handler(async ({ context }) => {
-		const { headers } = context;
+		const { reqHeaders } = context;
 
-		if (!headers) {
-			console.log("no headers");
+		if (!reqHeaders) {
 			return null;
 		}
 
 		const res = await auth.api.getSession({
-			headers: headers
+			headers: reqHeaders
 		});
 
 		const data = await v.safeParseAsync(getSessionSchema, res);
 
 		if (!data.success) {
-			console.log("not success: ", data.issues);
+			console.error("Session validation failed:", data.issues);
 			return null;
 		}
 
