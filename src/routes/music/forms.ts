@@ -2,7 +2,7 @@ import * as v from "valibot";
 
 export const CreateMusicIdSchema = v.object({
 	name: v.pipe(
-		v.string(),
+		v.string("please provide a string"),
 		v.minLength(6, "the name has to be longer than 6 characters"),
 		v.maxLength(128, "the name has to be shorter than 128 characters")
 	),
