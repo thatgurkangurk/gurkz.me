@@ -30,9 +30,9 @@
 	let value: string | number | undefined = $state();
 
 	$effect(() => {
-		if (!Number.isNaN(input)) {
-			value = input;
-		}
+		value = type === 'number' && typeof input === 'string'
+			? Number(input)
+			: input;
 	});
 </script>
 
