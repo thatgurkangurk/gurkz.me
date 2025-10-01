@@ -17,14 +17,14 @@ export const getSession = or
 	.route({ method: "GET" })
 	.output(getSessionSchema)
 	.handler(async ({ context }) => {
-		const { reqHeaders } = context;
+		const { headers } = context;
 
-		if (!reqHeaders) {
+		if (!headers) {
 			return null;
 		}
 
 		const res = await auth.api.getSession({
-			headers: reqHeaders
+			headers: headers
 		});
 
 		const data = await v.safeParseAsync(getSessionSchema, res);
