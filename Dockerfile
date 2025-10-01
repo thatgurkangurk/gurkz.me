@@ -17,7 +17,6 @@ FROM base
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 gurkz
 
-COPY --from=deps --chown=gurkz:nodejs /app/node_modules /app/node_modules
 COPY --from=build --chown=gurkz:nodejs /app/build /app/build
 
 ENV NODE_ENV="production"
