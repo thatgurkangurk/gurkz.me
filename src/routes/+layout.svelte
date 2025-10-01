@@ -1,7 +1,7 @@
 <script lang="ts">
 	import "../app.css";
 	import { ModeWatcher } from "mode-watcher";
-	import Header from "$lib/components/header.svelte";
+	import Header from "$lib/components/header/header.svelte";
 	import type { LayoutProps } from "./$types";
 	import { TooltipProvider } from "$lib/components/ui/tooltip";
 	import { dehydrate, QueryClientProvider } from "@tanstack/svelte-query";
