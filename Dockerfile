@@ -11,7 +11,7 @@ ENV CI=1
 COPY --from=deps /app/node_modules /app/node_modules
 COPY . .
 
-RUN CI="1" bun run --bun build
+RUN CI="1" DATABASE_URL="change me" bun run --bun build
 
 FROM base
 RUN addgroup --system --gid 1001 nodejs
