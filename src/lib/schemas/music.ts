@@ -1,36 +1,28 @@
-import { z } from "zod/v4";
+import * as v from "valibot";
 import { User } from "./user";
-import { schema } from "@/components/music/form/schema";
 
-export const MusicId = z.object({
-  id: z.ulid(),
-  robloxId: z
-    .string()
-    .describe(
-      "the sound id you use in a game - might not be safe to parse as a JS number (too big)"
-    ),
-  createdById: z.string().describe("creator user id"),
-  name: z.string(),
-  created: z.date(),
-  working: z.boolean(),
-  verified: z.boolean(),
-  tags: z.string().array(),
+export const MusicId = v.object({
+	id: v.pipe(v.string(), v.ulid()),
+	robloxId: v.pipe(
+		v.string(),
+		v.description(
+			"the sound id you use in a game - might not be safe to parse as a JS number (too big)"
+		)
+	),
+	createdById: v.pipe(v.string(), v.description("creator user id")),
+	name: v.string(),
+	created: v.date(),
+	working: v.boolean(),
+	verified: v.boolean(),
+	tags: v.array(v.string())
 });
 
-export const MusicIdWithCreator = MusicId.extend({
-  creator: User.pick({
-    id: true,
-    image: true,
-    name: true,
-  }),
+export const MusicIdWithCreator = v.object({
+	.../*@valibot-migrate we can't detect if MusicId has a `pipe` operator, if it does you might need to migrate this by hand otherwise it will loose it's pipeline*/
+	MusicId.entries,
+
+	creator: v.pick(User, ["id", "image", "name"])
 });
 
-export const UpdateMusicIdInput = schema.partial().extend({
-  id: z.ulid(),
-  working: z.boolean().optional(),
-  verified: z.boolean().optional(),
-});
-
-export type MusicId = z.infer<typeof MusicId>;
-export type MusicIdWithCreator = z.infer<typeof MusicIdWithCreator>;
-export type UpdateMusicIdInput = z.infer<typeof UpdateMusicIdInput>;
+export type MusicId = v.InferOutput<typeof MusicId>;
+export type MusicIdWithCreator = v.InferOutput<typeof MusicIdWithCreator>;

@@ -1,0 +1,40 @@
+import type { RequestHandler } from "./$types";
+import { router } from "$lib/server/router";
+import { OpenAPIHandler } from "@orpc/openapi/fetch";
+import { experimental_ValibotToJsonSchemaConverter } from "@orpc/valibot";
+import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
+import { CORSPlugin } from "@orpc/server/plugins";
+import { createRPCContext } from "$lib/server/orpc";
+
+const handler = new OpenAPIHandler(router, {
+	plugins: [
+		new CORSPlugin({
+			origin: (origin) => origin,
+			allowMethods: ["GET", "HEAD", "PUT", "POST", "DELETE", "PATCH"]
+		}),
+		new OpenAPIReferencePlugin({
+			schemaConverters: [new experimental_ValibotToJsonSchemaConverter()],
+			specGenerateOptions: {
+				info: {
+					title: "gurkz.me api",
+					version: "1.0.0"
+				}
+			}
+		})
+	]
+});
+
+const handle: RequestHandler = async ({ request }) => {
+	const { response } = await handler.handle(request, {
+		prefix: "/api",
+		context: await createRPCContext({ headers: request.headers })
+	});
+
+	return response ?? new Response("Not Found", { status: 404 });
+};
+
+export const GET = handle;
+export const POST = handle;
+export const PUT = handle;
+export const PATCH = handle;
+export const DELETE = handle;

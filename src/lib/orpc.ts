@@ -1,28 +1,33 @@
-import { router } from "@/server/router";
-import { createORPCClient } from "@orpc/client";
+import type { RouterClient } from "@orpc/server";
 import { RPCLink } from "@orpc/client/fetch";
-import { RouterClient } from "@orpc/server";
-import { createIsomorphicFn } from "@tanstack/react-start";
-import { getHeaders, getWebRequest } from "@tanstack/react-start/server";
-import { createTanstackQueryUtils } from "@orpc/tanstack-query";
+import { createORPCClient } from "@orpc/client";
+import { createORPCSvelteQueryUtils } from "@orpc/svelte-query";
+import type { router } from "./server/router";
+import { browser } from "$app/environment";
 
-const getClientLink = createIsomorphicFn()
-  .client(
-    () =>
-      new RPCLink({
-        url: `${window.location.origin}/api/rpc`,
-      })
-  )
-  .server(
-    () =>
-      new RPCLink({
-        url: () => new URL("/api/rpc", getWebRequest().url).toString(),
-        headers: () => getHeaders(),
-      })
-  );
+const link = new RPCLink({
+	url: () => {
+		if (!browser) throw new Error("RPCLink cannot be used on the server");
+		return `${window.location.origin}/rpc`;
+	},
+	method: (_, path) => {
+		if (!browser) {
+			return "GET";
+		}
 
-const clientLink = getClientLink();
+		// Use GET for read-like operations
+		if (path.at(-1)?.match(/^(?:get|find|list|search)(?:[A-Z].*)?$/)) {
+			return "GET";
+		}
 
-export const client: RouterClient<typeof router> = createORPCClient(clientLink);
+		return "POST";
+	},
+	plugins: []
+});
 
-export const orpc = createTanstackQueryUtils(client);
+/**
+ * Fallback to client-side client if server-side client is not available.
+ */
+export const client: RouterClient<typeof router> = globalThis.$client ?? createORPCClient(link);
+
+export const orpc = createORPCSvelteQueryUtils(client);

@@ -1,4 +1,4 @@
-import { z } from "zod/v4";
+import * as v from "valibot";
 
-export const SocialProvider = z.enum(["discord"]);
-export type SocialProvider = z.infer<typeof SocialProvider>;
+export const SocialProvider = v.picklist(["discord"]);
+export type SocialProvider = v.InferOutput<typeof SocialProvider>;
