@@ -48,7 +48,7 @@
 			onSuccess: async () => {
 				open = false;
 				await queryClient.refetchQueries({
-					queryKey: orpc.music.get.key()
+					queryKey: orpc.music.list.key()
 				});
 				reset(form, {
 					initialInput: musicId

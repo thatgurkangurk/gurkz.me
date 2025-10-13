@@ -4,7 +4,7 @@ import type { PageLoad } from "./$types";
 export const load = (async ({ parent }) => {
 	const { queryClient } = await parent();
 
-	await queryClient.ensureQueryData(orpc.music.get.queryOptions());
+	await queryClient.ensureQueryData(orpc.music.list.queryOptions());
 
 	return {};
 }) satisfies PageLoad;

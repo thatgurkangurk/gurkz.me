@@ -8,7 +8,46 @@ import * as v from "valibot";
 import { musicIds } from "../db/schema/music";
 import { eq } from "drizzle-orm";
 
-export const getMusicIds = or
+export const getMusicId = or
+	.route({ method: "GET" })
+	.input(
+		v.object({
+			id: v.pipe(v.string(), v.ulid())
+		})
+	)
+	.output(MusicIdWithCreator)
+	.handler(async ({ context: { db }, input }) => {
+		const id = await db.query.musicIds.findFirst({
+			columns: {
+				id: true,
+				name: true,
+				robloxId: true,
+				createdById: true,
+				created: true,
+				working: true,
+				verified: true,
+				tags: true
+			},
+			with: {
+				creator: {
+					columns: {
+						id: true,
+						name: true,
+						image: true
+					}
+				}
+			},
+			where: (table) => eq(table.id, input.id)
+		});
+
+		if (!id) {
+			throw new ORPCError("NOT_FOUND");
+		}
+
+		return id;
+	});
+
+export const listMusicIds = or
 	.route({ method: "GET" })
 	.output(v.array(MusicIdWithCreator))
 	.handler(async ({ context: { db } }) => {

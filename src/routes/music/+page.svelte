@@ -7,7 +7,7 @@
 	import { hasPermission } from "$lib/permissions";
 	import CreateMusicIdForm from "./components/create-music-id-form.svelte";
 
-	const query = createQuery(() => orpc.music.get.queryOptions());
+	const query = createQuery(() => orpc.music.list.queryOptions());
 	const session = useSession();
 </script>
 

@@ -31,7 +31,7 @@
 		orpc.music.create.mutationOptions({
 			onSuccess: async () => {
 				await queryClient.invalidateQueries({
-					queryKey: orpc.music.get.key()
+					queryKey: orpc.music.list.key()
 				});
 			}
 		})
