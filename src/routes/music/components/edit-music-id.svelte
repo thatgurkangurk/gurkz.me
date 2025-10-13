@@ -22,12 +22,17 @@
 		getInput,
 		insert,
 		remove,
-		reset
+		reset,
+		setInput
 	} from "@formisch/svelte";
 	import { EditMusicIdSchema } from "../forms";
 	import TextInput from "$lib/components/form/text-input.svelte";
 	import { autoAnimate } from "$lib/attachments/auto-animate";
 	import Trash from "@lucide/svelte/icons/trash";
+	import { Switch } from "$lib/components/ui/switch";
+	import { Label } from "$lib/components/ui/label";
+	import { useSession } from "$lib/session";
+	import { hasPermission } from "$lib/permissions";
 
 	type Props = {
 		musicId: MusicIdWithCreator;
@@ -69,6 +74,8 @@
 			}).length > 0
 		)
 	);
+
+	const session = useSession();
 </script>
 
 <Dialog bind:open>
@@ -157,6 +164,43 @@
 							</div>
 						{/snippet}
 					</FieldArray>
+
+					{#if session.data?.user && hasPermission(session.data.user, "MANAGE_MUSIC_IDS")}
+						<Field of={form} path={["verified"]}>
+							{#snippet children(field)}
+								<Label>verified</Label>
+								<Switch
+									bind:checked={
+										() => field.input,
+										(v) => {
+											setInput(form, {
+												path: field.path,
+												input: v || false
+											});
+										}
+									}
+									required
+								/>
+							{/snippet}
+						</Field>
+					{/if}
+					<Field of={form} path={["working"]}>
+						{#snippet children(field)}
+							<Label>working</Label>
+							<Switch
+								bind:checked={
+									() => field.input,
+									(v) => {
+										setInput(form, {
+											path: field.path,
+											input: v || false
+										});
+									}
+								}
+								required
+							/>
+						{/snippet}
+					</Field>
 
 					<div class="flex gap-2">
 						<Button
