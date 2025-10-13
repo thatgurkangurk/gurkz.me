@@ -1,4 +1,5 @@
 <script lang="ts">
+	import "@fontsource-variable/dm-sans";
 	import "../app.css";
 	import { ModeWatcher } from "mode-watcher";
 	import Header from "$lib/components/header/header.svelte";

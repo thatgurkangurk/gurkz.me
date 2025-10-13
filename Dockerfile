@@ -1,4 +1,4 @@
-FROM oven/bun:1.2.16 AS base
+FROM oven/bun:1.3.0 AS base
 LABEL org.opencontainers.image.source="https://github.com/thatgurkangurk/gurkz.me"
 WORKDIR /app
 
