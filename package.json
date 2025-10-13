@@ -6,7 +6,7 @@
 		"url": "git+https://github.com/thatgurkangurk/gurkz.me.git"
 	},
 	"overrides": {
-		"rollup": "^4.52.4" // this is recommended for sveltekit remote functions
+		"rollup": "^4.52.4"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.4.0",
@@ -15,7 +15,7 @@
 		"@formisch/svelte": "^0.3.0",
 		"@formkit/auto-animate": "^0.9.0",
 		"@internationalized/date": "^3.10.0",
-		"@lucide/svelte": "^0.544.0",
+		"@lucide/svelte": "^0.545.0",
 		"@orpc/client": "^1.9.3",
 		"@orpc/openapi": "^1.9.3",
 		"@orpc/server": "^1.9.3",
