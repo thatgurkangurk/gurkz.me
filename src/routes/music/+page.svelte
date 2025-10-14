@@ -6,10 +6,13 @@
 	import { useSession } from "$lib/session";
 	import { hasPermission } from "$lib/permissions";
 	import CreateMusicIdForm from "./components/create-music-id-form.svelte";
+	import Meta from "$lib/components/meta.svelte";
 
 	const query = createQuery(() => orpc.music.list.queryOptions());
 	const session = useSession();
 </script>
+
+<Meta title="music id list" />
 
 <p>music id list</p>
 
