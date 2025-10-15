@@ -1,45 +1,28 @@
-import { getRequestEvent, query } from "$app/server";
-import { error } from "@sveltejs/kit";
+import { form, getRequestEvent, query } from "$app/server";
+import { redirect } from "@sveltejs/kit";
 import { auth } from "./server/auth";
-import { hasPermission, type Permission } from "./permissions";
+import { SocialProvider } from "./schemas/auth";
+import * as v from "valibot";
 
 export const getSession = query(() => {
+	console.debug("getting session");
 	return auth.api.getSession({
 		headers: getRequestEvent().request.headers
 	});
 });
 
-/**
- * **only** use this in a remote function
- */
-export async function requireAuth() {
-	return (await getSession())?.user ?? error(403);
-}
-
-/**
- * **only** use this in a remote function
- *
- * this also calls {@link requireAuth}, so you don't need to call it
- */
-export async function requireUserPermission(permission: Permission) {
-	const user = await requireAuth();
-
-	if (!hasPermission(user, permission)) return error(403);
-
-	return user;
-}
-
-/**
- * **only** use this in a remote function
- *
- * this also calls {@link requireAuth}, so you don't need to call it
- */
-export async function requireUserPermissions(permissions: Permission[]) {
-	const user = await requireAuth();
-
-	for (const permission of permissions) {
-		if (!hasPermission(user, permission)) return error(403);
+export const signIn = form(
+	v.object({
+		provider: SocialProvider
+	}),
+	async (input) => {
+		const res = await auth.api.signInSocial({ body: { provider: input.provider } });
+		if (res.redirect) redirect(307, res.url!);
 	}
+);
 
-	return user;
-}
+export const signOut = form(async () => {
+	const { request } = getRequestEvent();
+	await auth.api.signOut({ headers: request.headers });
+	getSession().refresh();
+});

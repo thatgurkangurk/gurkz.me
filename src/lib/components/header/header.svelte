@@ -13,6 +13,7 @@
 	import HeaderLink from "./header-link.svelte";
 	import { useSession, useSignIn, useSignOut } from "$lib/session";
 	import ModeToggle from "../mode-toggle.svelte";
+	import { getSession, signIn, signOut } from "$lib/auth.remote.js";
 
 	type NavLink = Omit<HeaderLinkProps, "inSheet">;
 
@@ -27,7 +28,7 @@
 		}
 	];
 
-	const session = useSession();
+	const session = $derived(await getSession());
 	const { mutateAsync: signOutAsync } = useSignOut();
 	const { mutateAsync: signInAsync } = useSignIn();
 
@@ -81,27 +82,18 @@
 	</Sheet>
 
 	<div class="ml-auto flex items-center gap-2">
-		{#if session.data}
+		{#if session}
 			<div class="flex items-center-safe gap-2">
-				<p class="whitespace-nowrap">hello, {session.data.user.name}</p>
-				<Button
-					variant="link"
-					onclick={async () => {
-						await signOutAsync(null);
-					}}>log out</Button
-				>
+				<p class="whitespace-nowrap">hello, {session.user.name}</p>
+				<form {...signOut}>
+					<Button variant="link" type="submit">log out</Button>
+				</form>
 			</div>
 		{:else}
-			<Button
-				variant="link"
-				onclick={async () => {
-					await signInAsync({
-						provider: "discord"
-					});
-				}}
-			>
-				log in
-			</Button>
+			<form {...signIn}>
+				<input {...signIn.fields.provider.as("hidden", "discord")} />
+				<Button variant="link" type="submit">log in</Button>
+			</form>
 		{/if}
 		<ModeToggle />
 	</div>

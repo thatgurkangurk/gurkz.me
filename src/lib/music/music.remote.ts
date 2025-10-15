@@ -3,7 +3,7 @@ import { command, query } from "$app/server";
 import { db } from "$lib/server/db";
 import { error } from "@sveltejs/kit";
 import { CreateMusicIdSchema, EditMusicIdSchema } from "../../routes/music/forms";
-import { requireAuth, requireUserPermission } from "$lib/auth.remote";
+import { requireAuth, requireUserPermission } from "$lib/auth.js";
 import { hasPermission } from "$lib/permissions";
 import { musicIds } from "$lib/server/db/schema/music";
 import { eq } from "drizzle-orm";
