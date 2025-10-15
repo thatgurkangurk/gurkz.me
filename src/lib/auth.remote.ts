@@ -5,7 +5,6 @@ import { SocialProvider } from "./schemas/auth";
 import * as v from "valibot";
 
 export const getSession = query(() => {
-	console.debug("getting session");
 	return auth.api.getSession({
 		headers: getRequestEvent().request.headers
 	});

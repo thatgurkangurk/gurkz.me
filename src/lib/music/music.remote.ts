@@ -9,7 +9,6 @@ import { musicIds } from "$lib/server/db/schema/music";
 import { eq } from "drizzle-orm";
 
 export const listMusicIds = query(async () => {
-	console.debug("fetching music ids");
 	const ids = await db.query.musicIds.findMany({
 		columns: {
 			id: true,
