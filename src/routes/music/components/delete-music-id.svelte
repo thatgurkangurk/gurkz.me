@@ -15,6 +15,7 @@
 	import { cn } from "$lib/utils";
 	import { createMutation, useQueryClient } from "@tanstack/svelte-query";
 	import { toast } from "svelte-sonner";
+	import { listMusicIds } from "$lib/music/music.remote";
 
 	type Props = {
 		musicId: MusicIdWithCreator;
@@ -28,6 +29,7 @@
 		orpc.music.delete.mutationOptions({
 			onSuccess: async () => {
 				open = false;
+				listMusicIds().refresh();
 				await queryClient.refetchQueries({
 					queryKey: orpc.music.list.key()
 				});

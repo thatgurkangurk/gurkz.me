@@ -7,8 +7,8 @@
 	import { hasPermission } from "$lib/permissions";
 	import CreateMusicIdForm from "./components/create-music-id-form.svelte";
 	import Meta from "$lib/components/meta.svelte";
+	import { listMusicIds } from "$lib/music/music.remote";
 
-	const query = createQuery(() => orpc.music.list.queryOptions());
 	const session = useSession();
 </script>
 
@@ -22,12 +22,12 @@
 
 <FormatSelector />
 
-{#if query.data}
-	<div
-		class="grid w-full grid-cols-1 place-items-center gap-4 pt-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5"
-	>
-		{#each query.data as musicId (musicId.id)}
-			<MusicCard {musicId} />
-		{/each}
-	</div>
-{/if}
+<button onclick={() => listMusicIds().refresh()}>refresh (debug only)</button>
+
+<div
+	class="grid w-full grid-cols-1 place-items-center gap-4 pt-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5"
+>
+	{#each await listMusicIds() as musicId (musicId.id)}
+		<MusicCard {musicId} />
+	{/each}
+</div>

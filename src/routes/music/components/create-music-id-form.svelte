@@ -20,6 +20,7 @@
 	import LoaderCircle from "@lucide/svelte/icons/loader-circle";
 	import { toast } from "svelte-sonner";
 	import { autoAnimate } from "$lib/attachments/auto-animate";
+	import { listMusicIds } from "$lib/music/music.remote";
 
 	const form = createForm({
 		schema: CreateMusicIdSchema
@@ -30,6 +31,7 @@
 	const mutation = createMutation(() =>
 		orpc.music.create.mutationOptions({
 			onSuccess: async () => {
+				listMusicIds().refresh();
 				await queryClient.invalidateQueries({
 					queryKey: orpc.music.list.key()
 				});

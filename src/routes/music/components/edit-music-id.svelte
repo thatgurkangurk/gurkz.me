@@ -33,6 +33,7 @@
 	import { Label } from "$lib/components/ui/label";
 	import { useSession } from "$lib/session";
 	import { hasPermission } from "$lib/permissions";
+	import { listMusicIds } from "$lib/music/music.remote";
 
 	type Props = {
 		musicId: MusicIdWithCreator;
@@ -55,6 +56,7 @@
 				await queryClient.refetchQueries({
 					queryKey: orpc.music.list.key()
 				});
+				listMusicIds().refresh();
 				reset(form, {
 					initialInput: musicId
 				});
