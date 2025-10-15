@@ -11,8 +11,8 @@
 	import { Button, buttonVariants } from "../ui/button";
 	import type { HeaderLinkProps } from "./header-link.svelte";
 	import HeaderLink from "./header-link.svelte";
-	import { useSession, useSignIn, useSignOut } from "$lib/session";
 	import ModeToggle from "../mode-toggle.svelte";
+	import { getSession, signIn, signOut } from "$lib/auth.remote.js";
 
 	type NavLink = Omit<HeaderLinkProps, "inSheet">;
 
@@ -27,9 +27,12 @@
 		}
 	];
 
-	const session = useSession();
-	const { mutateAsync: signOutAsync } = useSignOut();
-	const { mutateAsync: signInAsync } = useSignIn();
+	/**
+	 * this **_CANNOT_** be `await`, due to https://svelte.dev/e/set_context_after_init
+	 *
+	 * looking into a fix
+	 */
+	const session = $derived(getSession());
 
 	let open = $state<boolean>(false);
 </script>
@@ -81,27 +84,18 @@
 	</Sheet>
 
 	<div class="ml-auto flex items-center gap-2">
-		{#if session.data}
+		{#if session.current}
 			<div class="flex items-center-safe gap-2">
-				<p class="whitespace-nowrap">hello, {session.data.user.name}</p>
-				<Button
-					variant="link"
-					onclick={async () => {
-						await signOutAsync(null);
-					}}>log out</Button
-				>
+				<p class="whitespace-nowrap">hello, {session.current.user.name}</p>
+				<form {...signOut}>
+					<Button variant="link" type="submit">log out</Button>
+				</form>
 			</div>
 		{:else}
-			<Button
-				variant="link"
-				onclick={async () => {
-					await signInAsync({
-						provider: "discord"
-					});
-				}}
-			>
-				log in
-			</Button>
+			<form {...signIn}>
+				<input {...signIn.fields.provider.as("hidden", "discord")} />
+				<Button variant="link" type="submit">log in</Button>
+			</form>
 		{/if}
 		<ModeToggle />
 	</div>

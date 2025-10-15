@@ -11,11 +11,11 @@
 	import FormattedId, { formatId } from "./formatted-id.svelte";
 	import { IdFormatContext } from "../context";
 	import CopyButton from "$lib/components/copy-button.svelte";
-	import { useSession } from "$lib/session";
 	import { hasPermission } from "$lib/permissions";
 	import ManageMusicId from "./manage-music-id.svelte";
+	import { getSession } from "$lib/auth.remote";
 	const format = IdFormatContext.get();
-	const session = useSession();
+	const session = $derived(await getSession());
 
 	let { musicId }: { musicId: MusicIdWithCreator } = $props();
 </script>
@@ -44,7 +44,7 @@
 		<p>
 			created by <span>{musicId.creator.name}</span>
 		</p>
-		{#if session.data?.user && (session.data.user.id === musicId.createdById || hasPermission(session.data.user, "MANAGE_MUSIC_IDS"))}
+		{#if session?.user && (session.user.id === musicId.createdById || hasPermission(session.user, "MANAGE_MUSIC_IDS"))}
 			<ManageMusicId {musicId} />
 		{/if}
 	</CardFooter>

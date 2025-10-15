@@ -9,10 +9,8 @@
 		DialogTrigger
 	} from "$lib/components/ui/dialog/index.js";
 	import LoaderCircle from "@lucide/svelte/icons/loader-circle";
-	import { orpc } from "$lib/orpc";
 	import type { MusicIdWithCreator } from "$lib/schemas/music";
 	import { cn } from "$lib/utils";
-	import { createMutation, useQueryClient } from "@tanstack/svelte-query";
 	import { toast } from "svelte-sonner";
 	import {
 		createForm,
@@ -31,8 +29,9 @@
 	import Trash from "@lucide/svelte/icons/trash";
 	import { Switch } from "$lib/components/ui/switch";
 	import { Label } from "$lib/components/ui/label";
-	import { useSession } from "$lib/session";
 	import { hasPermission } from "$lib/permissions";
+	import { deleteMusicId, editMusicId, listMusicIds } from "$lib/music/music.remote.js";
+	import { getSession } from "$lib/auth.remote";
 
 	type Props = {
 		musicId: MusicIdWithCreator;
@@ -47,21 +46,6 @@
 		initialInput: musicId
 	});
 
-	const queryClient = useQueryClient();
-	const mutation = createMutation(() =>
-		orpc.music.edit.mutationOptions({
-			onSuccess: async () => {
-				open = false;
-				await queryClient.refetchQueries({
-					queryKey: orpc.music.list.key()
-				});
-				reset(form, {
-					initialInput: musicId
-				});
-			}
-		})
-	);
-
 	const maxTags = $derived(
 		getInput(form, {
 			path: ["tags"]
@@ -75,7 +59,7 @@
 		)
 	);
 
-	const session = useSession();
+	const session = $derived(await getSession());
 </script>
 
 <Dialog bind:open>
@@ -90,10 +74,16 @@
 		<Form
 			of={form}
 			onsubmit={async (output) => {
-				const promise = mutation.mutateAsync(output);
+				const promise = editMusicId(output);
 				toast.promise(promise, {
 					loading: "creating...",
-					success: "successfully created",
+					success: () => {
+						open = false;
+						reset(form, {
+							initialInput: musicId
+						});
+						return "successfully created";
+					},
 					error: "something went wrong"
 				});
 			}}
@@ -165,7 +155,7 @@
 						{/snippet}
 					</FieldArray>
 
-					{#if session.data?.user && hasPermission(session.data.user, "MANAGE_MUSIC_IDS")}
+					{#if session?.user && hasPermission(session.user, "MANAGE_MUSIC_IDS")}
 						<Field of={form} path={["verified"]}>
 							{#snippet children(field)}
 								<Label>verified</Label>
@@ -238,10 +228,13 @@
 
 			<DialogFooter class="grid grid-cols-2 pt-2">
 				<Button
-					disabled={!form.isDirty || !form.isValid || form.isSubmitting || mutation.isPending}
+					disabled={!form.isDirty ||
+						!form.isValid ||
+						form.isSubmitting ||
+						editMusicId.pending > 0}
 					type="submit"
 				>
-					{#if mutation.isPending}
+					{#if deleteMusicId.pending > 0}
 						<LoaderCircle class="animate-spin" />
 					{/if}
 					save

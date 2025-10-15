@@ -1,34 +1,24 @@
 <script lang="ts">
-	import { authClient } from "$lib/auth";
 	import Meta from "$lib/components/meta.svelte";
-	import { useSession, useSignIn, useSignOut } from "$lib/session";
+	import { getSession, signIn, signOut } from "$lib/auth.remote.js";
 
-	const session = useSession();
-	const { mutateAsync: signOutAsync } = useSignOut();
-	const { mutateAsync: signInAsync } = useSignIn();
+	const session = $derived(await getSession());
 </script>
 
 <Meta title="home" />
 
 <p>hi</p>
 
-{#if session.data}
+{#if session}
 	<div class="flex items-center-safe gap-2">
-		<p>hello, {session.data.user.name}</p>
-		<button
-			onclick={async () => {
-				await signOutAsync(null);
-			}}>log out</button
-		>
+		<p class="whitespace-nowrap">hello, {session.user.name}</p>
+		<form {...signOut.for("homepage_signout")}>
+			<button type="submit">log out</button>
+		</form>
 	</div>
 {:else}
-	<button
-		onclick={async () => {
-			await signInAsync({
-				provider: "discord"
-			});
-		}}
-	>
-		log in
-	</button>
+	<form {...signIn.for("homepage_signin")}>
+		<input {...signIn.fields.provider.as("hidden", "discord")} />
+		<button type="submit">log in</button>
+	</form>
 {/if}
