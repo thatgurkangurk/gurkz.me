@@ -231,7 +231,7 @@
 					disabled={!form.isDirty ||
 						!form.isValid ||
 						form.isSubmitting ||
-						deleteMusicId.pending > 0}
+						editMusicId.pending > 0}
 					type="submit"
 				>
 					{#if deleteMusicId.pending > 0}
