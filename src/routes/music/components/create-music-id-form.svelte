@@ -14,30 +14,14 @@
 	import TextInput from "$lib/components/form/text-input.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import Trash from "@lucide/svelte/icons/trash";
-	import { fromAction } from "svelte/attachments";
-	import { orpc } from "$lib/orpc";
-	import { createMutation, useQueryClient } from "@tanstack/svelte-query";
+	import { createMusicId } from "$lib/music/music.remote.js";
 	import LoaderCircle from "@lucide/svelte/icons/loader-circle";
 	import { toast } from "svelte-sonner";
 	import { autoAnimate } from "$lib/attachments/auto-animate";
-	import { listMusicIds } from "$lib/music/music.remote";
 
 	const form = createForm({
 		schema: CreateMusicIdSchema
 	});
-
-	const queryClient = useQueryClient();
-
-	const mutation = createMutation(() =>
-		orpc.music.create.mutationOptions({
-			onSuccess: async () => {
-				listMusicIds().refresh();
-				await queryClient.invalidateQueries({
-					queryKey: orpc.music.list.key()
-				});
-			}
-		})
-	);
 
 	const maxTags = $derived(
 		getInput(form, {
@@ -56,7 +40,7 @@
 <Form
 	of={form}
 	onsubmit={async (output) => {
-		const promise = mutation.mutateAsync(output);
+		const promise = createMusicId(output);
 		toast.promise(promise, {
 			loading: "creating...",
 			success: "successfully created",
