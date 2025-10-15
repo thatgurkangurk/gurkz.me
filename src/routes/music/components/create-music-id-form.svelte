@@ -43,7 +43,10 @@
 		const promise = createMusicId(output);
 		toast.promise(promise, {
 			loading: "creating...",
-			success: "successfully created",
+			success: () => {
+				reset(form);
+				return "successfully created";
+			},
 			error: "something went wrong"
 		});
 	}}
