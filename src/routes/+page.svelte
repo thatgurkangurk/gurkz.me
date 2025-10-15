@@ -12,12 +12,12 @@
 {#if session}
 	<div class="flex items-center-safe gap-2">
 		<p class="whitespace-nowrap">hello, {session.user.name}</p>
-		<form {...signOut}>
+		<form {...signOut.for("homepage_signout")}>
 			<button type="submit">log out</button>
 		</form>
 	</div>
 {:else}
-	<form {...signIn}>
+	<form {...signIn.for("homepage_signin")}>
 		<input {...signIn.fields.provider.as("hidden", "discord")} />
 		<button type="submit">log in</button>
 	</form>

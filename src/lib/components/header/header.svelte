@@ -27,7 +27,12 @@
 		}
 	];
 
-	const session = $derived(await getSession());
+	/**
+	 * this **_CANNOT_** be `await`, due to https://svelte.dev/e/set_context_after_init
+	 *
+	 * looking into a fix
+	 */
+	const session = $derived(getSession());
 
 	let open = $state<boolean>(false);
 </script>
@@ -79,9 +84,9 @@
 	</Sheet>
 
 	<div class="ml-auto flex items-center gap-2">
-		{#if session}
+		{#if session.current}
 			<div class="flex items-center-safe gap-2">
-				<p class="whitespace-nowrap">hello, {session.user.name}</p>
+				<p class="whitespace-nowrap">hello, {session.current.user.name}</p>
 				<form {...signOut}>
 					<Button variant="link" type="submit">log out</Button>
 				</form>
