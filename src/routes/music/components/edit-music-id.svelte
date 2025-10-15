@@ -58,8 +58,6 @@
 			}).length > 0
 		)
 	);
-
-	const session = $derived(await getSession());
 </script>
 
 <Dialog bind:open>
@@ -155,7 +153,7 @@
 						{/snippet}
 					</FieldArray>
 
-					{#if session?.user && hasPermission(session.user, "MANAGE_MUSIC_IDS")}
+					{#if getSession().current?.user && hasPermission(getSession().current!.user, "MANAGE_MUSIC_IDS")}
 						<Field of={form} path={["verified"]}>
 							{#snippet children(field)}
 								<Label>verified</Label>
@@ -228,10 +226,7 @@
 
 			<DialogFooter class="grid grid-cols-2 pt-2">
 				<Button
-					disabled={!form.isDirty ||
-						!form.isValid ||
-						form.isSubmitting ||
-						editMusicId.pending > 0}
+					disabled={!form.isDirty || !form.isValid || form.isSubmitting || editMusicId.pending > 0}
 					type="submit"
 				>
 					{#if deleteMusicId.pending > 0}
