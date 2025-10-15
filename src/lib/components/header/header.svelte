@@ -11,7 +11,6 @@
 	import { Button, buttonVariants } from "../ui/button";
 	import type { HeaderLinkProps } from "./header-link.svelte";
 	import HeaderLink from "./header-link.svelte";
-	import { useSession, useSignIn, useSignOut } from "$lib/session";
 	import ModeToggle from "../mode-toggle.svelte";
 	import { getSession, signIn, signOut } from "$lib/auth.remote.js";
 
@@ -29,8 +28,6 @@
 	];
 
 	const session = $derived(await getSession());
-	const { mutateAsync: signOutAsync } = useSignOut();
-	const { mutateAsync: signInAsync } = useSignIn();
 
 	let open = $state<boolean>(false);
 </script>

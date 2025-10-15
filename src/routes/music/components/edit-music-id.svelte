@@ -29,9 +29,9 @@
 	import Trash from "@lucide/svelte/icons/trash";
 	import { Switch } from "$lib/components/ui/switch";
 	import { Label } from "$lib/components/ui/label";
-	import { useSession } from "$lib/session";
 	import { hasPermission } from "$lib/permissions";
 	import { deleteMusicId, editMusicId, listMusicIds } from "$lib/music/music.remote.js";
+	import { getSession } from "$lib/auth.remote";
 
 	type Props = {
 		musicId: MusicIdWithCreator;
@@ -59,7 +59,7 @@
 		)
 	);
 
-	const session = useSession();
+	const session = $derived(await getSession());
 </script>
 
 <Dialog bind:open>
@@ -155,7 +155,7 @@
 						{/snippet}
 					</FieldArray>
 
-					{#if session.data?.user && hasPermission(session.data.user, "MANAGE_MUSIC_IDS")}
+					{#if session?.user && hasPermission(session.user, "MANAGE_MUSIC_IDS")}
 						<Field of={form} path={["verified"]}>
 							{#snippet children(field)}
 								<Label>verified</Label>

@@ -1,20 +1,20 @@
 <script lang="ts">
 	import FormatSelector from "./components/format-selector.svelte";
 	import MusicCard from "./components/music-card.svelte";
-	import { useSession } from "$lib/session";
 	import { hasPermission } from "$lib/permissions";
 	import CreateMusicIdForm from "./components/create-music-id-form.svelte";
 	import Meta from "$lib/components/meta.svelte";
 	import { listMusicIds } from "$lib/music/music.remote";
+	import { getSession } from "$lib/auth.remote";
 
-	const session = useSession();
+	const session = $derived(await getSession());
 </script>
 
 <Meta title="music id list" />
 
 <p>music id list</p>
 
-{#if session.data?.user && hasPermission(session.data.user, "CREATE_MUSIC_IDS")}
+{#if session?.user && hasPermission(session.user, "CREATE_MUSIC_IDS")}
 	<CreateMusicIdForm />
 {/if}
 
