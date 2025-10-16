@@ -9,12 +9,12 @@
 	} from "$lib/components/ui/card/index.js";
 	import type { MusicIdWithCreator } from "$lib/schemas/music";
 	import FormattedId, { formatId } from "./formatted-id.svelte";
-	import { IdFormatContext } from "../context";
+	import { getIdFormat } from "../context.js";
 	import CopyButton from "$lib/components/copy-button.svelte";
 	import { hasPermission } from "$lib/permissions";
 	import ManageMusicId from "./manage-music-id.svelte";
 	import { getSession } from "$lib/auth.remote";
-	const format = IdFormatContext.get();
+	const format = getIdFormat();
 	const session = $derived(await getSession());
 
 	let { musicId }: { musicId: MusicIdWithCreator } = $props();

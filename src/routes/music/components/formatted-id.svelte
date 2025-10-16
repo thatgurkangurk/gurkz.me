@@ -16,10 +16,10 @@
 </script>
 
 <script lang="ts">
-	import { IdFormatContext } from "../context";
+	import { getIdFormat } from "../context.js";
 	let { robloxId }: { robloxId: string } = $props();
 
-	const format = IdFormatContext.get();
+	const format = getIdFormat();
 
 	const formattedId = $derived.by(() => formatId(robloxId, format.current));
 </script>
