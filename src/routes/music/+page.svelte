@@ -6,8 +6,16 @@
 	import Meta from "$lib/components/meta.svelte";
 	import { listMusicIds } from "$lib/music/music.remote";
 	import { getSession } from "$lib/auth.remote";
+	import { Input } from "$lib/components/ui/input";
+	import { Label } from "$lib/components/ui/label";
 
 	const session = $derived(await getSession());
+	const musicIds = $derived(await listMusicIds());
+	let searchFilter = $state("");
+
+	const filteredMusicIds = $derived(
+		musicIds.filter((id) => id.name.toLowerCase().includes(searchFilter))
+	);
 </script>
 
 <Meta title="music id list" />
@@ -20,10 +28,15 @@
 
 <FormatSelector />
 
+<div class="max-w-60 pt-2">
+	<Label>search</Label>
+	<Input bind:value={searchFilter} />
+</div>
+
 <div
 	class="grid w-full grid-cols-1 place-items-center gap-4 pt-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5"
 >
-	{#each await listMusicIds() as musicId (musicId.id)}
+	{#each filteredMusicIds as musicId (musicId.id)}
 		<MusicCard {musicId} />
 	{/each}
 </div>
