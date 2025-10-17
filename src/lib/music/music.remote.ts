@@ -1,5 +1,5 @@
 import * as v from "valibot";
-import { command, query } from "$app/server";
+import { command, form, query } from "$app/server";
 import { db } from "$lib/server/db";
 import { error } from "@sveltejs/kit";
 import { CreateMusicIdSchema, EditMusicIdSchema } from "../../routes/music/forms";
@@ -71,7 +71,7 @@ export const getMusicId = query(v.string(), async (input) => {
 /**
  * this is a command for now until i can figure out how to integrate formisch with remote functions
  */
-export const createMusicId = command(CreateMusicIdSchema, async (input) => {
+export const createMusicId = form(CreateMusicIdSchema, async (input, invalid) => {
 	const user = await requireUserPermission("CREATE_MUSIC_IDS");
 
 	await db
@@ -81,13 +81,11 @@ export const createMusicId = command(CreateMusicIdSchema, async (input) => {
 			createdById: user.id,
 			name: input.name,
 			robloxId: input.robloxId,
-			tags: input.tags
+			tags: input.tags.map((tag) => tag.text)
 		})
 		.catch((err) => {
 			console.error(err);
-			error(500, {
-				message: "could not create the music id"
-			});
+			invalid(invalid.name("could not create the music id"));
 		});
 
 	await listMusicIds().refresh();

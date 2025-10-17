@@ -3,17 +3,17 @@
 
 	type Props = {
 		name: string;
-		errors: [string, ...string[]] | null;
+		errors: string[] | null;
 	};
 
 	let { name, errors }: Props = $props();
 
-	// Use frozen error signal
-	let frozenErrors: [string, ...string[]] | null = $state(null);
+	// Keep a frozen copy of errors
+	let frozenErrors: string[] | null = $state(null);
 
-	// Freeze error while element collapses to prevent UI from jumping
+	// Freeze errors while collapsing to prevent UI jumping
 	$effect(() => {
-		if (errors) {
+		if (errors && errors.length > 0) {
 			frozenErrors = errors;
 		} else {
 			const timeout = setTimeout(() => {
@@ -25,7 +25,7 @@
 	});
 </script>
 
-<Expandable expanded={!!errors}>
+<Expandable expanded={!!(errors && errors.length)}>
 	<div id={`${name}-error`} class="text-sm font-medium text-destructive">
 		{frozenErrors?.[0]}
 	</div>

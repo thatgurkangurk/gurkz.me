@@ -13,12 +13,18 @@ export const CreateMusicIdSchema = v.object({
 		v.regex(/^\d+$/, "you can only provide numbers")
 	),
 	tags: v.pipe(
-		v.array(
-			v.pipe(
-				v.string("you have to provide a tag value"),
-				v.minLength(4, "the tag has to be longer than 4 characters"),
-				v.maxLength(24, "the tag has to be shorter than 24 characters")
-			)
+		v.fallback(
+			v.array(
+				v.object({
+					id: v.string(),
+					text: v.pipe(
+						v.string("you have to provide a tag value"),
+						v.minLength(4, "the tag has to be longer than 4 characters"),
+						v.maxLength(24, "the tag has to be shorter than 24 characters")
+					)
+				})
+			),
+			[]
 		),
 		v.maxLength(4, "you can only include a maximum of 4 tags")
 	)
