@@ -8,13 +8,18 @@
 	import { getSession } from "$lib/auth.remote";
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
+	import { Checkbox } from "$lib/components/ui/checkbox";
 
 	const session = $derived(await getSession());
 	const musicIds = $derived(await listMusicIds());
 	let searchFilter = $state("");
+	let verifiedOnly = $state(false);
 
 	const filteredMusicIds = $derived(
-		musicIds.filter((id) => id.name.toLowerCase().includes(searchFilter))
+		musicIds.filter(
+			(id) =>
+				id.name.toLowerCase().includes(searchFilter.toLowerCase()) && (!verifiedOnly || id.verified)
+		)
 	);
 </script>
 
@@ -28,15 +33,21 @@
 
 <FormatSelector />
 
-<div class="max-w-60 pt-2">
-	<Label>search</Label>
-	<Input bind:value={searchFilter} />
+<div class="grid max-w-60 grid-cols-1 gap-2 pt-4">
+	<div>
+		<Label class="pb-2">search</Label>
+		<Input bind:value={searchFilter} />
+	</div>
+	<div>
+		<Label class="pb-2">verified only?</Label>
+		<Checkbox bind:checked={verifiedOnly} />
+	</div>
 </div>
 
 <div
 	class="grid w-full grid-cols-1 place-items-center gap-4 pt-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5"
 >
-	{#each filteredMusicIds as musicId (musicId.id)}
+	{#each filteredMusicIds as musicId}
 		<MusicCard {musicId} />
 	{/each}
 </div>
