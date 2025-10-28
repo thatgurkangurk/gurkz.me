@@ -10,8 +10,20 @@
 	import Input from "$lib/components/ui/input/input.svelte";
 	import InputErrors from "$lib/components/form/input-errors.svelte";
 
-	const maxTags = $derived((createMusicId.fields.tags.value() || []).length > 3);
-	const noTags = $derived(!((createMusicId.fields.tags.value() || []).length > 0));
+	const tagsAmount = $derived((createMusicId.fields.tags.value() || []).length);
+	const maxTags = $derived(tagsAmount > 3);
+	const noTags = $derived(!(tagsAmount > 0));
+
+	function addTag() {
+		createMusicId.fields.tags[(createMusicId.fields.tags.value() || []).length].set({
+			id: crypto.randomUUID(),
+			text: ""
+		});
+	}
+
+	function clearTags() {
+		createMusicId.fields.tags.set([]);
+	}
 </script>
 
 <form
@@ -115,16 +127,7 @@
 				</Field.Set>
 
 				<div class="flex gap-2">
-					<Button
-						type="button"
-						disabled={maxTags}
-						class="w-fit"
-						onclick={() =>
-							createMusicId.fields.tags[(createMusicId.fields.tags.value() || []).length].set({
-								id: crypto.randomUUID(),
-								text: ""
-							})}
-					>
+					<Button type="button" disabled={maxTags} class="w-fit" onclick={addTag}>
 						{#if maxTags}
 							max tags reached
 						{:else}
@@ -136,9 +139,7 @@
 						disabled={noTags}
 						variant="destructive"
 						class="w-fit"
-						onclick={() => {
-							createMusicId.fields.tags.set([]);
-						}}
+						onclick={clearTags}
 					>
 						remove all tags
 					</Button>
