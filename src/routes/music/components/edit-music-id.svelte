@@ -9,7 +9,7 @@
 		DialogTrigger
 	} from "$lib/components/ui/dialog/index.js";
 	import LoaderCircle from "@lucide/svelte/icons/loader-circle";
-	import type { MusicIdWithCreator } from "$lib/schemas/music";
+	import type { MusicId, MusicIdWithCreator } from "$lib/schemas/music";
 	import { cn } from "$lib/utils";
 	import { toast } from "svelte-sonner";
 	import {
