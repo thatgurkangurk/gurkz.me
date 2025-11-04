@@ -3,8 +3,13 @@
 
 declare global {
 	namespace App {
-		// interface Error {}
-		// interface Locals {}
+		interface Error {
+			customMessage?: string;
+		}
+		interface Locals {
+			user: import("./lib/server/auth").User;
+			session: import("./lib/server/auth").Session;
+		}
 		// interface PageData {}
 		// interface PageState {}
 		// interface Platform {}

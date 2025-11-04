@@ -3,6 +3,7 @@ import type { User } from "./server/auth";
 
 export const permissions = [
 	"DEFAULT",
+	"VIEW_MUSIC_IDS",
 	"CREATE_MUSIC_IDS",
 	"CREATE_AUTO_VERIFIED_MUSIC_IDS",
 	"MANAGE_MUSIC_IDS"

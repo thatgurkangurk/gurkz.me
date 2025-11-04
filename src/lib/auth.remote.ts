@@ -12,10 +12,13 @@ export const getSession = query(() => {
 
 export const signIn = form(
 	v.object({
-		provider: SocialProvider
+		provider: SocialProvider,
+		redirectTo: v.optional(v.string())
 	}),
 	async (input) => {
-		const res = await auth.api.signInSocial({ body: { provider: input.provider } });
+		const res = await auth.api.signInSocial({
+			body: { provider: input.provider, callbackURL: input.redirectTo }
+		});
 		if (res.redirect) redirect(307, res.url!);
 	}
 );
@@ -24,4 +27,5 @@ export const signOut = form(async () => {
 	const { request } = getRequestEvent();
 	await auth.api.signOut({ headers: request.headers });
 	getSession().refresh();
+	return redirect(303, "/");
 });
