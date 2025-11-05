@@ -6,12 +6,13 @@ import { getRequestEvent } from "$app/server";
 import { env } from "$env/dynamic/private";
 import { z } from "zod";
 import { Permissions } from "$lib/permissions";
+import { admin } from "better-auth/plugins";
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
 		provider: "pg"
 	}),
-	plugins: [sveltekitCookies(getRequestEvent)],
+	plugins: [sveltekitCookies(getRequestEvent), admin()],
 	socialProviders: {
 		discord: {
 			clientId: env.DISCORD_CLIENT_ID,

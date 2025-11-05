@@ -16,7 +16,7 @@
 
 	type NavLink = Omit<HeaderLinkProps, "inSheet">;
 
-	const links: NavLink[] = [
+	const linksForEveryone: NavLink[] = [
 		{
 			href: "/",
 			label: "home"
@@ -29,6 +29,19 @@
 
 	const sessionPromise = $derived(getSession());
 	const session = $derived(await sessionPromise);
+
+	const links = $derived.by(() => {
+		if (session?.user.role === "admin")
+			return [
+				...linksForEveryone,
+				{
+					href: "/admin",
+					label: "admin"
+				}
+			];
+
+		return linksForEveryone;
+	});
 
 	let open = $state<boolean>(false);
 </script>
