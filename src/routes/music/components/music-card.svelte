@@ -43,7 +43,12 @@
 	</CardContent>
 	<CardFooter class="grid grid-cols-1 gap-1">
 		<p>
-			created by <span>{musicId.creator.name}</span>
+			created by <span>{musicId.creator.name}</span> on
+			<span class="whitespace-nowrap"
+				>{new Intl.DateTimeFormat("en-GB", {
+					dateStyle: "long"
+				}).format(musicId.created)}</span
+			>
 		</p>
 		{#if session?.user && (session.user.id === musicId.createdById || hasPermission(session.user, "MANAGE_MUSIC_IDS"))}
 			<ManageMusicId {musicId} />

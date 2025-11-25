@@ -18,8 +18,7 @@ export const MusicId = v.object({
 });
 
 export const MusicIdWithCreator = v.object({
-	.../*@valibot-migrate we can't detect if MusicId has a `pipe` operator, if it does you might need to migrate this by hand otherwise it will loose it's pipeline*/
-	MusicId.entries,
+	...MusicId.entries,
 
 	creator: v.pick(User, ["id", "image", "name"])
 });
