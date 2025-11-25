@@ -3,9 +3,10 @@
 	import { Permissions, permissions, type Permission } from "$lib/permissions.js";
 	import type { PageProps } from "./$types";
 	import { Button } from "$lib/components/ui/button";
-	import { createForm, Field, Form, reset } from "@formisch/svelte";
+	import { createForm, Field, Form, reset, setInput } from "@formisch/svelte";
 	import ArrowLeft from "@lucide/svelte/icons/arrow-left";
 	import * as v from "valibot";
+	import { watch } from "runed";
 
 	let { data, params }: PageProps = $props();
 
@@ -22,6 +23,17 @@
 			permissions: user.permissions as Permission[]
 		}
 	});
+
+	watch(
+		() => user.permissions,
+		(permissions) => {
+			setInput(form, {
+				input: {
+					permissions: permissions as Permission[]
+				}
+			});
+		}
+	);
 </script>
 
 <Button href="/admin">
