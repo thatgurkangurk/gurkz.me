@@ -29,7 +29,7 @@ export async function requireAuth(shouldRedirect: boolean = true) {
  * this also calls {@link requireAuth}, so you don't need to call it
  */
 export async function requireAdminAuth(shouldRedirect: boolean = true) {
-	const user = await requireAuth();
+	const user = await requireAuth(shouldRedirect);
 	const event = getRequestEvent();
 
 	if (user.role !== "admin") {
@@ -42,6 +42,7 @@ export async function requireAdminAuth(shouldRedirect: boolean = true) {
 	}
 
 	return user;
+}
 }
 
 /**
