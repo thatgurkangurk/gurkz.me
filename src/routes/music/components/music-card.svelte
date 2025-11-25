@@ -13,11 +13,12 @@
 	import CopyButton from "$lib/components/copy-button.svelte";
 	import { hasPermission } from "$lib/permissions";
 	import ManageMusicId from "./manage-music-id.svelte";
-	import { getSession } from "$lib/auth.remote";
+	import type { User, Session } from "$lib/server/auth";
 	const format = getIdFormat();
-	const session = $derived(await getSession());
-
-	let { musicId }: { musicId: MusicIdWithCreator } = $props();
+	let {
+		musicId,
+		session
+	}: { musicId: MusicIdWithCreator; session: { user: User; session: Session } | null } = $props();
 </script>
 
 <Card class="h-full w-full">

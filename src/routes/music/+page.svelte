@@ -48,6 +48,6 @@
 	class="grid w-full grid-cols-1 place-items-center gap-4 pt-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5"
 >
 	{#each filteredMusicIds as musicId}
-		<MusicCard {musicId} />
+		<MusicCard {session} {musicId} />
 	{/each}
 </div>
