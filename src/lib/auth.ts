@@ -43,7 +43,6 @@ export async function requireAdminAuth(shouldRedirect: boolean = true) {
 
 	return user;
 }
-}
 
 /**
  * **only** use this in a remote function
