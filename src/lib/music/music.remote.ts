@@ -8,6 +8,7 @@ import { hasPermission } from "$lib/permissions";
 import { musicIds } from "$lib/server/db/schema/music";
 import { eq } from "drizzle-orm";
 import { musicIdListGuard } from "../../routes/music/guard.server";
+import { ResultAsync } from "neverthrow";
 
 export const listMusicIds = query(async () => {
 	await musicIdListGuard();
@@ -71,25 +72,27 @@ export const getMusicId = query(v.string(), async (input) => {
 	return id;
 });
 
-/**
- * this is a command for now until i can figure out how to integrate formisch with remote functions
- */
 export const createMusicId = form(CreateMusicIdSchema, async (input, invalid) => {
 	const user = await requireUserPermission("CREATE_MUSIC_IDS");
 
-	await db
-		.insert(musicIds)
-		.values({
+	const result = await ResultAsync.fromPromise(
+		db.insert(musicIds).values({
 			verified: hasPermission(user, "CREATE_AUTO_VERIFIED_MUSIC_IDS") ? true : false,
 			createdById: user.id,
 			name: input.name,
 			robloxId: input.robloxId,
 			tags: input.tags.map((tag) => tag.text)
+		}),
+		(error) => ({
+			type: "db",
+			error: error instanceof Error ? error : new Error(String(error))
 		})
-		.catch((err) => {
-			console.error(err);
-			invalid(invalid.name("could not create the music id"));
-		});
+	);
+
+	if (result.isErr()) {
+		console.error("failed to create music id", result.error.error.message);
+		invalid(invalid.name("could not create the music id").message);
+	}
 
 	await listMusicIds().refresh();
 
@@ -129,10 +132,16 @@ export const deleteMusicId = command(
 				message: "you are not allowed to do that"
 			});
 
-		try {
-			await db.delete(musicIds).where(eq(musicIds.id, input.id));
-		} catch (err) {
-			console.error("FAILED TO DELETE", err);
+		const result = await ResultAsync.fromPromise(
+			db.delete(musicIds).where(eq(musicIds.id, input.id)),
+			(error) => ({
+				type: "db",
+				error: error instanceof Error ? error : new Error(String(error))
+			})
+		);
+
+		if (result.isErr()) {
+			console.error("failed to delete music id", result.error.error.message);
 			error(500);
 		}
 
@@ -180,16 +189,24 @@ export const editMusicId = command(EditMusicIdSchema, async (input) => {
 		});
 	}
 
-	try {
-		await db.update(musicIds).set(cleanUpdates).where(eq(musicIds.id, id));
-	} catch (err) {
-		console.error("FAILED TO UPDATE", err);
+	const updateResult = await ResultAsync.fromPromise(
+		db.update(musicIds).set(cleanUpdates).where(eq(musicIds.id, id)).returning(),
+		(error) => ({
+			type: "db",
+			error: error instanceof Error ? error : new Error(String(error))
+		})
+	);
+
+	if (updateResult.isErr()) {
+		console.error("failed to update", updateResult.error.error.message);
 		error(500);
 	}
 
 	await listMusicIds().refresh();
+	await getMusicId(input.id).refresh();
 
 	return {
-		success: true
+		success: true,
+		newData: updateResult.value[0]
 	};
 });

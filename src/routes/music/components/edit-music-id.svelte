@@ -9,7 +9,7 @@
 		DialogTrigger
 	} from "$lib/components/ui/dialog/index.js";
 	import LoaderCircle from "@lucide/svelte/icons/loader-circle";
-	import type { MusicId, MusicIdWithCreator } from "$lib/schemas/music";
+	import type { MusicIdWithCreator } from "$lib/schemas/music";
 	import { cn } from "$lib/utils";
 	import { toast } from "svelte-sonner";
 	import {
@@ -30,8 +30,9 @@
 	import { Switch } from "$lib/components/ui/switch";
 	import { Label } from "$lib/components/ui/label";
 	import { hasPermission } from "$lib/permissions";
-	import { deleteMusicId, editMusicId, listMusicIds } from "$lib/music/music.remote.js";
+	import { deleteMusicId, editMusicId } from "$lib/music/music.remote.js";
 	import { getSession } from "$lib/auth.remote";
+	import { watch } from "runed";
 
 	type Props = {
 		musicId: MusicIdWithCreator;
@@ -45,6 +46,15 @@
 		schema: EditMusicIdSchema,
 		initialInput: musicId
 	});
+
+	watch(
+		() => musicId,
+		(id) => {
+			setInput(form, {
+				input: id
+			});
+		}
+	);
 
 	const maxTags = $derived(
 		getInput(form, {
@@ -74,13 +84,13 @@
 			onsubmit={async (output) => {
 				const promise = editMusicId(output);
 				toast.promise(promise, {
-					loading: "creating...",
-					success: () => {
+					loading: "updating...",
+					success: (data) => {
 						open = false;
 						reset(form, {
-							initialInput: musicId
+							initialInput: data.newData
 						});
-						return "successfully created";
+						return "successfully updated";
 					},
 					error: "something went wrong"
 				});
