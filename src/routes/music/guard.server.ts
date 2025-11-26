@@ -1,7 +1,9 @@
+import { getRequestEvent } from "$app/server";
 import { hasPermission } from "$lib/permissions.js";
 import { error, redirect } from "@sveltejs/kit";
 
-export async function load(event) {
+export async function musicIdListGuard() {
+	const event = getRequestEvent();
 	if (!event.locals.user || !event.locals.session) {
 		const to = encodeURIComponent(event.url.pathname + event.url.search);
 		redirect(303, `/login?redirectTo=${to}`);
@@ -11,9 +13,4 @@ export async function load(event) {
 		throw error(403, {
 			message: "You do not have permission to view this page."
 		});
-
-	return {
-		user: event.locals.user,
-		session: event.locals.session
-	};
 }

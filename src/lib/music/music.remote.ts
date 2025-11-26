@@ -7,8 +7,10 @@ import { requireAuth, requireUserPermission } from "$lib/auth.js";
 import { hasPermission } from "$lib/permissions";
 import { musicIds } from "$lib/server/db/schema/music";
 import { eq } from "drizzle-orm";
+import { musicIdListGuard } from "../../routes/music/guard.server";
 
 export const listMusicIds = query(async () => {
+	await musicIdListGuard();
 	const ids = await db.query.musicIds.findMany({
 		columns: {
 			id: true,
@@ -38,6 +40,7 @@ export const listMusicIds = query(async () => {
  * not really used yet, but it might be later
  */
 export const getMusicId = query(v.string(), async (input) => {
+	await musicIdListGuard();
 	const id = await db.query.musicIds.findFirst({
 		columns: {
 			id: true,
