@@ -86,5 +86,8 @@
 		"db:migrate": "tsx --no-warnings node_modules/drizzle-kit/bin.cjs --config ./drizzle.config.ts migrate",
 		"db:studio": "tsx --no-warnings node_modules/drizzle-kit/bin.cjs --config ./drizzle.config.ts studio"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"permix": "^3.6.0"
+	}
 }

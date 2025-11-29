@@ -4,6 +4,7 @@ import { building } from "$app/environment";
 import { svelteKitHandler } from "better-auth/svelte-kit";
 import type { Handle } from "@sveltejs/kit";
 import { sequence } from "@sveltejs/kit/hooks";
+import { setupPermix } from "$lib/permix.server";
 
 const preloadHandle: Handle = async ({ event, resolve }) => {
 	const response = await resolve(event, {
@@ -24,6 +25,9 @@ export const authHandle: Handle = async ({ event, resolve }) => {
 		event.locals.session = session.session;
 		event.locals.user = session.user;
 	}
+
+	await setupPermix();
+
 	return svelteKitHandler({ event, resolve, auth, building });
 };
 

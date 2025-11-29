@@ -4,11 +4,11 @@ import { db } from "$lib/server/db";
 import { error } from "@sveltejs/kit";
 import { CreateMusicIdSchema, EditMusicIdSchema } from "../../routes/music/forms";
 import { requireAuth, requireUserPermission } from "$lib/auth.js";
-import { hasPermission } from "$lib/permissions";
 import { musicIds } from "$lib/server/db/schema/music";
 import { eq } from "drizzle-orm";
 import { musicIdListGuard } from "../../routes/music/guard.server";
 import { ResultAsync } from "neverthrow";
+import { permix } from "$lib/permix.server";
 
 export const listMusicIds = query(async () => {
 	await musicIdListGuard();
@@ -107,7 +107,7 @@ export const deleteMusicId = command(
 		id: v.pipe(v.string(), v.ulid())
 	}),
 	async (input) => {
-		const user = await requireAuth();
+		await requireAuth();
 
 		const [musicIdToDelete] = await db
 			.select()
@@ -120,11 +120,9 @@ export const deleteMusicId = command(
 				message: `Music ID ${input.id} not found`
 			});
 
-		const canManage =
-			!!user &&
-			(user.id === musicIdToDelete.createdById || hasPermission(user, "MANAGE_MUSIC_IDS"));
+		const canDelete = await permix.checkAsync("musicId", "delete", musicIdToDelete);
 
-		if (!canManage)
+		if (!canDelete)
 			error(403, {
 				message: "you are not allowed to do that"
 			});
@@ -154,7 +152,7 @@ export const deleteMusicId = command(
  * this is a command for now until i can figure out how to integrate formisch with remote functions
  */
 export const editMusicId = command(EditMusicIdSchema, async (input) => {
-	const user = await requireAuth();
+	await requireAuth();
 	const { id, ...updates } = input;
 	const cleanUpdates = Object.fromEntries(
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -167,10 +165,9 @@ export const editMusicId = command(EditMusicIdSchema, async (input) => {
 			message: `Music ID ${id} not found`
 		});
 
-	const isOwner = user.id === musicIdToEdit.createdById;
-	const isManager = user && hasPermission(user, "MANAGE_MUSIC_IDS");
+	const canEdit = await permix.checkAsync("musicId", "edit", musicIdToEdit);
 
-	if (!(isOwner || isManager)) {
+	if (!canEdit) {
 		error(403, {
 			message: "you are not allowed to do that"
 		});

@@ -8,7 +8,6 @@
 	import { getSession } from "$lib/auth.remote";
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
-	import { Checkbox } from "$lib/components/ui/checkbox";
 
 	const session = $derived(await getSession());
 	const musicIds = $derived(await listMusicIds());

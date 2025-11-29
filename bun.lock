@@ -4,6 +4,9 @@
   "workspaces": {
     "": {
       "name": "gurkz.me",
+      "dependencies": {
+        "permix": "^3.6.0",
+      },
       "devDependencies": {
         "@eslint/compat": "^1.4.1",
         "@eslint/js": "^9.39.1",
@@ -630,6 +633,8 @@
     "path-exists": ["path-exists@4.0.0", "", {}, "sha512-ak9Qy5Q7jYb2Wwcey5Fpvg2KoAc/ZIhLSLOSBmRmygPsGwkVVt0fZa0qrtMz+m6tJTAHfZQ8FnmB4MG4LWy7/w=="],
 
     "path-key": ["path-key@3.1.1", "", {}, "sha512-ojmeN0qd+y0jszEtoY48r0Peq5dwMEkIlCOu6Q5f41lfkswXuKtYrhgoTpLnyIcHm24Uhqx+5Tqm2InSwLhE6Q=="],
+
+    "permix": ["permix@3.6.0", "", { "peerDependencies": { "@orpc/server": ">=1", "@trpc/server": ">=11", "elysia": ">=1", "express": ">=4", "fastify": ">=5", "fastify-plugin": ">=5", "hono": ">=4", "react": ">=18", "react-dom": ">=18", "solid-js": ">=1", "vue": ">=3" }, "optionalPeers": ["@orpc/server", "@trpc/server", "elysia", "express", "fastify", "fastify-plugin", "hono", "react", "react-dom", "solid-js", "vue"] }, "sha512-eMqfYCKDlWuGyuAs9ihjDj0SGYDWYoxZ/n2ouCVWlzY9VaMa4eL/c+80o5qEeZO0zpxrA/5YUOGEwsrP9yJG/w=="],
 
     "picocolors": ["picocolors@1.1.1", "", {}, "sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA=="],
 

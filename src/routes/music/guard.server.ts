@@ -1,5 +1,5 @@
 import { getRequestEvent } from "$app/server";
-import { hasPermission } from "$lib/permissions.js";
+import { permix } from "$lib/permix.server";
 import { error, redirect } from "@sveltejs/kit";
 
 export async function musicIdListGuard() {
@@ -9,7 +9,7 @@ export async function musicIdListGuard() {
 		redirect(303, `/login?redirectTo=${to}`);
 	}
 
-	if (!hasPermission(event.locals.user, "VIEW_MUSIC_IDS"))
+	if (!permix.check("musicId", "read"))
 		throw error(403, {
 			message: "You do not have permission to view this page."
 		});
