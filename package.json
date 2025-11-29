@@ -23,6 +23,7 @@
     "@tanstack/react-router": "^1.139.11",
     "@tanstack/react-router-devtools": "^1.139.11",
     "@tanstack/react-start": "^1.139.11",
+    "better-auth": "^1.4.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.44.7",

@@ -8,6 +8,7 @@ import {
   Link,
 } from "@tanstack/react-router";
 import globalCss from "../styles/global.css?url";
+import { authClient } from "~/lib/auth";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -28,6 +29,33 @@ export const Route = createRootRoute({
   component: RootComponent,
 });
 
+function AuthDisplay() {
+  const session = authClient.useSession();
+
+  return (
+    <>
+      {session.data?.user ? (
+        <>
+          <p>hi, {session.data.user.name}</p>
+          <button onClick={() => authClient.signOut()}>log out</button>
+        </>
+      ) : (
+        <>
+          <button
+            onClick={() =>
+              authClient.signIn.social({
+                provider: "discord",
+              })
+            }
+          >
+            log in
+          </button>
+        </>
+      )}
+    </>
+  );
+}
+
 function RootComponent() {
   return (
     <RootDocument>
@@ -47,6 +75,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
           <nav className="flex flex-row w-full gap-2 bg-orange-400">
             <Link to="/">home</Link>
             <Link to="/music">music id list</Link>
+            <AuthDisplay />
           </nav>
           {children}
           <Scripts />
