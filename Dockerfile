@@ -17,7 +17,7 @@ FROM base
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 gurkz
 
-COPY --from=build --chown=gurkz:nodejs /app/build /app/build
+COPY --from=build --chown=gurkz:nodejs /app/.output /app/.output
 
 ENV NODE_ENV="production"
 ENV HOST=0.0.0.0
@@ -25,4 +25,4 @@ ENV PORT=4321
 ENV ORIGIN="https://www.gurkz.me/"
 EXPOSE 4321/tcp
 
-CMD [ "bun", "./build/index.js" ]
+CMD [ "bun", "./.output/server/index.mjs" ]

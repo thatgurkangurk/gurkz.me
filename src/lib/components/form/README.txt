@@ -1,1 +1,0 @@
-copied (and slightly modified) from https://github.com/fabian-hiller/formisch/tree/main/playgrounds/svelte/src/lib/components
