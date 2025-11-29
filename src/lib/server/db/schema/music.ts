@@ -14,7 +14,6 @@ export const musicIds = pgTable("music_id", {
 	name: varchar("name", { length: 128 }).notNull(),
 	created: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
 	working: boolean("working").notNull().default(true),
-	verified: boolean("verified").notNull().default(false),
 	tags: text("tags").array().notNull().default([])
 });
 

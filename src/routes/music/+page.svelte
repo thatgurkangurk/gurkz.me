@@ -13,13 +13,9 @@
 	const session = $derived(await getSession());
 	const musicIds = $derived(await listMusicIds());
 	let searchFilter = $state("");
-	let verifiedOnly = $state(false);
 
 	const filteredMusicIds = $derived(
-		musicIds.filter(
-			(id) =>
-				id.name.toLowerCase().includes(searchFilter.toLowerCase()) && (!verifiedOnly || id.verified)
-		)
+		musicIds.filter((id) => id.name.toLowerCase().includes(searchFilter.toLowerCase()))
 	);
 </script>
 
@@ -37,10 +33,6 @@
 	<div>
 		<Label class="pb-2">search</Label>
 		<Input bind:value={searchFilter} />
-	</div>
-	<div>
-		<Label class="pb-2">verified only?</Label>
-		<Checkbox bind:checked={verifiedOnly} />
 	</div>
 </div>
 

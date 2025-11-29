@@ -39,6 +39,5 @@ export const EditMusicIdSchema = v.object({
 		v.maxLength(4, "you can only include a maximum of 4 tags")
 	),
 	id: v.pipe(v.string(), v.ulid()),
-	working: v.optional(v.boolean()),
-	verified: v.optional(v.boolean())
+	working: v.optional(v.boolean())
 });

@@ -25,7 +25,6 @@ export const getMusicId = or
 				createdById: true,
 				created: true,
 				working: true,
-				verified: true,
 				tags: true
 			},
 			with: {
@@ -59,7 +58,6 @@ export const listMusicIds = or
 				createdById: true,
 				created: true,
 				working: true,
-				verified: true,
 				tags: true
 			},
 			with: {
@@ -87,7 +85,6 @@ export const createMusicId = or
 		await context.db
 			.insert(musicIds)
 			.values({
-				verified: hasPermission(user, "CREATE_AUTO_VERIFIED_MUSIC_IDS") ? true : false,
 				createdById: user.id,
 				name: input.name,
 				robloxId: input.robloxId,
@@ -169,16 +166,6 @@ export const editMusicId = or
 
 		const isOwner = session?.user?.id === musicIdToEdit.createdById;
 		const isManager = !!session?.user && hasPermission(session.user, "MANAGE_MUSIC_IDS");
-
-		if (
-			"verified" in cleanUpdates &&
-			cleanUpdates.verified !== musicIdToEdit.verified &&
-			!isManager
-		) {
-			throw new ORPCError("FORBIDDEN", {
-				message: "you are not allowed to change the verified status"
-			});
-		}
 
 		if (!(isOwner || isManager)) {
 			throw new ORPCError("FORBIDDEN", {

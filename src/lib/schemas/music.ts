@@ -13,7 +13,6 @@ export const MusicId = v.object({
 	name: v.string(),
 	created: v.date(),
 	working: v.boolean(),
-	verified: v.boolean(),
 	tags: v.array(v.string())
 });
 

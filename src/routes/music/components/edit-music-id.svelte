@@ -163,25 +163,6 @@
 						{/snippet}
 					</FieldArray>
 
-					{#if getSession().current?.user && hasPermission(getSession().current!.user, "MANAGE_MUSIC_IDS")}
-						<Field of={form} path={["verified"]}>
-							{#snippet children(field)}
-								<Label>verified</Label>
-								<Switch
-									bind:checked={
-										() => field.input,
-										(v) => {
-											setInput(form, {
-												path: field.path,
-												input: v || false
-											});
-										}
-									}
-									required
-								/>
-							{/snippet}
-						</Field>
-					{/if}
 					<Field of={form} path={["working"]}>
 						{#snippet children(field)}
 							<Label>working</Label>

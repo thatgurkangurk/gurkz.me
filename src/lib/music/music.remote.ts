@@ -20,7 +20,6 @@ export const listMusicIds = query(async () => {
 			createdById: true,
 			created: true,
 			working: true,
-			verified: true,
 			tags: true
 		},
 		with: {
@@ -50,7 +49,6 @@ export const getMusicId = query(v.string(), async (input) => {
 			createdById: true,
 			created: true,
 			working: true,
-			verified: true,
 			tags: true
 		},
 		with: {
@@ -77,7 +75,6 @@ export const createMusicId = form(CreateMusicIdSchema, async (input, invalid) =>
 
 	const result = await ResultAsync.fromPromise(
 		db.insert(musicIds).values({
-			verified: hasPermission(user, "CREATE_AUTO_VERIFIED_MUSIC_IDS") ? true : false,
 			createdById: user.id,
 			name: input.name,
 			robloxId: input.robloxId,
@@ -172,16 +169,6 @@ export const editMusicId = command(EditMusicIdSchema, async (input) => {
 
 	const isOwner = user.id === musicIdToEdit.createdById;
 	const isManager = user && hasPermission(user, "MANAGE_MUSIC_IDS");
-
-	if (
-		"verified" in cleanUpdates &&
-		cleanUpdates.verified !== musicIdToEdit.verified &&
-		!isManager
-	) {
-		error(403, {
-			message: "you are not allowed to change the verified status"
-		});
-	}
 
 	if (!(isOwner || isManager)) {
 		error(403, {
