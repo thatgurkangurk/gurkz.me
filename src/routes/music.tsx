@@ -1,12 +1,33 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { MusicCard } from "~/components/music/music-card";
 import { orpc } from "~/lib/orpc";
+import { getServerSession } from "~/lib/session";
 
 export const Route = createFileRoute("/music")({
   component: RouteComponent,
-  loader: ({ context }) =>
-    context.queryClient.ensureQueryData(orpc.music.list.queryOptions()),
+  beforeLoad: async () => {
+    const session = await getServerSession();
+
+    if (!session?.user)
+      throw redirect({
+        to: "/login",
+        search: {
+          redirectTo: "/music",
+        },
+      });
+
+    if (!session.user.permissions.includes("VIEW_MUSIC_IDS"))
+      throw redirect({
+        to: "/unauthorised",
+        search: {
+          redirectTo: "/music",
+        },
+      });
+  },
+  loader: ({ context }) => {
+    context.queryClient.ensureQueryData(orpc.music.list.queryOptions());
+  },
 });
 
 function RouteComponent() {
