@@ -2,15 +2,19 @@
 import { StrictMode, type ReactNode } from "react";
 import {
   Outlet,
-  createRootRoute,
   HeadContent,
   Scripts,
   Link,
+  createRootRouteWithContext,
 } from "@tanstack/react-router";
 import globalCss from "../styles/global.css?url";
 import { authClient } from "~/lib/auth";
+import type { QueryClient } from "@tanstack/react-query";
+import { Devtools } from "~/components/devtools";
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<{
+  queryClient: QueryClient;
+}>()({
   head: () => ({
     meta: [
       {
@@ -60,6 +64,7 @@ function RootComponent() {
   return (
     <RootDocument>
       <Outlet />
+      <Devtools />
     </RootDocument>
   );
 }

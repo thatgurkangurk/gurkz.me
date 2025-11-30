@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as MusicRouteImport } from './routes/music'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc/$'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const MusicRoute = MusicRouteImport.update({
@@ -23,6 +24,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
+  id: '/api/rpc/$',
+  path: '/api/rpc/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -33,30 +39,34 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/music': typeof MusicRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/music': typeof MusicRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/music': typeof MusicRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/music' | '/api/auth/$'
+  fullPaths: '/' | '/music' | '/api/auth/$' | '/api/rpc/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/music' | '/api/auth/$'
-  id: '__root__' | '/' | '/music' | '/api/auth/$'
+  to: '/' | '/music' | '/api/auth/$' | '/api/rpc/$'
+  id: '__root__' | '/' | '/music' | '/api/auth/$' | '/api/rpc/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   MusicRoute: typeof MusicRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiRpcSplatRoute: typeof ApiRpcSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -75,6 +85,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/rpc/$': {
+      id: '/api/rpc/$'
+      path: '/api/rpc/$'
+      fullPath: '/api/rpc/$'
+      preLoaderRoute: typeof ApiRpcSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   MusicRoute: MusicRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiRpcSplatRoute: ApiRpcSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

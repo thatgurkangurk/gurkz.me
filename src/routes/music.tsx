@@ -1,40 +1,16 @@
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-import { createServerFn } from "@tanstack/react-start";
-import { db } from "~/server/db";
-
-const getMusicIds = createServerFn({ method: "GET" }).handler(async () => {
-  const ids = await db.query.musicIds.findMany({
-    columns: {
-      id: true,
-      name: true,
-      robloxId: true,
-      createdById: true,
-      created: true,
-      working: true,
-      tags: true,
-    },
-    with: {
-      creator: {
-        columns: {
-          id: true,
-          name: true,
-          image: true,
-        },
-      },
-    },
-    orderBy: ({ id }, { desc }) => desc(id),
-  });
-
-  return ids;
-});
+import { orpc } from "~/lib/orpc";
 
 export const Route = createFileRoute("/music")({
   component: RouteComponent,
-  loader: () => getMusicIds(),
+  loader: ({ context }) =>
+    context.queryClient.ensureQueryData(orpc.music.list.queryOptions()),
 });
 
 function RouteComponent() {
-  const data = Route.useLoaderData();
+  const { data } = useSuspenseQuery(orpc.music.list.queryOptions());
+
   return (
     <div>
       music id list
