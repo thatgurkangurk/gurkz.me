@@ -1,8 +1,32 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createIsomorphicFn } from "@tanstack/react-start";
+import { getCookie } from "@tanstack/react-start/server";
+import { useHydrateAtoms } from "jotai/utils";
+import Cookies from "js-cookie";
+import { idFormat, idFormatSchema } from "~/components/music/format";
+import { FormatSelector } from "~/components/music/format-selector";
 import { MusicCard } from "~/components/music/music-card";
 import { orpc } from "~/lib/orpc";
 import { getServerSession } from "~/lib/session";
+
+const getInitialIdFormat = createIsomorphicFn()
+  .server(() => {
+    const raw = getCookie("id_format");
+    try {
+      return idFormatSchema.parse(raw);
+    } catch {
+      return "DEFAULT";
+    }
+  })
+  .client(() => {
+    const raw = Cookies.get("id_format");
+    try {
+      return idFormatSchema.parse(raw);
+    } catch {
+      return "DEFAULT";
+    }
+  });
 
 export const Route = createFileRoute("/music")({
   component: RouteComponent,
@@ -25,17 +49,24 @@ export const Route = createFileRoute("/music")({
         },
       });
   },
-  loader: ({ context }) => {
-    context.queryClient.ensureQueryData(orpc.music.list.queryOptions());
+  loader: async ({ context }) => {
+    await context.queryClient.ensureQueryData(orpc.music.list.queryOptions());
+    return {
+      initialIdFormat: getInitialIdFormat(),
+    };
   },
 });
 
 function RouteComponent() {
   const { data } = useSuspenseQuery(orpc.music.list.queryOptions());
+  const { initialIdFormat } = Route.useLoaderData();
+
+  useHydrateAtoms([[idFormat, initialIdFormat]]);
 
   return (
     <div>
       music id list
+      <FormatSelector />
       <div className="grid w-full grid-cols-1 place-items-center gap-4 pt-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
         {data.map((musicId) => (
           <MusicCard key={musicId.id} musicId={musicId} />
