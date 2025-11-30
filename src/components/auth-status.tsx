@@ -1,15 +1,16 @@
 import { useSession } from "~/lib/session";
 import { Button } from "./ui/button";
+import { authClient } from "~/lib/auth";
 
 export function AuthStatus() {
-  const { data, signIn, signOut } = useSession();
+  const { data } = useSession();
 
   return (
     <>
       {data?.user ? (
         <>
           <p className="whitespace-nowrap">hello, {data.user.name}</p>
-          <Button variant={"link"} onClick={() => signOut(null)}>
+          <Button variant={"link"} onClick={() => authClient.signOut()}>
             log out
           </Button>
         </>
@@ -17,7 +18,7 @@ export function AuthStatus() {
         <Button
           variant={"link"}
           onClick={() =>
-            signIn({
+            authClient.signIn.social({
               provider: "discord",
             })
           }
