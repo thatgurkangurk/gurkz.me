@@ -14,6 +14,7 @@ import { Devtools } from "~/components/devtools";
 import { themeScript, useSyncThemeClass } from "~/lib/theme";
 import { ModeToggle } from "~/components/mode-toggle";
 import { Provider } from "jotai";
+import { Header } from "~/components/header";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
@@ -89,12 +90,19 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
           <HeadContent />
         </head>
         <body>
-          <nav className="flex flex-row w-full gap-2 bg-orange-400">
-            <Link to="/">home</Link>
-            <Link to="/music">music id list</Link>
-            <AuthDisplay />
-            <ModeToggle />
-          </nav>
+          <Header
+            sheetPosition="left"
+            links={[
+              {
+                label: "home",
+                to: "/",
+              },
+              {
+                label: "music id list",
+                to: "/music",
+              },
+            ]}
+          />
           {children}
           <Scripts />
         </body>

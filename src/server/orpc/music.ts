@@ -1,7 +1,7 @@
-import { os } from "@orpc/server";
 import { db } from "../db";
+import { or } from "../orpc";
 
-const listMusicIds = os.route({ method: "GET" }).handler(async () => {
+const listMusicIds = or.route({ method: "GET" }).handler(async () => {
   const ids = await db.query.musicIds.findMany({
     columns: {
       id: true,
