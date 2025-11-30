@@ -6,7 +6,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import { user } from "./auth";
-import { relations } from "drizzle-orm";
+import { InferSelectModel, relations } from "drizzle-orm";
 import { ulid } from "ulid";
 
 export const musicIds = pgTable("music_id", {
@@ -26,3 +26,8 @@ export const musicIds = pgTable("music_id", {
 export const musicIdRelations = relations(musicIds, ({ one }) => ({
   creator: one(user, { fields: [musicIds.createdById], references: [user.id] }),
 }));
+
+export type MusicId = InferSelectModel<typeof musicIds>;
+export type MusicIdWithCreator = MusicId & {
+  creator: Pick<InferSelectModel<typeof user>, "id" | "name" | "image">;
+};
