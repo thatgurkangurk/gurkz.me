@@ -19,9 +19,11 @@ import {
   DialogTrigger,
 } from "~/components/ui/dialog";
 import { Button } from "./ui/button";
+import { useRouter } from "@tanstack/react-router";
 
 export function AuthStatus() {
   const { data } = useSession();
+  const router = useRouter();
 
   return (
     <>
@@ -41,7 +43,14 @@ export function AuthStatus() {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuLabel>hi, {data.user.name}!</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => authClient.signOut()}>
+            <DropdownMenuItem
+              onClick={() => {
+                authClient.signOut();
+                router.navigate({
+                  to: "/",
+                });
+              }}
+            >
               log out
             </DropdownMenuItem>
           </DropdownMenuContent>
