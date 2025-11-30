@@ -11,6 +11,9 @@ import globalCss from "../styles/global.css?url";
 import { authClient } from "~/lib/auth";
 import type { QueryClient } from "@tanstack/react-query";
 import { Devtools } from "~/components/devtools";
+import { themeScript, useSyncThemeClass } from "~/lib/theme";
+import { ModeToggle } from "~/components/mode-toggle";
+import { Provider } from "jotai";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
@@ -26,6 +29,12 @@ export const Route = createRootRouteWithContext<{
       },
       {
         title: "TanStack Start Starter",
+      },
+    ],
+    scripts: [
+      {
+        id: "theme-script",
+        children: themeScript,
       },
     ],
     links: [{ rel: "stylesheet", href: globalCss }],
@@ -62,17 +71,20 @@ function AuthDisplay() {
 
 function RootComponent() {
   return (
-    <RootDocument>
-      <Outlet />
-      <Devtools />
-    </RootDocument>
+    <Provider>
+      <RootDocument>
+        <Outlet />
+        <Devtools />
+      </RootDocument>
+    </Provider>
   );
 }
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
+  useSyncThemeClass();
   return (
     <StrictMode>
-      <html>
+      <html lang="en" suppressHydrationWarning>
         <head>
           <HeadContent />
         </head>
@@ -81,6 +93,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
             <Link to="/">home</Link>
             <Link to="/music">music id list</Link>
             <AuthDisplay />
+            <ModeToggle />
           </nav>
           {children}
           <Scripts />
