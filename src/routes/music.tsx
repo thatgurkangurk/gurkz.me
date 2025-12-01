@@ -4,10 +4,12 @@ import { createIsomorphicFn } from "@tanstack/react-start";
 import { getCookie } from "@tanstack/react-start/server";
 import { useHydrateAtoms } from "jotai/utils";
 import Cookies from "js-cookie";
+import { CreateMusicIdForm } from "~/components/music/create-form";
 import { idFormat, idFormatSchema } from "~/components/music/format";
 import { FormatSelector } from "~/components/music/format-selector";
 import { MusicCard } from "~/components/music/music-card";
 import { orpc } from "~/lib/orpc";
+import { Check } from "~/lib/permix";
 import { getServerSession } from "~/lib/session";
 
 const getInitialIdFormat = createIsomorphicFn()
@@ -66,6 +68,9 @@ function RouteComponent() {
   return (
     <div>
       music id list
+      <Check entity={"musicId"} action={"create"}>
+        <CreateMusicIdForm />
+      </Check>
       <FormatSelector />
       <div className="grid w-full grid-cols-1 place-items-center gap-4 pt-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
         {data.map((musicId) => (

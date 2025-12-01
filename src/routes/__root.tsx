@@ -1,5 +1,5 @@
 /// <reference types="vite/client" />
-import { StrictMode, type ReactNode } from "react";
+import { StrictMode, useEffect, type ReactNode } from "react";
 import {
   Outlet,
   HeadContent,
@@ -15,6 +15,10 @@ import { themeScript, useSyncThemeClass } from "~/lib/theme";
 import { ModeToggle } from "~/components/mode-toggle";
 import { Provider } from "jotai";
 import { Header } from "~/components/header";
+import { Toaster } from "~/components/ui/sonner";
+import { PermixProvider } from "permix/react";
+import { getRules, permix } from "~/lib/permix";
+import { useSession } from "~/lib/session";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
@@ -43,40 +47,23 @@ export const Route = createRootRouteWithContext<{
   component: RootComponent,
 });
 
-function AuthDisplay() {
-  const session = authClient.useSession();
-
-  return (
-    <>
-      {session.data?.user ? (
-        <>
-          <p>hi, {session.data.user.name}</p>
-          <button onClick={() => authClient.signOut()}>log out</button>
-        </>
-      ) : (
-        <>
-          <button
-            onClick={() =>
-              authClient.signIn.social({
-                provider: "discord",
-              })
-            }
-          >
-            log in
-          </button>
-        </>
-      )}
-    </>
-  );
-}
-
 function RootComponent() {
+  const { data } = useSession();
+
+  useEffect(() => {
+    if (data) {
+      permix.setup(getRules(data));
+    }
+  }, [data]);
+
   return (
     <Provider>
-      <RootDocument>
-        <Outlet />
-        <Devtools />
-      </RootDocument>
+      <PermixProvider permix={permix}>
+        <RootDocument>
+          <Outlet />
+          <Devtools />
+        </RootDocument>
+      </PermixProvider>
     </Provider>
   );
 }
@@ -90,6 +77,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
           <HeadContent />
         </head>
         <body>
+          <Toaster />
           <Header
             sheetPosition="left"
             links={[
