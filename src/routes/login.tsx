@@ -1,8 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { SquareUserRound } from "lucide-react";
 import * as z from "zod/v4";
+import { SignInDialogContent } from "~/components/auth-status";
 import { Button } from "~/components/ui/button";
+import { Dialog, DialogTrigger } from "~/components/ui/dialog";
 import {
   Empty,
   EmptyContent,
@@ -11,7 +13,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "~/components/ui/empty";
-import { authClient } from "~/lib/auth";
+import { getServerSession } from "~/lib/session";
 
 const loginSearchSchema = z.object({
   redirectTo: z.optional(z.string()).default("/"),
@@ -20,6 +22,14 @@ const loginSearchSchema = z.object({
 export const Route = createFileRoute("/login")({
   component: RouteComponent,
   validateSearch: zodValidator(loginSearchSchema),
+  beforeLoad: async ({ search }) => {
+    const session = await getServerSession();
+
+    if (session)
+      throw redirect({
+        to: search.redirectTo,
+      });
+  },
 });
 
 function RouteComponent() {
@@ -37,16 +47,12 @@ function RouteComponent() {
       </EmptyHeader>
       <EmptyContent>
         <div className="flex gap-2">
-          <Button
-            onClick={() =>
-              authClient.signIn.social({
-                provider: "discord",
-                callbackURL: searchParams.redirectTo,
-              })
-            }
-          >
-            sign in
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>sign in</Button>
+            </DialogTrigger>
+            <SignInDialogContent />
+          </Dialog>
         </div>
       </EmptyContent>
     </Empty>
