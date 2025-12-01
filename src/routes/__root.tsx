@@ -8,13 +8,11 @@ import {
   createRootRouteWithContext,
 } from "@tanstack/react-router";
 import globalCss from "../styles/global.css?url";
-import { authClient } from "~/lib/auth";
 import type { QueryClient } from "@tanstack/react-query";
 import { Devtools } from "~/components/devtools";
 import { themeScript, useSyncThemeClass } from "~/lib/theme";
-import { ModeToggle } from "~/components/mode-toggle";
 import { Provider } from "jotai";
-import { Header } from "~/components/header";
+import { Header, NavLink } from "~/components/header";
 import { Toaster } from "~/components/ui/sonner";
 import { PermixProvider } from "permix/react";
 import { getRules, permix } from "~/lib/permix";
@@ -66,12 +64,14 @@ function RootComponent() {
 
   useEffect(() => {
     permix.hydrate(state);
-    permix.setup(getRules(session));
+    const rules = getRules(session);
+    permix.setup(rules);
   }, []);
 
   useEffect(() => {
     if (data) {
-      permix.setup(getRules(data));
+      const rules = getRules(data);
+      permix.setup(rules);
     }
   }, [data]);
 
@@ -97,19 +97,10 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         </head>
         <body>
           <Toaster />
-          <Header
-            sheetPosition="left"
-            links={[
-              {
-                label: "home",
-                to: "/",
-              },
-              {
-                label: "music id list",
-                to: "/music",
-              },
-            ]}
-          />
+          <Header sheetPosition="left">
+            <NavLink label="home" to="/" />
+            <NavLink label="music id list" to="/music" />
+          </Header>
           {children}
           <Scripts />
         </body>

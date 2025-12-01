@@ -13,9 +13,9 @@ import { atom, useAtom, useSetAtom } from "jotai";
 import { AuthStatus } from "./auth-status";
 import { cn } from "~/lib/utils";
 import { cva } from "class-variance-authority";
-import { ComponentProps } from "react";
+import { ComponentProps, createContext, ReactNode, use } from "react";
 
-type NavLink = {
+type NavLinkType = {
   to: ValidateRedirectOptions["to"];
   label: string;
 };
@@ -60,20 +60,17 @@ const linkVariants = cva(
   }
 );
 
-export function Links({
-  links,
-  inSheet = false,
-}: {
-  links: NavLink[];
-  inSheet?: boolean;
-}) {
+const InSheetContext = createContext(false);
+
+export function NavLink({ label, to }: NavLinkType) {
+  const inSheet = use(InSheetContext);
   const setSheetOpen = useSetAtom(sheetOpenAtom);
   const variant = inSheet ? "sheet" : "outside";
 
-  return links.map((link) => (
+  return (
     <Link
-      key={`${link.to}-${link.label}`}
-      to={link.to}
+      key={`${to}-${label}`}
+      to={to}
       onClick={() => inSheet && setSheetOpen(false)}
       activeProps={{
         className: cn(linkVariants({ variant, state: "active" })),
@@ -82,16 +79,16 @@ export function Links({
         className: cn(linkVariants({ variant, state: "inactive" })),
       }}
     >
-      {link.label}
+      {label}
     </Link>
-  ));
+  );
 }
 
 export function Header({
-  links,
+  children,
   sheetPosition = "right",
 }: {
-  links: NavLink[];
+  children: ReactNode;
   sheetPosition?: ComponentProps<typeof SheetContent>["side"];
 }) {
   const [sheetOpen, setSheetOpen] = useAtom(sheetOpenAtom);
@@ -106,7 +103,7 @@ export function Header({
           gurkan's website
         </Link>
         <div className="flex items-center gap-2 lg:gap-4">
-          <Links links={links} />
+          <InSheetContext value={false}>{children}</InSheetContext>
         </div>
       </nav>
 
@@ -127,7 +124,7 @@ export function Header({
               gurkan's website
             </SheetTitle>
             <nav className="mt-6 flex flex-col gap-4">
-              <Links inSheet links={links} />
+              <InSheetContext value={true}>{children}</InSheetContext>
             </nav>
           </SheetHeader>
         </SheetContent>

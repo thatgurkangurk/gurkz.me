@@ -6,6 +6,9 @@ import { ResultAsync } from "neverthrow";
 import { musicIds } from "../db/schema/music";
 import { ORPCError } from "@orpc/client";
 import { orpcPermix } from "~/server/permix";
+import { permix } from "~/lib/permix";
+import * as z from "zod/v4";
+import { eq } from "drizzle-orm";
 
 const listMusicIds = protectedMiddleware
   .use(orpcPermix.checkMiddleware("musicId", "view"))
@@ -71,7 +74,51 @@ const createMusicId = protectedMiddleware
     };
   });
 
+const deleteMusicId = protectedMiddleware
+  .route({ method: "DELETE" })
+  .input(
+    z.object({
+      id: z.ulid(),
+    })
+  )
+  .handler(async ({ context, input }) => {
+    const user = context.session?.user;
+
+    if (!user) throw new ORPCError("UNAUTHORIZED");
+
+    const musicIdToDelete = await context.db.query.musicIds.findFirst({
+      where: (table, { eq }) => eq(table.id, input.id),
+    });
+
+    if (!musicIdToDelete) throw new ORPCError("NOT_FOUND");
+
+    const permissionCheck = permix.check("musicId", "delete", musicIdToDelete);
+
+    if (!permissionCheck) throw new ORPCError("FORBIDDEN");
+
+    const result = await ResultAsync.fromPromise(
+      context.db.delete(musicIds).where(eq(musicIds.id, musicIdToDelete.id)),
+      (error) => ({
+        type: "db",
+        error: error instanceof Error ? error : new Error(String(error)),
+      })
+    );
+
+    if (result.isErr()) {
+      console.error("failed to delete music id", result.error.error.message);
+      throw new ORPCError("INTERNAL_SERVER_ERROR", {
+        message: "could not delete the music id",
+      });
+    }
+
+    return {
+      text: "successfully deleted the music id",
+      type: "success",
+    };
+  });
+
 export const musicRouter = or.router({
   list: listMusicIds,
   create: createMusicId,
+  delete: deleteMusicId,
 });
