@@ -18,7 +18,19 @@ import { Header } from "~/components/header";
 import { Toaster } from "~/components/ui/sonner";
 import { PermixProvider } from "permix/react";
 import { getRules, permix } from "~/lib/permix";
-import { useSession } from "~/lib/session";
+import { getServerSession, useSession } from "~/lib/session";
+import { createServerFn } from "@tanstack/react-start";
+
+const getPermixRules = createServerFn({ method: "GET" }).handler(async () => {
+  const session = await getServerSession();
+
+  permix.setup(getRules(session));
+
+  return {
+    state: permix.dehydrate(),
+    session: session,
+  };
+});
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
@@ -45,10 +57,17 @@ export const Route = createRootRouteWithContext<{
     links: [{ rel: "stylesheet", href: globalCss }],
   }),
   component: RootComponent,
+  loader: () => getPermixRules(),
 });
 
 function RootComponent() {
+  const { state, session } = Route.useLoaderData();
   const { data } = useSession();
+
+  useEffect(() => {
+    permix.hydrate(state);
+    permix.setup(getRules(session));
+  }, []);
 
   useEffect(() => {
     if (data) {
