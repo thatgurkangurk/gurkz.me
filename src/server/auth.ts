@@ -10,6 +10,11 @@ export const auth = betterAuth({
     provider: "pg",
     schema: schema,
   }),
+  advanced: {
+    ipAddress: {
+      ipAddressHeaders: ["cf-connecting-ip"], // CF
+    },
+  },
   plugins: [admin(), reactStartCookies()],
   socialProviders: {
     discord: {
