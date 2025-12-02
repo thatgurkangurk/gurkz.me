@@ -10,10 +10,10 @@ import {
   SheetTrigger,
 } from "~/components/ui/sheet";
 import { atom, useAtom, useSetAtom } from "jotai";
-import { AuthStatus } from "./auth-status";
 import { cn } from "~/lib/utils";
 import { cva } from "class-variance-authority";
 import { ComponentProps, createContext, ReactNode, use } from "react";
+import { UserButton } from "@daveyplate/better-auth-ui";
 
 type NavLinkType = {
   to: ValidateRedirectOptions["to"];
@@ -131,7 +131,7 @@ export function Header({
       </Sheet>
 
       <div className="ml-auto flex items-center gap-2">
-        <AuthStatus />
+        <UserButton size="icon" />
         <ModeToggle />
       </div>
     </header>

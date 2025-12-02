@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "@fontsource-variable/dm-sans";
+@import "@daveyplate/better-auth-ui/css";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));

@@ -13,6 +13,8 @@ import { Route as UnauthorisedRouteImport } from './routes/unauthorised'
 import { Route as MusicRouteImport } from './routes/music'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthAuthViewRouteImport } from './routes/auth/$authView'
+import { Route as AccountAccountViewRouteImport } from './routes/account/$accountView'
 import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc/$'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
@@ -36,6 +38,16 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthAuthViewRoute = AuthAuthViewRouteImport.update({
+  id: '/auth/$authView',
+  path: '/auth/$authView',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountAccountViewRoute = AccountAccountViewRouteImport.update({
+  id: '/account/$accountView',
+  path: '/account/$accountView',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
   id: '/api/rpc/$',
   path: '/api/rpc/$',
@@ -52,6 +64,8 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/music': typeof MusicRoute
   '/unauthorised': typeof UnauthorisedRoute
+  '/account/$accountView': typeof AccountAccountViewRoute
+  '/auth/$authView': typeof AuthAuthViewRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
 }
@@ -60,6 +74,8 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/music': typeof MusicRoute
   '/unauthorised': typeof UnauthorisedRoute
+  '/account/$accountView': typeof AccountAccountViewRoute
+  '/auth/$authView': typeof AuthAuthViewRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
 }
@@ -69,6 +85,8 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/music': typeof MusicRoute
   '/unauthorised': typeof UnauthorisedRoute
+  '/account/$accountView': typeof AccountAccountViewRoute
+  '/auth/$authView': typeof AuthAuthViewRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
 }
@@ -79,16 +97,28 @@ export interface FileRouteTypes {
     | '/login'
     | '/music'
     | '/unauthorised'
+    | '/account/$accountView'
+    | '/auth/$authView'
     | '/api/auth/$'
     | '/api/rpc/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/music' | '/unauthorised' | '/api/auth/$' | '/api/rpc/$'
+  to:
+    | '/'
+    | '/login'
+    | '/music'
+    | '/unauthorised'
+    | '/account/$accountView'
+    | '/auth/$authView'
+    | '/api/auth/$'
+    | '/api/rpc/$'
   id:
     | '__root__'
     | '/'
     | '/login'
     | '/music'
     | '/unauthorised'
+    | '/account/$accountView'
+    | '/auth/$authView'
     | '/api/auth/$'
     | '/api/rpc/$'
   fileRoutesById: FileRoutesById
@@ -98,6 +128,8 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   MusicRoute: typeof MusicRoute
   UnauthorisedRoute: typeof UnauthorisedRoute
+  AccountAccountViewRoute: typeof AccountAccountViewRoute
+  AuthAuthViewRoute: typeof AuthAuthViewRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiRpcSplatRoute: typeof ApiRpcSplatRoute
 }
@@ -132,6 +164,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/$authView': {
+      id: '/auth/$authView'
+      path: '/auth/$authView'
+      fullPath: '/auth/$authView'
+      preLoaderRoute: typeof AuthAuthViewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account/$accountView': {
+      id: '/account/$accountView'
+      path: '/account/$accountView'
+      fullPath: '/account/$accountView'
+      preLoaderRoute: typeof AccountAccountViewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/rpc/$': {
       id: '/api/rpc/$'
       path: '/api/rpc/$'
@@ -154,6 +200,8 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   MusicRoute: MusicRoute,
   UnauthorisedRoute: UnauthorisedRoute,
+  AccountAccountViewRoute: AccountAccountViewRoute,
+  AuthAuthViewRoute: AuthAuthViewRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiRpcSplatRoute: ApiRpcSplatRoute,
 }

@@ -18,6 +18,7 @@ import { PermixProvider } from "permix/react";
 import { getRules, permix } from "~/lib/permix";
 import { getServerSession, useSession } from "~/lib/session";
 import { createServerFn } from "@tanstack/react-start";
+import { Providers } from "~/components/providers";
 
 const getPermixRules = createServerFn({ method: "GET" }).handler(async () => {
   const session = await getServerSession();
@@ -77,12 +78,14 @@ function RootComponent() {
 
   return (
     <Provider>
-      <PermixProvider permix={permix}>
-        <RootDocument>
-          <Outlet />
-          <Devtools />
-        </RootDocument>
-      </PermixProvider>
+      <Providers>
+        <PermixProvider permix={permix}>
+          <RootDocument>
+            <Outlet />
+            <Devtools />
+          </RootDocument>
+        </PermixProvider>
+      </Providers>
     </Provider>
   );
 }
