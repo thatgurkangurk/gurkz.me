@@ -16,7 +16,7 @@ const getSession = or
   .route({ method: "GET" })
   .output(getSessionSchema)
   .handler(async ({ context }) => {
-    const { headers } = context;
+    const { reqHeaders: headers } = context;
 
     if (!headers) return null;
 
@@ -77,7 +77,7 @@ const signOut = or
     })
   )
   .handler(async ({ context }) => {
-    const { headers } = context;
+    const { reqHeaders: headers } = context;
 
     if (!headers) throw new ORPCError("BAD_REQUEST");
 
