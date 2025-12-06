@@ -1,0 +1,212 @@
+diff --git a/dist/chunk-34FET4WS.js b/dist/chunk-34FET4WS.js
+index 38f893f5405ca91f35c08ffde865e7eeb8ad19c4..89aab884e7186021efe5bc4b3ad37ae689e4b949 100644
+--- a/dist/chunk-34FET4WS.js
++++ b/dist/chunk-34FET4WS.js
+@@ -181,7 +181,8 @@ function RecaptchaV3({ children }) {
+       useEnterprise: captcha.enterprise,
+       useRecaptchaNet: captcha.recaptchaNet,
+       children: [
+-        isHydrated && /* @__PURE__ */ jsx("style", { children: `
++        isHydrated && /* @__PURE__ */ jsx("style", {
++          children: `
+                     .grecaptcha-badge {
+                         visibility: hidden;
+                         border-radius: var(--radius) !important;
+@@ -546,7 +547,7 @@ var AuthUIProvider = ({
+         cacheKey: "listAccounts"
+       }),
+       useAccountInfo: (params) => useAuthData({
+-        queryFn: () => authClient.accountInfo(params),
++        queryFn: () => authClient.$fetch("/account-info", { method: "GET", query: params }),
+         cacheKey: `accountInfo:${JSON.stringify(params)}`
+       }),
+       useListDeviceSessions: () => useAuthData({
+diff --git a/dist/chunk-I5UNUWF4.cjs b/dist/chunk-I5UNUWF4.cjs
+index 560257c0dc86414f670c7d04f3b9f0afd508a904..efca1364c0fc854bb560380af2fae18d697847c2 100644
+--- a/dist/chunk-I5UNUWF4.cjs
++++ b/dist/chunk-I5UNUWF4.cjs
+@@ -1,4 +1,4 @@
+-"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } } var _class;"use client"
++"use strict"; Object.defineProperty(exports, "__esModule", { value: true }); function _nullishCoalesce(lhs, rhsFn) { if (lhs != null) { return lhs; } else { return rhsFn(); } } var _class; "use client"
+ 
+ 
+ 
+@@ -19,10 +19,11 @@ var _chunkYNX7XHHIcjs = require('./chunk-YNX7XHHI.cjs');
+ var _react = require('react');
+ 
+ // src/lib/auth-data-cache.ts
+-var AuthDataCache = (_class = class {constructor() { _class.prototype.__init.call(this);_class.prototype.__init2.call(this);_class.prototype.__init3.call(this); }
+-  __init() {this.cache = /* @__PURE__ */ new Map()}
+-  __init2() {this.listeners = /* @__PURE__ */ new Map()}
+-  __init3() {this.inFlightRequests = /* @__PURE__ */ new Map()}
++var AuthDataCache = (_class = class {
++  constructor() { _class.prototype.__init.call(this); _class.prototype.__init2.call(this); _class.prototype.__init3.call(this); }
++  __init() { this.cache = /* @__PURE__ */ new Map() }
++  __init2() { this.listeners = /* @__PURE__ */ new Map() }
++  __init3() { this.inFlightRequests = /* @__PURE__ */ new Map() }
+   get(key) {
+     return this.cache.get(key);
+   }
+@@ -110,7 +111,7 @@ function subscribe() {
+   };
+ }
+ function useIsHydrated() {
+-  return _react.useSyncExternalStore.call(void 0, 
++  return _react.useSyncExternalStore.call(void 0,
+     subscribe,
+     () => true,
+     () => false
+@@ -120,11 +121,11 @@ function useIsHydrated() {
+ // src/hooks/use-lang.ts
+ 
+ function useLang() {
+-  const [lang, setLang] = _react.useState.call(void 0, );
++  const [lang, setLang] = _react.useState.call(void 0,);
+   _react.useEffect.call(void 0, () => {
+     const checkLang = () => {
+       const currentLang = document.documentElement.getAttribute("lang");
+-      setLang(_nullishCoalesce(currentLang, () => ( void 0)));
++      setLang(_nullishCoalesce(currentLang, () => (void 0)));
+     };
+     checkLang();
+     const observer = new MutationObserver((mutations) => {
+@@ -174,14 +175,15 @@ function RecaptchaV3({ children }) {
+   const isHydrated = useIsHydrated();
+   const { captcha } = _react.useContext.call(void 0, AuthUIContext);
+   if ((captcha == null ? void 0 : captcha.provider) !== "google-recaptcha-v3") return children;
+-  return /* @__PURE__ */ _jsxruntime.jsxs.call(void 0, 
++  return /* @__PURE__ */ _jsxruntime.jsxs.call(void 0,
+     _reactrecaptchav3.GoogleReCaptchaProvider,
+     {
+       reCaptchaKey: captcha.siteKey,
+       useEnterprise: captcha.enterprise,
+       useRecaptchaNet: captcha.recaptchaNet,
+       children: [
+-        isHydrated && /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "style", { children: `
++        isHydrated && /* @__PURE__ */ _jsxruntime.jsx.call(void 0, "style", {
++          children: `
+                     .grecaptcha-badge {
+                         visibility: hidden;
+                         border-radius: var(--radius) !important;
+@@ -202,7 +204,7 @@ function RecaptchaV3({ children }) {
+   );
+ }
+ function RecaptchaV3Style() {
+-  const { executeRecaptcha } = _reactrecaptchav3.useGoogleReCaptcha.call(void 0, );
++  const { executeRecaptcha } = _reactrecaptchav3.useGoogleReCaptcha.call(void 0,);
+   const { theme } = useTheme();
+   const { lang } = useLang();
+   _react.useEffect.call(void 0, () => {
+@@ -262,7 +264,7 @@ function useCurrentOrganization({
+     isPending = organizationPending;
+     isRefetching = organizationRefetching;
+   }
+-  return _react.useMemo.call(void 0, 
++  return _react.useMemo.call(void 0,
+     () => ({
+       data,
+       isPending,
+@@ -332,7 +334,7 @@ var defaultToast = ({ variant = "default", message }) => {
+     _sonner.toast[variant](message);
+   }
+ };
+-var AuthUIContext = _react.createContext.call(void 0, 
++var AuthUIContext = _react.createContext.call(void 0,
+   {}
+ );
+ var AuthUIProvider = ({
+@@ -394,7 +396,7 @@ var AuthUIProvider = ({
+     }
+     const basePath2 = ((_a = accountProp.basePath) == null ? void 0 : _a.endsWith("/")) ? accountProp.basePath.slice(0, -1) : accountProp.basePath;
+     return {
+-      basePath: _nullishCoalesce(basePath2, () => ( "/account")),
++      basePath: _nullishCoalesce(basePath2, () => ("/account")),
+       fields: accountProp.fields || ["image", "name"],
+       viewPaths: { ..._chunkYNX7XHHIcjs.accountViewPaths, ...accountProp.viewPaths }
+     };
+@@ -424,8 +426,8 @@ var AuthUIProvider = ({
+     }
+     return {
+       ...credentialsProp,
+-      forgotPassword: _nullishCoalesce((credentialsProp == null ? void 0 : credentialsProp.forgotPassword), () => ( true)),
+-      usernameRequired: _nullishCoalesce((credentialsProp == null ? void 0 : credentialsProp.usernameRequired), () => ( true))
++      forgotPassword: _nullishCoalesce((credentialsProp == null ? void 0 : credentialsProp.forgotPassword), () => (true)),
++      usernameRequired: _nullishCoalesce((credentialsProp == null ? void 0 : credentialsProp.usernameRequired), () => (true))
+     };
+   }, [credentialsProp]);
+   const signUp = _react.useMemo.call(void 0, () => {
+@@ -467,7 +469,7 @@ var AuthUIProvider = ({
+     return {
+       ...organizationProp,
+       logo,
+-      basePath: _nullishCoalesce(basePath2, () => ( "/organization")),
++      basePath: _nullishCoalesce(basePath2, () => ("/organization")),
+       customRoles: organizationProp.customRoles || [],
+       viewPaths: {
+         ..._chunkYNX7XHHIcjs.organizationViewPaths,
+@@ -489,11 +491,11 @@ var AuthUIProvider = ({
+       };
+     }
+     return {
+-      enabled: _nullishCoalesce(teamsProp.enabled, () => ( true)),
++      enabled: _nullishCoalesce(teamsProp.enabled, () => (true)),
+       customRoles: teamsProp.customRoles || [],
+       colors: {
+-        count: _nullishCoalesce(((_a = teamsProp.colors) == null ? void 0 : _a.count), () => ( 5)),
+-        prefix: _nullishCoalesce(((_b = teamsProp.colors) == null ? void 0 : _b.prefix), () => ( "team"))
++        count: _nullishCoalesce(((_a = teamsProp.colors) == null ? void 0 : _a.count), () => (5)),
++        prefix: _nullishCoalesce(((_b = teamsProp.colors) == null ? void 0 : _b.prefix), () => ("team"))
+       }
+     };
+   }, [teamsProp, organization]);
+@@ -546,7 +548,7 @@ var AuthUIProvider = ({
+         cacheKey: "listAccounts"
+       }),
+       useAccountInfo: (params) => useAuthData({
+-        queryFn: () => authClient.accountInfo(params),
++        queryFn: () => authClient.$fetch("/account-info", { method: "GET", query: params }),
+         cacheKey: `accountInfo:${JSON.stringify(params)}`
+       }),
+       useListDeviceSessions: () => useAuthData({
+@@ -633,7 +635,7 @@ var AuthUIProvider = ({
+   baseURL = baseURL.endsWith("/") ? baseURL.slice(0, -1) : baseURL;
+   basePath = basePath.endsWith("/") ? basePath.slice(0, -1) : basePath;
+   const { data: sessionData } = hooks.useSession();
+-  return /* @__PURE__ */ _jsxruntime.jsxs.call(void 0, 
++  return /* @__PURE__ */ _jsxruntime.jsxs.call(void 0,
+     AuthUIContext.Provider,
+     {
+       value: {
+@@ -691,16 +693,16 @@ function useAuthData({
+   const queryFnRef = _react.useRef.call(void 0, queryFn);
+   queryFnRef.current = queryFn;
+   const stableCacheKey = cacheKey || queryFn.toString();
+-  const cacheEntry = _react.useSyncExternalStore.call(void 0, 
+-    _react.useCallback.call(void 0, 
++  const cacheEntry = _react.useSyncExternalStore.call(void 0,
++    _react.useCallback.call(void 0,
+       (callback) => authDataCache.subscribe(stableCacheKey, callback),
+       [stableCacheKey]
+     ),
+-    _react.useCallback.call(void 0, 
++    _react.useCallback.call(void 0,
+       () => authDataCache.get(stableCacheKey),
+       [stableCacheKey]
+     ),
+-    _react.useCallback.call(void 0, 
++    _react.useCallback.call(void 0,
+       () => authDataCache.get(stableCacheKey),
+       [stableCacheKey]
+     )
+@@ -793,9 +795,9 @@ function useAuthData({
+   ]);
+   const isPending = sessionPending || (cacheEntry == null ? void 0 : cacheEntry.data) === void 0 && !error;
+   return {
+-    data: _nullishCoalesce((cacheEntry == null ? void 0 : cacheEntry.data), () => ( null)),
++    data: _nullishCoalesce((cacheEntry == null ? void 0 : cacheEntry.data), () => (null)),
+     isPending,
+-    isRefetching: _nullishCoalesce((cacheEntry == null ? void 0 : cacheEntry.isRefetching), () => ( false)),
++    isRefetching: _nullishCoalesce((cacheEntry == null ? void 0 : cacheEntry.isRefetching), () => (false)),
+     error,
+     refetch
+   };

@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { reactStartCookies } from "better-auth/react-start";
+import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { Permissions } from "~/lib/permissions";
 import { admin } from "better-auth/plugins";
 import { db, schema } from "~/server/db";
@@ -15,7 +15,7 @@ export const auth = betterAuth({
       ipAddressHeaders: ["cf-connecting-ip"], // CF
     },
   },
-  plugins: [admin(), reactStartCookies()],
+  plugins: [admin(), tanstackStartCookies()],
   socialProviders: {
     discord: {
       clientId: process.env.DISCORD_CLIENT_ID!,
