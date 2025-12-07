@@ -1,4 +1,4 @@
 {
 	"editor.formatOnSave": true,
-	"cSpell.enabled": false
+	"editor.defaultFormatter": "biomejs.biome"
 }
