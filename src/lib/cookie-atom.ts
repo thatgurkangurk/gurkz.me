@@ -1,59 +1,73 @@
 import { createIsomorphicFn } from "@tanstack/react-start";
-import { setCookie as tanstackSetCookie } from "@tanstack/react-start/server";
+import {
+  setCookie as tanstackSetCookie,
+  getCookie as tanstackGetCookie,
+} from "@tanstack/react-start/server";
 import * as cookie from "cookie";
 import { atom } from "jotai";
-import Cookies from "js-cookie";
 import type { ZodType } from "zod/v4";
 
 const setCookie = createIsomorphicFn()
-	.server((key: string, value: string, options: cookie.SerializeOptions) => {
-		tanstackSetCookie(key, value, options);
-	})
-	.client((key: string, value: string, options: cookie.SerializeOptions) => {
-		// biome-ignore lint/suspicious/noDocumentCookie: cookieStore needs async
-		document.cookie = cookie.serialize(key, value, options);
-	});
+  .server((key: string, value: string, options: cookie.SerializeOptions) => {
+    tanstackSetCookie(key, value, options);
+  })
+  .client((key: string, value: string, options: cookie.SerializeOptions) => {
+    document.cookie = cookie.serialize(key, value, options);
+  });
+
+const getCookie = createIsomorphicFn()
+  .server((key: string) => tanstackGetCookie(key))
+  .client((key: string) => {
+    const parsed = cookie.parse(document.cookie || "");
+    return parsed[key];
+  });
 
 export function atomWithCookie<T>(
-	key: string,
-	initialValue: T,
-	schema?: ZodType<T>,
+  key: string,
+  initialValue: T,
+  schema?: ZodType<T>
 ) {
-	let savedValue: T | undefined;
-	const cookie = Cookies.get(key);
-	if (cookie) {
-		try {
-			const parsed = JSON.parse(cookie);
-			savedValue = schema ? schema.parse(parsed) : parsed;
-		} catch {
-			savedValue = undefined;
-		}
-	}
+  const baseAtom = atom<T | undefined>(undefined);
 
-	const baseAtom = atom<T>(savedValue ?? initialValue);
+  const derivedAtom = atom(
+    (get) => {
+      let current = get(baseAtom);
+      if (current !== undefined) return current;
 
-	return atom(
-		(get) => get(baseAtom),
-		(get, set, update: T | ((prev: T) => T)) => {
-			const nextValue =
-				typeof update === "function"
-					? (update as (prev: T) => T)(get(baseAtom))
-					: update;
+      const raw = getCookie(key);
+      if (!raw) {
+        get(baseAtom);
+        return initialValue;
+      }
 
-			const validatedValue = schema ? schema.parse(nextValue) : nextValue;
+      try {
+        const parsed = schema ? schema.parse(JSON.parse(raw)) : JSON.parse(raw);
+        return parsed;
+      } catch {
+        return initialValue;
+      }
+    },
 
-			set(baseAtom, validatedValue);
-			setCookie(
-				key,
-				typeof validatedValue === "string"
-					? validatedValue
-					: JSON.stringify(validatedValue),
-				{
-					path: "/",
-					sameSite: "lax",
-					expires: new Date(+new Date(3e10)),
-				},
-			);
-		},
-	);
+    (get, set, update: T | ((prev: T) => T)) => {
+      const prev = get(baseAtom) ?? initialValue;
+      const next =
+        typeof update === "function" ? (update as (p: T) => T)(prev) : update;
+
+      const validated = schema ? schema.parse(next) : next;
+
+      set(baseAtom, validated);
+
+      setCookie(
+        key,
+        typeof validated === "string" ? validated : JSON.stringify(validated),
+        {
+          path: "/",
+          sameSite: "lax",
+          expires: new Date("9999-12-31"),
+        }
+      );
+    }
+  );
+
+  return derivedAtom;
 }
