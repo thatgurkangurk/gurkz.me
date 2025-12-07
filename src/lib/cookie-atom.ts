@@ -1,15 +1,18 @@
-import { createClientOnlyFn } from "@tanstack/react-start";
+import { createIsomorphicFn } from "@tanstack/react-start";
+import { setCookie as tanstackSetCookie } from "@tanstack/react-start/server";
 import * as cookie from "cookie";
 import { atom } from "jotai";
 import Cookies from "js-cookie";
 import type { ZodType } from "zod/v4";
 
-const setCookie = createClientOnlyFn(
-	(key: string, value: string, options: cookie.SerializeOptions) => {
+const setCookie = createIsomorphicFn()
+	.server((key: string, value: string, options: cookie.SerializeOptions) => {
+		tanstackSetCookie(key, value, options);
+	})
+	.client((key: string, value: string, options: cookie.SerializeOptions) => {
 		// biome-ignore lint/suspicious/noDocumentCookie: cookieStore needs async
 		document.cookie = cookie.serialize(key, value, options);
-	},
-);
+	});
 
 export function atomWithCookie<T>(
 	key: string,
