@@ -36,7 +36,7 @@ export function atomWithCookie<T>(
         typeof validatedValue === "string"
           ? validatedValue
           : JSON.stringify(validatedValue),
-        { path: "/", sameSite: "lax" }
+        { path: "/", sameSite: "lax", expires: 365 }
       );
     }
   );
