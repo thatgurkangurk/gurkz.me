@@ -5,16 +5,16 @@ import { createPermix } from "permix/orpc";
 export const orpcPermix = createPermix<PermissionsDefinition>();
 
 export const protectedMiddleware = or.use(({ context, next }) => {
-  if (!context.session) {
-    console.log("[WARN] no session");
-  }
-  const rules = getRules(context.session);
-  const p = orpcPermix.setup(rules);
-  permix.setup(rules); // just in case
+	if (!context.session) {
+		console.log("[WARN] no session");
+	}
+	const rules = getRules(context.session);
+	const p = orpcPermix.setup(rules);
+	permix.setup(rules); // just in case
 
-  return next({
-    context: {
-      permix: p,
-    },
-  });
+	return next({
+		context: {
+			permix: p,
+		},
+	});
 });

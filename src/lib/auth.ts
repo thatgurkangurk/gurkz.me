@@ -3,5 +3,5 @@ import { createAuthClient } from "better-auth/react";
 import type { auth } from "~/server/auth";
 
 export const authClient = createAuthClient({
-  plugins: [adminClient(), inferAdditionalFields<typeof auth>()],
+	plugins: [adminClient(), inferAdditionalFields<typeof auth>()],
 });

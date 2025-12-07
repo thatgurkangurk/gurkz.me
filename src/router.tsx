@@ -4,25 +4,25 @@ import { QueryClient } from "@tanstack/react-query";
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
 
 export function getRouter() {
-  const queryClient = new QueryClient();
+	const queryClient = new QueryClient();
 
-  const router = createRouter({
-    routeTree,
-    scrollRestoration: true,
-    context: { queryClient },
-    defaultPreload: "intent",
-  });
+	const router = createRouter({
+		routeTree,
+		scrollRestoration: true,
+		context: { queryClient },
+		defaultPreload: "intent",
+	});
 
-  setupRouterSsrQueryIntegration({
-    router,
-    queryClient,
-  });
+	setupRouterSsrQueryIntegration({
+		router,
+		queryClient,
+	});
 
-  return router;
+	return router;
 }
 
 declare module "@tanstack/react-router" {
-  interface Register {
-    router: ReturnType<typeof getRouter>;
-  }
+	interface Register {
+		router: ReturnType<typeof getRouter>;
+	}
 }

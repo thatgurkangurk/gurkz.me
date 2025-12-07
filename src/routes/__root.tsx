@@ -1,11 +1,11 @@
 /// <reference types="vite/client" />
 import { StrictMode, useEffect, type ReactNode } from "react";
 import {
-  Outlet,
-  HeadContent,
-  Scripts,
-  Link,
-  createRootRouteWithContext,
+	Outlet,
+	HeadContent,
+	Scripts,
+	Link,
+	createRootRouteWithContext,
 } from "@tanstack/react-router";
 import globalCss from "../styles/global.css?url";
 import type { QueryClient } from "@tanstack/react-query";
@@ -21,93 +21,93 @@ import { createServerFn } from "@tanstack/react-start";
 import { Providers } from "~/components/providers";
 
 const getPermixRules = createServerFn({ method: "GET" }).handler(async () => {
-  const session = await getServerSession();
+	const session = await getServerSession();
 
-  permix.setup(getRules(session));
+	permix.setup(getRules(session));
 
-  return {
-    state: permix.dehydrate(),
-    session: session,
-  };
+	return {
+		state: permix.dehydrate(),
+		session: session,
+	};
 });
 
 export const Route = createRootRouteWithContext<{
-  queryClient: QueryClient;
+	queryClient: QueryClient;
 }>()({
-  head: () => ({
-    meta: [
-      {
-        charSet: "utf-8",
-      },
-      {
-        name: "viewport",
-        content: "width=device-width, initial-scale=1",
-      },
-      {
-        title: "gurkan's website",
-      },
-    ],
-    scripts: [
-      {
-        id: "theme-script",
-        children: themeScript,
-      },
-    ],
-    links: [{ rel: "stylesheet", href: globalCss }],
-  }),
-  component: RootComponent,
-  loader: () => getPermixRules(),
+	head: () => ({
+		meta: [
+			{
+				charSet: "utf-8",
+			},
+			{
+				name: "viewport",
+				content: "width=device-width, initial-scale=1",
+			},
+			{
+				title: "gurkan's website",
+			},
+		],
+		scripts: [
+			{
+				id: "theme-script",
+				children: themeScript,
+			},
+		],
+		links: [{ rel: "stylesheet", href: globalCss }],
+	}),
+	component: RootComponent,
+	loader: () => getPermixRules(),
 });
 
 function RootComponent() {
-  const { state, session } = Route.useLoaderData();
-  const { data } = useSession();
+	const { state, session } = Route.useLoaderData();
+	const { data } = useSession();
 
-  useEffect(() => {
-    permix.hydrate(state);
-    const rules = getRules(session);
-    permix.setup(rules);
-  }, []);
+	useEffect(() => {
+		permix.hydrate(state);
+		const rules = getRules(session);
+		permix.setup(rules);
+	}, []);
 
-  useEffect(() => {
-    if (data) {
-      const rules = getRules(data);
-      permix.setup(rules);
-    }
-  }, [data]);
+	useEffect(() => {
+		if (data) {
+			const rules = getRules(data);
+			permix.setup(rules);
+		}
+	}, [data]);
 
-  return (
-    <Provider>
-      <Providers>
-        <PermixProvider permix={permix}>
-          <RootDocument>
-            <Outlet />
-            <Devtools />
-          </RootDocument>
-        </PermixProvider>
-      </Providers>
-    </Provider>
-  );
+	return (
+		<Provider>
+			<Providers>
+				<PermixProvider permix={permix}>
+					<RootDocument>
+						<Outlet />
+						<Devtools />
+					</RootDocument>
+				</PermixProvider>
+			</Providers>
+		</Provider>
+	);
 }
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
-  useSyncThemeClass();
-  return (
-    <StrictMode>
-      <html lang="en" suppressHydrationWarning>
-        <head>
-          <HeadContent />
-        </head>
-        <body>
-          <Toaster />
-          <Header sheetPosition="left">
-            <NavLink label="home" to="/" />
-            <NavLink label="music id list" to="/music" />
-          </Header>
-          {children}
-          <Scripts />
-        </body>
-      </html>
-    </StrictMode>
-  );
+	useSyncThemeClass();
+	return (
+		<StrictMode>
+			<html lang="en" suppressHydrationWarning>
+				<head>
+					<HeadContent />
+				</head>
+				<body>
+					<Toaster />
+					<Header sheetPosition="left">
+						<NavLink label="home" to="/" />
+						<NavLink label="music id list" to="/music" />
+					</Header>
+					{children}
+					<Scripts />
+				</body>
+			</html>
+		</StrictMode>
+	);
 }

@@ -6,94 +6,94 @@ import { or } from "../orpc";
 import { SocialProvider } from "~/lib/schemas/auth";
 
 const getSessionSchema = z
-  .object({
-    session: Session,
-    user: User,
-  })
-  .nullable();
+	.object({
+		session: Session,
+		user: User,
+	})
+	.nullable();
 
 const getSession = or
-  .route({ method: "GET" })
-  .output(getSessionSchema)
-  .handler(async ({ context }) => {
-    const { reqHeaders: headers } = context;
+	.route({ method: "GET" })
+	.output(getSessionSchema)
+	.handler(async ({ context }) => {
+		const { reqHeaders: headers } = context;
 
-    if (!headers) return null;
+		if (!headers) return null;
 
-    const res = await auth.api.getSession({
-      headers: headers,
-    });
+		const res = await auth.api.getSession({
+			headers: headers,
+		});
 
-    const data = await getSessionSchema.safeParseAsync(res);
+		const data = await getSessionSchema.safeParseAsync(res);
 
-    if (!data.success) return null;
+		if (!data.success) return null;
 
-    return data.data;
-  });
+		return data.data;
+	});
 
 const signIn = or
-  .route({ method: "POST" })
-  .input(
-    z.object({
-      provider: SocialProvider,
-    })
-  )
-  .output(
-    z.object({
-      url: z.url().nullish(),
-      redirect: z.boolean(),
-    })
-  )
-  .handler(async ({ input }) => {
-    switch (input.provider) {
-      case "discord": {
-        try {
-          const res = await auth.api.signInSocial({
-            body: {
-              provider: input.provider,
-              callbackURL: "/",
-            },
-          });
+	.route({ method: "POST" })
+	.input(
+		z.object({
+			provider: SocialProvider,
+		}),
+	)
+	.output(
+		z.object({
+			url: z.url().nullish(),
+			redirect: z.boolean(),
+		}),
+	)
+	.handler(async ({ input }) => {
+		switch (input.provider) {
+			case "discord": {
+				try {
+					const res = await auth.api.signInSocial({
+						body: {
+							provider: input.provider,
+							callbackURL: "/",
+						},
+					});
 
-          return {
-            url: res.url,
-            redirect: res.redirect,
-          };
-        } catch (err) {
-          console.error(err);
-          throw new ORPCError("INTERNAL_SERVER_ERROR", {
-            defined: false,
-          });
-        }
-      }
-    }
-  });
+					return {
+						url: res.url,
+						redirect: res.redirect,
+					};
+				} catch (err) {
+					console.error(err);
+					throw new ORPCError("INTERNAL_SERVER_ERROR", {
+						defined: false,
+					});
+				}
+			}
+		}
+	});
 
 const signOut = or
-  .route({ method: "POST" })
-  .output(
-    z.object({
-      message: z.literal("ok"),
-    })
-  )
-  .handler(async ({ context }) => {
-    const { reqHeaders: headers } = context;
+	.route({ method: "POST" })
+	.output(
+		z.object({
+			message: z.literal("ok"),
+		}),
+	)
+	.handler(async ({ context }) => {
+		const { reqHeaders: headers } = context;
 
-    if (!headers) throw new ORPCError("BAD_REQUEST");
+		if (!headers) throw new ORPCError("BAD_REQUEST");
 
-    const res = await auth.api.signOut({
-      headers: headers,
-    });
+		const res = await auth.api.signOut({
+			headers: headers,
+		});
 
-    if (!res.success) throw new ORPCError("BAD_REQUEST");
+		if (!res.success) throw new ORPCError("BAD_REQUEST");
 
-    return {
-      message: "ok",
-    };
-  });
+		return {
+			message: "ok",
+		};
+	});
 
 export const sessionRouter = {
-  get: getSession,
-  signIn: signIn,
-  signOut: signOut,
+	get: getSession,
+	signIn: signIn,
+	signOut: signOut,
 };

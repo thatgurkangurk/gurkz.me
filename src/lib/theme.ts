@@ -7,7 +7,7 @@ type Theme = "dark" | "light";
 const theme = atomWithStorage<Theme>("theme", "light");
 
 function useTheme() {
-  return useAtom(theme);
+	return useAtom(theme);
 }
 
 const themeScript = `(function () {
@@ -18,15 +18,15 @@ const themeScript = `(function () {
     })();`;
 
 function useSyncThemeClass() {
-  const currentTheme = useAtomValue(theme);
+	const currentTheme = useAtomValue(theme);
 
-  useEffect(() => {
-    const root = document.documentElement;
-    if (!root.classList.contains(currentTheme)) {
-      root.classList.remove("light", "dark");
-      root.classList.add(currentTheme);
-    }
-  }, [currentTheme]);
+	useEffect(() => {
+		const root = document.documentElement;
+		if (!root.classList.contains(currentTheme)) {
+			root.classList.remove("light", "dark");
+			root.classList.add(currentTheme);
+		}
+	}, [currentTheme]);
 }
 
 export { theme, useTheme, themeScript, useSyncThemeClass };

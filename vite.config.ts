@@ -10,24 +10,24 @@ import devtoolsJson from "vite-plugin-devtools-json";
 import { devtools } from "@tanstack/devtools-vite";
 
 export default defineConfig({
-  server: {
-    port: 3000,
-  },
-  plugins: [
-    devtools(),
-    devtoolsJson(),
-    tailwindcss(),
-    tsConfigPaths(),
-    nitro(),
-    tanstackStart(),
-    viteReact({
-      babel: {
-        plugins: [reactCompiler],
-        presets: [jotai],
-      },
-    }),
-  ],
-  nitro: {
-    preset: "bun",
-  },
+	server: {
+		port: 3000,
+	},
+	plugins: [
+		devtools(),
+		devtoolsJson(),
+		tailwindcss(),
+		tsConfigPaths(),
+		nitro(),
+		tanstackStart(),
+		viteReact({
+			babel: {
+				plugins: [reactCompiler],
+				presets: [jotai],
+			},
+		}),
+	],
+	nitro: {
+		preset: "bun",
+	},
 });
