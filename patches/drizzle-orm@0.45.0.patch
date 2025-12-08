@@ -1,0 +1,18 @@
+diff --git a/pg-core/columns/common.js b/pg-core/columns/common.js
+index 1ce5aa3497d67299190dcc362a68e761a7b378c0..77e750e227237fde106e359e704c98b1ef83c374 100644
+--- a/pg-core/columns/common.js
++++ b/pg-core/columns/common.js
+@@ -180,7 +180,12 @@ class PgArray extends PgColumn {
+     return value.map((v) => this.baseColumn.mapFromDriverValue(v));
+   }
+   mapToDriverValue(value, isNestedArray = false) {
+-    const a = value.map(
++    let theValue;
++    // this patch is REALLY DUMB -- xoxo gurkan
++    if (value.startsWith("[convertThisToAStringArrayPlease]:")) {
++      theValue = value.split(":")[1].split(",");
++    }
++    const a = theValue.map(
+       (v) => v === null ? null : is(this.baseColumn, PgArray) ? this.baseColumn.mapToDriverValue(v, true) : this.baseColumn.mapToDriverValue(v)
+     );
+     if (isNestedArray) return a;
