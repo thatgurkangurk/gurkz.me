@@ -82,7 +82,7 @@ function UserCard({
           role: <span> {user.role}</span>
         </p>
         <Link
-          className="w-fit"
+          className="w-fit cursor-pointer"
           to="/admin/user/$userId"
           params={{
             userId: user.id,
