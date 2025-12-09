@@ -1,7 +1,8 @@
 name: trigger deploy
 
 on:
-  registry_package:
+  package:
+    types: [published, updated]
 
 jobs:
   send-webhook:
