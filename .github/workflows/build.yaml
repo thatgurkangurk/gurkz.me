@@ -42,3 +42,9 @@ jobs:
           file: Dockerfile
           context: .
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.commit.outputs.short }}
+      - name: send webhook
+        run: |
+          curl -X POST "${{ secrets.DEPLOY_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -H "x-github-event: registry_package" \
+            -d '{"registry_package": {"package_version": {"package_url": "ghcr.io/thatgurkangurk/gurkz.me:latest"}}}'
