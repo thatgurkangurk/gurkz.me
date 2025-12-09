@@ -87,7 +87,6 @@
   },
   "type": "module",
   "patchedDependencies": {
-    "@daveyplate/better-auth-ui@3.2.13": "patches/@daveyplate%2Fbetter-auth-ui@3.2.13.patch",
-    "drizzle-orm@0.45.0": "patches/drizzle-orm@0.45.0.patch"
+    "@daveyplate/better-auth-ui@3.2.13": "patches/@daveyplate%2Fbetter-auth-ui@3.2.13.patch"
   }
 }

@@ -5,7 +5,8 @@ import {
   redirect,
 } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
-import { auth, type User } from "~/server/auth";
+import { userSchema, type User } from "~/lib/auth";
+import { auth } from "~/server/auth";
 import * as z from "zod/v4";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { getServerSession } from "~/lib/session";
@@ -23,6 +24,11 @@ import { Field, FieldGroup, FieldSet } from "~/components/ui/field";
 import { Checkbox } from "~/components/ui/checkbox";
 import { toast } from "sonner";
 import { LoaderCircle } from "lucide-react";
+import { requireAdminMiddleware } from "~/server/admin";
+import { ResultAsync } from "neverthrow";
+import { db } from "~/server/db";
+import { user } from "~/server/db/schema/auth";
+import { eq } from "drizzle-orm";
 
 const checkIfUserExists = createServerFn({ method: "GET" })
   .inputValidator(zodValidator(z.object({ id: z.string() })))
@@ -44,6 +50,33 @@ const checkIfUserExists = createServerFn({ method: "GET" })
       exists: true,
       data: res as User,
     };
+  });
+
+const updateUser = createServerFn({ method: "POST" })
+  .inputValidator(
+    zodValidator(
+      z.object({
+        userId: z.string(),
+        data: userSchema.omit({ id: true }).partial(),
+      })
+    )
+  )
+  .middleware([requireAdminMiddleware])
+  .handler(async ({ data }) => {
+    const result = await ResultAsync.fromPromise<User[], Error>(
+      db
+        .update(user)
+        .set(data.data)
+        .where(eq(user.id, data.userId))
+        .returning(),
+      (e) => e as Error
+    );
+
+    if (result.isErr()) {
+      return { success: false, error: result.error.message };
+    }
+
+    return { success: true, user: result.value[0] };
   });
 
 function getUserOptions(id: string) {
@@ -72,31 +105,27 @@ function UserPermissionsSelector({
   const form = useForm({
     onSubmit: async ({ value, formApi }) => {
       console.log(value.permissions);
-      const res = await authClient.admin.updateUser({
-        userId: user.id,
+      const res = await updateUser({
         data: {
-          /**
-           * this uses my REALLY STUPID patch in drizzle orm for a bug in better-auth
-           * basically, authClient.admin.updateUser seemed to send ["DEFAULT"] (for example) as a type "string"
-           * and it was quite hard to find a place to patch this into better-auth, so i just added this special version into drizzle
-           * */
-          permissions: `[convertThisToAStringArrayPlease]:${value.permissions.join(",")}`,
+          userId: user.id,
+          data: {
+            permissions: value.permissions,
+          },
         },
       });
 
-      if (res.error) {
+      if (!res.success) {
         toast.error("something went wrong", {
-          description: res.error.message,
+          description: res.error,
+          position: "top-center",
         });
         console.error(res.error);
         return;
       }
 
-      const newUser = res.data as User;
-
       formApi.setFieldValue(
         "permissions",
-        () => newUser.permissions as Permission[]
+        () => res.user.permissions as Permission[]
       );
 
       await queryClient.invalidateQueries(getUserOptions(user.id));

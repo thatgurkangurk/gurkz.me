@@ -20,7 +20,7 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { LoaderCircleIcon } from "lucide-react";
-import { User } from "~/server/auth";
+import type { User } from "~/lib/auth";
 import { Button } from "~/components/ui/button";
 import { UserAvatar } from "@daveyplate/better-auth-ui";
 

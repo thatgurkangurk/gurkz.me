@@ -4,6 +4,9 @@ import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { Permissions } from "~/lib/permissions";
 import { admin } from "better-auth/plugins";
 import { db, schema } from "~/server/db";
+import * as z from "zod/v4";
+import { createMiddleware } from "@tanstack/react-start";
+import { getServerSession } from "~/lib/session";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -55,6 +58,3 @@ export const auth = betterAuth({
     },
   },
 });
-
-export type User = typeof auth.$Infer.Session.user;
-export type Session = typeof auth.$Infer.Session.session;
