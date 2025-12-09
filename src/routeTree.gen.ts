@@ -13,10 +13,12 @@ import { Route as UnauthorisedRouteImport } from './routes/unauthorised'
 import { Route as MusicRouteImport } from './routes/music'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AuthAuthViewRouteImport } from './routes/auth/$authView'
 import { Route as AccountAccountViewRouteImport } from './routes/account/$accountView'
 import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc/$'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as AdminUserUserIdRouteImport } from './routes/admin/user/$userId'
 
 const UnauthorisedRoute = UnauthorisedRouteImport.update({
   id: '/unauthorised',
@@ -36,6 +38,11 @@ const LoginRoute = LoginRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthAuthViewRoute = AuthAuthViewRouteImport.update({
@@ -58,6 +65,11 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminUserUserIdRoute = AdminUserUserIdRouteImport.update({
+  id: '/admin/user/$userId',
+  path: '/admin/user/$userId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -66,6 +78,8 @@ export interface FileRoutesByFullPath {
   '/unauthorised': typeof UnauthorisedRoute
   '/account/$accountView': typeof AccountAccountViewRoute
   '/auth/$authView': typeof AuthAuthViewRoute
+  '/admin': typeof AdminIndexRoute
+  '/admin/user/$userId': typeof AdminUserUserIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
 }
@@ -76,6 +90,8 @@ export interface FileRoutesByTo {
   '/unauthorised': typeof UnauthorisedRoute
   '/account/$accountView': typeof AccountAccountViewRoute
   '/auth/$authView': typeof AuthAuthViewRoute
+  '/admin': typeof AdminIndexRoute
+  '/admin/user/$userId': typeof AdminUserUserIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
 }
@@ -87,6 +103,8 @@ export interface FileRoutesById {
   '/unauthorised': typeof UnauthorisedRoute
   '/account/$accountView': typeof AccountAccountViewRoute
   '/auth/$authView': typeof AuthAuthViewRoute
+  '/admin/': typeof AdminIndexRoute
+  '/admin/user/$userId': typeof AdminUserUserIdRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
 }
@@ -99,6 +117,8 @@ export interface FileRouteTypes {
     | '/unauthorised'
     | '/account/$accountView'
     | '/auth/$authView'
+    | '/admin'
+    | '/admin/user/$userId'
     | '/api/auth/$'
     | '/api/rpc/$'
   fileRoutesByTo: FileRoutesByTo
@@ -109,6 +129,8 @@ export interface FileRouteTypes {
     | '/unauthorised'
     | '/account/$accountView'
     | '/auth/$authView'
+    | '/admin'
+    | '/admin/user/$userId'
     | '/api/auth/$'
     | '/api/rpc/$'
   id:
@@ -119,6 +141,8 @@ export interface FileRouteTypes {
     | '/unauthorised'
     | '/account/$accountView'
     | '/auth/$authView'
+    | '/admin/'
+    | '/admin/user/$userId'
     | '/api/auth/$'
     | '/api/rpc/$'
   fileRoutesById: FileRoutesById
@@ -130,6 +154,8 @@ export interface RootRouteChildren {
   UnauthorisedRoute: typeof UnauthorisedRoute
   AccountAccountViewRoute: typeof AccountAccountViewRoute
   AuthAuthViewRoute: typeof AuthAuthViewRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+  AdminUserUserIdRoute: typeof AdminUserUserIdRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiRpcSplatRoute: typeof ApiRpcSplatRoute
 }
@@ -164,6 +190,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth/$authView': {
       id: '/auth/$authView'
       path: '/auth/$authView'
@@ -192,6 +225,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/user/$userId': {
+      id: '/admin/user/$userId'
+      path: '/admin/user/$userId'
+      fullPath: '/admin/user/$userId'
+      preLoaderRoute: typeof AdminUserUserIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -202,6 +242,8 @@ const rootRouteChildren: RootRouteChildren = {
   UnauthorisedRoute: UnauthorisedRoute,
   AccountAccountViewRoute: AccountAccountViewRoute,
   AuthAuthViewRoute: AuthAuthViewRoute,
+  AdminIndexRoute: AdminIndexRoute,
+  AdminUserUserIdRoute: AdminUserUserIdRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiRpcSplatRoute: ApiRpcSplatRoute,
 }
