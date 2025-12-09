@@ -2,7 +2,7 @@ name: trigger deploy
 
 on:
   registry_package:
-    types: [published]
+    types: [published, updated]
 
 jobs:
   send-webhook:
