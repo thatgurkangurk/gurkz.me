@@ -1,10 +1,5 @@
-import {
-  queryOptions,
-  useQuery,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
-import { authClient } from "~/lib/auth";
 import { getServerSession } from "~/lib/session";
 import {
   Empty,
@@ -23,30 +18,7 @@ import { LoaderCircleIcon } from "lucide-react";
 import type { User } from "~/lib/auth";
 import { Button } from "~/components/ui/button";
 import { UserAvatar } from "@daveyplate/better-auth-ui";
-
-const listAllUsersQuery = queryOptions({
-  queryKey: ["admin", "list-users"],
-  queryFn: async () => {
-    const res = await authClient.admin.listUsers({
-      query: {},
-    });
-
-    if (res.error) throw res.error;
-
-    return res.data as NonNullable<
-      | {
-          users: User[];
-          total: number;
-          limit: number | undefined;
-          offset: number | undefined;
-        }
-      | {
-          users: never[];
-          total: number;
-        }
-    >;
-  },
-});
+import { listAllUsersQuery } from "~/api/admin";
 
 export const Route = createFileRoute("/admin/")({
   beforeLoad: async () => {

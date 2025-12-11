@@ -1,100 +1,19 @@
+import { useForm } from "@tanstack/react-form";
+import { useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 import {
   createFileRoute,
   Link,
   notFound,
   redirect,
 } from "@tanstack/react-router";
-import { createServerFn } from "@tanstack/react-start";
-import { userSchema, type User } from "~/lib/auth";
-import { auth } from "~/server/auth";
-import * as z from "zod/v4";
-import { zodValidator } from "@tanstack/zod-adapter";
-import { getServerSession } from "~/lib/session";
-import { getRequest } from "@tanstack/react-start/server";
-import {
-  queryOptions,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
-import { authClient } from "~/lib/auth";
-import { Button } from "~/components/ui/button";
-import { useForm } from "@tanstack/react-form";
-import { Permission, permissions } from "~/lib/permissions";
-import { Field, FieldGroup, FieldSet } from "~/components/ui/field";
-import { Checkbox } from "~/components/ui/checkbox";
-import { toast } from "sonner";
 import { LoaderCircle } from "lucide-react";
-import { requireAdminMiddleware } from "~/server/admin";
-import { ResultAsync } from "neverthrow";
-import { db } from "~/server/db";
-import { user } from "~/server/db/schema/auth";
-import { eq } from "drizzle-orm";
-
-const checkIfUserExists = createServerFn({ method: "GET" })
-  .inputValidator(zodValidator(z.object({ id: z.string() })))
-  .handler(async (ctx) => {
-    const res = await auth.api.getUser({
-      query: {
-        id: ctx.data.id,
-      },
-      headers: getRequest().headers,
-    });
-
-    if (!res)
-      return {
-        exists: false,
-        data: null,
-      };
-
-    return {
-      exists: true,
-      data: res as User,
-    };
-  });
-
-const updateUser = createServerFn({ method: "POST" })
-  .inputValidator(
-    zodValidator(
-      z.object({
-        userId: z.string(),
-        data: userSchema.omit({ id: true }).partial(),
-      })
-    )
-  )
-  .middleware([requireAdminMiddleware])
-  .handler(async ({ data }) => {
-    const result = await ResultAsync.fromPromise<User[], Error>(
-      db
-        .update(user)
-        .set(data.data)
-        .where(eq(user.id, data.userId))
-        .returning(),
-      (e) => e as Error
-    );
-
-    if (result.isErr()) {
-      return { success: false, error: result.error.message };
-    }
-
-    return { success: true, user: result.value[0] };
-  });
-
-function getUserOptions(id: string) {
-  return queryOptions({
-    queryKey: ["admin", "get-user", id],
-    queryFn: async () => {
-      const res = await authClient.admin.getUser({
-        query: {
-          id: id,
-        },
-      });
-
-      if (res.error) throw res.error;
-
-      return res.data as User;
-    },
-  });
-}
+import { toast } from "sonner";
+import { checkIfUserExists, getUserOptions, updateUser } from "~/api/admin";
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
+import { Field, FieldGroup, FieldSet } from "~/components/ui/field";
+import type { User } from "~/lib/auth";
+import { type Permission, permissions } from "~/lib/permissions";
 
 function UserPermissionsSelector({
   user,
