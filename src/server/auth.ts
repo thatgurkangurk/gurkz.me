@@ -1,12 +1,10 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { tanstackStartCookies } from "better-auth/tanstack-start";
-import { Permissions } from "~/lib/permissions";
 import { admin } from "better-auth/plugins";
+import { tanstackStartCookies } from "better-auth/tanstack-start";
+import { env } from "~/env";
+import { Permissions } from "~/lib/permissions";
 import { db, schema } from "~/server/db";
-import * as z from "zod/v4";
-import { createMiddleware } from "@tanstack/react-start";
-import { getServerSession } from "~/lib/session";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -21,8 +19,8 @@ export const auth = betterAuth({
   plugins: [admin(), tanstackStartCookies()],
   socialProviders: {
     discord: {
-      clientId: process.env.DISCORD_CLIENT_ID!,
-      clientSecret: process.env.DISCORD_CLIENT_SECRET,
+      clientId: env.DISCORD_CLIENT_ID,
+      clientSecret: env.DISCORD_CLIENT_SECRET,
       prompt: "consent",
       overrideUserInfoOnSignIn: true,
       mapProfileToUser: (profile) => {
@@ -32,8 +30,8 @@ export const auth = betterAuth({
       },
     },
     github: {
-      clientId: process.env.GITHUB_CLIENT_ID!,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      clientId: env.GITHUB_CLIENT_ID,
+      clientSecret: env.GITHUB_CLIENT_SECRET,
       prompt: "consent",
       mapProfileToUser: (profile) => {
         return {
