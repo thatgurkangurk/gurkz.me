@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UnauthorisedRouteImport } from './routes/unauthorised'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as MusicRouteImport } from './routes/music'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
@@ -23,6 +24,11 @@ import { Route as AdminUserUserIdRouteImport } from './routes/admin/user/$userId
 const UnauthorisedRoute = UnauthorisedRouteImport.update({
   id: '/unauthorised',
   path: '/unauthorised',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MusicRoute = MusicRouteImport.update({
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/music': typeof MusicRoute
+  '/privacy': typeof PrivacyRoute
   '/unauthorised': typeof UnauthorisedRoute
   '/account/$accountView': typeof AccountAccountViewRoute
   '/auth/$authView': typeof AuthAuthViewRoute
@@ -87,6 +94,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/music': typeof MusicRoute
+  '/privacy': typeof PrivacyRoute
   '/unauthorised': typeof UnauthorisedRoute
   '/account/$accountView': typeof AccountAccountViewRoute
   '/auth/$authView': typeof AuthAuthViewRoute
@@ -100,6 +108,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/music': typeof MusicRoute
+  '/privacy': typeof PrivacyRoute
   '/unauthorised': typeof UnauthorisedRoute
   '/account/$accountView': typeof AccountAccountViewRoute
   '/auth/$authView': typeof AuthAuthViewRoute
@@ -114,6 +123,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/music'
+    | '/privacy'
     | '/unauthorised'
     | '/account/$accountView'
     | '/auth/$authView'
@@ -126,6 +136,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/music'
+    | '/privacy'
     | '/unauthorised'
     | '/account/$accountView'
     | '/auth/$authView'
@@ -138,6 +149,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/music'
+    | '/privacy'
     | '/unauthorised'
     | '/account/$accountView'
     | '/auth/$authView'
@@ -151,6 +163,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
   MusicRoute: typeof MusicRoute
+  PrivacyRoute: typeof PrivacyRoute
   UnauthorisedRoute: typeof UnauthorisedRoute
   AccountAccountViewRoute: typeof AccountAccountViewRoute
   AuthAuthViewRoute: typeof AuthAuthViewRoute
@@ -167,6 +180,13 @@ declare module '@tanstack/react-router' {
       path: '/unauthorised'
       fullPath: '/unauthorised'
       preLoaderRoute: typeof UnauthorisedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/music': {
@@ -239,6 +259,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
   MusicRoute: MusicRoute,
+  PrivacyRoute: PrivacyRoute,
   UnauthorisedRoute: UnauthorisedRoute,
   AccountAccountViewRoute: AccountAccountViewRoute,
   AuthAuthViewRoute: AuthAuthViewRoute,

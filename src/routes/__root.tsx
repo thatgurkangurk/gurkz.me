@@ -21,6 +21,7 @@ import { getRules, permix } from "~/lib/permix";
 import { getServerSession, useSession } from "~/lib/session";
 import { themeScript, useSyncThemeClass } from "~/lib/theme";
 import globalCss from "../styles/global.css?url";
+import { Footer } from "~/components/footer";
 
 const getPermixRules = createServerFn({ method: "GET" }).handler(async () => {
   const session = await getServerSession();
@@ -108,7 +109,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         <head>
           <HeadContent />
         </head>
-        <body>
+        <body className="min-h-screen flex flex-col">
           <Toaster />
           <Header sheetPosition="left">
             <NavLink label="home" to="/" />
@@ -117,7 +118,8 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
               <NavLink label="admin" to="/admin" />
             )}
           </Header>
-          <main className="pt-20 px-4">{children}</main>
+          <main className="grow pt-20 px-4">{children}</main>
+          <Footer />
           <Scripts />
         </body>
       </html>
