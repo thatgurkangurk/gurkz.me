@@ -1,24 +1,24 @@
 /// <reference types="vite/client" />
-import { StrictMode, useEffect, type ReactNode } from "react";
+import type { QueryClient } from "@tanstack/react-query";
 import {
-  Outlet,
   HeadContent,
+  Outlet,
   Scripts,
-  Link,
   createRootRouteWithContext,
 } from "@tanstack/react-router";
-import globalCss from "../styles/global.css?url";
-import type { QueryClient } from "@tanstack/react-query";
-import { Devtools } from "~/components/devtools";
-import { themeScript, useSyncThemeClass } from "~/lib/theme";
+import { createServerFn } from "@tanstack/react-start";
 import { Provider } from "jotai";
-import { Header, NavLink } from "~/components/header";
-import { Toaster } from "~/components/ui/sonner";
 import { PermixProvider } from "permix/react";
+import { StrictMode, useEffect, type ReactNode } from "react";
+import { Devtools } from "~/components/devtools";
+import { NavLink } from "~/components/nav-link";
+import { Header } from "~/components/navbar";
+import { Providers } from "~/components/providers";
+import { Toaster } from "~/components/ui/sonner";
 import { getRules, permix } from "~/lib/permix";
 import { getServerSession, useSession } from "~/lib/session";
-import { createServerFn } from "@tanstack/react-start";
-import { Providers } from "~/components/providers";
+import { themeScript, useSyncThemeClass } from "~/lib/theme";
+import globalCss from "../styles/global.css?url";
 
 const getPermixRules = createServerFn({ method: "GET" }).handler(async () => {
   const session = await getServerSession();
@@ -63,6 +63,7 @@ function RootComponent() {
   const { state, session } = Route.useLoaderData();
   const { data } = useSession();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: this should only run on mount
   useEffect(() => {
     permix.hydrate(state);
     const rules = getRules(session);
@@ -108,7 +109,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
               <NavLink label="admin" to="/admin" />
             )}
           </Header>
-          <main className="p-2">{children}</main>
+          <main className="pt-20 px-4">{children}</main>
           <Scripts />
         </body>
       </html>
