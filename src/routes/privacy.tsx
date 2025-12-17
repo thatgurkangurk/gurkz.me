@@ -39,7 +39,7 @@ function RouteComponent() {
       </p>
       <br />
       <p>
-        if you want your data, please don't hesitate to email{" "}
+        if you want your data deleted, please don't hesitate to email{" "}
         <a
           className="text-primary underline-offset-4 hover:underline"
           href="mailto:hello@gurkz.me"
@@ -54,6 +54,9 @@ function RouteComponent() {
         when, and if you sign up, we collect your username, profile picture,
         email address and display name from the social provider you used to make
         your account. this data is never linked with analytics.
+        <br />
+        we also collect your IP address for your convenience on the Account
+        Settings page (so you know which device is which)
       </p>
     </>
   );
