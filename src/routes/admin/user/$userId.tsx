@@ -14,6 +14,7 @@ import { Checkbox } from "~/components/ui/checkbox";
 import { Field, FieldGroup, FieldSet } from "~/components/ui/field";
 import type { User } from "~/lib/auth";
 import { type Permission, permissions } from "~/lib/permissions";
+import { getServerSession } from "~/lib/session";
 
 function UserPermissionsSelector({
   user,
