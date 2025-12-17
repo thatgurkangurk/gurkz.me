@@ -1,15 +1,17 @@
 /// <reference types="vite/client" />
+
 import type { QueryClient } from "@tanstack/react-query";
 import {
+  createRootRouteWithContext,
   HeadContent,
   Outlet,
   Scripts,
-  createRootRouteWithContext,
 } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { Provider } from "jotai";
+import { configure } from "onedollarstats";
 import { PermixProvider } from "permix/react";
-import { StrictMode, useEffect, type ReactNode } from "react";
+import { type ReactNode, StrictMode, useEffect } from "react";
 import { Devtools } from "~/components/devtools";
 import { NavLink } from "~/components/nav-link";
 import { Header } from "~/components/navbar";
@@ -68,6 +70,12 @@ function RootComponent() {
     permix.hydrate(state);
     const rules = getRules(session);
     permix.setup(rules);
+  }, []);
+
+  useEffect(() => {
+    configure({
+      trackLocalhostAs: "test.com",
+    });
   }, []);
 
   useEffect(() => {
