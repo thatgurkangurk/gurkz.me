@@ -101,6 +101,7 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
+  const { session } = Route.useLoaderData();
   const { data } = useSession();
   useSyncThemeClass();
   return (
@@ -114,7 +115,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
           <Header sheetPosition="left">
             <NavLink label="home" to="/" />
             <NavLink label="music id list" to="/music" />
-            {data?.user.role === "admin" && (
+            {session?.user.role === "admin" && (
               <NavLink label="admin" to="/admin" />
             )}
           </Header>
