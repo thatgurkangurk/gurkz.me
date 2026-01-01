@@ -23,5 +23,5 @@ export const userSchema = z.object({
 	banExpires: z.date().nullable().optional()
 });
 
-export type User = z.infer<typeof userSchema>;
+export type User = typeof auth.$Infer.Session.user;
 export type Session = typeof auth.$Infer.Session.session;
