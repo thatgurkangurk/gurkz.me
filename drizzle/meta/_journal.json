@@ -1,48 +1,48 @@
 {
-  "version": "7",
-  "dialect": "postgresql",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "7",
-      "when": 1752765902568,
-      "tag": "0000_ordinary_alex_power",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1752766074600,
-      "tag": "0001_living_black_knight",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1753107709937,
-      "tag": "0002_colorful_sharon_ventura",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1753125323035,
-      "tag": "0003_hot_jack_murdock",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1762283128419,
-      "tag": "0004_slimy_chamber",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1762348799787,
-      "tag": "0005_magenta_onslaught",
-      "breakpoints": true
-    }
-  ]
+	"version": "7",
+	"dialect": "postgresql",
+	"entries": [
+		{
+			"idx": 0,
+			"version": "7",
+			"when": 1752765902568,
+			"tag": "0000_ordinary_alex_power",
+			"breakpoints": true
+		},
+		{
+			"idx": 1,
+			"version": "7",
+			"when": 1752766074600,
+			"tag": "0001_living_black_knight",
+			"breakpoints": true
+		},
+		{
+			"idx": 2,
+			"version": "7",
+			"when": 1753107709937,
+			"tag": "0002_colorful_sharon_ventura",
+			"breakpoints": true
+		},
+		{
+			"idx": 3,
+			"version": "7",
+			"when": 1753125323035,
+			"tag": "0003_hot_jack_murdock",
+			"breakpoints": true
+		},
+		{
+			"idx": 4,
+			"version": "7",
+			"when": 1762283128419,
+			"tag": "0004_slimy_chamber",
+			"breakpoints": true
+		},
+		{
+			"idx": 5,
+			"version": "7",
+			"when": 1762348799787,
+			"tag": "0005_magenta_onslaught",
+			"breakpoints": true
+		}
+	]
 }
