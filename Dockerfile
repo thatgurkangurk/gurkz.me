@@ -14,11 +14,9 @@ COPY . .
 
 RUN CI="1" DATABASE_URL="postgres://changeme" bun run --bun build
 
-FROM base
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 gurkz
+FROM gcr.io/distroless/base
 
-COPY --from=build --chown=gurkz:nodejs /app/.output /app/.output
+COPY --from=build --chown=gurkz:nodejs /app/dist/gurkz-me gurkz-me
 
 ENV NODE_ENV="production"
 ENV HOST=0.0.0.0
@@ -26,4 +24,4 @@ ENV PORT=4321
 ENV ORIGIN="https://www.gurkz.me/"
 EXPOSE 4321/tcp
 
-CMD [ "bun", "./.output/server/index.mjs" ]
+CMD [ "./gurkz-me" ]
