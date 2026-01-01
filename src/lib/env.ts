@@ -14,5 +14,6 @@ export const env = createEnv({
 	},
 	client: {},
 	clientPrefix: "VITE_",
-	runtimeEnv: stdEnv
+	runtimeEnv: stdEnv,
+	skipValidation: stdEnv.CI === "1"
 });
