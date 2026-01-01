@@ -5,6 +5,7 @@
 	import ModeToggle from "./mode-toggle.svelte";
 	import { buttonVariants } from "./ui/button";
 	import { Menu } from "@lucide/svelte";
+	import UserMenu from "./user-menu.svelte";
 
 	type NavLinkProps = {
 		label: string;
@@ -73,6 +74,7 @@
 
 			<div class="flex items-center gap-2">
 				<ModeToggle />
+				<UserMenu />
 				<!-- <ModeToggle />
 				<UserButton size={"icon"} /> -->
 			</div>
@@ -128,6 +130,7 @@
 
 			<div class="flex-gap flex items-center gap-2">
 				<ModeToggle />
+				<UserMenu />
 				<!-- <ModeToggle />
 				<UserButton size={"icon"} /> -->
 			</div>
