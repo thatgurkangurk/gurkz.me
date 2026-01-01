@@ -39,6 +39,10 @@
 		{
 			label: "home",
 			to: "/"
+		},
+		{
+			label: "music id list",
+			to: "/music"
 		}
 	]}
 />
