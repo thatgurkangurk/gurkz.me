@@ -1,11 +1,14 @@
 <script lang="ts">
 	import type { PageProps } from "./$types";
+	import FormatSelector from "./components/format-selector.svelte";
 	import MusicCard from "./components/music-card.svelte";
 
 	let { data }: PageProps = $props();
 </script>
 
 <h1 class="text-3xl">music id list</h1>
+
+<FormatSelector />
 
 <div
 	class="grid w-full grid-cols-1 place-items-center gap-4 pt-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5"
