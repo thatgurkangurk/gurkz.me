@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { authClient } from "$lib/auth";
 	import {
 		DropdownMenu,
 		DropdownMenuContent,
@@ -10,7 +9,7 @@
 		DropdownMenuItem
 	} from "$lib/components/ui/dropdown-menu/index.js";
 	import { Skeleton } from "$lib/components/ui/skeleton/index.js";
-	import { CircleUserRound, LogOut, UserIcon } from "@lucide/svelte";
+	import { LogOut, UserIcon } from "@lucide/svelte";
 	import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 	import { buttonVariants } from "./ui/button";
 	import { useSession } from "$lib/session.svelte";
@@ -42,7 +41,7 @@
 			</DropdownMenuLabel>
 			<DropdownMenuSeparator />
 			<DropdownMenuGroup>
-				<DropdownMenuItem onclick={async () => await authClient.signOut()}>
+				<DropdownMenuItem onclick={async () => await session.signOut()}>
 					<LogOut /> log out
 				</DropdownMenuItem>
 			</DropdownMenuGroup>
@@ -71,12 +70,7 @@
 			</DropdownMenuLabel>
 			<DropdownMenuSeparator />
 			<DropdownMenuGroup>
-				<DropdownMenuItem
-					onclick={async () =>
-						await authClient.signIn.social({
-							provider: "discord"
-						})}
-				>
+				<DropdownMenuItem onclick={async () => await session.signInSocial("discord")}>
 					<LogOut /> log in
 				</DropdownMenuItem>
 			</DropdownMenuGroup>
