@@ -1,4 +1,4 @@
-import { idFormatSchema, type IdFormat } from "./context.js";
+import { idFormatSchema, type IdFormat } from "./context.svelte.js";
 import * as z from "zod/v4";
 import { fromThrowable } from "neverthrow";
 

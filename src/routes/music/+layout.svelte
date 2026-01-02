@@ -1,13 +1,12 @@
 <script lang="ts">
-	import { CookieState } from "$lib/cookie-state.svelte";
-	import { setIdFormat } from "./context.js";
+	import { IdFormatState, setIdFormat } from "./context.svelte.js";
 
 	let { children, data } = $props();
 
 	// svelte-ignore state_referenced_locally
-	const cookieState = new CookieState("id_format", $state.snapshot(data.idFormat));
+	const formatState = new IdFormatState($state.snapshot(data.idFormat));
 
-	setIdFormat(cookieState);
+	setIdFormat(formatState);
 </script>
 
 {@render children()}

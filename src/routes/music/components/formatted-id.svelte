@@ -1,28 +1,11 @@
-<script lang="ts" module>
-	import { CopyButton } from "$lib/components/ui/copy-button/index.js";
-	import type { IdFormat } from "../context.js";
-	export function formatId(robloxId: string, format: IdFormat = "DEFAULT") {
-		switch (format) {
-			case "DEFAULT": {
-				return robloxId;
-			}
-			case "TRAITOR_TOWN": {
-				return `s/${robloxId}`;
-			}
-			default: {
-				return robloxId;
-			}
-		}
-	}
-</script>
-
 <script lang="ts">
-	import { getIdFormat } from "../context.js";
+	import { CopyButton } from "$lib/components/ui/copy-button/index.js";
+	import { getIdFormat } from "../context.svelte.js";
 	let { robloxId }: { robloxId: string } = $props();
 
-	const format = getIdFormat();
+	const state = getIdFormat();
 
-	const formattedId = $derived.by(() => formatId(robloxId, format.current));
+	const formattedId = $derived.by(() => state.format(robloxId));
 </script>
 
 <span>{formattedId}</span>
