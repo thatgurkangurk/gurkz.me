@@ -41,6 +41,10 @@
 		{
 			label: "music id list",
 			to: "/music"
+		},
+		{
+			label: "misc",
+			to: "/misc"
 		}
 	]}
 />
