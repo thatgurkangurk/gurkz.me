@@ -18,11 +18,11 @@
 	const session = useSession();
 </script>
 
-{#if session.data}
+{#if session.current}
 	<DropdownMenu>
 		<DropdownMenuTrigger>
 			<Avatar class="size-8 rounded-full">
-				<AvatarImage src={session.data.user.image}></AvatarImage>
+				<AvatarImage src={session.current.user.image}></AvatarImage>
 				<AvatarFallback>
 					<Skeleton class="size-8 rounded-full" />
 				</AvatarFallback>
@@ -32,12 +32,12 @@
 			<DropdownMenuLabel class="p-0 font-normal">
 				<div class="flex items-center gap-2 px-1 py-1.5 text-start text-sm">
 					<Avatar class="size-8 rounded-full">
-						<AvatarImage src={session.data.user.image} alt={session.data.user.name} />
+						<AvatarImage src={session.current.user.image} alt={session.current.user.name} />
 						<AvatarFallback class="rounded-lg">
 							<Skeleton class="size-8 rounded-full" />
 						</AvatarFallback>
 					</Avatar>
-					<span class="truncate font-bold">{session.data.user.name}</span>
+					<span class="truncate font-bold">{session.current.user.name}</span>
 				</div>
 			</DropdownMenuLabel>
 			<DropdownMenuSeparator />

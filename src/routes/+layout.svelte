@@ -5,7 +5,7 @@
 	import { ModeWatcher } from "mode-watcher";
 	import Navbar from "$lib/components/navbar.svelte";
 	import { authClient } from "$lib/auth";
-	import { setSession } from "$lib/session.svelte";
+	import { SessionState, setSession } from "$lib/session.svelte";
 	import type { LayoutProps } from "./$types";
 	import { fromStore } from "svelte/store";
 
@@ -13,16 +13,14 @@
 
 	const rawSession = fromStore(authClient.useSession());
 
-	let sessionState = $state({
-		// svelte-ignore state_referenced_locally
-		data: $state.snapshot(data.session)
-	});
+	// svelte-ignore state_referenced_locally
+	let sessionState = new SessionState($state.snapshot(data.session));
 
 	setSession(sessionState);
 
 	$effect(() => {
 		if (rawSession.current.isPending) return;
-		sessionState.data = rawSession.current.data;
+		sessionState.current = rawSession.current.data;
 	});
 
 	$effect(() => {
