@@ -7,7 +7,9 @@
 		CardTitle
 	} from "$lib/components/ui/card/index.js";
 	import type { MusicIdWithCreator } from "$lib/server/db/schema/music";
+	import { SquareArrowOutUpRight } from "@lucide/svelte";
 	import FormattedId from "./formatted-id.svelte";
+	import { Button } from "$lib/components/ui/button";
 
 	type Props = {
 		musicId: MusicIdWithCreator;
@@ -21,8 +23,17 @@
 </script>
 
 <Card class="h-full w-full">
-	<CardHeader>
+	<CardHeader class="flex items-center gap-2">
 		<CardTitle class="text-xl">{musicId.name}</CardTitle>
+		<Button
+			size="icon"
+			variant="ghost"
+			href="https://create.roblox.com/store/asset/{musicId.robloxId}/"
+			target="_blank"
+			rel="noopener noreferrer"
+		>
+			<SquareArrowOutUpRight />
+		</Button>
 	</CardHeader>
 
 	<CardContent>
