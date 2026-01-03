@@ -5,6 +5,7 @@
 	import { scope } from "simple:scope";
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
+	import { ConfirmDeleteDialog } from "$lib/components/ui/confirm-delete-dialog";
 
 	let { data }: PageProps = $props();
 
@@ -18,6 +19,8 @@
 <h1 class="text-3xl">music id list</h1>
 
 <FormatSelector />
+
+<ConfirmDeleteDialog />
 
 <div class="grid max-w-60 grid-cols-1 gap-2 pt-4">
 	<div>

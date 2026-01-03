@@ -1,3 +1,4 @@
+// @ts-check
 import adapter from "@jesterkit/exe-sveltekit";
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 
@@ -13,7 +14,17 @@ const config = {
 		// See https://svelte.dev/docs/kit/adapters for more information about adapters.
 		adapter: adapter({
 			binaryName: "gurkz-me"
-		})
+		}),
+
+		experimental: {
+			remoteFunctions: true
+		}
+	},
+
+	compilerOptions: {
+		experimental: {
+			async: true
+		}
 	},
 
 	vitePlugin: {
