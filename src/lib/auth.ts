@@ -1,12 +1,6 @@
-import { adminClient, inferAdditionalFields } from "better-auth/client/plugins";
-import { createAuthClient } from "better-auth/svelte";
 import type { auth } from "$lib/server/auth";
 import * as z from "zod/v4";
 import { Permissions } from "./permissions";
-
-export const authClient = createAuthClient({
-	plugins: [inferAdditionalFields<typeof auth>(), adminClient()]
-});
 
 export const userSchema = z.object({
 	id: z.string(),

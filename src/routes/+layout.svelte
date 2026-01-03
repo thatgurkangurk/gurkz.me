@@ -4,24 +4,15 @@
 	import favicon from "$lib/assets/favicon.svg";
 	import { ModeWatcher } from "mode-watcher";
 	import Navbar from "$lib/components/navbar.svelte";
-	import { authClient } from "$lib/auth";
 	import { SessionState, setSession } from "$lib/session.svelte";
 	import type { LayoutProps } from "./$types";
-	import { fromStore } from "svelte/store";
 
 	const { children, data }: LayoutProps = $props();
-
-	const rawSession = fromStore(authClient.useSession());
 
 	// svelte-ignore state_referenced_locally
 	let sessionState = new SessionState($state.snapshot(data.session));
 
 	setSession(sessionState);
-
-	$effect(() => {
-		if (rawSession.current.isPending) return;
-		sessionState.current = rawSession.current.data;
-	});
 
 	$effect(() => {
 		configure();
