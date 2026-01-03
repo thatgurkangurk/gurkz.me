@@ -1,11 +1,10 @@
 <script lang="ts">
 	import { page } from "$app/state";
-	import { authClient } from "$lib/auth";
 	import { Sheet, SheetContent, SheetTrigger } from "$lib/components/ui/sheet/index.js";
-	import ModeToggle from "./mode-toggle.svelte";
 	import { buttonVariants } from "./ui/button";
 	import { Menu } from "@lucide/svelte";
 	import UserMenu from "./user-menu.svelte";
+	import LightSwitch from "./ui/light-switch/light-switch.svelte";
 
 	type NavLinkProps = {
 		label: string;
@@ -19,8 +18,6 @@
 	let { links }: NavbarProps = $props();
 
 	let sheetOpen = $state<boolean>(false);
-
-	const session = authClient.useSession();
 </script>
 
 {#snippet navLink(props: NavLinkProps)}
@@ -73,7 +70,7 @@
 			</div>
 
 			<div class="flex items-center gap-2">
-				<ModeToggle />
+				<LightSwitch variant={"ghost"} />
 				<UserMenu />
 				<!-- <ModeToggle />
 				<UserButton size={"icon"} /> -->
@@ -129,7 +126,7 @@
 			</a>
 
 			<div class="flex-gap flex items-center gap-2">
-				<ModeToggle />
+				<LightSwitch variant={"ghost"} />
 				<UserMenu />
 				<!-- <ModeToggle />
 				<UserButton size={"icon"} /> -->
