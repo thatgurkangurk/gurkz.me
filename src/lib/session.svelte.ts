@@ -18,10 +18,10 @@ export class SessionState {
 	constructor(
 		sessionData: {
 			session: Session;
-			user: User;
+			user: typeof auth.$Infer.Session.user;
 		} | null
 	) {
-		this.current = sessionData;
+		this.current = sessionData as { user: User; session: Session } | null;
 		this.authClient = createAuthClient({
 			plugins: [inferAdditionalFields<typeof auth>(), adminClient()]
 		});
@@ -29,7 +29,7 @@ export class SessionState {
 
 		$effect(() => {
 			if (rawSession.current.isPending) return;
-			this.current = rawSession.current.data;
+			this.current = rawSession.current.data as { user: User; session: Session } | null;
 		});
 	}
 

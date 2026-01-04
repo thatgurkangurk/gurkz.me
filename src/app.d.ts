@@ -6,6 +6,14 @@ import type { Session, User } from "$lib/auth";
 
 declare global {
 	namespace App {
+		namespace Superforms {
+			type Message = {
+				type: "error" | "success" | "warning";
+				title: string;
+				text: string;
+			};
+		}
+
 		// interface Error {}
 		interface Locals {
 			user?: User;
