@@ -16,6 +16,10 @@ const config = {
 			binaryName: "gurkz-me"
 		}),
 
+		csrf: {
+			trustedOrigins: ["https://www.gurkz.me", "https://gurkz.me"]
+		},
+
 		experimental: {
 			remoteFunctions: true
 		}
