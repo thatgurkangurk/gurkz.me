@@ -22,13 +22,16 @@
 	import * as Alert from "$lib/components/ui/alert/index.js";
 	import { Bomb, CircleCheckBig, TriangleAlert } from "@lucide/svelte";
 	import { useSession } from "$lib/session.svelte";
+	import { getMusicIds } from "$lib/api/music.remote.js";
 
 	let { data }: PageProps = $props();
 
 	let searchFilter = $state("");
 
+	let musicIds = $derived(await getMusicIds());
+
 	const filteredMusicIds = $derived(
-		data.musicIds.filter((id) => id.name.toLowerCase().includes(searchFilter.toLowerCase()))
+		musicIds.filter((id) => id.name.toLowerCase().includes(searchFilter.toLowerCase()))
 	);
 
 	// svelte-ignore state_referenced_locally its ok

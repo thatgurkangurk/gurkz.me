@@ -13,7 +13,6 @@
 	import { confirmDelete } from "$lib/components/ui/confirm-delete-dialog/index.js";
 	import { useSession } from "$lib/session.svelte";
 	import { deleteMusicId } from "$lib/api/music.remote";
-	import { invalidateAll } from "$app/navigation";
 
 	type Props = {
 		musicId: MusicIdWithCreator;
@@ -69,8 +68,6 @@
 								await deleteMusicId({
 									id: musicId.id
 								});
-
-								await invalidateAll();
 							}
 						});
 					}}>delete</Button

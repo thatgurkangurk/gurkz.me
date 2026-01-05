@@ -11,29 +11,7 @@ export const load = (async (ev) => {
 
 	const form = await superValidate(zod4(createMusicIdSchema));
 
-	const musicIds = await db.query.musicIds.findMany({
-		columns: {
-			id: true,
-			name: true,
-			robloxId: true,
-			createdById: true,
-			created: true,
-			working: true,
-			tags: true
-		},
-		with: {
-			creator: {
-				columns: {
-					id: true,
-					name: true,
-					image: true
-				}
-			}
-		},
-		orderBy: ({ id }, { desc }) => desc(id)
-	});
-
-	return { musicIds, form };
+	return { form };
 }) satisfies PageServerLoad;
 
 export const actions = {

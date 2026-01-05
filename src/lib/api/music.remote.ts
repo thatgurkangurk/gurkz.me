@@ -1,9 +1,37 @@
 import * as z from "zod/v4";
-import { command, getRequestEvent } from "$app/server";
+import { command, getRequestEvent, query } from "$app/server";
 import { error } from "@sveltejs/kit";
 import { db } from "$lib/server/db";
 import { musicIds } from "$lib/server/db/schema/music";
 import { eq } from "drizzle-orm";
+
+const getMusicIds = query(async () => {
+	const event = getRequestEvent();
+
+	if (!event.locals.user || !event.locals.user.permissions.includes("VIEW_MUSIC_IDS")) error(403);
+
+	return await db.query.musicIds.findMany({
+		columns: {
+			id: true,
+			name: true,
+			robloxId: true,
+			createdById: true,
+			created: true,
+			working: true,
+			tags: true
+		},
+		with: {
+			creator: {
+				columns: {
+					id: true,
+					name: true,
+					image: true
+				}
+			}
+		},
+		orderBy: ({ id }, { desc }) => desc(id)
+	});
+});
 
 const deleteMusicId = command(
 	z.object({
@@ -33,10 +61,12 @@ const deleteMusicId = command(
 			error(500, "Failed to delete music id");
 		}
 
+		getMusicIds().refresh();
+
 		return {
 			success: true
 		};
 	}
 );
 
-export { deleteMusicId };
+export { deleteMusicId, getMusicIds };
