@@ -142,7 +142,7 @@
 				<div class="flex flex-col gap-3">
 					<label>
 						resolution (cols) SET ME FIRST!
-						<input type="range" min="40" max="200" step="10" bind:value={targetCols} />
+						<input type="range" min="40" max="300" step="10" bind:value={targetCols} />
 						<span>{targetCols}</span>
 					</label>
 
