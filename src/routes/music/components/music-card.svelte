@@ -7,7 +7,6 @@
 		CardTitle
 	} from "$lib/components/ui/card/index.js";
 	import type { MusicIdWithCreator } from "$lib/server/db/schema/music";
-	import { SquareArrowOutUpRight } from "@lucide/svelte";
 	import FormattedId from "./formatted-id.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import { confirmDelete } from "$lib/components/ui/confirm-delete-dialog/index.js";
@@ -48,7 +47,7 @@
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				<SquareArrowOutUpRight />
+				<span class="icon-[lucide--square-arrow-out-up-right] size-5"></span>
 			</Button>
 		</div>
 

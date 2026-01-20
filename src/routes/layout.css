@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "@fontsource-variable/dm-sans";
+@plugin "@iconify/tailwind4";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));

@@ -2,9 +2,6 @@
 	import { Button } from "$lib/components/ui/button";
 	import { UseClipboard } from "$lib/hooks/use-clipboard.svelte";
 	import { cn } from "$lib/utils.js";
-	import CheckIcon from "@lucide/svelte/icons/check";
-	import CopyIcon from "@lucide/svelte/icons/copy";
-	import XIcon from "@lucide/svelte/icons/x";
 	import { scale } from "svelte/transition";
 	import type { CopyButtonProps } from "./types";
 
@@ -48,12 +45,14 @@
 >
 	{#if clipboard.status === "success"}
 		<div in:scale={{ duration: animationDuration, start: 0.85 }}>
-			<CheckIcon tabindex={-1} />
+			<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+			<span class="icon-[lucide--check] size-4 align-middle" tabindex={-1}></span>
 			<span class="sr-only">Copied</span>
 		</div>
 	{:else if clipboard.status === "failure"}
 		<div in:scale={{ duration: animationDuration, start: 0.85 }}>
-			<XIcon tabindex={-1} />
+			<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+			<span class="icon-[lucide--x] size-4 align-middle" tabindex={-1}></span>
 			<span class="sr-only">Failed to copy</span>
 		</div>
 	{:else}
@@ -61,7 +60,8 @@
 			{#if icon}
 				{@render icon()}
 			{:else}
-				<CopyIcon tabindex={-1} />
+				<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+				<span class="icon-[lucide--copy] size-4 align-middle" tabindex={-1}></span>
 			{/if}
 			<span class="sr-only">Copy</span>
 		</div>

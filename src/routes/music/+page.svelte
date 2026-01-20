@@ -20,7 +20,6 @@
 	import { zod4Client } from "sveltekit-superforms/adapters";
 	import { createMusicIdSchema } from "./schemas";
 	import * as Alert from "$lib/components/ui/alert/index.js";
-	import { Bomb, CircleCheckBig, TrashIcon, TriangleAlert } from "@lucide/svelte";
 	import { useSession } from "$lib/session.svelte";
 	import { getMusicIds } from "$lib/api/music.remote.js";
 
@@ -53,11 +52,11 @@
 				{#if $message}
 					<Alert.Root variant={$message.type === "error" ? "destructive" : "default"}>
 						{#if $message.type === "success"}
-							<CircleCheckBig />
+							<span class="icon-[lucide--circle-check-big] size-4"></span>
 						{:else if $message.type === "warning"}
-							<TriangleAlert />
+							<span class="icon-[lucide--triangle-alert] size-4"></span>
 						{:else if $message.type === "error"}
-							<Bomb />
+							<span class="icon-[lucide--bomb] size-4"></span>
 						{/if}
 
 						<Alert.Title>{$message.title}</Alert.Title>
@@ -114,7 +113,7 @@
 												},
 												{ taint: false }
 											);
-										}}><TrashIcon /></Button
+										}}><span class="icon-[lucide--trash]"></span></Button
 									>
 								</div>
 

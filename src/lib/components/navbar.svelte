@@ -2,7 +2,6 @@
 	import { page } from "$app/state";
 	import { Sheet, SheetContent, SheetTrigger } from "$lib/components/ui/sheet/index.js";
 	import { buttonVariants } from "./ui/button";
-	import { Menu } from "@lucide/svelte";
 	import UserMenu from "./user-menu.svelte";
 	import LightSwitch from "./ui/light-switch/light-switch.svelte";
 
@@ -93,7 +92,7 @@
 							"h-9 w-9 rounded-full bg-gray-100 text-black hover:bg-gray-200 dark:bg-white/10 dark:text-white dark:hover:bg-white/20"
 					})}
 				>
-					<Menu class="h-5 w-5" />
+					<span class="icon-[lucide--menu] h-5 w-5"></span>
 				</SheetTrigger>
 				<SheetContent
 					side={"left"}

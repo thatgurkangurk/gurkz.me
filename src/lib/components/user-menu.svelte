@@ -9,7 +9,6 @@
 		DropdownMenuItem
 	} from "$lib/components/ui/dropdown-menu/index.js";
 	import { Skeleton } from "$lib/components/ui/skeleton/index.js";
-	import { LogOut, UserIcon } from "@lucide/svelte";
 	import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 	import { buttonVariants } from "./ui/button";
 	import { useSession } from "$lib/session.svelte";
@@ -42,7 +41,7 @@
 			<DropdownMenuSeparator />
 			<DropdownMenuGroup>
 				<DropdownMenuItem onclick={async () => await session.signOut()}>
-					<LogOut /> log out
+					<span class="icon-[lucide--log-out]"></span> log out
 				</DropdownMenuItem>
 			</DropdownMenuGroup>
 		</DropdownMenuContent>
@@ -56,12 +55,12 @@
 				class: "size-8 rounded-full text-black dark:text-white"
 			})}
 		>
-			<UserIcon />
+			<span class="icon-[lucide--user]"></span>
 		</DropdownMenuTrigger>
 		<DropdownMenuContent class="min-w-56 rounded-lg">
 			<DropdownMenuLabel class="p-0 font-normal">
 				<div class="flex items-center gap-2 px-1 py-1.5 text-start text-sm">
-					<UserIcon />
+					<span class="icon-[lucide--user] size-6"></span>
 					<div class="grid flex-1 text-start text-sm leading-tight">
 						<span class="truncate font-bold">welcome!</span>
 						<span class="truncate text-xs opacity-70"> please sign in </span>
@@ -71,7 +70,7 @@
 			<DropdownMenuSeparator />
 			<DropdownMenuGroup>
 				<DropdownMenuItem onclick={async () => await session.signInSocial("discord")}>
-					<LogOut /> log in
+					<span class="icon-[lucide--log-out]"></span> log in
 				</DropdownMenuItem>
 			</DropdownMenuGroup>
 		</DropdownMenuContent>
