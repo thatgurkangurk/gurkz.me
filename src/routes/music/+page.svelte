@@ -20,7 +20,7 @@
 	import { zod4Client } from "sveltekit-superforms/adapters";
 	import { createMusicIdSchema } from "./schemas";
 	import * as Alert from "$lib/components/ui/alert/index.js";
-	import { Bomb, CircleCheckBig, TriangleAlert } from "@lucide/svelte";
+	import { Bomb, CircleCheckBig, TrashIcon, TriangleAlert } from "@lucide/svelte";
 	import { useSession } from "$lib/session.svelte";
 	import { getMusicIds } from "$lib/api/music.remote.js";
 
@@ -95,13 +95,29 @@
 						<div>
 							<Field.Field data-invalid={$errors.robloxId ? "true" : undefined}>
 								<Field.Label for="tag_{i}">tag {i + 1}</Field.Label>
-								<Input
-									id="tag_{i}"
-									name="tags"
-									bind:value={$form.tags[i]}
-									aria-invalid={$errors.tags?.[i] ? "true" : undefined}
-									{...$constraints.tags}
-								/>
+								<div class="flex gap-2">
+									<Input
+										id="tag_{i}"
+										name="tags"
+										bind:value={$form.tags[i]}
+										aria-invalid={$errors.tags?.[i] ? "true" : undefined}
+										{...$constraints.tags}
+									/>
+									<Button
+										variant="destructive"
+										size="icon"
+										onclick={() => {
+											form.update(
+												($form) => {
+													$form.tags.splice(i, 1);
+													return $form;
+												},
+												{ taint: false }
+											);
+										}}><TrashIcon /></Button
+									>
+								</div>
+
 								<Field.Error>{$errors.tags?.[i]?.join(", ")}</Field.Error>
 							</Field.Field>
 						</div>
