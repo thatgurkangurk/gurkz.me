@@ -13,6 +13,7 @@
 	import { confirmDelete } from "$lib/components/ui/confirm-delete-dialog/index.js";
 	import { useSession } from "$lib/session.svelte";
 	import { deleteMusicId } from "$lib/api/music.remote";
+	import { Badge } from "$lib/components/ui/badge/index.js";
 
 	type Props = {
 		musicId: MusicIdWithCreator;
@@ -37,17 +38,27 @@
 </script>
 
 <Card class="h-full w-full">
-	<CardHeader class="flex items-center gap-2">
-		<CardTitle class="text-xl">{musicId.name}</CardTitle>
-		<Button
-			size="icon"
-			variant="ghost"
-			href="https://create.roblox.com/store/asset/{musicId.robloxId}/"
-			target="_blank"
-			rel="noopener noreferrer"
-		>
-			<SquareArrowOutUpRight />
-		</Button>
+	<CardHeader>
+		<div class="flex items-center gap-2">
+			<CardTitle class="text-xl">{musicId.name}</CardTitle>
+			<Button
+				size="icon"
+				variant="ghost"
+				href="https://create.roblox.com/store/asset/{musicId.robloxId}/"
+				target="_blank"
+				rel="noopener noreferrer"
+			>
+				<SquareArrowOutUpRight />
+			</Button>
+		</div>
+
+		{#if musicId.tags.length > 0}
+			<div class="flex gap-2 pt-2">
+				{#each musicId.tags as tag}
+					<Badge>{tag}</Badge>
+				{/each}
+			</div>
+		{/if}
 	</CardHeader>
 
 	<CardContent>
