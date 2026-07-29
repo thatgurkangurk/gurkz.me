@@ -1,4 +1,4 @@
-import { drizzle } from "drizzle-orm/bun-sql";
+import { drizzle } from "drizzle-orm/postgres-js";
 import { env } from "$lib/env";
 import * as authSchema from "./schema/auth";
 import * as musicSchema from "./schema/music";
