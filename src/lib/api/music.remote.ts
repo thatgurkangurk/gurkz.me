@@ -2,7 +2,7 @@ import * as z from "zod/v4";
 import { command, form, getRequestEvent, query } from "$app/server";
 import { error } from "@sveltejs/kit";
 import { db } from "$lib/server/db";
-import { musicIds } from "$lib/server/db/schema/music";
+import { musicIds } from "$lib/server/db/schema.js";
 import { eq } from "drizzle-orm";
 import { createMusicIdSchema } from "../../routes/music/schemas";
 
@@ -34,7 +34,7 @@ const getMusicIds = query(async () => {
 			name: true,
 			robloxId: true,
 			createdById: true,
-			created: true,
+			createdAt: true,
 			working: true,
 			tags: true
 		},

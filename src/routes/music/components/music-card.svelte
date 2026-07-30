@@ -6,7 +6,7 @@
 		CardHeader,
 		CardTitle
 	} from "$lib/components/ui/card/index.js";
-	import type { MusicIdWithCreator } from "$lib/server/db/schema/music";
+	import type { MusicIdWithCreator } from "$lib/server/db/schema.js";
 	import FormattedId from "./formatted-id.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import { confirmDelete } from "$lib/components/ui/confirm-delete-dialog/index.js";
@@ -89,7 +89,7 @@
 		<p>
 			created by <span>{musicId.creator.name}</span> on{" "}
 			<span class="whitespace-nowrap">
-				{dateFormat.format(musicId.created)}
+				{dateFormat.format(musicId.createdAt)}
 			</span>
 		</p>
 	</CardFooter>
