@@ -2,13 +2,13 @@ import { defineRelations } from "drizzle-orm";
 import * as schema from "./schema";
 
 export const relations = defineRelations(schema, (r) => ({
-	accounts: {
+	account: {
 		user: r.one.user({
 			from: r.account.userId,
 			to: r.user.id
 		})
 	},
-	users: {
+	user: {
 		accounts: r.many.account(),
 		musicIds: r.many.musicIds(),
 		sessions: r.many.session()
@@ -20,7 +20,7 @@ export const relations = defineRelations(schema, (r) => ({
 			optional: false
 		})
 	},
-	sessions: {
+	session: {
 		user: r.one.user({
 			from: r.session.userId,
 			to: r.user.id
