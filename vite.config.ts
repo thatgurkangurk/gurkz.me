@@ -18,7 +18,8 @@ export default defineConfig({
 			},
 
 			experimental: {
-				remoteFunctions: true
+				remoteFunctions: true,
+				explicitEnvironmentVariables: true
 			},
 
 			compilerOptions: {
