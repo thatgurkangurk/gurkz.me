@@ -8,8 +8,6 @@
   "devDependencies": {
     "@fontsource-variable/dm-sans": "^5.3.0",
     "@formkit/auto-animate": "^0.10.0",
-    "@iconify-json/lucide": "^1.2.120",
-    "@iconify/tailwind4": "^1.2.3",
     "@internationalized/date": "^3.12.2",
     "@lucide/svelte": "^1.27.0",
     "@sillvva/utils": "^0.9.0",

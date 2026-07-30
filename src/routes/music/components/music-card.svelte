@@ -13,6 +13,7 @@
 	import { useSession } from "$lib/session.svelte";
 	import { deleteMusicId } from "$lib/api/music.remote";
 	import { Badge } from "$lib/components/ui/badge/index.js";
+	import { SquareArrowOutUpRight } from "@lucide/svelte";
 
 	type Props = {
 		musicId: MusicIdWithCreator;
@@ -47,7 +48,7 @@
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				<span class="icon-[lucide--square-arrow-out-up-right] size-5"></span>
+				<SquareArrowOutUpRight />
 			</Button>
 		</div>
 

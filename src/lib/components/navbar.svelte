@@ -4,6 +4,7 @@
 	import { buttonVariants } from "./ui/button";
 	import UserMenu from "./user-menu.svelte";
 	import LightSwitch from "./ui/light-switch/light-switch.svelte";
+	import Menu from "@lucide/svelte/icons/menu";
 
 	type NavLinkProps = {
 		label: string;
@@ -92,7 +93,7 @@
 							"h-9 w-9 rounded-full bg-gray-100 text-black hover:bg-gray-200 dark:bg-white/10 dark:text-white dark:hover:bg-white/20"
 					})}
 				>
-					<span class="icon-[lucide--menu] h-5 w-5"></span>
+					<Menu class="h-5 w-5" />
 				</SheetTrigger>
 				<SheetContent
 					side={"left"}
