@@ -1,9 +1,27 @@
 import * as z from "zod/v4";
-import { command, getRequestEvent, query } from "$app/server";
+import { command, form, getRequestEvent, query } from "$app/server";
 import { error } from "@sveltejs/kit";
 import { db } from "$lib/server/db";
 import { musicIds } from "$lib/server/db/schema/music";
 import { eq } from "drizzle-orm";
+import { createMusicIdSchema } from "../../routes/music/schemas";
+
+const createMusicId = form(createMusicIdSchema, async (data) => {
+	const event = getRequestEvent();
+
+	if (!event.locals.user || !event.locals.user.permissions.includes("CREATE_MUSIC_IDS")) error(403);
+
+	try {
+		await db.insert(musicIds).values({
+			createdById: event.locals.user.id,
+			name: data.name,
+			tags: data.tags,
+			robloxId: data.robloxId
+		});
+	} catch (err) {
+		console.error("creating music id failed", err);
+	}
+});
 
 const getMusicIds = query(async () => {
 	const event = getRequestEvent();
@@ -69,4 +87,4 @@ const deleteMusicId = command(
 	}
 );
 
-export { deleteMusicId, getMusicIds };
+export { createMusicId, deleteMusicId, getMusicIds };
