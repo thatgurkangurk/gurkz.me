@@ -1,4 +1,4 @@
-import * as cookie from "cookie";
+import * as cookie from "npm-cookie";
 import { browser } from "$app/env";
 import { PersistedState, watch } from "runed";
 
@@ -30,7 +30,7 @@ export class CookieState<T> {
 		});
 
 		if (browser) {
-			const existingCookie = cookie.parse(document.cookie)[key];
+			const existingCookie = cookie.parseCookie(document.cookie)[key];
 			if (!existingCookie) {
 				this.#persistedState.current = initialValue;
 				return;
@@ -51,7 +51,9 @@ export class CookieState<T> {
 	}
 
 	#setCookie(key: string, value: string): void {
-		document.cookie = cookie.serialize(key, value, {
+		document.cookie = cookie.stringifySetCookie({
+			name: key,
+			value: value,
 			expires: new Date(+new Date() + 3e10)
 		});
 	}
