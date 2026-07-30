@@ -4,7 +4,7 @@ WORKDIR /app
 
 FROM base AS deps
 COPY --chown=node:node package.json pnpm-lock.yaml ./
-RUN nub install --frozen-lockfile
+RUN nub ci
 
 FROM base AS build
 ENV CI=1
