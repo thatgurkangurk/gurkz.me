@@ -17,34 +17,28 @@ jobs:
       - id: commit
         name: Commit Hash
         uses: prompt/actions-commit-hash@v3.0.0
-      - uses: actions/checkout@v3
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
+      - uses: actions/checkout@v6
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Login to GHCR
+        uses: docker/login-action@v4
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build and push (latest)
-        uses: docker/build-push-action@v6
+      - name: Build and push
+        uses: docker/build-push-action@v7
         with:
           push: true
           file: Dockerfile
           context: .
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-      - name: Build and push (commit sha)
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          file: Dockerfile
-          context: .
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.commit.outputs.short }}
-      - name: send webhook
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.commit.outputs.short }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+      - name: Trigger Deploy Webhook
         run: |
-          curl -X POST "${{ secrets.DEPLOY_WEBHOOK_URL }}" \
-            -H "Content-Type: application/json" \
-            -H "x-github-event: registry_package" \
-            -d '{"registry_package": {"package_version": {"package_url": "ghcr.io/thatgurkangurk/gurkz.me:latest"}}}'
+          curl --request POST --max-time 1 --silent '${{ secrets.DEPLOY_WEBHOOK }}' || true
