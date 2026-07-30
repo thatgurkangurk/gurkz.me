@@ -1,5 +1,5 @@
 import * as cookie from "cookie";
-import { browser } from "$app/environment";
+import { browser } from "$app/env";
 import { PersistedState, watch } from "runed";
 
 export class CookieState<T> {
