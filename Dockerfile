@@ -11,7 +11,7 @@ ENV CI=1
 COPY --chown=node:node --from=deps /app/node_modules /app/node_modules
 COPY --chown=node:node . .
 
-RUN CI="1" DATABASE_URL="postgres://changeme" nub run build
+RUN CI="1" BETTER_AUTH_SECRET="changeme" DATABASE_URL="postgres://changeme" nub run build
 
 FROM base
 
