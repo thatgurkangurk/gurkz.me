@@ -1,7 +1,7 @@
 <script lang="ts">
 	import FormatSelector from "./components/format-selector.svelte";
 	import MusicCard from "./components/music-card.svelte";
-	import { scope } from "simple:scope";
+	import { scope } from "$lib/utils/scope";
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
 	import { ConfirmDeleteDialog } from "$lib/components/ui/confirm-delete-dialog";
@@ -18,6 +18,8 @@
 	);
 
 	const session = useSession();
+
+	let id = $props.id();
 </script>
 
 <h1 class="text-3xl">music id list</h1>
@@ -32,8 +34,8 @@
 
 <div class="grid max-w-60 grid-cols-1 gap-2 pt-4">
 	<div>
-		<Label for={scope("search_filter")} class="pb-2">search</Label>
-		<Input id={scope("search_filter")} bind:value={searchFilter} />
+		<Label for={scope(id, "search_filter")} class="pb-2">search</Label>
+		<Input id={scope(id, "search_filter")} bind:value={searchFilter} />
 	</div>
 </div>
 
