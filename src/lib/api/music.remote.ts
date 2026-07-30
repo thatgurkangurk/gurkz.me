@@ -2,7 +2,7 @@ import * as z from "zod/v4";
 import { command, form, getRequestEvent, query } from "$app/server";
 import { error } from "@sveltejs/kit";
 import { db } from "$lib/server/db";
-import { musicIds } from "$lib/server/db/schema.js";
+import { musicIds } from "$lib/server/db/schema";
 import { eq } from "drizzle-orm";
 import { createMusicIdSchema } from "../../routes/music/schemas";
 

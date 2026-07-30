@@ -16,7 +16,8 @@ export const relations = defineRelations(schema, (r) => ({
 	musicIds: {
 		creator: r.one.user({
 			from: r.musicIds.createdById,
-			to: r.user.id
+			to: r.user.id,
+			optional: false
 		})
 	},
 	sessions: {
