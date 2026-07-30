@@ -42,4 +42,5 @@ export const createMusicIdSchema = z.object({
 		.max(4, {
 			error: "you can only include a maximum of 4 tags"
 		})
+		.default([])
 });

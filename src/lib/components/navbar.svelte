@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { page } from "$app/state";
-	import { Sheet, SheetContent, SheetTrigger } from "$lib/components/ui/sheet/index.js";
 	import { buttonVariants } from "./ui/button";
 	import UserMenu from "./user-menu.svelte";
 	import LightSwitch from "./ui/light-switch/light-switch.svelte";
+	import Menu from "@lucide/svelte/icons/menu";
+	import X from "@lucide/svelte/icons/x";
+	import { accordion } from "./accordion.svelte";
 
 	type NavLinkProps = {
 		label: string;
@@ -16,7 +18,26 @@
 
 	let { links }: NavbarProps = $props();
 
-	let sheetOpen = $state<boolean>(false);
+	function closeDetails(e: MouseEvent) {
+		const details = (e.currentTarget as HTMLElement).closest("details");
+		if (details) {
+			const content = details.querySelector(".details-content") as HTMLElement;
+			if (content) {
+				const anim = content.animate(
+					[
+						{ height: `${content.offsetHeight}px`, opacity: 1 },
+						{ height: "0px", opacity: 0 }
+					],
+					{ duration: 200, easing: "ease-out" }
+				);
+				anim.onfinish = () => {
+					details.open = false;
+				};
+			} else {
+				details.open = false;
+			}
+		}
+	}
 </script>
 
 {#snippet navLink(props: NavLinkProps)}
@@ -32,18 +53,16 @@
 	</a>
 {/snippet}
 
-{#snippet sheetNavLink(props: NavLinkProps)}
+{#snippet mobileNavLink(props: NavLinkProps)}
 	{@const active = page.url.pathname === props.to}
 	<a
 		href={props.to}
-		onclick={() => {
-			sheetOpen = false;
-		}}
+		onclick={closeDetails}
 		class={[
-			"px-6 py-3 text-base font-medium transition-colors hover:bg-gray-100 dark:hover:bg-white/5",
+			"block rounded-lg px-4 py-2.5 text-base transition-colors",
 			active
-				? "font-medium text-primary"
-				: "text-gray-700 hover:text-black dark:text-white/90 dark:hover:text-white"
+				? "bg-gray-100 font-medium text-primary dark:bg-white/10"
+				: "text-gray-700 hover:bg-gray-100 hover:text-black dark:text-white/90 dark:hover:bg-white/5 dark:hover:text-white"
 		]}
 	>
 		{props.label}
@@ -71,52 +90,31 @@
 			<div class="flex items-center gap-2">
 				<LightSwitch variant={"ghost"} />
 				<UserMenu />
-				<!-- <ModeToggle />
-				<UserButton size={"icon"} /> -->
 			</div>
 		</div>
 	</div>
 </nav>
 
+<!-- mobile navbar -->
 <nav class="fixed top-4 right-4 left-4 z-50 md:hidden">
-	<div
-		class="rounded-full border border-gray-200 bg-white px-4 py-3 shadow-lg backdrop-blur-sm dark:border-white/10 dark:bg-black/95"
+	<details
+		class="group rounded-2xl border border-gray-200 bg-white/95 p-3 shadow-lg backdrop-blur-md dark:border-white/10 dark:bg-black/95 [&>summary::-webkit-details-marker]:hidden"
+		{@attach accordion}
 	>
-		<div class="flex items-center justify-between">
-			<Sheet bind:open={sheetOpen}>
-				<SheetTrigger
-					class={buttonVariants({
-						variant: "ghost",
-						size: "icon",
-						class:
-							"h-9 w-9 rounded-full bg-gray-100 text-black hover:bg-gray-200 dark:bg-white/10 dark:text-white dark:hover:bg-white/20"
-					})}
-				>
-					<span class="icon-[lucide--menu] h-5 w-5"></span>
-				</SheetTrigger>
-				<SheetContent
-					side={"left"}
-					class="w-75 border-gray-200 bg-white p-0 backdrop-blur-md dark:border-white/10 dark:bg-black/98"
-				>
-					<div class="flex h-full flex-col">
-						<div
-							class="flex items-center justify-between border-b border-gray-200 px-6 py-6 dark:border-white/10"
-						>
-							<a href="/" class="flex items-center gap-2">
-								<span class="text-base font-bold tracking-wide text-black dark:text-white">
-									gurkan's website
-								</span>
-							</a>
-						</div>
-
-						<div class="flex flex-col gap-1 py-6">
-							{#each links as link}
-								{@render sheetNavLink(link)}
-							{/each}
-						</div>
-					</div>
-				</SheetContent>
-			</Sheet>
+		<summary
+			class="flex cursor-pointer list-none items-center justify-between outline-none select-none"
+		>
+			<div
+				class={buttonVariants({
+					variant: "ghost",
+					size: "icon",
+					class:
+						"pointer-events-none h-9 w-9 rounded-full bg-gray-100 text-black hover:bg-gray-200 dark:bg-white/10 dark:text-white dark:hover:bg-white/20"
+				})}
+			>
+				<Menu class="h-5 w-5 group-open:hidden" />
+				<X class="hidden h-5 w-5 group-open:block" />
+			</div>
 
 			<a href="/" class="flex items-center gap-2">
 				<span class="text-base font-bold tracking-wide text-black dark:text-white">
@@ -124,12 +122,18 @@
 				</span>
 			</a>
 
-			<div class="flex-gap flex items-center gap-2">
+			<div class="flex items-center gap-2">
 				<LightSwitch variant={"ghost"} />
 				<UserMenu />
-				<!-- <ModeToggle />
-				<UserButton size={"icon"} /> -->
+			</div>
+		</summary>
+
+		<div class="details-content overflow-hidden">
+			<div class="mt-3 flex flex-col gap-1 border-t border-gray-200 pt-3 dark:border-white/10">
+				{#each links as link}
+					{@render mobileNavLink(link)}
+				{/each}
 			</div>
 		</div>
-	</div>
+	</details>
 </nav>

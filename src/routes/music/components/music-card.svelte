@@ -6,13 +6,15 @@
 		CardHeader,
 		CardTitle
 	} from "$lib/components/ui/card/index.js";
-	import type { MusicIdWithCreator } from "$lib/server/db/schema/music";
-	import FormattedId from "./formatted-id.svelte";
+	import type { MusicIdWithCreator } from "$lib/server/db/schema.js";
 	import { Button } from "$lib/components/ui/button";
 	import { confirmDelete } from "$lib/components/ui/confirm-delete-dialog/index.js";
 	import { useSession } from "$lib/session.svelte";
 	import { deleteMusicId } from "$lib/api/music.remote";
 	import { Badge } from "$lib/components/ui/badge/index.js";
+	import { SquareArrowOutUpRight } from "@lucide/svelte";
+	import { getIdFormat } from "../context.svelte";
+	import { CopyButton } from "$lib/components/ui/copy-button";
 
 	type Props = {
 		musicId: MusicIdWithCreator;
@@ -34,6 +36,10 @@
 			musicId.createdById === user.id || user.permissions?.includes("MANAGE_MUSIC_IDS") === true
 		);
 	});
+
+	const state = getIdFormat();
+
+	const formattedId = $derived.by(() => state.format(musicId.robloxId));
 </script>
 
 <Card class="h-full w-full">
@@ -47,7 +53,7 @@
 				target="_blank"
 				rel="noopener noreferrer"
 			>
-				<span class="icon-[lucide--square-arrow-out-up-right] size-5"></span>
+				<SquareArrowOutUpRight />
 			</Button>
 		</div>
 
@@ -62,7 +68,8 @@
 
 	<CardContent>
 		<div class="flex items-center gap-2 text-xl">
-			<FormattedId robloxId={musicId.robloxId} />
+			<span>{formattedId}</span>
+			<CopyButton text={formattedId} variant={"outline"} />
 		</div>
 	</CardContent>
 	<CardFooter class="grid grid-cols-1 gap-1">
@@ -88,7 +95,7 @@
 		<p>
 			created by <span>{musicId.creator.name}</span> on{" "}
 			<span class="whitespace-nowrap">
-				{dateFormat.format(musicId.created)}
+				{dateFormat.format(musicId.createdAt)}
 			</span>
 		</p>
 	</CardFooter>
