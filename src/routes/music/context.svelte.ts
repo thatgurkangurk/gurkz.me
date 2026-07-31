@@ -4,6 +4,16 @@ import { createContext } from "svelte";
 
 export const idFormatSchema = z.optional(z.enum(["DEFAULT", "TRAITOR_TOWN"])).default("DEFAULT");
 
+export const ID_FORMAT_LABELS: Record<IdFormat, string> = {
+	DEFAULT: "default",
+	TRAITOR_TOWN: "traitor town"
+};
+
+export const ID_FORMAT_OPTIONS = (Object.keys(ID_FORMAT_LABELS) as IdFormat[]).map((value) => ({
+	value,
+	label: ID_FORMAT_LABELS[value]
+}));
+
 export type IdFormat = z.infer<typeof idFormatSchema>;
 
 export class IdFormatState {
