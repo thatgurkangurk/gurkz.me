@@ -12,8 +12,11 @@
 
 <div
 	bind:this={ref}
-	data-slot="field-content"
-	class={cn("gap-0.5 group/field-content flex flex-1 flex-col leading-snug", className)}
+	data-slot="avatar-group"
+	class={cn(
+		"cn-avatar-group group/avatar-group flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background",
+		className
+	)}
 	{...restProps}
 >
 	{@render children?.()}
