@@ -19,7 +19,6 @@
 		form: createMusicId,
 		formEl,
 		schema: createMusicIdSchema,
-		initialErrors: true,
 		navBlockMessage: "you have unsaved changes. are you sure?",
 		onresult: ({ success, error }) => {
 			if (success) {
@@ -85,6 +84,8 @@
 				/>
 			</div>
 
+			<br />
+
 			<div {@attach autoAnimate({ duration: 150 })}>
 				{#each tags, idx (idx)}
 					<div class="py-2">
@@ -119,16 +120,18 @@
 				{/each}
 			</div>
 
-			<Button type="button" disabled={tags.length >= 4} onclick={addTag}>add tag</Button>
+			<div class="flex flex-row gap-2 py-2">
+				<Button type="button" disabled={tags.length >= 4} onclick={addTag}>add tag</Button>
 
-			<Button
-				type="button"
-				variant="destructive"
-				disabled={tags.length === 0}
-				onclick={removeAllTags}
-			>
-				remove all tags
-			</Button>
+				<Button
+					type="button"
+					variant="destructive"
+					disabled={tags.length === 0}
+					onclick={removeAllTags}
+				>
+					remove all tags
+				</Button>
+			</div>
 
 			<Button type="submit" disabled={submitting}>submit</Button>
 		</form>
