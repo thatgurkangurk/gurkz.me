@@ -9,22 +9,7 @@
 	import { Checkbox } from "$lib/components/ui/checkbox";
 	import { Progress } from "$lib/components/ui/progress";
 	import { Badge } from "$lib/components/ui/badge";
-
-	type ModStatus = {
-		id: string;
-		name: string | null;
-		supports_target_version: boolean;
-		latest_supported_version: string | null;
-		modrinth_url: string | null;
-	};
-
-	type ModpackCheckReport = {
-		target_minecraft_version: string;
-		total_mods: number;
-		supported_mods_count: number;
-		percentage_supported: number;
-		mods: ModStatus[];
-	};
+	import type { ModpackCheckReport } from "@thatgurkangurk/awty";
 
 	let mode = $state<"packwiz" | "list">("packwiz");
 	let targetVersion = $state("26.2");
@@ -58,11 +43,7 @@
 
 				const activeProxy = useProxy && proxyUrl.trim() ? proxyUrl.trim() : null;
 
-				report = (await check_packwiz_wasm(
-					packUrl.trim(),
-					targetVersion.trim(),
-					activeProxy
-				)) as ModpackCheckReport;
+				report = await check_packwiz_wasm(packUrl.trim(), targetVersion.trim(), activeProxy);
 			} else {
 				const ids = rawModList
 					.split(/[\n,]+/)
@@ -71,7 +52,7 @@
 
 				if (ids.length === 0) throw new Error("please enter at least one mod id");
 
-				report = (await check_mod_list_wasm(ids, targetVersion.trim())) as ModpackCheckReport;
+				report = await check_mod_list_wasm(ids, targetVersion.trim());
 			}
 		} catch (err: any) {
 			error = err?.message || String(err) || "failed to complete version check.";

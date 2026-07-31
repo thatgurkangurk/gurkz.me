@@ -39,8 +39,8 @@ importers:
         specifier: ^4.3.3
         version: 4.3.3(vite@8.2.0(@types/node@26.1.2)(jiti@2.7.0))
       '@thatgurkangurk/awty':
-        specifier: ^0.7.0
-        version: 0.7.0
+        specifier: ^0.7.1
+        version: 0.7.1
       '@types/node':
         specifier: ^26.1.2
         version: 26.1.2
@@ -1071,8 +1071,8 @@ packages:
     peerDependencies:
       vite: ^5.2.0 || ^6 || ^7 || ^8
 
-  '@thatgurkangurk/awty@0.7.0':
-    resolution: {integrity: sha512-0h0OfitBES524Rj8flpoHXsmNkMUba9JAPSpeOh0s7rptnbHdSnU+OSSNczzza7wNRXwd+MXUu6Glzg53K8eXw==}
+  '@thatgurkangurk/awty@0.7.1':
+    resolution: {integrity: sha512-7Zb6ddZ9hB6TtqRkmdrzF80SdTYdshhgBc5wfMBCbAZ0LxkXa8uxthU1Qc+0D3ytVoUYcZHo/xQ+vfYY7CGV3g==}
 
   '@tybys/wasm-util@0.10.3':
     resolution: {integrity: sha512-F3fo1MYrRJYL3zER0OUOmkutjr1Vp23m7OsSgp7nq4SP6OqX6C/56XFIPAl5bt3zaBRjmW7SGz3u/6LwFpYcOg==}
@@ -3000,7 +3000,7 @@ snapshots:
       tailwindcss: 4.3.3
       vite: 8.2.0(@types/node@26.1.2)(jiti@2.7.0)
 
-  '@thatgurkangurk/awty@0.7.0': {}
+  '@thatgurkangurk/awty@0.7.1': {}
 
   '@tybys/wasm-util@0.10.3':
     dependencies:
