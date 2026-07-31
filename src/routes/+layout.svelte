@@ -23,31 +23,25 @@
 
 <ModeWatcher />
 
-<Navbar
-	links={[
-		{
-			label: "home",
-			to: "/"
-		},
-		{
-			label: "music id list",
-			to: "/music"
-		},
-		{
-			label: "misc",
-			to: "/misc"
-		}
-	]}
-/>
+<div class="min-h-screen bg-gray-950">
+	<Navbar
+		links={[
+			{
+				label: "home",
+				to: "/"
+			},
+			{
+				label: "music id list",
+				to: "/music"
+			},
+			{
+				label: "misc",
+				to: "/misc"
+			}
+		]}
+	/>
 
-<div class="mt-20 w-full bg-amber-400 text-black">
-	<p>
-		hello! we are reorganising a bit, so some stuff may not exist, or may not work. thank you for
-		your patience &lt;3
-	</p>
+	<main class="mt-20 grow px-4 pt-2">
+		{@render children()}
+	</main>
 </div>
-
-<main class="grow px-4 pt-2">
-	<!-- TODO: MAKE THIS MT-20 WHEN REMOVING THE NOTICE -->
-	{@render children()}
-</main>

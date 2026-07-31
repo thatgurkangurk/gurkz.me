@@ -38,7 +38,7 @@
 	--sidebar-accent-foreground: oklch(0.218 0.008 223.9);
 	--sidebar-border: oklch(0.925 0.005 214.3);
 	--sidebar-ring: oklch(0.723 0.014 214.4);
-	--radius: 0.625rem;
+	--radius: 0.45rem;
 	--shadow-x: 0px;
 	--shadow-y: 4px;
 	--shadow-blur: 8px;
@@ -64,7 +64,7 @@
 	--card-foreground: oklch(0.987 0.002 197.1);
 	--popover: oklch(0.218 0.008 223.9);
 	--popover-foreground: oklch(0.987 0.002 197.1);
-	--primary: oklch(0.432 0.095 166.913);
+	--primary: oklch(59.061% 0.12478 163.972);
 	--primary-foreground: oklch(0.979 0.021 166.113);
 	--secondary: oklch(0.274 0.006 286.033);
 	--secondary-foreground: oklch(0.985 0 0);
@@ -144,7 +144,7 @@
 	--color-sidebar-border: var(--sidebar-border);
 	--color-sidebar-ring: var(--sidebar-ring);
 
-	--font-sans: 'DM Sans Variable', sans-serif;
+	--font-sans: "DM Sans Variable", sans-serif;
 	--font-mono: var(--font-mono);
 	--font-serif: var(--font-serif);
 
