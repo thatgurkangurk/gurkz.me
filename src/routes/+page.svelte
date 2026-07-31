@@ -99,6 +99,7 @@
 			>
 				<ExternalLink /> view source on GitHub
 			</Button>
+			<Button variant="link" href="/awty">web version</Button>
 		</CardFooter>
 	</Card>
 </div>
