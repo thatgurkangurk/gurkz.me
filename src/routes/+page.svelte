@@ -17,7 +17,7 @@
 <br />
 <p>here are some of them:</p>
 
-<div class="grid grid-cols-2 gap-4 md:grid-cols-3">
+<div class="grid grid-cols-1 gap-4 md:grid-cols-3">
 	<Card class="flex h-full flex-col">
 		<CardHeader>
 			<CardTitle>traitor town core</CardTitle>
