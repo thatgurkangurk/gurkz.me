@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/state";
+	import { useSession } from "$lib/session.svelte";
 	import { buttonVariants } from "./ui/button";
 	import UserMenu from "./user-menu.svelte";
 	import LightSwitch from "./ui/light-switch/light-switch.svelte";
@@ -17,6 +18,8 @@
 	};
 
 	let { links }: NavbarProps = $props();
+
+	const session = useSession();
 
 	function closeDetails(e: MouseEvent) {
 		const details = (e.currentTarget as HTMLElement).closest("details");
@@ -85,6 +88,10 @@
 				{#each links as link}
 					{@render navLink(link)}
 				{/each}
+
+				{#if session.current?.user.admin}
+					{@render navLink({ label: "admin", to: "/admin" })}
+				{/if}
 			</div>
 
 			<div class="flex items-center gap-2">
@@ -133,6 +140,10 @@
 				{#each links as link}
 					{@render mobileNavLink(link)}
 				{/each}
+
+				{#if session.current?.user.admin}
+					{@render mobileNavLink({ label: "admin", to: "/admin" })}
+				{/if}
 			</div>
 		</div>
 	</details>

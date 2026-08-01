@@ -1,8 +1,7 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { admin } from "better-auth/plugins";
 import { sveltekitCookies } from "better-auth/svelte-kit";
-import { Permissions } from "$lib/permissions";
+import { Permissions, type Permission } from "$lib/permissions";
 import { db } from "$lib/server/db";
 import { getRequestEvent } from "$app/server";
 import * as env from "$app/env/private";
@@ -18,7 +17,7 @@ export const auth = betterAuth({
 			ipAddressHeaders: ["cf-connecting-ip"] // CF
 		}
 	},
-	plugins: [admin(), sveltekitCookies(getRequestEvent)],
+	plugins: [sveltekitCookies(getRequestEvent)],
 	socialProviders: {
 		discord: {
 			clientId: env.DISCORD_CLIENT_ID,
@@ -54,8 +53,19 @@ export const auth = betterAuth({
 					input: Permissions.array(),
 					output: Permissions.array()
 				}
+			},
+			admin: {
+				type: "boolean",
+				required: true,
+				defaultValue: false,
+				input: false
 			}
 		}
 	},
 	secret: env.BETTER_AUTH_SECRET
 });
+
+export type User = Omit<typeof auth.$Infer.Session.user, "permissions"> & {
+	permissions: Permission[];
+};
+export type Session = typeof auth.$Infer.Session.session;

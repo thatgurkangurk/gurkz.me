@@ -100,7 +100,8 @@ export const user = pgTable(
 		permissions: permissionsEnum()
 			.array()
 			.default(sql`ARRAY['DEFAULT'::permission]`)
-			.notNull()
+			.notNull(),
+		admin: boolean("admin").default(false).notNull()
 	},
 	(table) => [unique("user_email_unique").on(table.email)]
 );
