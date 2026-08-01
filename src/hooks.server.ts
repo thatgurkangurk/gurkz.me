@@ -1,7 +1,7 @@
 import type { Handle } from "@sveltejs/kit";
 import { auth } from "$lib/server/auth.js";
 import { svelteKitHandler } from "better-auth/svelte-kit";
-import { building } from "$app/environment";
+import { building } from "$app/env";
 import type { User } from "$lib/auth";
 
 export const handle: Handle = async ({ event, resolve }) => {
