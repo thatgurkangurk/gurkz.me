@@ -12,19 +12,10 @@ export function load({ cookies }) {
 
 	const parsedCookie = parseJson().match(
 		(value) => value,
-		() => {
-			cookies.set("id_format", JSON.stringify("DEFAULT"), {
-				maxAge: new Date(+new Date() + 3e10).getSeconds(), // 1 year
-				path: "/",
-				httpOnly: false,
-				sameSite: "lax"
-			});
-			return "DEFAULT" as const;
-		}
+		() => "DEFAULT" as const
 	);
 
 	const parseResult = z.safeParse(idFormatSchema, parsedCookie);
-
 	const idFormat: IdFormat = parseResult.success ? parseResult.data : "DEFAULT";
 
 	return { idFormat };

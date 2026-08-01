@@ -1,0 +1,31 @@
+{
+    "consentModal": {
+        "title": "we use cookies",
+        "description": "we use cookies to make your experience better, and to remember your preferences. we have no analytical cookies. do you accept this?",
+        "acceptAllBtn": "accept all",
+        "acceptNecessaryBtn": "reject all",
+        "showPreferencesBtn": "manage preferences"
+    },
+    "preferencesModal": {
+        "title": "cookie preferences",
+        "acceptAllBtn": "accept all",
+        "acceptNecessaryBtn": "reject all",
+        "savePreferencesBtn": "save preferences",
+        "closeIconLabel": "close",
+        "sections": [
+            {
+                "title": "cookie usage",
+                "description": "we use cookies to make your experience better, and to remember your preferences. we have no analytical cookies. do you accept this?"
+            },
+            {
+                "title": "preferences cookies",
+                "description": "these cookies allow the website to remember the choices you have made in the past",
+                "linkedCategory": "preferences"
+            },
+            {
+                "title": "more information",
+                "description": "for any questions in relation to our policy on cookies and your choices, you can <a class=\"cc-link\" href=\"mailto:hello@gurkz.me\">contact me</a>."
+            }
+        ]
+    }
+}

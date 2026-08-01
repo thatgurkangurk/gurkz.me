@@ -1,12 +1,15 @@
 <script lang="ts">
 	import { page } from "$app/state";
 	import { useSession } from "$lib/session.svelte";
-	import { buttonVariants } from "./ui/button";
+	import { Button, buttonVariants } from "./ui/button";
 	import UserMenu from "./user-menu.svelte";
 	import LightSwitch from "./ui/light-switch/light-switch.svelte";
 	import Menu from "@lucide/svelte/icons/menu";
 	import X from "@lucide/svelte/icons/x";
 	import { accordion } from "./accordion.svelte";
+	import { Cookie } from "@lucide/svelte";
+	import { sizeMap } from "./button.svelte";
+	import { showPreferences } from "$lib/cookie-consent.js";
 
 	type NavLinkProps = {
 		label: string;
@@ -95,6 +98,14 @@
 			</div>
 
 			<div class="flex items-center gap-2">
+				<Button
+					type="button"
+					onclick={showPreferences}
+					variant="ghost"
+					size={sizeMap["default"].icon}
+				>
+					<Cookie />
+				</Button>
 				<LightSwitch variant={"ghost"} />
 				<UserMenu />
 			</div>
@@ -130,6 +141,14 @@
 			</a>
 
 			<div class="flex items-center gap-2">
+				<Button
+					type="button"
+					onclick={showPreferences}
+					variant="ghost"
+					size={sizeMap["default"].icon}
+				>
+					<Cookie />
+				</Button>
 				<LightSwitch variant={"ghost"} />
 				<UserMenu />
 			</div>

@@ -1,78 +1,56 @@
 import * as cookie from "npm-cookie";
 import { browser } from "$app/env";
-import { PersistedState, watch } from "runed";
+import { getUserPreferences } from "./cookie-consent";
 
 export class CookieState<T> {
 	#key: string;
-	#persistedState: PersistedState<T>;
+	#value = $state() as T;
 
 	constructor(key: string, initialValue: T) {
 		this.#key = key;
-		this.#persistedState = new PersistedState(this.#key, initialValue);
-
-		watch.pre([() => this.#persistedState, () => this.#persistedState.current], (e) => {
-			let localStorageItem;
-			try {
-				localStorageItem = JSON.parse(localStorage.getItem(this.#key) ?? `""`);
-			} catch (error) {
-				console.error(`Error parsing localStorage item "${this.#key}":`, error);
-				localStorageItem = null;
-			}
-
-			if (localStorageItem !== this.#persistedState.current) {
-				console.warn("local storage and cookie isn't synchronised. syncing them now");
-				console.dir({
-					localStorage: localStorageItem,
-					cookie: this.#persistedState.current
-				});
-				localStorage.setItem(this.#key, JSON.stringify(this.#persistedState.current));
-			}
-		});
+		this.#value = initialValue;
 
 		if (browser) {
 			const existingCookie = cookie.parseCookie(document.cookie)[key];
-			if (!existingCookie) {
-				this.#persistedState.current = initialValue;
-				return;
+			if (existingCookie) {
+				try {
+					this.#value = JSON.parse(existingCookie);
+				} catch (error) {
+					console.error(`Error parsing cookie "${key}":`, error);
+				}
 			}
-
-			try {
-				const parsedResult = JSON.parse(existingCookie);
-				this.#persistedState.current = parsedResult;
-			} catch (error) {
-				console.error(`Error parsing cookie "${key}":`, error);
-				this.#persistedState.current = initialValue;
-			}
-
-			return;
 		}
-
-		this.#persistedState.current = initialValue;
 	}
 
 	#setCookie(key: string, value: string): void {
 		document.cookie = cookie.stringifySetCookie({
 			name: key,
 			value: value,
-			expires: new Date(+new Date() + 3e10)
+			expires: new Date(+new Date() + 3e10),
+			path: "/"
 		});
 	}
 
-	get current() {
-		return this.#persistedState.current;
+	get current(): T {
+		return this.#value;
 	}
+
 	set current(newValue: T) {
-		this.#persistedState.current = newValue;
-		this.#serialize(newValue);
+		this.#value = newValue;
+
+		const hasPreferenceConsent =
+			browser && getUserPreferences().acceptedCategories.includes("preferences");
+		if (hasPreferenceConsent) {
+			this.#serialize(newValue);
+		}
 	}
 
 	#serialize(value: T): void {
 		try {
 			const serialized = JSON.stringify(value);
 			this.#setCookie(this.#key, serialized);
-			localStorage.setItem(this.#key, serialized);
 		} catch (error) {
-			console.error(`Error when writing value from persisted store "${this.#key}"`, error);
+			console.error(`Error when writing cookie "${this.#key}"`, error);
 		}
 	}
 }

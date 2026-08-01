@@ -7,12 +7,39 @@
 	import { SessionState, setSession } from "$lib/session.svelte";
 	import type { LayoutProps } from "./$types";
 
+	import "vanilla-cookieconsent/dist/cookieconsent.css";
+	import { run } from "$lib/cookie-consent.js";
+
 	const { children, data }: LayoutProps = $props();
 
 	// svelte-ignore state_referenced_locally
 	let sessionState = new SessionState($state.snapshot(data.session));
 
 	setSession(sessionState);
+
+	$effect(() => {
+		run({
+			language: {
+				default: "en",
+				translations: {
+					en: "./en.json"
+				}
+			},
+			categories: {
+				preferences: {
+					enabled: true,
+					autoClear: {
+						cookies: [
+							{
+								name: "id_format",
+								path: "/"
+							}
+						]
+					}
+				}
+			}
+		});
+	});
 
 	$effect(() => {
 		configure();
