@@ -1,21 +1,15 @@
-import type { auth } from "$lib/server/auth";
-import * as z from "zod/v4";
-import { Permissions } from "./permissions";
+import type { User, Session } from "$lib/server/auth";
 
-export const userSchema = z.object({
-	id: z.string(),
-	createdAt: z.date(),
-	updatedAt: z.date(),
-	email: z.string(),
-	emailVerified: z.boolean(),
-	name: z.string(),
-	image: z.string().nullable().optional(),
-	permissions: Permissions.array(),
-	banned: z.boolean().nullable().optional(),
-	role: z.string().nullable().optional(),
-	banReason: z.string().nullable().optional(),
-	banExpires: z.date().nullable().optional()
-});
+/**
+ * @deprecated use `User` directly from `$lib/server/auth` instead.
+ * @see {@link User}
+ */
+type DeprecatedUser = User;
 
-export type User = z.infer<typeof userSchema>;
-export type Session = typeof auth.$Infer.Session.session;
+/**
+ * @deprecated use `Session` directly from `$lib/server/auth` instead.
+ * @see {@link Session}
+ */
+type DeprecatedSession = Session;
+
+export type { DeprecatedUser as User, DeprecatedSession as Session };

@@ -1,11 +1,10 @@
 import { invalidateAll } from "$app/navigation";
 import { page } from "$app/state";
-import { type User, type Session } from "$lib/auth.js";
+import type { User, Session, auth } from "$lib/server/auth.js";
 import type { SocialProvider } from "better-auth";
-import { adminClient, inferAdditionalFields } from "better-auth/client/plugins";
+import { inferAdditionalFields } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/svelte";
 import { createContext } from "svelte";
-import type { auth } from "./server/auth";
 import { fromStore } from "svelte/store";
 
 export class SessionState {
@@ -14,18 +13,22 @@ export class SessionState {
 		user: User;
 	} | null = $state(null);
 	public readonly authClient;
+	public readonly refresh: () => Promise<void>;
 
 	constructor(
 		sessionData: {
 			session: Session;
-			user: typeof auth.$Infer.Session.user;
+			user: User;
 		} | null
 	) {
 		this.current = sessionData as { user: User; session: Session } | null;
 		this.authClient = createAuthClient({
-			plugins: [inferAdditionalFields<typeof auth>(), adminClient()]
+			plugins: [inferAdditionalFields<typeof auth>()]
 		});
+
 		const rawSession = fromStore(this.authClient.useSession());
+
+		this.refresh = rawSession.current.refetch;
 
 		$effect(() => {
 			if (rawSession.current.isPending) return;
@@ -42,7 +45,7 @@ export class SessionState {
 	async signInSocial(provider: SocialProvider) {
 		return await this.authClient.signIn.social({
 			provider: provider,
-			callbackURL: page.route.id?.toString()
+			callbackURL: page.url.pathname?.toString()
 		});
 	}
 }

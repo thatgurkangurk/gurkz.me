@@ -19,6 +19,7 @@
     "@thatgurkangurk/awty": "^0.7.1",
     "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^26.1.2",
+    "auth": "^1.6.25",
     "better-auth": "^1.6.25",
     "bits-ui": "^2.18.1",
     "canvas-confetti": "^1.9.4",
@@ -74,7 +75,8 @@
     "db:push": "nub node_modules/drizzle-kit/bin.cjs --config ./drizzle.config.ts push",
     "db:generate": "nub node_modules/drizzle-kit/bin.cjs --config ./drizzle.config.ts generate",
     "db:migrate": "nub node_modules/drizzle-kit/bin.cjs --config ./drizzle.config.ts migrate",
-    "db:studio": "nub node_modules/drizzle-kit/bin.cjs --config ./drizzle.config.ts studio"
+    "db:studio": "nub node_modules/drizzle-kit/bin.cjs --config ./drizzle.config.ts studio",
+    "auth:schema": "auth generate --config ./src/lib/server/auth.ts --output ./src/lib/server/db/auth.ts --yes"
   },
   "type": "module",
   "packageManager": "pnpm@11.18.0+sha512.33d83c77da82f49fba836925c6f1b841181ec3132b670639bd012f7075f5c7cf634c5f870147c19aae7478fac01df09d8892e880454896edd23ee9b33757563c",
