@@ -10,6 +10,7 @@
 	import { Progress } from "$lib/components/ui/progress";
 	import { Badge } from "$lib/components/ui/badge";
 	import type { ModpackCheckReport } from "@thatgurkangurk/awty";
+	import confetti from "canvas-confetti";
 
 	let mode = $state<"packwiz" | "list">("packwiz");
 	let targetVersion = $state("26.2");
@@ -25,6 +26,64 @@
 	let report = $state<ModpackCheckReport | null>(null);
 
 	let formattedPercentage = $derived(report ? Math.round(report.percentage_supported) : 0);
+
+	let checkButton = $state<HTMLButtonElement | null>(null);
+
+	let checkButtonPosition = $derived.by(() => {
+		if (!checkButton) return { x: 0.5, y: 0.5 };
+
+		const rect = checkButton.getBoundingClientRect();
+		return {
+			x: (rect.left + rect.width / 2) / window.innerWidth,
+			y: (rect.top + rect.height / 2) / window.innerHeight
+		};
+	});
+
+	let confettiDefaults = $derived.by(() => {
+		return {
+			origin: {
+				x: checkButtonPosition.x,
+				y: checkButtonPosition.y
+			},
+			disableForReducedMotion: true
+		} satisfies confetti.Options;
+	});
+
+	function fire(particleRatio: number, opts: confetti.Options) {
+		confetti({
+			...confettiDefaults,
+			...opts,
+			particleCount: Math.floor(300 * particleRatio)
+		});
+	}
+
+	$effect(() => {
+		console.log(formattedPercentage);
+		if (formattedPercentage === 100 && checkButton) {
+			fire(0.25, {
+				spread: 26,
+				startVelocity: 55
+			});
+			fire(0.2, {
+				spread: 60
+			});
+			fire(0.35, {
+				spread: 100,
+				decay: 0.91,
+				scalar: 0.8
+			});
+			fire(0.1, {
+				spread: 120,
+				startVelocity: 25,
+				decay: 0.92,
+				scalar: 1.2
+			});
+			fire(0.1, {
+				spread: 120,
+				startVelocity: 45
+			});
+		}
+	});
 
 	async function handleCheck(e: SubmitEvent) {
 		e.preventDefault();
@@ -139,7 +198,7 @@
 						</div>
 					{/if}
 
-					<Button type="submit" class="w-full" disabled={isLoading}>
+					<Button bind:ref={checkButton} type="submit" class="w-full" disabled={isLoading}>
 						{#if isLoading}
 							{statusMessage}
 						{:else}
