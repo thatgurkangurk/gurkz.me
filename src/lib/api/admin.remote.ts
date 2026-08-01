@@ -50,7 +50,6 @@ export const getUserById = query(z.string(), async (userId) => {
 
 export const setUserPermissions = form(SetUserPermissions, async (data) => {
 	adminOnlyGuard();
-
 	const { userId, ...permissionFlags } = data;
 
 	const activePermissions = (Object.entries(permissionFlags) as [NonDefaultPermission, boolean][])
@@ -72,6 +71,12 @@ export const setUserPermissions = form(SetUserPermissions, async (data) => {
 			permissions: user.permissions,
 			image: user.image
 		});
+
+	if (!newUser) {
+		error(404, {
+			message: "could not find that user"
+		});
+	}
 
 	getUserById(newUser.id).set(newUser);
 	getUsers().refresh();
