@@ -9,8 +9,9 @@ export async function GET({ url, locals }) {
 			message: "please sign in to continue"
 		});
 
-	const rawVideoUrl = url.searchParams.get("videoUrl");
+	const ALLOWED_HOSTS = new Set(["cdn.medal.tv", "medal.tv"]);
 
+	const rawVideoUrl = url.searchParams.get("videoUrl");
 	const validationResult = z.safeParse(urlSchema, rawVideoUrl);
 
 	if (!validationResult.success) {
@@ -19,6 +20,12 @@ export async function GET({ url, locals }) {
 	}
 
 	const videoUrl = validationResult.data;
+	const parsedTarget = new URL(videoUrl);
+
+	if (parsedTarget.protocol !== "https:") throw error(400, "only https urls are allowed");
+
+	if (!ALLOWED_HOSTS.has(parsedTarget.hostname) && !parsedTarget.hostname.endsWith(".medal.tv"))
+		throw error(400, "this host is not allowed");
 
 	try {
 		const videoRes = await fetch(videoUrl);
