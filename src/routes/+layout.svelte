@@ -22,7 +22,7 @@
 			language: {
 				default: "en",
 				translations: {
-					en: "./en.json"
+					en: "/en.json"
 				}
 			},
 			categories: {

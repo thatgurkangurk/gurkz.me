@@ -1,14 +1,34 @@
 <script lang="ts">
+	import {
+		Breadcrumb,
+		BreadcrumbItem,
+		BreadcrumbLink,
+		BreadcrumbList,
+		BreadcrumbSeparator,
+		BreadcrumbPage
+	} from "$lib/components/ui/breadcrumb/index.js";
 	import { resolve } from "$app/paths";
-	import { listVideos } from "$lib/api/ttcore/videos.remote";
+	import { getVideos } from "$lib/api/ttcore/videos.remote";
 
 	import { Button } from "$lib/components/ui/button/index.js";
 
-	const videos = $derived(await listVideos());
+	const videos = $derived(await getVideos());
 
 	const openVideos = $derived.by(() => videos.filter((v) => v.submissionsOpen));
 	const closedVideos = $derived.by(() => videos.filter((v) => !v.submissionsOpen));
 </script>
+
+<Breadcrumb>
+	<BreadcrumbList>
+		<BreadcrumbItem>
+			<BreadcrumbLink href="/">home</BreadcrumbLink>
+		</BreadcrumbItem>
+		<BreadcrumbSeparator />
+		<BreadcrumbItem>
+			<BreadcrumbPage>traitor town core</BreadcrumbPage>
+		</BreadcrumbItem>
+	</BreadcrumbList>
+</Breadcrumb>
 
 <h1 class="text-3xl font-bold tracking-tight md:text-4xl">traitor town core</h1>
 
