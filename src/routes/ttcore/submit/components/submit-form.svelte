@@ -224,6 +224,7 @@
 				onclick={() => form.fields.profileOverride.set("")}
 				variant="destructive"
 				size="icon"
+				disabled={form.fields.profileOverride.value() === ""}
 			>
 				<Trash2 />
 			</Button>
