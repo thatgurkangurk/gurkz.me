@@ -219,7 +219,12 @@
 				{/each}
 			</NativeSelect>
 
-			<Button onclick={() => form.fields.profileOverride.set("")} variant="destructive" size="icon">
+			<Button
+				type="button"
+				onclick={() => form.fields.profileOverride.set("")}
+				variant="destructive"
+				size="icon"
+			>
 				<Trash2 />
 			</Button>
 		</div>
@@ -241,6 +246,7 @@
 			</NativeSelect>
 
 			<Button
+				type="button"
 				onclick={() => form.fields.userOverride.set("")}
 				variant="destructive"
 				size="icon"
