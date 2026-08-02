@@ -76,7 +76,7 @@
 
 		{const date = await getDateOfLastSubmissionForVideoByCurrentUser(data.details.id)}
 
-		{#if (!date || date > data.details.messageUpdatedAt!) && !isMessageDismissed}
+		{#if (!date || date < data.details.messageUpdatedAt!) && !isMessageDismissed}
 			<br />
 			<Card>
 				<CardHeader>
