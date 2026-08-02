@@ -62,6 +62,10 @@
 				to: "/music"
 			},
 			{
+				label: "ttcore",
+				to: "/ttcore"
+			},
+			{
 				label: "misc",
 				to: "/misc"
 			}

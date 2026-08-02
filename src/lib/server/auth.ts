@@ -6,6 +6,7 @@ import { db } from "$lib/server/db";
 import { getRequestEvent } from "$app/server";
 import * as env from "$app/env/private";
 import * as schema from "$lib/server/db/schema.js";
+import { apiKey } from "@better-auth/api-key";
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
@@ -17,16 +18,17 @@ export const auth = betterAuth({
 			ipAddressHeaders: ["cf-connecting-ip"] // CF
 		}
 	},
-	plugins: [sveltekitCookies(getRequestEvent)],
+	plugins: [apiKey(), sveltekitCookies(getRequestEvent)],
 	socialProviders: {
 		discord: {
 			clientId: env.DISCORD_CLIENT_ID,
 			clientSecret: env.DISCORD_CLIENT_SECRET,
 			prompt: "consent",
 			overrideUserInfoOnSignIn: true,
-			mapProfileToUser: (profile) => {
+			mapProfileToUser: async (profile) => {
 				return {
-					name: profile.username
+					username: profile.username,
+					name: profile.global_name || profile.username
 				};
 			}
 		},
@@ -34,8 +36,9 @@ export const auth = betterAuth({
 			clientId: env.GITHUB_CLIENT_ID,
 			clientSecret: env.GITHUB_CLIENT_SECRET,
 			prompt: "consent",
-			mapProfileToUser: (profile) => {
+			mapProfileToUser: async (profile) => {
 				return {
+					username: profile.login,
 					name: profile.name
 				};
 			}
@@ -43,6 +46,12 @@ export const auth = betterAuth({
 	},
 	user: {
 		additionalFields: {
+			username: {
+				type: "string",
+				unique: true,
+				required: true,
+				input: false
+			},
 			permissions: {
 				type: "string[]",
 				required: true,
