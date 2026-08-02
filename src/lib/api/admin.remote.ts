@@ -19,7 +19,8 @@ export const getUsers = query(async () => {
 			name: true,
 			email: true,
 			permissions: true,
-			image: true
+			image: true,
+			username: true
 		}
 	});
 	return allUsers;

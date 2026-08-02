@@ -1,29 +1,34 @@
 import { defineRelations } from "drizzle-orm";
-import * as schema from "./schema";
+import { schema } from "./schema.js";
 
 export const relations = defineRelations(schema, (r) => ({
-	account: {
-		user: r.one.user({
-			from: r.account.userId,
+	user: {
+		musicIds: r.many.musicIds(),
+		clips: r.many.clip()
+	},
+	clip: {
+		creator: r.one.user({
+			from: r.clip.createdById,
 			to: r.user.id
+		}),
+		video: r.one.video({
+			from: r.clip.videoId,
+			to: r.video.id
+		}),
+		overriddenProfileData: r.one.profile({
+			optional: true,
+			from: r.clip.overriddenProfileDataId,
+			to: r.profile.id
 		})
 	},
-	user: {
-		accounts: r.many.account(),
-		musicIds: r.many.musicIds(),
-		sessions: r.many.session()
+	video: {
+		clips: r.many.clip()
 	},
 	musicIds: {
 		creator: r.one.user({
 			from: r.musicIds.createdById,
 			to: r.user.id,
 			optional: false
-		})
-	},
-	session: {
-		user: r.one.user({
-			from: r.session.userId,
-			to: r.user.id
 		})
 	}
 }));

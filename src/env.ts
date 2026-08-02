@@ -32,5 +32,11 @@ export const variables = defineEnvVars({
 	},
 	GITHUB_CLIENT_SECRET: {
 		schema: skipInCI(z.string())
+	},
+	DISCORD_WEBHOOK_URL: {
+		schema: skipInCI(z.optional(z.url()))
+	},
+	DOWNLOAD_URL: {
+		schema: skipInCI(z.url())
 	}
 });

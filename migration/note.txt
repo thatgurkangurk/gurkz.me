@@ -1,0 +1,5 @@
+this was migrating in the ttcore database into this one
+
+please do not try running this
+
+manual migration is also necessary in some instances

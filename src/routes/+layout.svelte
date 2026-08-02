@@ -22,7 +22,7 @@
 			language: {
 				default: "en",
 				translations: {
-					en: "./en.json"
+					en: "/en.json"
 				}
 			},
 			categories: {
@@ -60,6 +60,10 @@
 			{
 				label: "music id list",
 				to: "/music"
+			},
+			{
+				label: "ttcore",
+				to: "/ttcore"
 			},
 			{
 				label: "misc",
