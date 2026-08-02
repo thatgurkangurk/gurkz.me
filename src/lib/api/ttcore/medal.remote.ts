@@ -26,5 +26,5 @@ export const medalDownloader = form(MedalDownloaderSchema, async (data, issues) 
 		invalid(issues.url("failed to get a valid video source link"));
 	}
 
-	redirect(303, `/api/download-video?videoUrl=${json.src}`);
+	redirect(303, `/api/download-video?videoUrl=${encodeURIComponent(json.src)}`);
 });
