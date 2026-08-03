@@ -12,7 +12,7 @@
 	import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 	import { buttonVariants } from "./ui/button";
 	import { useSession } from "$lib/session.svelte";
-	import { LogOut, UserIcon } from "@lucide/svelte";
+	import { LogOut, UserIcon, Settings } from "@lucide/svelte";
 	import SigninModal from "./signin-modal.svelte";
 
 	const session = useSession();
@@ -44,6 +44,14 @@
 					</DropdownMenuLabel>
 					<DropdownMenuSeparator />
 					<DropdownMenuGroup>
+						<DropdownMenuItem>
+							{#snippet child({ props })}
+								<a href="/user" {...props}>
+									<Settings />
+									<span>user settings</span>
+								</a>
+							{/snippet}
+						</DropdownMenuItem>
 						<DropdownMenuItem onclick={async () => await session.signOut()}>
 							<LogOut /> log out
 						</DropdownMenuItem>
