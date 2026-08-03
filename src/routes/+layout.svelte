@@ -72,7 +72,7 @@
 		]}
 	/>
 
-	<main class="mt-20 grow px-4 pt-2">
+	<main class="mt-20 grow px-4 pt-2" data-vaul-drawer-wrapper>
 		{@render children()}
 	</main>
 </div>

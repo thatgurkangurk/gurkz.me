@@ -1,4 +1,5 @@
 <script lang="ts">
+	import SigninModal from "$lib/components/signin-modal.svelte";
 	import Button from "$lib/components/ui/button/button.svelte";
 	import {
 		Card,
@@ -12,6 +13,12 @@
 </script>
 
 <h1 class="text-3xl">hello!</h1>
+
+<SigninModal>
+	{#snippet button(props)}
+		<button onclick={props.toggleOpen}>sign in</button>
+	{/snippet}
+</SigninModal>
 
 <p>i make random things</p>
 <br />
