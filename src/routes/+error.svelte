@@ -1,22 +1,18 @@
 <script lang="ts">
 	import { page } from "$app/state";
 	import { Button } from "$lib/components/ui/button/index.js";
-	import { useSession } from "$lib/session.svelte";
 	import { dev } from "$app/environment";
-
-	const session = useSession();
+	import SigninModal from "$lib/components/signin-modal.svelte";
 </script>
 
 {#if page.status === 401}
 	<h1 class="text-3xl font-bold tracking-tight md:text-4xl">please sign in to continue</h1>
 	<br />
-	<Button
-		onclick={() =>
-			session.authClient.signIn.social({
-				provider: "discord",
-				loginHint: "yes"
-			})}>sign in with Discord</Button
-	>
+	<SigninModal>
+		{#snippet button(props)}
+			<Button onclick={props.toggleOpen}>sign in</Button>
+		{/snippet}
+	</SigninModal>
 {:else if page.status === 403}
 	<h1 class="text-3xl font-bold tracking-tight md:text-4xl">
 		{page.error?.message ?? "sorry, but you cannot access this page"}
