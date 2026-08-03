@@ -42,7 +42,7 @@
 	const formattedId = $derived.by(() => state.format(musicId.robloxId));
 </script>
 
-<Card class="h-full w-full">
+<Card class="flex h-full w-full flex-col">
 	<CardHeader>
 		<div class="flex items-center gap-2">
 			<CardTitle class="text-xl">{musicId.name}</CardTitle>
@@ -66,7 +66,7 @@
 		{/if}
 	</CardHeader>
 
-	<CardContent>
+	<CardContent class="flex-1">
 		<div class="flex items-center gap-2 text-xl">
 			<span>{formattedId}</span>
 			<CopyButton text={formattedId} variant={"outline"} />
