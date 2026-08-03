@@ -57,7 +57,7 @@
 	{/if}
 {/snippet}
 
-{#snippet navbarLink(props NavLinkProps, mobile: boolean)}
+{#snippet navbarLink(props: NavLinkProps, mobile: boolean)}
  {#if mobile}
     {@render mobileNavLink(props)}
  {:else}
