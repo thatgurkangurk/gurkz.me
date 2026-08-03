@@ -55,26 +55,7 @@
 <ModeWatcher />
 
 <div class="min-h-screen bg-gray-950">
-	<Navbar
-		links={[
-			{
-				label: "home",
-				to: "/"
-			},
-			{
-				label: "music id list",
-				to: "/music"
-			},
-			{
-				label: "ttcore",
-				to: "/ttcore"
-			},
-			{
-				label: "misc",
-				to: "/misc"
-			}
-		]}
-	/>
+	<Navbar />
 
 	<main class="mt-20 grow px-4 pt-2" data-vaul-drawer-wrapper>
 		{@render children()}

@@ -20,8 +20,6 @@
 		links: NavLinkProps[];
 	};
 
-	let { links }: NavbarProps = $props();
-
 	const session = useSession();
 
 	let isOpen = $state(false);
@@ -43,6 +41,21 @@
 </script>
 
 <svelte:window onclick={handleOutsideClick} />
+
+{#snippet links()}
+	{@render navLink({ label: "home", to: "/" })}
+	{@render navLink({ label: "ttcore", to: "/ttcore" })}
+
+	{#if session.current?.user.permissions.includes("VIEW_MUSIC_IDS")}
+		{@render navLink({ label: "music id list", to: "/music" })}
+	{/if}
+
+	{@render navLink({ label: "misc", to: "/misc" })}
+
+	{#if session.current?.user.admin}
+		{@render navLink({ label: "admin", to: "/admin" })}
+	{/if}
+{/snippet}
 
 {#snippet navLink(props: NavLinkProps)}
 	{@const active = page.url.pathname === props.to}
@@ -87,13 +100,7 @@
 			</a>
 
 			<div class="flex items-center gap-8">
-				{#each links as link}
-					{@render navLink(link)}
-				{/each}
-
-				{#if session.current?.user.admin}
-					{@render navLink({ label: "admin", to: "/admin" })}
-				{/if}
+				{@render links()}
 			</div>
 
 			<div class="flex items-center gap-2">
@@ -162,13 +169,7 @@
 				class="overflow-hidden"
 			>
 				<div class="mt-3 flex flex-col gap-1 border-t border-gray-200 pt-3 dark:border-white/10">
-					{#each links as link}
-						{@render mobileNavLink(link)}
-					{/each}
-
-					{#if session.current?.user.admin}
-						{@render mobileNavLink({ label: "admin", to: "/admin" })}
-					{/if}
+					{@render links()}
 				</div>
 			</div>
 		{/if}
