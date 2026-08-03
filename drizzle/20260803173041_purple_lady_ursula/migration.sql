@@ -1,0 +1,1 @@
+ALTER TABLE "cookie_consent" ADD CONSTRAINT "cookie_consent_user_by_id_key" UNIQUE("user_by_id");

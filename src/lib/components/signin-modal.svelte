@@ -5,6 +5,8 @@
 	import { Button, buttonVariants } from "$lib/components/ui/button/index.js";
 	import type { Snippet } from "svelte";
 	import { useSession } from "$lib/session.svelte.js";
+	import type { SocialProvider } from "better-auth";
+	import Badge from "./ui/badge/badge.svelte";
 
 	type Props = {
 		button: Snippet<
@@ -23,11 +25,36 @@
 	const isDesktop = new MediaQuery("(min-width: 768px)");
 
 	const session = useSession();
+
+	const lastUsed = session.authClient.getLastUsedLoginMethod();
 </script>
 
+{#snippet signinButton(provider: SocialProvider)}
+	{const isLastUsed = lastUsed === provider}
+
+	<div class="relative flex items-center justify-between gap-3">
+		<Button
+			variant="outline"
+			class="w-full justify-between"
+			onclick={() => session.signInSocial(provider)}
+		>
+			<span>sign in with {provider}</span>
+
+			{#if isLastUsed}
+				<Badge
+					variant="secondary"
+					class="ml-2 bg-emerald-500/15 text-emerald-600 hover:bg-emerald-500/25 dark:text-emerald-400"
+				>
+					last used
+				</Badge>
+			{/if}
+		</Button>
+	</div>
+{/snippet}
+
 {#snippet signinOptions()}
-	<Button onclick={() => session.signInSocial("discord")}>sign in with discord</Button>
-	<Button onclick={() => session.signInSocial("github")}>sign in with github</Button>
+	{@render signinButton("discord")}
+	{@render signinButton("github")}
 {/snippet}
 
 {#if isDesktop.current}

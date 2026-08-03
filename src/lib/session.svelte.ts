@@ -2,7 +2,7 @@ import { invalidateAll } from "$app/navigation";
 import { page } from "$app/state";
 import type { User, Session, auth } from "$lib/server/auth.js";
 import type { SocialProvider } from "better-auth";
-import { inferAdditionalFields } from "better-auth/client/plugins";
+import { inferAdditionalFields, lastLoginMethodClient } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/svelte";
 import { createContext } from "svelte";
 import { fromStore } from "svelte/store";
@@ -23,7 +23,7 @@ export class SessionState {
 	) {
 		this.current = sessionData as { user: User; session: Session } | null;
 		this.authClient = createAuthClient({
-			plugins: [inferAdditionalFields<typeof auth>()]
+			plugins: [lastLoginMethodClient(), inferAdditionalFields<typeof auth>()]
 		});
 
 		const rawSession = fromStore(this.authClient.useSession());

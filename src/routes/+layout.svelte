@@ -9,6 +9,7 @@
 
 	import "vanilla-cookieconsent/dist/cookieconsent.css";
 	import { run } from "$lib/cookie-consent.js";
+	import { untrack } from "svelte";
 
 	const { children, data }: LayoutProps = $props();
 
@@ -25,14 +26,17 @@
 					en: "/en.json"
 				}
 			},
+			autoClearCookies: true,
 			categories: {
 				preferences: {
 					enabled: true,
 					autoClear: {
 						cookies: [
 							{
-								name: "id_format",
-								path: "/"
+								name: "id_format"
+							},
+							{
+								name: "better-auth.last_used_login_method"
 							}
 						]
 					}

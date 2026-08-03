@@ -1,0 +1,1 @@
+ALTER TABLE "cookie_consent" RENAME COLUMN "user_by_id" TO "user_id";

@@ -7,6 +7,8 @@ import { getRequestEvent } from "$app/server";
 import * as env from "$app/env/private";
 import * as schema from "$lib/server/db/schema.js";
 import { apiKey } from "@better-auth/api-key";
+import { lastLoginMethod } from "better-auth/plugins";
+import { getSessionFromCtx } from "better-auth/api";
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
@@ -18,7 +20,31 @@ export const auth = betterAuth({
 			ipAddressHeaders: ["cf-connecting-ip"] // CF
 		}
 	},
-	plugins: [apiKey(), sveltekitCookies(getRequestEvent)],
+	plugins: [
+		lastLoginMethod({
+			beforeStoreCookie: async (ctx) => {
+				const rawConsentCookie = ctx.getCookie("cc_cookie");
+
+				if (!rawConsentCookie) {
+					return false;
+				}
+
+				try {
+					const consent = JSON.parse(rawConsentCookie);
+
+					if (Array.isArray(consent?.categories)) {
+						return consent.categories.includes("preferences");
+					}
+				} catch {
+					console.warn("Failed to parse cc_cookie json");
+				}
+
+				return false;
+			}
+		}),
+		apiKey(),
+		sveltekitCookies(getRequestEvent)
+	],
 	socialProviders: {
 		discord: {
 			clientId: env.DISCORD_CLIENT_ID,
