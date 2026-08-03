@@ -8,13 +8,17 @@ import * as env from "$app/env/private";
 import * as schema from "$lib/server/db/schema.js";
 import { apiKey } from "@better-auth/api-key";
 import { lastLoginMethod } from "better-auth/plugins";
-import { getSessionFromCtx } from "better-auth/api";
 
 export const auth = betterAuth({
 	database: drizzleAdapter(db, {
 		provider: "pg",
 		schema: schema
 	}),
+	account: {
+		accountLinking: {
+			disableImplicitLinking: true
+		}
+	},
 	advanced: {
 		ipAddress: {
 			ipAddressHeaders: ["cf-connecting-ip"] // CF

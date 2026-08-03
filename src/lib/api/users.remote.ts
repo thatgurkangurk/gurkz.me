@@ -19,6 +19,14 @@ export const getUsers = query(async () => {
 	return allUsers;
 });
 
+export const getLinkedAccounts = query(async () => {
+	authGuard();
+	const res = await auth.api.listUserAccounts({
+		headers: getRequestEvent().request.headers
+	});
+	return res;
+});
+
 export const setDisplayName = form(SetNewDisplayNameSchema, async (data) => {
 	authGuard();
 
