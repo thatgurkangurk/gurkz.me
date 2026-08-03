@@ -42,19 +42,27 @@
 
 <svelte:window onclick={handleOutsideClick} />
 
-{#snippet links()}
-	{@render navLink({ label: "home", to: "/" })}
-	{@render navLink({ label: "ttcore", to: "/ttcore" })}
+{#snippet links(mobile: boolean)}
+	{@render navbarLink({ label: "home", to: "/" }, mobile)}
+	{@render navbarLink({ label: "ttcore", to: "/ttcore" }, mobile)}
 
 	{#if session.current?.user.permissions.includes("VIEW_MUSIC_IDS")}
-		{@render navLink({ label: "music id list", to: "/music" })}
+		{@render navbarLink({ label: "music id list", to: "/music" }, mobile)}
 	{/if}
 
-	{@render navLink({ label: "misc", to: "/misc" })}
+	{@render navbarLink({ label: "misc", to: "/misc" }, mobile)}
 
 	{#if session.current?.user.admin}
-		{@render navLink({ label: "admin", to: "/admin" })}
+		{@render navbarLink({ label: "admin", to: "/admin" }, mobile)}
 	{/if}
+{/snippet}
+
+{#snippet navbarLink(props NavLinkProps, mobile: boolean)}
+ {#if mobile}
+    {@render mobileNavLink(props)}
+ {:else}
+    {@render navLink(props)}
+ {/if}
 {/snippet}
 
 {#snippet navLink(props: NavLinkProps)}
@@ -100,7 +108,7 @@
 			</a>
 
 			<div class="flex items-center gap-8">
-				{@render links()}
+				{@render links(false)}
 			</div>
 
 			<div class="flex items-center gap-2">
@@ -169,7 +177,7 @@
 				class="overflow-hidden"
 			>
 				<div class="mt-3 flex flex-col gap-1 border-t border-gray-200 pt-3 dark:border-white/10">
-					{@render links()}
+					{@render links(true)}
 				</div>
 			</div>
 		{/if}
