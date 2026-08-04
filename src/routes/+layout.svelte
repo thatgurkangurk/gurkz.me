@@ -10,6 +10,7 @@
 	import "vanilla-cookieconsent/dist/cookieconsent.css";
 	import { run } from "$lib/cookie-consent.js";
 	import { untrack } from "svelte";
+	import { Toaster } from "svelte-sonner";
 
 	const { children, data }: LayoutProps = $props();
 
@@ -52,7 +53,8 @@
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
-<ModeWatcher />
+<ModeWatcher defaultMode="dark" />
+<Toaster />
 
 <div class="min-h-screen bg-gray-950">
 	<Navbar />
