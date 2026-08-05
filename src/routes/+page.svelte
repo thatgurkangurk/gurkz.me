@@ -38,14 +38,7 @@
 			>
 				<ExternalLink /> watch now
 			</Button>
-			<Button
-				variant="link"
-				rel="noopener noreferrer"
-				target="_blank"
-				href="https://ttcore.gurkz.me"
-			>
-				<ExternalLink /> submit clips
-			</Button>
+			<Button variant="link" href="/ttcore">submit clips</Button>
 		</CardFooter>
 	</Card>
 
