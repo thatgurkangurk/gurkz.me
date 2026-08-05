@@ -2,6 +2,7 @@ import { db } from "$lib/server/db";
 import { error } from "@sveltejs/kit";
 
 import type { PageServerLoad } from "./$types";
+import { defineMeta } from "$lib/meta";
 
 export const load = (async (ev) => {
 	if (!ev.locals.user)
@@ -14,5 +15,9 @@ export const load = (async (ev) => {
 			message: "sorry, but you can't view this page"
 		});
 
-	return {};
+	return {
+		meta: defineMeta({
+			title: "music id list"
+		})
+	};
 }) satisfies PageServerLoad;

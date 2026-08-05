@@ -11,6 +11,7 @@
 	import { run } from "$lib/cookie-consent.js";
 	import { untrack } from "svelte";
 	import { Toaster } from "svelte-sonner";
+	import { page } from "$app/state";
 
 	const { children, data }: LayoutProps = $props();
 
@@ -51,7 +52,18 @@
 	});
 </script>
 
-<svelte:head><link rel="icon" href={favicon} /></svelte:head>
+<svelte:head>
+	{#if page.data.meta}
+		<title>{page.data.meta.title}</title>
+		<link rel="icon" href={favicon} />
+
+		<meta property="og:title" content={page.data.meta.title} />
+		<meta property="og:description" content={page.data.meta.description} />
+		<meta property="og:type" content="website" />
+	{/if}
+
+	<meta name="twitter:card" content="summary_large_image" />
+</svelte:head>
 
 <ModeWatcher defaultMode="dark" />
 <Toaster />

@@ -2,6 +2,7 @@ import { db } from "$lib/server/db";
 import { error } from "@sveltejs/kit";
 
 import type { PageServerLoad } from "./$types";
+import { defineMeta } from "$lib/meta";
 
 async function getSubmittersForVideo(videoId: string) {
 	const res = await db.query.clip.findMany({
@@ -78,6 +79,9 @@ export const load = (async (ev) => {
 	return {
 		submissionsOpen: queriedVideo.submissionsOpen,
 		submitters,
-		details: queriedVideo
+		details: queriedVideo,
+		meta: defineMeta({
+			title: `submit to ${queriedVideo.title}`
+		})
 	};
 }) satisfies PageServerLoad;

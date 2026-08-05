@@ -3,6 +3,7 @@
 /// <reference types="vite-plugin-simple-scope/types" />
 
 import type { Session, User } from "$lib/auth";
+import type { Meta } from "$lib/meta";
 
 declare global {
 	namespace App {
@@ -19,7 +20,9 @@ declare global {
 			user?: User;
 			session?: Session;
 		}
-		// interface PageData {}
+		interface PageData {
+			meta?: Meta;
+		}
 		// interface PageState {}
 		// interface Platform {}
 	}
