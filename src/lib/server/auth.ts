@@ -56,6 +56,7 @@ export const auth = betterAuth({
 			prompt: "consent",
 			// overrideUserInfoOnSignIn: true,
 			mapProfileToUser: async (profile) => {
+				console.debug("profile", profile);
 				return {
 					username: profile.username,
 					name: profile.global_name || profile.username
