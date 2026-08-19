@@ -54,7 +54,7 @@ export const auth = betterAuth({
 			clientId: env.DISCORD_CLIENT_ID,
 			clientSecret: env.DISCORD_CLIENT_SECRET,
 			prompt: "consent",
-			overrideUserInfoOnSignIn: true,
+			// overrideUserInfoOnSignIn: true,
 			mapProfileToUser: async (profile) => {
 				return {
 					username: profile.username,
