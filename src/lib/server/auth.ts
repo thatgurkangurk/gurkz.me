@@ -16,8 +16,9 @@ export const auth = betterAuth({
 	}),
 	account: {
 		accountLinking: {
-			disableImplicitLinking: true
-		}
+			disableImplicitLinking: false
+		},
+		identityStrategy: "provider-id"
 	},
 	advanced: {
 		ipAddress: {

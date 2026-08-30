@@ -1,6 +1,14 @@
 import { relations } from "drizzle-orm/_relations";
 import { sql } from "drizzle-orm";
-import { pgTable, text, timestamp, boolean, integer, index } from "drizzle-orm/pg-core";
+import {
+	pgTable,
+	text,
+	timestamp,
+	boolean,
+	integer,
+	index,
+	uniqueIndex
+} from "drizzle-orm/pg-core";
 import { permissionsEnum } from "./permission";
 
 export const user = pgTable("user", {
@@ -14,6 +22,7 @@ export const user = pgTable("user", {
 		.defaultNow()
 		.$onUpdate(() => /* @__PURE__ */ new Date())
 		.notNull(),
+	// Your custom fields
 	username: text("username").notNull().unique(),
 	permissions: permissionsEnum()
 		.array()
@@ -45,6 +54,7 @@ export const account = pgTable(
 	"account",
 	{
 		id: text("id").primaryKey(),
+		issuer: text("issuer").notNull(),
 		accountId: text("account_id").notNull(),
 		providerId: text("provider_id").notNull(),
 		userId: text("user_id")
@@ -62,7 +72,10 @@ export const account = pgTable(
 			.$onUpdate(() => /* @__PURE__ */ new Date())
 			.notNull()
 	},
-	(table) => [index("account_userId_idx").on(table.userId)]
+	(table) => [
+		uniqueIndex("account_issuer_accountId_uidx").on(table.issuer, table.accountId),
+		index("account_userId_idx").on(table.userId)
+	]
 );
 
 export const verification = pgTable(
