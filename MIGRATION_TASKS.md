@@ -110,7 +110,7 @@ Use `Response.json(...)` and `new Response(text)` instead.
 
 #### Files to review
 
-- [ ] `src/lib/api/ttcore/medal.remote.ts`
+- [X] `src/lib/api/ttcore/medal.remote.ts`
 
 ### Move adapter-node `ORIGIN` to `paths.origin`
 
