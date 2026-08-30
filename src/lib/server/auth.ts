@@ -1,11 +1,11 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { sveltekitCookies } from "better-auth/svelte-kit";
-import { Permissions, type Permission } from "$lib/permissions";
-import { db } from "$lib/server/db";
+import { Permissions, type Permission } from "#lib/permissions.js";
+import { db } from "#lib/server/db/index.js";
 import { getRequestEvent } from "$app/server";
 import * as env from "$app/env/private";
-import * as schema from "$lib/server/db/schema.js";
+import * as schema from "#lib/server/db/schema.js";
 import { apiKey } from "@better-auth/api-key";
 import { lastLoginMethod } from "better-auth/plugins";
 

@@ -1,20 +1,21 @@
 <script lang="ts">
 	import { resolve } from "$app/paths";
-	import { Button } from "$lib/components/ui/button/index.js";
+	import { Button } from "#lib/components/ui/button/index.js";
 	import SubmitForm from "../components/submit-form.svelte";
 	import type { PageProps } from "./$types";
-	import { Alert, AlertDescription, AlertTitle } from "$lib/components/ui/alert/index.js";
+	import { Alert, AlertDescription, AlertTitle } from "#lib/components/ui/alert/index.js";
 	import CircleQuestionMark from "@lucide/svelte/icons/circle-question-mark";
 	import CircleAlert from "@lucide/svelte/icons/circle-alert";
 	import MedalDownloader from "../components/medal-downloader.svelte";
-	import { getDateOfLastSubmissionForVideoByCurrentUser } from "$lib/api/ttcore/videos.remote.js";
+	import { getDateOfLastSubmissionForVideoByCurrentUser } from "#lib/api/ttcore/videos.remote.js";
 	import {
 		Card,
 		CardContent,
 		CardFooter,
 		CardHeader,
 		CardTitle
-	} from "$lib/components/ui/card/index.js";
+	} from "#lib/components/ui/card/index.js";
+
 	import {
 		Breadcrumb,
 		BreadcrumbItem,
@@ -22,7 +23,7 @@
 		BreadcrumbList,
 		BreadcrumbSeparator,
 		BreadcrumbPage
-	} from "$lib/components/ui/breadcrumb/index.js";
+	} from "#lib/components/ui/breadcrumb/index.js";
 
 	let { data }: PageProps = $props();
 
@@ -45,7 +46,7 @@
 	</BreadcrumbList>
 </Breadcrumb>
 
-<Button href={resolve("/ttcore")}>go back</Button>
+<Button href={resolve("ttcore")}>go back</Button>
 
 {#if data.details.submissionsOpen}
 	<div class="mx-auto max-w-4xl space-y-6 px-6 py-8 text-sm">

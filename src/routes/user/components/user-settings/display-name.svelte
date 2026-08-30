@@ -1,18 +1,18 @@
 <script lang="ts">
-	import { Card, CardContent, CardHeader, CardTitle } from "$lib/components/ui/card";
-	import { Button } from "$lib/components/ui/button";
+	import { Card, CardContent, CardHeader, CardTitle } from "#lib/components/ui/card/index.js";
+	import { Button } from "#lib/components/ui/button/index.js";
 	import Save from "@lucide/svelte/icons/save";
-	import { useSession } from "$lib/session.svelte";
+	import { useSession } from "#lib/session.svelte.js";
 	import { toast } from "svelte-sonner";
 	import { watch } from "runed";
-	import { setDisplayName } from "$lib/api/users.remote.js";
-	import { SetNewDisplayNameSchema } from "$lib/schemas/user";
-	import { Label } from "$lib/components/ui/label";
-	import { Input } from "$lib/components/ui/input";
-	import InputErrors from "$lib/components/form/input-errors.svelte";
-	import { toErrors } from "$lib/utils/to-errors";
-	import ButtonGroup from "$lib/components/ui/button-group/button-group.svelte";
-	import { Spinner } from "$lib/components/ui/spinner";
+	import { setDisplayName } from "#lib/api/users.remote.js";
+	import { SetNewDisplayNameSchema } from "#lib/schemas/user.js";
+	import { Label } from "#lib/components/ui/label/index.js";
+	import { Input } from "#lib/components/ui/input/index.js";
+	import InputErrors from "#lib/components/form/input-errors.svelte";
+	import { toErrors } from "#lib/utils/to-errors.js";
+	import ButtonGroup from "#lib/components/ui/button-group/button-group.svelte";
+	import { Spinner } from "#lib/components/ui/spinner/index.js";
 
 	const session = useSession();
 
@@ -45,7 +45,7 @@
 					toast.error("something went wrong");
 				}
 			})}
-			oninput={() => setDisplayName.validate({ includeUntouched: false, preflightOnly: true })}
+			oninput={() => setDisplayName.validate({ all: false, preflightOnly: true })}
 			enctype="multipart/form-data"
 		>
 			<div>

@@ -1,6 +1,6 @@
 import { form, query } from "$app/server";
-import { db } from "$lib/server/db";
-import { profile } from "$lib/server/db/schema/profile";
+import { db } from "#lib/server/db/index.js";
+import { profile } from "#lib/server/db/schema/profile.js";
 import * as z from "zod/v4";
 
 import { ttcoreAdminOnlyGuard } from "./utils";

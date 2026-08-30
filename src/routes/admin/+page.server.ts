@@ -1,4 +1,4 @@
-import { defineMeta } from "$lib/meta";
+import { defineMeta } from "#lib/meta.js";
 import type { PageServerLoad } from "./$types";
 import { adminGuard } from "./guard";
 

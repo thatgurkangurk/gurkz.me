@@ -1,5 +1,5 @@
 import { form } from "$app/server";
-import { MedalDownloaderSchema } from "$lib/schemas/medal-downloader.js";
+import { MedalDownloaderSchema } from "#lib/schemas/medal-downloader.js";
 import * as env from "$app/env/private";
 import { authGuard } from "./utils";
 import { invalid, redirect } from "@sveltejs/kit";

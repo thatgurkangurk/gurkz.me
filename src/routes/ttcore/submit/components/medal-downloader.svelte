@@ -1,18 +1,18 @@
 <script lang="ts">
-	import { medalDownloader } from "$lib/api/ttcore/medal.remote.js";
-	import { Input } from "$lib/components/ui/input";
-	import { Label } from "$lib/components/ui/label";
-	import { Button } from "$lib/components/ui/button";
-	import InputErrors from "$lib/components/form/input-errors.svelte";
-	import { toErrors } from "$lib/utils/to-errors";
-	import { MedalDownloaderSchema } from "$lib/schemas/medal-downloader";
+	import { medalDownloader } from "#lib/api/ttcore/medal.remote.js";
+	import { Input } from "#lib/components/ui/input/index.js";
+	import { Label } from "#lib/components/ui/label/index.js";
+	import { Button } from "#lib/components/ui/button/index.js";
+	import InputErrors from "#lib/components/form/input-errors.svelte";
+	import { toErrors } from "#lib/utils/to-errors.js";
+	import { MedalDownloaderSchema } from "#lib/schemas/medal-downloader.js";
 	import { Download, LoaderCircle } from "@lucide/svelte";
-	import ButtonGroup from "$lib/components/ui/button-group/button-group.svelte";
+	import ButtonGroup from "#lib/components/ui/button-group/button-group.svelte";
 </script>
 
 <form
 	{...medalDownloader.preflight(MedalDownloaderSchema)}
-	oninput={() => medalDownloader.validate({ includeUntouched: false, preflightOnly: true })}
+	oninput={() => medalDownloader.validate({ all: false, preflightOnly: true })}
 	enctype="multipart/form-data"
 	class="max-w-xl space-y-1.5 pt-2"
 >

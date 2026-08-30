@@ -1,11 +1,11 @@
 import { command, form, query } from "$app/server";
-import { db } from "$lib/server/db";
-import { video } from "$lib/server/db/schema/video";
+import { db } from "#lib/server/db/index.js";
+import { video } from "#lib/server/db/schema/video.js";
 import { error } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 import * as z from "zod/v4";
 
-import { CreateNewVideoSchema, VideoMessageSchema } from "$lib/schemas/video.js";
+import { CreateNewVideoSchema, VideoMessageSchema } from "#lib/schemas/video.js";
 import { ttcoreAdminOnlyGuard as adminOnlyGuard, authGuard } from "./utils";
 
 export const createVideo = form(CreateNewVideoSchema, async (data) => {

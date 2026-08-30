@@ -5,16 +5,16 @@
 		CardFooter,
 		CardHeader,
 		CardTitle
-	} from "$lib/components/ui/card/index.js";
-	import type { MusicIdWithCreator } from "$lib/server/db/schema.js";
-	import { Button } from "$lib/components/ui/button";
-	import { confirmDelete } from "$lib/components/ui/confirm-delete-dialog/index.js";
-	import { useSession } from "$lib/session.svelte";
-	import { deleteMusicId } from "$lib/api/music.remote";
-	import { Badge } from "$lib/components/ui/badge/index.js";
+	} from "#lib/components/ui/card/index.js";
+	import type { MusicIdWithCreator } from "#lib/server/db/schema.js";
+	import { Button } from "#lib/components/ui/button/index.js";
+	import { confirmDelete } from "#lib/components/ui/confirm-delete-dialog/index.js";
+	import { useSession } from "#lib/session.svelte.js";
+	import { deleteMusicId } from "#lib/api/music.remote.js";
+	import { Badge } from "#lib/components/ui/badge/index.js";
 	import { SquareArrowOutUpRight } from "@lucide/svelte";
 	import { getIdFormat } from "../context.svelte";
-	import { CopyButton } from "$lib/components/ui/copy-button";
+	import { CopyButton } from "#lib/components/ui/copy-button/index.js";
 
 	type Props = {
 		musicId: MusicIdWithCreator;

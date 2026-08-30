@@ -1,7 +1,7 @@
 <script lang="ts" module>
 	class ConfirmDeleteDialogState {
 		open = $state(false);
-		inputText = $state('');
+		inputText = $state("");
 		options = $state<ConfirmDeleteOptions | null>(null);
 		loading = $state(false);
 
@@ -18,7 +18,7 @@
 
 		reset() {
 			this.open = false;
-			this.inputText = '';
+			this.inputText = "";
 			this.options = null;
 		}
 
@@ -76,8 +76,8 @@
 </script>
 
 <script lang="ts">
-	import * as AlertDialog from '$lib/components/ui/alert-dialog';
-	import { Input } from '$lib/components/ui/input';
+	import * as AlertDialog from "#lib/components/ui/alert-dialog/index.js";
+	import { Input } from "#lib/components/ui/input/index.js";
 </script>
 
 <AlertDialog.Root bind:open={dialogState.open}>
@@ -103,7 +103,7 @@
 					bind:value={dialogState.inputText}
 					placeholder={`Enter \"${dialogState.options.input.confirmationText}\" to confirm.`}
 					onkeydown={(e) => {
-						if (e.key === 'Enter') {
+						if (e.key === "Enter") {
 							// for some reason without this the form will submit and the dialog will close immediately
 							e.preventDefault();
 							dialogState.confirm();
@@ -113,7 +113,7 @@
 			{/if}
 			<AlertDialog.Footer>
 				<AlertDialog.Cancel type="button" onclick={dialogState.cancel}>
-					{dialogState.options?.cancel?.text ?? 'Cancel'}
+					{dialogState.options?.cancel?.text ?? "Cancel"}
 				</AlertDialog.Cancel>
 				<AlertDialog.Action
 					type="submit"
@@ -122,7 +122,7 @@
 					disabled={dialogState.options?.input &&
 						dialogState.inputText !== dialogState.options.input.confirmationText}
 				>
-					{dialogState.options?.confirm?.text ?? 'Delete'}
+					{dialogState.options?.confirm?.text ?? "Delete"}
 				</AlertDialog.Action>
 			</AlertDialog.Footer>
 		</form>

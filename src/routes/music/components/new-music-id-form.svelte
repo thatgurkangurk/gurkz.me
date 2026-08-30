@@ -1,17 +1,17 @@
 <script lang="ts">
-	import { Button } from "$lib/components/ui/button";
-	import { Label } from "$lib/components/ui/label";
+	import { Button } from "#lib/components/ui/button/index.js";
+	import { Label } from "#lib/components/ui/label/index.js";
 	import { Trash2 } from "@lucide/svelte";
-	import { ButtonGroup } from "$lib/components/ui/button-group/index.js";
-	import { Input } from "$lib/components/ui/input";
-	import InputErrors from "$lib/components/form/input-errors.svelte";
-	import { toErrors } from "$lib/utils/to-errors";
-	import { configureForm } from "$lib/remote-form.svelte";
+	import { ButtonGroup } from "#lib/components/ui/button-group/index.js";
+	import { Input } from "#lib/components/ui/input/index.js";
+	import InputErrors from "#lib/components/form/input-errors.svelte";
+	import { toErrors } from "#lib/utils/to-errors.js";
+	import { configureForm } from "#lib/remote-form.svelte.js";
 	import { toast } from "svelte-sonner";
-	import { createMusicId } from "$lib/api/music.remote";
+	import { createMusicId } from "#lib/api/music.remote.js";
 	import { createMusicIdSchema } from "../schemas";
-	import { Card, CardContent, CardHeader, CardTitle } from "$lib/components/ui/card/index.js";
-	import { autoAnimate } from "$lib/attachments/auto-animate.svelte";
+	import { Card, CardContent, CardHeader, CardTitle } from "#lib/components/ui/card/index.js";
+	import { autoAnimate } from "#lib/attachments/auto-animate.svelte.js";
 
 	let formEl: HTMLFormElement | undefined = $state.raw();
 

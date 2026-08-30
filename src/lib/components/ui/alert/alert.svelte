@@ -6,19 +6,20 @@
 		variants: {
 			variant: {
 				default: "bg-card text-card-foreground",
-				destructive: "bg-card text-destructive *:data-[slot=alert-description]:text-destructive/90 *:[svg]:text-current",
-			},
+				destructive:
+					"bg-card text-destructive *:data-[slot=alert-description]:text-destructive/90 *:[svg]:text-current"
+			}
 		},
 		defaultVariants: {
-			variant: "default",
-		},
+			variant: "default"
+		}
 	});
 
 	export type AlertVariant = VariantProps<typeof alertVariants>["variant"];
 </script>
 
 <script lang="ts">
-	import { cn, type WithElementRef } from "$lib/utils.js";
+	import { cn, type WithElementRef } from "#lib/utils.js";
 	import type { HTMLAttributes } from "svelte/elements";
 
 	let {

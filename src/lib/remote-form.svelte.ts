@@ -1,7 +1,7 @@
+import type { RemoteForm, RemoteFormInput, RemoteFormIssue } from "$app/server";
 import { beforeNavigate } from "$app/navigation";
 import { debounce, deepEqual } from "@sillvva/utils";
 import type { StandardSchemaV1 } from "@standard-schema/spec";
-import type { RemoteForm, RemoteFormInput, RemoteFormIssue } from "@sveltejs/kit";
 import type { Awaitable } from "better-auth";
 import { onMount, tick, untrack } from "svelte";
 import { ulid } from "ulid";
@@ -115,6 +115,7 @@ export function configureForm<Input extends RemoteFormInput = RemoteFormInput>(
 	type FormData = Input extends undefined ? Record<string, never> : Input;
 	const data = $derived((formData ?? {}) as FormData);
 	const key = $derived(formKey ?? ((data.id ?? ulid()) as FormId<Input>));
+
 	const form = $derived(schema ? remoteForm.for(key).preflight(schema) : remoteForm.for(key));
 
 	let initial = $state.raw(
@@ -191,7 +192,7 @@ export function configureForm<Input extends RemoteFormInput = RemoteFormInput>(
 	const debouncedValidate = debounce(validate, 300);
 
 	async function validate(reset = false) {
-		await form.validate({ includeUntouched: true, preflightOnly: true });
+		await form.validate({ all: true, preflightOnly: true });
 		if (allIssues && onissues && !deepEqual(lastIssues, allIssues)) onissues({ issues: allIssues });
 		if (allIssues) lastIssues = allIssues;
 		else if (reset) lastIssues = undefined;
@@ -228,6 +229,7 @@ export function configureForm<Input extends RemoteFormInput = RemoteFormInput>(
 	});
 
 	beforeNavigate((ev) => {
+		if (ev.shallow) return;
 		if ((dirty || issues) && navBlockMessage && !confirm(navBlockMessage)) ev.cancel();
 	});
 

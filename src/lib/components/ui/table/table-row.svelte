@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { cn, type WithElementRef } from "$lib/utils.js";
+	import { cn, type WithElementRef } from "#lib/utils.js";
 	import type { HTMLAttributes } from "svelte/elements";
 
 	let {
@@ -10,6 +10,14 @@
 	}: WithElementRef<HTMLAttributes<HTMLTableRowElement>> = $props();
 </script>
 
-<tr bind:this={ref} data-slot="table-row" class={cn("border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted", className)} {...restProps}>
+<tr
+	bind:this={ref}
+	data-slot="table-row"
+	class={cn(
+		"border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted",
+		className
+	)}
+	{...restProps}
+>
 	{@render children?.()}
 </tr>

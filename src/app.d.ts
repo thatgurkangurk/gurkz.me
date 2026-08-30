@@ -2,8 +2,8 @@
 // for information about these interfaces
 /// <reference types="vite-plugin-simple-scope/types" />
 
-import type { Session, User } from "$lib/auth";
-import type { Meta } from "$lib/meta";
+import type { Session, User } from "#lib/auth.js";
+import type { Meta } from "#lib/meta.js";
 
 declare global {
 	namespace App {

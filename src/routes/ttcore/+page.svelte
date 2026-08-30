@@ -6,11 +6,11 @@
 		BreadcrumbList,
 		BreadcrumbSeparator,
 		BreadcrumbPage
-	} from "$lib/components/ui/breadcrumb/index.js";
+	} from "#lib/components/ui/breadcrumb/index.js";
 	import { resolve } from "$app/paths";
-	import { getVideos } from "$lib/api/ttcore/videos.remote";
+	import { getVideos } from "#lib/api/ttcore/videos.remote.js";
 
-	import { Button } from "$lib/components/ui/button/index.js";
+	import { Button } from "#lib/components/ui/button/index.js";
 
 	const videos = $derived(await getVideos());
 

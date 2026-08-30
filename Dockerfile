@@ -20,7 +20,6 @@ COPY --from=build --chown=node:node /app/build /app/build
 ENV NODE_ENV="production"
 ENV HOST=0.0.0.0
 ENV PORT=4321
-ENV ORIGIN="https://www.gurkz.me/"
 EXPOSE 4321/tcp
 
 CMD [ "nub", "./build/index.js" ]

@@ -1,4 +1,4 @@
-import { defineMeta } from "$lib/meta";
+import { defineMeta } from "#lib/meta.js";
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = ({ params }) => {

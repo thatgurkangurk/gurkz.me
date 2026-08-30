@@ -1,5 +1,5 @@
 import { form, query } from "$app/server";
-import { db } from "$lib/server/db";
+import { db } from "#lib/server/db/index.js";
 import { error } from "@sveltejs/kit";
 import { adminOnlyGuard } from "./utils";
 import * as z from "zod/v4";
@@ -7,8 +7,8 @@ import {
 	SetUserPermissions,
 	type NonDefaultPermission
 } from "../../routes/admin/users/[userId]/schemas";
-import type { Permission } from "$lib/permissions";
-import { user } from "$lib/server/db/schema";
+import type { Permission } from "#lib/permissions.js";
+import { user } from "#lib/server/db/schema.js";
 import { eq } from "drizzle-orm";
 
 export const getUsers = query(async () => {
@@ -41,10 +41,7 @@ export const getUserById = query(z.string(), async (userId) => {
 		}
 	});
 
-	if (!user)
-		error(404, {
-			message: "could not find that user"
-		});
+	if (!user) error(404, "could not find that user");
 
 	return user;
 });
@@ -74,9 +71,7 @@ export const setUserPermissions = form(SetUserPermissions, async (data) => {
 		});
 
 	if (!newUser) {
-		error(404, {
-			message: "could not find that user"
-		});
+		error(404, "could not find that user");
 	}
 
 	getUserById(newUser.id).set(newUser);

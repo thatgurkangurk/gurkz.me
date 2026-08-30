@@ -1,12 +1,12 @@
 import { command, form } from "$app/server";
 import * as env from "$app/env/private";
-import { db } from "$lib/server/db";
-import { clip } from "$lib/server/db/schema/clip";
+import { db } from "#lib/server/db/index.js";
+import { clip } from "#lib/server/db/schema/clip.js";
 import { EmbedBuilder } from "@discordjs/builders";
 import { error, invalid } from "@sveltejs/kit";
 import { and, eq } from "drizzle-orm";
-import { ClipTitleSchema, CreateNewClipArgs, UpdateClipArgs } from "$lib/schemas/clip.js";
-import { SongsSchema } from "$lib/schemas/song.js";
+import { ClipTitleSchema, CreateNewClipArgs, UpdateClipArgs } from "#lib/schemas/clip.js";
+import { SongsSchema } from "#lib/schemas/song.js";
 import { authGuard, ttcoreAdminOnlyGuard as adminOnlyGuard } from "./utils.js";
 import { getClipsForVideo, getMyClipsForVideo } from "./videos.remote.js";
 import * as z from "zod/v4";
@@ -155,10 +155,7 @@ export const deleteClip = command(
 			}
 		});
 
-		if (!queriedClip)
-			throw error(404, {
-				message: "that clip was not found"
-			});
+		if (!queriedClip) throw error(404, "that clip was not found");
 
 		await db.delete(clip).where(eq(clip.id, data.clipId));
 
@@ -183,10 +180,7 @@ export const setNewClipSongs = command(
 			}
 		});
 
-		if (!queriedClip)
-			throw error(404, {
-				message: "that clip was not found"
-			});
+		if (!queriedClip) throw error(404, "that clip was not found");
 
 		await db
 			.update(clip)
@@ -219,10 +213,7 @@ export const setNewClipTitle = command(
 			}
 		});
 
-		if (!queriedClip)
-			throw error(404, {
-				message: "that clip was not found"
-			});
+		if (!queriedClip) throw error(404, "that clip was not found");
 
 		await db
 			.update(clip)
@@ -254,10 +245,7 @@ export const setClipSelected = command(
 			}
 		});
 
-		if (!queriedClip)
-			throw error(404, {
-				message: "that clip was not found"
-			});
+		if (!queriedClip) throw error(404, "that clip was not found");
 
 		await db
 			.update(clip)

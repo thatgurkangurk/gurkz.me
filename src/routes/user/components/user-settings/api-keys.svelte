@@ -1,19 +1,25 @@
 <script lang="ts">
-	import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "$lib/components/ui/card";
-	import { Button, buttonVariants } from "$lib/components/ui/button";
-	import { Separator } from "$lib/components/ui/separator";
-	import * as AlertDialog from "$lib/components/ui/alert-dialog/index.js";
+	import {
+		Card,
+		CardContent,
+		CardFooter,
+		CardHeader,
+		CardTitle
+	} from "#lib/components/ui/card/index.js";
+	import { Button, buttonVariants } from "#lib/components/ui/button/index.js";
+	import { Separator } from "#lib/components/ui/separator/index.js";
+	import * as AlertDialog from "#lib/components/ui/alert-dialog/index.js";
 	import Trash2 from "@lucide/svelte/icons/trash-2";
-	import { getApiKeys, createApiKey, deleteApiKey } from "$lib/api/api-key.remote.js";
-	import { CreateNewApiKeySchema } from "$lib/schemas/api-key";
-	import { Input } from "$lib/components/ui/input";
-	import { Label } from "$lib/components/ui/label";
-	import InputErrors from "$lib/components/form/input-errors.svelte";
-	import { toErrors } from "$lib/utils/to-errors";
-	import * as Alert from "$lib/components/ui/alert/index.js";
+	import { getApiKeys, createApiKey, deleteApiKey } from "#lib/api/api-key.remote.js";
+	import { CreateNewApiKeySchema } from "#lib/schemas/api-key.js";
+	import { Input } from "#lib/components/ui/input/index.js";
+	import { Label } from "#lib/components/ui/label/index.js";
+	import InputErrors from "#lib/components/form/input-errors.svelte";
+	import { toErrors } from "#lib/utils/to-errors.js";
+	import * as Alert from "#lib/components/ui/alert/index.js";
 	import CheckCircle2Icon from "@lucide/svelte/icons/check-circle-2";
 	import CopyIcon from "@lucide/svelte/icons/copy";
-	import { Spinner } from "$lib/components/ui/spinner";
+	import { Spinner } from "#lib/components/ui/spinner/index.js";
 
 	const apiKeyPromise = $derived(getApiKeys());
 	const apiKeys = $derived(await apiKeyPromise);
@@ -101,7 +107,7 @@
 
 			<form
 				{...createApiKey.preflight(CreateNewApiKeySchema)}
-				oninput={() => createApiKey.validate({ includeUntouched: false, preflightOnly: true })}
+				oninput={() => createApiKey.validate({ all: false, preflightOnly: true })}
 				enctype="multipart/form-data"
 			>
 				<div>

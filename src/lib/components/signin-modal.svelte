@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { MediaQuery } from "svelte/reactivity";
-	import * as Dialog from "$lib/components/ui/dialog/index.js";
-	import * as Drawer from "$lib/components/ui/drawer/index.js";
-	import { Button, buttonVariants } from "$lib/components/ui/button/index.js";
+	import * as Dialog from "#lib/components/ui/dialog/index.js";
+	import * as Drawer from "#lib/components/ui/drawer/index.js";
+	import { Button, buttonVariants } from "#lib/components/ui/button/index.js";
 	import type { Snippet } from "svelte";
-	import { useSession } from "$lib/session.svelte.js";
+	import { useSession } from "#lib/session.svelte.js";
 	import type { SocialProvider } from "better-auth";
 	import Badge from "./ui/badge/badge.svelte";
 
