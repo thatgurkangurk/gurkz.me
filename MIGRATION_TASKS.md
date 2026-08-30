@@ -58,7 +58,7 @@ Create a mutable copy with `new URL(page.url.href)`, mutate that copy, and use i
 
 #### Files to review
 
-- [ ] `src/lib/components/navbar.svelte`
+- [X] `src/lib/components/navbar.svelte`
 
 ### Adjust error(...) usage
 
