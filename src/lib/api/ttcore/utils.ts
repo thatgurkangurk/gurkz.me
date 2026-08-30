@@ -15,10 +15,7 @@ export function ttcoreAdminOnlyGuard() {
 export function authGuard() {
 	const ev = getRequestEvent();
 
-	if (!ev.locals.user || !ev.locals.session)
-		error(401, {
-			message: "please sign in to continue"
-		});
+	if (!ev.locals.user || !ev.locals.session) error(401, "please sign in to continue");
 
 	return {
 		user: ev.locals.user,

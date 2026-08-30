@@ -41,10 +41,7 @@ export const getUserById = query(z.string(), async (userId) => {
 		}
 	});
 
-	if (!user)
-		error(404, {
-			message: "could not find that user"
-		});
+	if (!user) error(404, "could not find that user");
 
 	return user;
 });
@@ -74,9 +71,7 @@ export const setUserPermissions = form(SetUserPermissions, async (data) => {
 		});
 
 	if (!newUser) {
-		error(404, {
-			message: "could not find that user"
-		});
+		error(404, "could not find that user");
 	}
 
 	getUserById(newUser.id).set(newUser);

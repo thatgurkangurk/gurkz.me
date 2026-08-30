@@ -74,15 +74,15 @@ Replace `error(status, { message, ... })` with `error(status, message, { ... })`
 
 #### Files to review
 
-- [ ] `src/lib/api/admin.remote.ts`
-- [ ] `src/lib/api/ttcore/clips.remote.ts`
-- [ ] `src/lib/api/ttcore/utils.ts`
-- [ ] `src/lib/api/utils.ts`
-- [ ] `src/routes/admin/guard.ts`
-- [ ] `src/routes/api/download-video/+server.ts`
-- [ ] `src/routes/music/+page.server.ts`
-- [ ] `src/routes/ttcore/submit/[videoId]/+page.server.ts`
-- [ ] `src/routes/user/+page.server.ts`
+- [X] `src/lib/api/admin.remote.ts`
+- [X] `src/lib/api/ttcore/clips.remote.ts`
+- [X] `src/lib/api/ttcore/utils.ts`
+- [X] `src/lib/api/utils.ts`
+- [X] `src/routes/admin/guard.ts`
+- [X] `src/routes/api/download-video/+server.ts`
+- [X] `src/routes/music/+page.server.ts`
+- [X] `src/routes/ttcore/submit/[videoId]/+page.server.ts`
+- [X] `src/routes/user/+page.server.ts`
 
 ### CORS for static assets in development is handled by Vite
 
