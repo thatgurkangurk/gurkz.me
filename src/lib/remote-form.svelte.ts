@@ -192,7 +192,7 @@ export function configureForm<Input extends RemoteFormInput = RemoteFormInput>(
 	const debouncedValidate = debounce(validate, 300);
 
 	async function validate(reset = false) {
-		await form.validate({ includeUntouched: true, preflightOnly: true });
+		await form.validate({ all: true, preflightOnly: true });
 		if (allIssues && onissues && !deepEqual(lastIssues, allIssues)) onissues({ issues: allIssues });
 		if (allIssues) lastIssues = allIssues;
 		else if (reset) lastIssues = undefined;

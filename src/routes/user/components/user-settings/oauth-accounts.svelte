@@ -17,12 +17,14 @@
 		<CardTitle>linked accounts</CardTitle>
 	</CardHeader>
 	<CardContent>
-		{@const accountProviderIdList = Array.from(new Set(accounts.map((acc) => acc.providerId)))}
-		{@const isLastAccount = accountProviderIdList.length <= 1}
+		{const accountProviderMap = new Map(accounts.map((acc) => [acc.providerId, acc.id]))}
+		{const accountProviderIdList = Array.from(accountProviderMap.keys())}
+		{const isLastAccount = accountProviderIdList.length <= 1}
 
 		<div class="flex flex-col gap-3">
 			{#each providers as provider}
-				{@const isLinked = accountProviderIdList.includes(provider)}
+				{const accountId = accountProviderMap.get(provider)}
+				{const isLinked = Boolean(accountId)}
 
 				<div class="flex items-center justify-between rounded-lg border p-4 shadow-sm">
 					<div class="flex flex-col gap-1">
@@ -32,14 +34,12 @@
 						</p>
 					</div>
 
-					{#if isLinked}
+					{#if isLinked && accountId}
 						<Button
 							variant="outline"
 							disabled={isLastAccount}
 							onclick={async () => {
-								await session.authClient.unlinkAccount({
-									providerId: provider
-								});
+								await session.authClient.unlinkAccount({ accountId });
 								getLinkedAccounts().refresh();
 							}}
 						>
