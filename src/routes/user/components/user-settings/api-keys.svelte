@@ -107,7 +107,7 @@
 
 			<form
 				{...createApiKey.preflight(CreateNewApiKeySchema)}
-				oninput={() => createApiKey.validate({ includeUntouched: false, preflightOnly: true })}
+				oninput={() => createApiKey.validate({ all: false, preflightOnly: true })}
 				enctype="multipart/form-data"
 			>
 				<div>

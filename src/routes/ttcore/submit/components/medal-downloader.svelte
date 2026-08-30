@@ -12,7 +12,7 @@
 
 <form
 	{...medalDownloader.preflight(MedalDownloaderSchema)}
-	oninput={() => medalDownloader.validate({ includeUntouched: false, preflightOnly: true })}
+	oninput={() => medalDownloader.validate({ all: false, preflightOnly: true })}
 	enctype="multipart/form-data"
 	class="max-w-xl space-y-1.5 pt-2"
 >

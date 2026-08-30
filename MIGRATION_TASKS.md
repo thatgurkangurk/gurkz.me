@@ -142,11 +142,11 @@ Replace manually specified control names with attributes from the corresponding 
 
 #### Files to review
 
-- [ ] `src/routes/music/components/new-music-id-form.svelte`
-- [ ] `src/routes/ttcore/submit/components/medal-downloader.svelte`
-- [ ] `src/routes/ttcore/submit/components/submit-form.svelte`
-- [ ] `src/routes/user/components/user-settings/api-keys.svelte`
-- [ ] `src/routes/user/components/user-settings/display-name.svelte`
+- [X] `src/routes/music/components/new-music-id-form.svelte`
+- [X] `src/routes/ttcore/submit/components/medal-downloader.svelte`
+- [X] `src/routes/ttcore/submit/components/submit-form.svelte`
+- [X] `src/routes/user/components/user-settings/api-keys.svelte`
+- [X] `src/routes/user/components/user-settings/display-name.svelte`
 
 ## Final verification
 

@@ -45,7 +45,7 @@
 					toast.error("something went wrong");
 				}
 			})}
-			oninput={() => setDisplayName.validate({ includeUntouched: false, preflightOnly: true })}
+			oninput={() => setDisplayName.validate({ all: false, preflightOnly: true })}
 			enctype="multipart/form-data"
 		>
 			<div>
