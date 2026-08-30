@@ -42,7 +42,7 @@ The `Pathname` and `Asset` types have also been renamed to `Path` and `AssetPath
 
 #### Files to review
 
-- [ ] `src/routes/ttcore/submit/[videoId]/+page.svelte`
+- [X] `src/routes/ttcore/submit/[videoId]/+page.svelte`
 
 ### Copy `page.url` before mutating it
 
