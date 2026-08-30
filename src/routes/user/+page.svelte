@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { useSession } from "$lib/session.svelte.js";
+	import { useSession } from "#lib/session.svelte.js";
 	import UserSettings from "./components/user-settings.svelte";
 
 	const session = useSession();

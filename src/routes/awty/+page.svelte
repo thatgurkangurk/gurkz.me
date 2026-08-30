@@ -1,14 +1,14 @@
 <script lang="ts">
-	import * as Card from "$lib/components/ui/card";
-	import * as Tabs from "$lib/components/ui/tabs";
-	import * as Table from "$lib/components/ui/table";
-	import { Button } from "$lib/components/ui/button";
-	import { Input } from "$lib/components/ui/input";
-	import { Textarea } from "$lib/components/ui/textarea";
-	import { Label } from "$lib/components/ui/label";
-	import { Checkbox } from "$lib/components/ui/checkbox";
-	import { Progress } from "$lib/components/ui/progress";
-	import { Badge } from "$lib/components/ui/badge";
+	import * as Card from "#lib/components/ui/card/index.js";
+	import * as Tabs from "#lib/components/ui/tabs/index.js";
+	import * as Table from "#lib/components/ui/table/index.js";
+	import { Button } from "#lib/components/ui/button/index.js";
+	import { Input } from "#lib/components/ui/input/index.js";
+	import { Textarea } from "#lib/components/ui/textarea/index.js";
+	import { Label } from "#lib/components/ui/label/index.js";
+	import { Checkbox } from "#lib/components/ui/checkbox/index.js";
+	import { Progress } from "#lib/components/ui/progress/index.js";
+	import { Badge } from "#lib/components/ui/badge/index.js";
 	import type { ModpackCheckReport } from "@thatgurkangurk/awty";
 	import confetti from "canvas-confetti";
 

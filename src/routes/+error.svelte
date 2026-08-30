@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { page } from "$app/state";
-	import { Button } from "$lib/components/ui/button/index.js";
+	import { Button } from "#lib/components/ui/button/index.js";
 	import { dev } from "$app/env";
-	import SigninModal from "$lib/components/signin-modal.svelte";
+	import SigninModal from "#lib/components/signin-modal.svelte";
 </script>
 
 {#if page.status === 401}

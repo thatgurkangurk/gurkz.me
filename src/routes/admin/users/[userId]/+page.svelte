@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getUserById, setUserPermissions } from "$lib/api/admin.remote";
+	import { getUserById, setUserPermissions } from "#lib/api/admin.remote.js";
 	import {
 		Breadcrumb,
 		BreadcrumbItem,
@@ -7,16 +7,16 @@
 		BreadcrumbList,
 		BreadcrumbPage,
 		BreadcrumbSeparator
-	} from "$lib/components/ui/breadcrumb/index.js";
+	} from "#lib/components/ui/breadcrumb/index.js";
 	import type { PageProps } from "./$types";
-	import { Avatar, AvatarFallback, AvatarImage } from "$lib/components/ui/avatar/index.js";
-	import { getInitials } from "$lib/utils/initials.js";
-	import { configureForm } from "$lib/remote-form.svelte";
+	import { Avatar, AvatarFallback, AvatarImage } from "#lib/components/ui/avatar/index.js";
+	import { getInitials } from "#lib/utils/initials.js";
+	import { configureForm } from "#lib/remote-form.svelte.js";
 	import { nonDefaultPermissions, SetUserPermissions, type NonDefaultPermission } from "./schemas";
 	import { toast } from "svelte-sonner";
-	import { Label } from "$lib/components/ui/label/index.js";
-	import { Checkbox } from "$lib/components/ui/checkbox/index.js";
-	import Button from "$lib/components/button.svelte";
+	import { Label } from "#lib/components/ui/label/index.js";
+	import { Checkbox } from "#lib/components/ui/checkbox/index.js";
+	import Button from "#lib/components/button.svelte";
 
 	type Props = {};
 

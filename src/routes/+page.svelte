@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Button from "$lib/components/ui/button/button.svelte";
+	import Button from "#lib/components/ui/button/button.svelte";
 	import {
 		Card,
 		CardContent,
@@ -7,7 +7,7 @@
 		CardFooter,
 		CardHeader,
 		CardTitle
-	} from "$lib/components/ui/card";
+	} from "#lib/components/ui/card/index.js";
 	import { ExternalLink } from "@lucide/svelte";
 </script>
 

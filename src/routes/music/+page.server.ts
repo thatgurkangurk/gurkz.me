@@ -1,8 +1,8 @@
-import { db } from "$lib/server/db";
+import { db } from "#lib/server/db/index.js";
 import { error } from "@sveltejs/kit";
 
 import type { PageServerLoad } from "./$types";
-import { defineMeta } from "$lib/meta";
+import { defineMeta } from "#lib/meta.js";
 
 export const load = (async (ev) => {
 	if (!ev.locals.user)

@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { page } from "$app/state";
-	import { useSession } from "$lib/session.svelte";
+	import { useSession } from "#lib/session.svelte.js";
 	import { Button, buttonVariants } from "./ui/button";
 	import UserMenu from "./user-menu.svelte";
 	import Menu from "@lucide/svelte/icons/menu";
 	import X from "@lucide/svelte/icons/x";
 	import { Cookie } from "@lucide/svelte";
 	import { sizeMap } from "./button.svelte";
-	import { showPreferences } from "$lib/cookie-consent.js";
+	import { showPreferences } from "#lib/cookie-consent.js";
 	import { slide } from "svelte/transition";
 	import { cubicOut } from "svelte/easing";
 
@@ -58,11 +58,11 @@
 {/snippet}
 
 {#snippet navbarLink(props: NavLinkProps, mobile: boolean)}
- {#if mobile}
-    {@render mobileNavLink(props)}
- {:else}
-    {@render navLink(props)}
- {/if}
+	{#if mobile}
+		{@render mobileNavLink(props)}
+	{:else}
+		{@render navLink(props)}
+	{/if}
 {/snippet}
 
 {#snippet navLink(props: NavLinkProps)}

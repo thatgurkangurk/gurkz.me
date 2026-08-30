@@ -1,7 +1,7 @@
 import { form, getRequestEvent, query } from "$app/server";
-import { authGuard } from "$lib/api/utils";
-import { CreateNewApiKeySchema, DeleteApiKeySchema } from "$lib/schemas/api-key";
-import { auth } from "$lib/server/auth";
+import { authGuard } from "#lib/api/utils.js";
+import { CreateNewApiKeySchema, DeleteApiKeySchema } from "#lib/schemas/api-key.js";
+import { auth } from "#lib/server/auth.js";
 import { error } from "@sveltejs/kit";
 
 export const getApiKeys = query(async () => {

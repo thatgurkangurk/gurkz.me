@@ -1,12 +1,12 @@
 <script lang="ts">
 	import FormatSelector from "./components/format-selector.svelte";
 	import MusicCard from "./components/music-card.svelte";
-	import { scope } from "$lib/utils/scope";
-	import { Input } from "$lib/components/ui/input";
-	import { Label } from "$lib/components/ui/label";
-	import { ConfirmDeleteDialog } from "$lib/components/ui/confirm-delete-dialog";
-	import { useSession } from "$lib/session.svelte";
-	import { getMusicIds } from "$lib/api/music.remote.js";
+	import { scope } from "#lib/utils/scope.js";
+	import { Input } from "#lib/components/ui/input/index.js";
+	import { Label } from "#lib/components/ui/label/index.js";
+	import { ConfirmDeleteDialog } from "#lib/components/ui/confirm-delete-dialog/index.js";
+	import { useSession } from "#lib/session.svelte.js";
+	import { getMusicIds } from "#lib/api/music.remote.js";
 	import NewMusicIdForm from "./components/new-music-id-form.svelte";
 
 	let searchFilter = $state("");

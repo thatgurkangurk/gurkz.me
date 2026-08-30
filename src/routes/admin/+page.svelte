@@ -6,9 +6,9 @@
 		BreadcrumbList,
 		BreadcrumbSeparator,
 		BreadcrumbPage
-	} from "$lib/components/ui/breadcrumb/index.js";
+	} from "#lib/components/ui/breadcrumb/index.js";
 	import { resolve } from "$app/paths";
-	import { Button } from "$lib/components/ui/button/index.js";
+	import { Button } from "#lib/components/ui/button/index.js";
 </script>
 
 <Breadcrumb>
@@ -25,4 +25,4 @@
 
 <h1 class="text-3xl font-bold tracking-tight md:text-4xl">admin</h1>
 
-<Button href={resolve("/admin/users")}>manage users</Button>
+<Button href={resolve("admin/users")}>manage users</Button>

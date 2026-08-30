@@ -21,8 +21,7 @@ export default defineConfig({
 			},
 
 			experimental: {
-				remoteFunctions: true,
-				explicitEnvironmentVariables: true
+				remoteFunctions: true
 			},
 
 			compilerOptions: {
@@ -31,9 +30,7 @@ export default defineConfig({
 				}
 			},
 
-			vitePlugin: {
-				inspector: true
-			}
+			inspector: true
 		}),
 		devtoolsJson()
 	],
