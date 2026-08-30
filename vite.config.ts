@@ -30,6 +30,10 @@ export default defineConfig({
 				}
 			},
 
+			paths: {
+				origin: "https://www.gurkz.me"
+			},
+
 			inspector: true
 		}),
 		devtoolsJson()

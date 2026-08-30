@@ -126,7 +126,7 @@ If this value configures adapter-node, move the public-facing origin to `paths.o
 
 #### Files to review
 
-- [ ] `Dockerfile`
+- [X] `Dockerfile`
 
 ### Use remote form field attributes
 
