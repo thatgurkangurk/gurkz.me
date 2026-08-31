@@ -7,6 +7,7 @@
 	import CircleQuestionMark from "@lucide/svelte/icons/circle-question-mark";
 	import CircleAlert from "@lucide/svelte/icons/circle-alert";
 	import MedalDownloader from "../components/medal-downloader.svelte";
+	import VideoUploader from "#lib/components/ttcore/video-uploader.svelte";
 	import { getDateOfLastSubmissionForVideoByCurrentUser } from "#lib/api/ttcore/videos.remote.js";
 	import {
 		Card,
@@ -65,6 +66,8 @@
 				</div>
 			</AlertDescription>
 		</Alert>
+
+		<VideoUploader />
 
 		{#if data.details.message}
 			<Alert variant="destructive" class="p-4 sm:p-5">
