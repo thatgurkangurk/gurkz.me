@@ -13,6 +13,10 @@
 		{
 			name: "want you gone in html",
 			path: "/misc/want-you-gone"
+		},
+		{
+			name: "still alive in html",
+			path: "/misc/still-alive"
 		}
 	];
 </script>
