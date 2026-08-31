@@ -1,12 +1,6 @@
 <script lang="ts">
 	import { Button } from "#lib/components/ui/button/index.js";
-	import {
-		Card,
-		CardContent,
-		CardFooter,
-		CardHeader,
-		CardTitle
-	} from "#lib/components/ui/card/index.js";
+	import { Card, CardFooter, CardHeader, CardTitle } from "#lib/components/ui/card/index.js";
 	import type { PageProps } from "./$types";
 
 	let { data }: PageProps = $props();
@@ -15,6 +9,10 @@
 		{
 			name: "video to html table",
 			path: "/video-to-table"
+		},
+		{
+			name: "want you gone in html",
+			path: "/misc/want-you-gone"
 		}
 	];
 </script>
