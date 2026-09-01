@@ -4,6 +4,7 @@ import { svelteKitHandler } from "better-auth/svelte-kit";
 import { building } from "$app/env";
 import type { User } from "#lib/server/auth.js";
 import { db } from "#lib/server/db/index.js";
+import { createServerPermix } from "#lib/permix.js";
 
 export const init: ServerInit = async () => {
 	process.on("sveltekit:shutdown", async (reason) => {
@@ -20,6 +21,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.session = session.session;
 		event.locals.user = session.user as User;
 	}
+
+	const serverPermix = createServerPermix(session?.user as User);
+
+	event.locals.permix = serverPermix;
 
 	return svelteKitHandler({ event, resolve, auth, building });
 };

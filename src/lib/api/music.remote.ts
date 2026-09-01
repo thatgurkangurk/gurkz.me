@@ -9,7 +9,7 @@ import { createMusicIdSchema } from "../../routes/music/schemas";
 const createMusicId = form(createMusicIdSchema, async (data) => {
 	const event = getRequestEvent();
 
-	if (!event.locals.user || !event.locals.user.permissions.includes("CREATE_MUSIC_IDS")) error(403);
+	if (!event.locals.user || !event.locals.permix.check("musicId.create")) error(403);
 
 	try {
 		await db.insert(musicIds).values({
@@ -26,7 +26,7 @@ const createMusicId = form(createMusicIdSchema, async (data) => {
 const getMusicIds = query(async () => {
 	const event = getRequestEvent();
 
-	if (!event.locals.user || !event.locals.user.permissions.includes("VIEW_MUSIC_IDS")) error(403);
+	if (!event.locals.user || !event.locals.permix.check("musicId.list")) error(403);
 
 	return await db.query.musicIds.findMany({
 		columns: {
@@ -66,11 +66,7 @@ const deleteMusicId = command(
 
 		if (!musicIdToDelete) error(404);
 
-		const isCreator = musicIdToDelete.createdById === event.locals.user.id;
-
-		const canManage = event.locals.user.permissions.includes("MANAGE_MUSIC_IDS");
-
-		if (!isCreator && !canManage) error(403);
+		if (!event.locals.permix.check("musicId.delete", musicIdToDelete)) error(403);
 
 		try {
 			await db.delete(musicIds).where(eq(musicIds.id, musicIdToDelete.id));

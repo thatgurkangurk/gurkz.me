@@ -121,7 +121,9 @@ export function configureForm<Input extends RemoteFormInput = RemoteFormInput>(
 	let initial = $state.raw(
 		use({
 			track: () => data,
+			// svelte-ignore state_referenced_locally
 			ssr: form.fields.set,
+			// svelte-ignore state_referenced_locally
 			pre: form.fields.set
 		})
 	);

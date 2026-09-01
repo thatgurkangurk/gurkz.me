@@ -10,6 +10,7 @@
 	import { showPreferences } from "#lib/cookie-consent.js";
 	import { slide } from "svelte/transition";
 	import { cubicOut } from "svelte/easing";
+	import { usePermix } from "#lib/permix.js";
 
 	type NavLinkProps = {
 		label: string;
@@ -38,6 +39,8 @@
 			closeMenu();
 		}
 	}
+
+	const permix = usePermix();
 </script>
 
 <svelte:window onclick={handleOutsideClick} />
@@ -46,7 +49,7 @@
 	{@render navbarLink({ label: "home", to: "/" }, mobile)}
 	{@render navbarLink({ label: "ttcore", to: "/ttcore" }, mobile)}
 
-	{#if session.current?.user.permissions.includes("VIEW_MUSIC_IDS")}
+	{#if permix.check("musicId.list")}
 		{@render navbarLink({ label: "music id list", to: "/music" }, mobile)}
 	{/if}
 

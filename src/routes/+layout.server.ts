@@ -9,7 +9,10 @@ export const load = (async (ev) => {
 		user: User;
 	} | null;
 
+	const permixState = ev.locals.permix.dehydrate();
+
 	return {
-		session
+		session,
+		permixState
 	};
 }) satisfies LayoutServerLoad;

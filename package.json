@@ -38,6 +38,7 @@
     "neverthrow": "^8.2.0",
     "npm-cookie": "npm:cookie@^2.0.1",
     "onedollarstats": "^0.0.23",
+    "permix": "^4.1.2",
     "postgres": "^3.4.9",
     "prettier": "^3.9.6",
     "prettier-plugin-svelte": "^4.1.1",

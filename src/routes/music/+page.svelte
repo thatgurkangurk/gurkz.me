@@ -8,6 +8,7 @@
 	import { useSession } from "#lib/session.svelte.js";
 	import { getMusicIds } from "#lib/api/music.remote.js";
 	import NewMusicIdForm from "./components/new-music-id-form.svelte";
+	import { usePermix } from "#lib/permix.js";
 
 	let searchFilter = $state("");
 
@@ -20,11 +21,13 @@
 	const session = useSession();
 
 	let id = $props.id();
+
+	const permix = usePermix();
 </script>
 
 <h1 class="text-3xl">music id list</h1>
 
-{#if session.current?.user && session.current.user.permissions.includes("CREATE_MUSIC_IDS")}
+{#if permix.check("musicId.create")}
 	<NewMusicIdForm />
 {/if}
 
