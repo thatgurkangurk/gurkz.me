@@ -66,7 +66,7 @@ const deleteMusicId = command(
 
 		if (!musicIdToDelete) error(404);
 
-		if (event.locals.permix.check("musicId.delete", musicIdToDelete)) error(403);
+		if (!event.locals.permix.check("musicId.delete", musicIdToDelete)) error(403);
 
 		try {
 			await db.delete(musicIds).where(eq(musicIds.id, musicIdToDelete.id));
