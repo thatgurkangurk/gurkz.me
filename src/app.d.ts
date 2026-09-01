@@ -4,6 +4,8 @@
 
 import type { Session, User } from "#lib/auth.js";
 import type { Meta } from "#lib/meta.js";
+import type { PermissionsDefinition } from "#lib/permix.js";
+import type { Permix } from "permix";
 
 declare global {
 	namespace App {
@@ -19,6 +21,7 @@ declare global {
 		interface Locals {
 			user?: User;
 			session?: Session;
+			permix: Permix<PermissionsDefinition>;
 		}
 		interface PageData {
 			meta?: Meta;

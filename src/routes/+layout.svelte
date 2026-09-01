@@ -12,7 +12,7 @@
 	import { Toaster } from "svelte-sonner";
 	import { page } from "$app/state";
 	import { PermixProvider, PermixHydrate } from "permix/svelte";
-	import { getRules, permix } from "#lib/permix.js";
+	import { getRules, clientOnlyPermix } from "#lib/permix.js";
 
 	const { children, data }: LayoutProps = $props();
 
@@ -26,7 +26,7 @@
 
 		console.log("updating permix rules");
 
-		permix.setup(permixRules);
+		clientOnlyPermix.setup(permixRules);
 	});
 
 	$effect(() => {
@@ -74,7 +74,7 @@
 	<meta name="twitter:card" content="summary_large_image" />
 </svelte:head>
 
-<PermixProvider {permix}>
+<PermixProvider permix={clientOnlyPermix}>
 	<PermixHydrate state={data.permixState}>
 		<ModeWatcher defaultMode="dark" />
 		<Toaster />

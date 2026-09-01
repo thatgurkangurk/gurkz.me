@@ -3,7 +3,7 @@ import { usePermix as libUsePermix } from "permix/svelte";
 import type { MusicIdWithCreator } from "./server/db/schema";
 import type { User } from "./server/auth";
 
-type PermissionsDefinition = {
+export type PermissionsDefinition = {
 	musicId: [
 		{ name: "create" },
 		{ name: "read" },
@@ -25,8 +25,16 @@ export function getRules(user: User | undefined): Rules<PermissionsDefinition> {
 	};
 }
 
-export const permix = createPermix<PermissionsDefinition>();
+export const clientOnlyPermix = createPermix<PermissionsDefinition>();
+
+export function createServerPermix(user: User | undefined) {
+	const serverPermix = createPermix<PermissionsDefinition>();
+
+	serverPermix.setup(getRules(user));
+
+	return serverPermix;
+}
 
 export function usePermix() {
-	return libUsePermix(permix);
+	return libUsePermix(clientOnlyPermix);
 }
