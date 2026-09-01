@@ -111,6 +111,9 @@ importers:
       onedollarstats:
         specifier: ^0.0.23
         version: 0.0.23
+      permix:
+        specifier: ^4.1.2
+        version: 4.1.2(drizzle-orm@1.0.0-rc.5-ab785fc(postgres@3.4.9)(zod@4.5.2))(svelte@5.57.0)
       postgres:
         specifier: ^3.4.9
         version: 3.4.9
@@ -2381,6 +2384,60 @@ packages:
   pathe@2.0.3:
     resolution: {integrity: sha512-WUjGcAqP1gQacoQe+OBJsFA7Ld4DyXuUIjZ5cc75cLHvJ7dtNsTugphxIADwspS+AraAUePCKrSVtPLFj/F88w==}
 
+  permix@4.1.2:
+    resolution: {integrity: sha512-AeGqOQWkZD6PZYPQwcSKZOBCnGdcOfwXPGEs3N+nWRMZHOnkHFipPQ1wSAsb9RVIXnOHhOoxotPlNqC6xSxMHQ==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      '@orpc/server': '>=1'
+      '@tanstack/react-start': '>=1'
+      '@trpc/server': '>=11'
+      drizzle-orm: '>=0.30.0 || >=1.0.0-rc.3'
+      effect: '>=3'
+      elysia: '>=1'
+      express: '>=4'
+      fastify: '>=5'
+      fastify-plugin: '>=5'
+      hono: '>=4'
+      next: '>=14'
+      react: '>=18'
+      react-dom: '>=18'
+      solid-js: '>=1'
+      svelte: '>=5'
+      vue: '>=3'
+    peerDependenciesMeta:
+      '@orpc/server':
+        optional: true
+      '@tanstack/react-start':
+        optional: true
+      '@trpc/server':
+        optional: true
+      drizzle-orm:
+        optional: true
+      effect:
+        optional: true
+      elysia:
+        optional: true
+      express:
+        optional: true
+      fastify:
+        optional: true
+      fastify-plugin:
+        optional: true
+      hono:
+        optional: true
+      next:
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
+      solid-js:
+        optional: true
+      svelte:
+        optional: true
+      vue:
+        optional: true
+
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
 
@@ -4559,6 +4616,11 @@ snapshots:
   path-key@3.1.1: {}
 
   pathe@2.0.3: {}
+
+  permix@4.1.2(drizzle-orm@1.0.0-rc.5-ab785fc(postgres@3.4.9)(zod@4.5.2))(svelte@5.57.0):
+    dependencies:
+      drizzle-orm: 1.0.0-rc.5-ab785fc(postgres@3.4.9)(zod@4.5.2)
+      svelte: 5.57.0
 
   picocolors@1.1.1: {}
 

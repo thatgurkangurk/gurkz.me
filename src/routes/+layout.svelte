@@ -9,9 +9,10 @@
 
 	import "vanilla-cookieconsent/dist/cookieconsent.css";
 	import { run } from "#lib/cookie-consent.js";
-	import { untrack } from "svelte";
 	import { Toaster } from "svelte-sonner";
 	import { page } from "$app/state";
+	import { PermixProvider, PermixHydrate } from "permix/svelte";
+	import { getRules, permix } from "#lib/permix.js";
 
 	const { children, data }: LayoutProps = $props();
 
@@ -19,6 +20,14 @@
 	let sessionState = new SessionState($state.snapshot(data.session));
 
 	setSession(sessionState);
+
+	$effect(() => {
+		const permixRules = getRules(sessionState.current?.user);
+
+		console.log("updating permix rules");
+
+		permix.setup(permixRules);
+	});
 
 	$effect(() => {
 		run({
@@ -65,13 +74,17 @@
 	<meta name="twitter:card" content="summary_large_image" />
 </svelte:head>
 
-<ModeWatcher defaultMode="dark" />
-<Toaster />
+<PermixProvider {permix}>
+	<PermixHydrate state={data.permixState}>
+		<ModeWatcher defaultMode="dark" />
+		<Toaster />
 
-<div class="min-h-screen bg-gray-950">
-	<Navbar />
+		<div class="min-h-screen bg-gray-950">
+			<Navbar />
 
-	<main class="mt-20 grow px-4 pt-2" data-vaul-drawer-wrapper>
-		{@render children()}
-	</main>
-</div>
+			<main class="mt-20 grow px-4 pt-2" data-vaul-drawer-wrapper>
+				{@render children()}
+			</main>
+		</div>
+	</PermixHydrate>
+</PermixProvider>
