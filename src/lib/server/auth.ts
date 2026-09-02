@@ -47,7 +47,9 @@ export const auth = betterAuth({
 				return false;
 			}
 		}),
-		apiKey(),
+		apiKey({
+			enableSessionForAPIKeys: true
+		}),
 		sveltekitCookies(getRequestEvent)
 	],
 	socialProviders: {
