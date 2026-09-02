@@ -18,18 +18,27 @@ export const init: ServerInit = async () => {
 };
 
 export const handle: Handle = async ({ event, resolve }) => {
-	const session = await auth.api.getSession({
-		headers: event.request.headers
-	});
+	let session: Awaited<ReturnType<typeof auth.api.getSession>> = null;
+
+	try {
+		session = await auth.api.getSession({
+			headers: event.request.headers
+		});
+	} catch {
+		session = null;
+	}
 
 	if (session) {
 		event.locals.session = session.session;
 		event.locals.user = session.user as User;
 	}
 
-	const serverPermix = createServerPermix(session?.user as User);
+	event.locals.permix = createServerPermix(session?.user as User | undefined);
 
-	event.locals.permix = serverPermix;
-
-	return svelteKitHandler({ event, resolve, auth, building });
+	return svelteKitHandler({
+		event,
+		resolve,
+		auth,
+		building
+	});
 };
