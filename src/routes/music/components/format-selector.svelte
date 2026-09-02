@@ -1,17 +1,26 @@
 <script lang="ts">
-	import { Button } from "#lib/components/ui/button/index.js";
-	import { getIdFormat, ID_FORMAT_OPTIONS } from "../context.svelte.js";
+	import * as ToggleGroup from "#lib/components/ui/toggle-group/index.js";
+	import { getIdFormat, ID_FORMAT_OPTIONS, type IdFormat } from "../context.svelte.js";
 
 	const state = getIdFormat();
 </script>
 
-<div class="flex flex-row gap-2 select-none">
-	{#each ID_FORMAT_OPTIONS as { value, label }}
-		<Button
-			disabled={state.idFormat.current === value}
-			onclick={() => (state.idFormat.current = value)}
+<ToggleGroup.Root
+	type="single"
+	value={state.idFormat.current}
+	spacing={2}
+	onValueChange={(val) => {
+		if (val) state.idFormat.current = val as IdFormat;
+	}}
+	class="inline-flex rounded-lg bg-muted p-1 text-muted-foreground select-none"
+>
+	{#each ID_FORMAT_OPTIONS as { value, label } (value)}
+		<ToggleGroup.Item
+			{value}
+			aria-label={label}
+			class="rounded-md px-3.5 py-1.5 text-sm font-medium transition-all data-[state=on]:bg-background data-[state=on]:text-foreground data-[state=on]:shadow-sm"
 		>
 			{label}
-		</Button>
+		</ToggleGroup.Item>
 	{/each}
-</div>
+</ToggleGroup.Root>

@@ -20,10 +20,12 @@
 	let id = $props.id();
 </script>
 
-<h1 class="text-3xl">music id list</h1>
+<h1 class="pb-2 text-3xl font-bold tracking-tight md:text-4xl">music id list</h1>
 
 <Check path="musicId.create">
 	<NewMusicIdForm />
+
+	<br />
 </Check>
 
 <FormatSelector />
