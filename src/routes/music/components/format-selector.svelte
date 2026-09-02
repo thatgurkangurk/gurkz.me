@@ -18,6 +18,11 @@
 		<ToggleGroup.Item
 			{value}
 			aria-label={label}
+			onclick={(e) => {
+							if (state.idFormat.current === value) {
+           e.preventDefault();
+       }
+   }}
 			class="rounded-md px-3.5 py-1.5 text-sm font-medium transition-all data-[state=on]:bg-background data-[state=on]:text-foreground data-[state=on]:shadow-sm"
 		>
 			{label}
