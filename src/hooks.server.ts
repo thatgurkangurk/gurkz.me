@@ -1,10 +1,10 @@
 import type { Handle, ServerInit } from "@sveltejs/kit/hooks";
-import { auth } from "#lib/server/auth.js";
 import { svelteKitHandler } from "better-auth/svelte-kit";
-import { building } from "$app/env";
-import type { User } from "#lib/server/auth.js";
-import { db } from "#lib/server/db/index.js";
 import { createServerPermix } from "#lib/permix.js";
+import type { User } from "#lib/server/auth.js";
+import { auth } from "#lib/server/auth.js";
+import { db } from "#lib/server/db/index.js";
+import { building } from "$app/env";
 
 let isShutdownRegistered = false;
 
@@ -18,11 +18,24 @@ export const init: ServerInit = async () => {
 };
 
 export const handle: Handle = async ({ event, resolve }) => {
+	if (
+		event.url.pathname.startsWith("/api/") &&
+		event.request.method === "OPTIONS"
+	) {
+		return new Response(null, {
+			headers: {
+				"Access-Control-Allow-Origin": "*",
+				"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+				"Access-Control-Allow-Headers": "Content-Type, Authorization",
+			},
+		});
+	}
+
 	let session: Awaited<ReturnType<typeof auth.api.getSession>> = null;
 
 	try {
 		session = await auth.api.getSession({
-			headers: event.request.headers
+			headers: event.request.headers,
 		});
 	} catch {
 		session = null;
@@ -35,10 +48,24 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	event.locals.permix = createServerPermix(session?.user as User | undefined);
 
-	return svelteKitHandler({
+	const response = await svelteKitHandler({
 		event,
 		resolve,
 		auth,
-		building
+		building,
 	});
+
+	if (event.url.pathname.startsWith("/api/")) {
+		response.headers.set("Access-Control-Allow-Origin", "*");
+		response.headers.set(
+			"Access-Control-Allow-Methods",
+			"GET, POST, PUT, DELETE, OPTIONS",
+		);
+		response.headers.set(
+			"Access-Control-Allow-Headers",
+			"Content-Type, Authorization",
+		);
+	}
+
+	return response;
 };
