@@ -33,3 +33,6 @@ stats.html
 static/~partytown
 
 migration/data
+
+# doing some testing
+.rsvelte-language-server

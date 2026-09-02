@@ -5,10 +5,9 @@
 	import { Input } from "#lib/components/ui/input/index.js";
 	import { Label } from "#lib/components/ui/label/index.js";
 	import { ConfirmDeleteDialog } from "#lib/components/ui/confirm-delete-dialog/index.js";
-	import { useSession } from "#lib/session.svelte.js";
 	import { getMusicIds } from "#lib/api/music.remote.js";
 	import NewMusicIdForm from "./components/new-music-id-form.svelte";
-	import { usePermix } from "#lib/permix.js";
+	import { Check } from "#lib/permix.js";
 
 	let searchFilter = $state("");
 
@@ -18,18 +17,14 @@
 		musicIds.filter((id) => id.name.toLowerCase().includes(searchFilter.toLowerCase()))
 	);
 
-	const session = useSession();
-
 	let id = $props.id();
-
-	const permix = usePermix();
 </script>
 
 <h1 class="text-3xl">music id list</h1>
 
-{#if permix.check("musicId.create")}
+<Check path="musicId.create">
 	<NewMusicIdForm />
-{/if}
+</Check>
 
 <FormatSelector />
 

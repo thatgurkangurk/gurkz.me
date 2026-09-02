@@ -6,7 +6,12 @@ import type { User } from "#lib/server/auth.js";
 import { db } from "#lib/server/db/index.js";
 import { createServerPermix } from "#lib/permix.js";
 
+let isShutdownRegistered = false;
+
 export const init: ServerInit = async () => {
+	if (isShutdownRegistered) return;
+	isShutdownRegistered = true;
+
 	process.on("sveltekit:shutdown", async (reason) => {
 		await db.$client.end();
 	});

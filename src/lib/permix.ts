@@ -1,5 +1,5 @@
 import { createPermix, type Rules } from "permix";
-import { usePermix as libUsePermix } from "permix/svelte";
+import { usePermix as libUsePermix, createComponents } from "permix/svelte";
 import type { MusicId } from "./server/db/schema";
 import type { User } from "./server/auth";
 
@@ -50,3 +50,5 @@ export function createServerPermix(user: User | undefined) {
 export function usePermix() {
 	return libUsePermix(clientOnlyPermix);
 }
+
+export const { Check } = createComponents(clientOnlyPermix);

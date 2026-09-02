@@ -9,12 +9,13 @@
 	import type { MusicIdWithCreator } from "#lib/server/db/schema.js";
 	import { Button } from "#lib/components/ui/button/index.js";
 	import { confirmDelete } from "#lib/components/ui/confirm-delete-dialog/index.js";
-	import { useSession } from "#lib/session.svelte.js";
 	import { deleteMusicId } from "#lib/api/music.remote.js";
 	import { Badge } from "#lib/components/ui/badge/index.js";
 	import { SquareArrowOutUpRight } from "@lucide/svelte";
 	import { getIdFormat } from "../context.svelte";
 	import { CopyButton } from "#lib/components/ui/copy-button/index.js";
+	import { Skeleton } from "#lib/components/ui/skeleton/index.js";
+	import CheckWithPending from "#lib/components/check-with-pending.svelte";
 
 	type Props = {
 		musicId: MusicIdWithCreator;
@@ -25,17 +26,6 @@
 	});
 
 	let { musicId }: Props = $props();
-
-	const session = useSession();
-
-	const canManage = $derived.by(() => {
-		const user = session.current?.user;
-		if (!user) return false;
-
-		return (
-			musicId.createdById === user.id || user.permissions?.includes("MANAGE_MUSIC_IDS") === true
-		);
-	});
 
 	const state = getIdFormat();
 
@@ -73,8 +63,12 @@
 		</div>
 	</CardContent>
 	<CardFooter class="grid grid-cols-1 gap-1">
-		<div class="flex flex-row gap-2">
-			{#if canManage}
+		<div class="flex min-h-9 items-center justify-start">
+			<CheckWithPending path="musicId.delete" data={musicId}>
+				{#snippet pending()}
+					<Skeleton class="h-9 w-18 rounded-md" />
+				{/snippet}
+
 				<Button
 					variant="destructive"
 					onclick={() => {
@@ -89,8 +83,7 @@
 						});
 					}}>delete</Button
 				>
-			{/if}
-			<!-- delete music card -->
+			</CheckWithPending>
 		</div>
 		<p>
 			created by <span>{musicId.creator.name}</span> on{" "}
