@@ -14,6 +14,8 @@ export async function GET({ request }) {
 				throw error(401, authErr.message);
 			case "RATE_LIMITED":
 				throw error(429, authErr.message);
+			case "INTERNAL_SERVER_ERROR":
+				throw error(500, authErr.message);
 			default:
 				throw error(500, "internal server error");
 		}

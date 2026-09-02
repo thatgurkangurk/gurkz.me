@@ -4,7 +4,9 @@ import { Result, ok, err } from "neverthrow";
 import type { Session, User } from "#lib/server/auth.js";
 
 export type AuthError =
-	{ type: "UNAUTHORIZED"; message: string } | { type: "RATE_LIMITED"; message: string };
+	| { type: "UNAUTHORIZED"; message: string }
+	| { type: "RATE_LIMITED"; message: string }
+	| { type: "INTERNAL_SERVER_ERROR"; message: string };
 
 export type AuthResult = {
 	user: User;
@@ -41,6 +43,14 @@ export async function getSessionFromApiKey(
 			if (error.status === 429) {
 				return err({ type: "RATE_LIMITED", message: "too many requests. please slow down." });
 			}
+
+			if (error.status === 500) {
+				return err({
+					type: "INTERNAL_SERVER_ERROR",
+					message: error.message || "internal server error"
+				});
+			}
+
 			return err({ type: "UNAUTHORIZED", message: error.message || "invalid or expired api key" });
 		}
 
