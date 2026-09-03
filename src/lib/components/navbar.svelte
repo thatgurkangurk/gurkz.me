@@ -10,7 +10,7 @@
 	import { showPreferences } from "#lib/cookie-consent.js";
 	import { slide } from "svelte/transition";
 	import { cubicOut } from "svelte/easing";
-	import { Check } from "#lib/permix.js";
+	import { Check } from "#lib/permix.svelte.js";
 
 	type NavLinkProps = {
 		label: string;

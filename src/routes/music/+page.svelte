@@ -7,7 +7,7 @@
 	import { ConfirmDeleteDialog } from "#lib/components/ui/confirm-delete-dialog/index.js";
 	import * as Empty from "#lib/components/ui/empty/index.js";
 	import { scope } from "#lib/utils/scope.js";
-	import { Check } from "#lib/permix.js";
+	import { Check } from "#lib/permix.svelte.js";
 	import { Loader, Search, SearchAlert } from "@lucide/svelte";
 	import { Debounced, useIntersectionObserver } from "runed";
 	import { createInfiniteQuery, useQueryClient, type InfiniteData } from "@tanstack/svelte-query";

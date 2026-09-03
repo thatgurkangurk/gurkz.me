@@ -1,4 +1,4 @@
-import { createServerPermix } from "#lib/permix.js";
+import { createPermix } from "#lib/permix.js";
 import { db } from "#lib/server/db/index.js";
 import { error } from "@sveltejs/kit";
 import { getSessionFromApiKey } from "#lib/server/api-helpers.js";
@@ -23,7 +23,7 @@ export async function GET({ request }) {
 
 	const { user } = authResult.value;
 
-	const permix = createServerPermix(user);
+	const permix = createPermix(user);
 
 	if (!permix.check("musicId.list")) error(403, "you do not have permission to do this");
 

@@ -11,9 +11,10 @@
 	import { Toaster } from "svelte-sonner";
 	import { page } from "$app/state";
 	import { PermixProvider, PermixHydrate } from "permix/svelte";
-	import { getRules, clientOnlyPermix } from "#lib/permix.js";
+	import { getRules, createPermix } from "#lib/permix.js";
 	import { QueryClientProvider } from "@tanstack/svelte-query";
 	import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
+	import { setPermix } from "#lib/permix.svelte.js";
 
 	const { children, data }: LayoutProps = $props();
 
@@ -22,12 +23,15 @@
 
 	setSession(sessionState);
 
-	$effect(() => {
-		const permixRules = getRules(sessionState.current?.user);
+	// svelte-ignore state_referenced_locally
+	const permixInstance = createPermix(data.session?.user);
 
-		console.log("updating permix rules");
+	setPermix(permixInstance);
 
-		clientOnlyPermix.setup(permixRules);
+	$effect.pre(() => {
+		const user = sessionState.current?.user;
+
+		permixInstance.setup(getRules(user));
 	});
 
 	$effect(() => {
@@ -76,7 +80,7 @@
 </svelte:head>
 
 <QueryClientProvider client={data.queryClient}>
-	<PermixProvider permix={clientOnlyPermix}>
+	<PermixProvider permix={permixInstance}>
 		<PermixHydrate state={data.permixState}>
 			<ModeWatcher defaultMode="dark" />
 			<Toaster />

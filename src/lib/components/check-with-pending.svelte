@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { type Snippet } from "svelte";
-	import { Check, usePermix } from "#lib/permix.js";
+	import { Check, usePermix } from "#lib/permix.svelte.js";
 	import type { ComponentProps } from "svelte";
 
 	type Props = ComponentProps<typeof Check> & {

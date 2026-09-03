@@ -1,6 +1,6 @@
 import type { Handle, ServerInit } from "@sveltejs/kit/hooks";
 import { svelteKitHandler } from "better-auth/svelte-kit";
-import { createServerPermix } from "#lib/permix.js";
+import { createPermix } from "#lib/permix.js";
 import type { User } from "#lib/server/auth.js";
 import { auth } from "#lib/server/auth.js";
 import { db } from "#lib/server/db/index.js";
@@ -18,16 +18,13 @@ export const init: ServerInit = async () => {
 };
 
 export const handle: Handle = async ({ event, resolve }) => {
-	if (
-		event.url.pathname.startsWith("/api/") &&
-		event.request.method === "OPTIONS"
-	) {
+	if (event.url.pathname.startsWith("/api/") && event.request.method === "OPTIONS") {
 		return new Response(null, {
 			headers: {
 				"Access-Control-Allow-Origin": "*",
 				"Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-				"Access-Control-Allow-Headers": "Content-Type, Authorization",
-			},
+				"Access-Control-Allow-Headers": "Content-Type, Authorization"
+			}
 		});
 	}
 
@@ -35,7 +32,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	try {
 		session = await auth.api.getSession({
-			headers: event.request.headers,
+			headers: event.request.headers
 		});
 	} catch {
 		session = null;
@@ -46,25 +43,19 @@ export const handle: Handle = async ({ event, resolve }) => {
 		event.locals.user = session.user as User;
 	}
 
-	event.locals.permix = createServerPermix(session?.user as User | undefined);
+	event.locals.permix = createPermix(session?.user as User | undefined);
 
 	const response = await svelteKitHandler({
 		event,
 		resolve,
 		auth,
-		building,
+		building
 	});
 
 	if (event.url.pathname.startsWith("/api/")) {
 		response.headers.set("Access-Control-Allow-Origin", "*");
-		response.headers.set(
-			"Access-Control-Allow-Methods",
-			"GET, POST, PUT, DELETE, OPTIONS",
-		);
-		response.headers.set(
-			"Access-Control-Allow-Headers",
-			"Content-Type, Authorization",
-		);
+		response.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+		response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
 	}
 
 	return response;
