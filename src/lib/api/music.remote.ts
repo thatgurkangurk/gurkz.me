@@ -23,33 +23,49 @@ const createMusicId = form(createMusicIdSchema, async (data) => {
 	}
 });
 
-const getMusicIds = query(async () => {
-	const event = getRequestEvent();
+const getMusicIds = query(
+	z.object({
+		page: z.number().int().positive().default(1),
+		limit: z.number().int().min(1).max(100).default(20),
+		search: z.string().default("")
+	}),
+	async ({ page = 1, limit = 20, search = "" }) => {
+		const event = getRequestEvent();
 
-	if (!event.locals.user || !event.locals.permix.check("musicId.list")) error(403);
+		if (!event.locals.user || !event.locals.permix.check("musicId.list")) error(403);
 
-	return await db.query.musicIds.findMany({
-		columns: {
-			id: true,
-			name: true,
-			robloxId: true,
-			createdById: true,
-			createdAt: true,
-			working: true,
-			tags: true
-		},
-		with: {
-			creator: {
-				columns: {
-					id: true,
-					name: true,
-					image: true
+		const offset = (page - 1) * limit;
+
+		return await db.query.musicIds.findMany({
+			...(search && {
+				where: {
+					name: { ilike: `%${search}%` }
 				}
-			}
-		},
-		orderBy: ({ id }, { desc }) => desc(id)
-	});
-});
+			}),
+			columns: {
+				id: true,
+				name: true,
+				robloxId: true,
+				createdById: true,
+				createdAt: true,
+				working: true,
+				tags: true
+			},
+			with: {
+				creator: {
+					columns: {
+						id: true,
+						name: true,
+						image: true
+					}
+				}
+			},
+			orderBy: ({ id }, { desc }) => desc(id),
+			limit,
+			offset
+		});
+	}
+);
 
 const deleteMusicId = command(
 	z.object({
@@ -74,8 +90,6 @@ const deleteMusicId = command(
 			console.error("failed to delete music id", err);
 			error(500, "Failed to delete music id");
 		}
-
-		getMusicIds().refresh();
 
 		return {
 			success: true
