@@ -20,13 +20,14 @@
 
 	type Props = {
 		musicId: MusicIdWithCreator;
+		onDelete?: (id: string) => void;
 	};
 
 	const dateFormat = new Intl.DateTimeFormat("en-GB", {
 		dateStyle: "long"
 	});
 
-	let { musicId }: Props = $props();
+	let { musicId, onDelete }: Props = $props();
 
 	const state = getIdFormat();
 
@@ -111,6 +112,7 @@
 								await deleteMusicId({
 									id: musicId.id
 								});
+								onDelete?.(musicId.id);
 							}
 						});
 					}}
