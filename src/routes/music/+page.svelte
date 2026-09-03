@@ -7,76 +7,56 @@
 	import { ConfirmDeleteDialog } from "#lib/components/ui/confirm-delete-dialog/index.js";
 	import * as Empty from "#lib/components/ui/empty/index.js";
 	import { scope } from "#lib/utils/scope.js";
-	import { getMusicIds } from "#lib/api/music.remote.js";
 	import { Check } from "#lib/permix.js";
-	import { untrack } from "svelte";
 	import { Loader, Search, SearchAlert } from "@lucide/svelte";
-	import { Debounced, useIntersectionObserver, watch } from "runed";
-
-	const LIMIT = 20;
-	const initialItems = await getMusicIds({ page: 1, limit: LIMIT, search: "" });
+	import { Debounced, useIntersectionObserver } from "runed";
+	import { createInfiniteQuery, useQueryClient, type InfiniteData } from "@tanstack/svelte-query";
+	import { musicIdsInfiniteQueryOptions } from "./query.js";
+	import type { getMusicIds } from "#lib/api/music.remote.js";
 
 	let searchFilter = $state("");
 	const debouncedSearchFilter = new Debounced(() => searchFilter, 500);
 
-	let musicIds = $state(initialItems);
-	let lastBatchLength = $state(initialItems.length);
-	let page = $state(2);
+	const queryClient = useQueryClient();
 
-	let isFetchingMore = $state(false);
-	let isFetchingNewSearch = $state(false);
+	const query = createInfiniteQuery(() =>
+		musicIdsInfiniteQueryOptions(debouncedSearchFilter.current)
+	);
 
-	let isSearching = $derived(searchFilter !== debouncedSearchFilter.current || isFetchingNewSearch);
-	let hasMore = $derived(lastBatchLength === LIMIT);
+	let musicIds = $derived(query.data?.pages.flat() ?? []);
+
+	let isSearching = $derived(
+		searchFilter !== debouncedSearchFilter.current ||
+			(query.isFetching && !query.isFetchingNextPage)
+	);
 
 	let loadMoreAnchor = $state<HTMLElement | null>(null);
 
 	useIntersectionObserver(
 		() => loadMoreAnchor,
 		([entry]) => {
-			if (entry?.isIntersecting) {
-				untrack(() => loadMore());
+			if (entry?.isIntersecting && query.hasNextPage && !query.isFetchingNextPage) {
+				query.fetchNextPage();
 			}
 		}
 	);
 
-	async function loadMore() {
-		if (isFetchingMore || !hasMore || isSearching) return;
-		isFetchingMore = true;
+	type MusicPage = Awaited<ReturnType<typeof getMusicIds>>;
 
-		try {
-			const newItems = await getMusicIds({
-				page,
-				limit: LIMIT,
-				search: debouncedSearchFilter.current
-			});
+	type MusicCache = InfiniteData<MusicPage>;
 
-			musicIds = [...musicIds, ...newItems];
-			lastBatchLength = newItems.length;
-			page += 1;
-		} finally {
-			isFetchingMore = false;
-		}
+	function handleDelete(deletedId: string) {
+		const options = musicIdsInfiniteQueryOptions(debouncedSearchFilter.current);
+
+		queryClient.setQueryData<MusicCache>(options.queryKey, (oldData) => {
+			if (!oldData) return oldData;
+
+			return {
+				...oldData,
+				pages: oldData.pages.map((page) => page.filter((item) => item.id !== deletedId))
+			};
+		});
 	}
-
-	watch(
-		() => debouncedSearchFilter.current,
-		(currentSearch) => {
-			(async () => {
-				isFetchingNewSearch = true;
-
-				try {
-					const newItems = await getMusicIds({ page: 1, limit: LIMIT, search: currentSearch });
-					musicIds = newItems;
-					lastBatchLength = newItems.length;
-					page = 2;
-				} finally {
-					isFetchingNewSearch = false;
-				}
-			})();
-		},
-		{ lazy: true }
-	);
 
 	let id = $props.id();
 </script>
@@ -104,7 +84,7 @@
 				class="px-9"
 			/>
 
-			{#if isSearching}
+			{#if isSearching || (query.isLoading && !query.data)}
 				<div class="absolute top-2.5 right-3 text-muted-foreground">
 					<Loader class="h-4 w-4 animate-spin" />
 				</div>
@@ -120,15 +100,10 @@
 	]}
 >
 	{#each musicIds as musicId (musicId.id)}
-		<MusicCard
-			{musicId}
-			onDelete={(deletedId) => {
-				musicIds = musicIds.filter((item) => item.id !== deletedId);
-			}}
-		/>
+		<MusicCard {musicId} onDelete={handleDelete} />
 	{/each}
 
-	{#if musicIds.length === 0 && !isSearching}
+	{#if musicIds.length === 0 && !query.isLoading && !isSearching}
 		<Empty.Root>
 			<Empty.Header>
 				<Empty.Media variant="icon">
@@ -141,9 +116,9 @@
 	{/if}
 </div>
 
-{#if hasMore && !isSearching}
+{#if query.hasNextPage && !isSearching}
 	<div bind:this={loadMoreAnchor} class="flex w-full items-center justify-center py-10">
-		{#if isFetchingMore}
+		{#if query.isFetchingNextPage}
 			<div
 				class="flex items-center gap-2 rounded-full border bg-background px-4 py-2 text-sm text-muted-foreground shadow-sm"
 			>
