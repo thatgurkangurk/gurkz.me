@@ -12,11 +12,6 @@
 					}
 				}
 			}
-		},
-		"svelte-language-server": {
-			"initialization_options": {
-				"dont_start": true
-			}
 		}
 	}
 }
