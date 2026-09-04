@@ -6,11 +6,9 @@ import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 import adapter from "@sveltejs/adapter-node";
 import path from "node:path";
 import wasm from "vite-plugin-wasm";
-import { MagicRegExpTransformPlugin } from "magic-regexp/transform";
 
 export default defineConfig({
 	plugins: [
-		MagicRegExpTransformPlugin.vite(),
 		wasm(),
 		tailwindcss(),
 		sveltekit({

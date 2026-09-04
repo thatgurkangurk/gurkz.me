@@ -36,7 +36,6 @@
     "eslint-plugin-svelte": "^3.22.0",
     "globals": "^17.8.0",
     "jsrepo": "^3.8.1",
-    "magic-regexp": "^0.11.0",
     "mode-watcher": "^1.1.0",
     "neverthrow": "^8.2.0",
     "npm-cookie": "npm:cookie@^2.0.1",
