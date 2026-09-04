@@ -10,7 +10,13 @@
 	import { toast } from "svelte-sonner";
 	import { createMusicId } from "#lib/api/music.remote.js";
 	import { createMusicIdSchema } from "../schemas";
-	import { Card, CardContent, CardHeader, CardTitle } from "#lib/components/ui/card/index.js";
+	import {
+		Card,
+		CardContent,
+		CardFooter,
+		CardHeader,
+		CardTitle
+	} from "#lib/components/ui/card/index.js";
 	import { autoAnimate } from "#lib/attachments/auto-animate.svelte.js";
 
 	let formEl: HTMLFormElement | undefined = $state.raw();
@@ -48,12 +54,13 @@
 	const { form, attributes, submitting } = $derived(configured());
 </script>
 
-<Card class="w-full max-w-xs">
+<Card class="w-full max-w-md">
 	<CardHeader>
 		<CardTitle>create a music id</CardTitle>
 	</CardHeader>
-	<CardContent>
-		<form bind:this={formEl} {...attributes} enctype="multipart/form-data">
+
+	<form bind:this={formEl} {...attributes} enctype="multipart/form-data">
+		<CardContent>
 			<div>
 				<Label class={[!!form.fields.name.issues() && "text-destructive", "pb-2"]}>name</Label>
 				<Input
@@ -101,7 +108,8 @@
 							/>
 
 							<Button
-								variant="destructive"
+								size="icon"
+								variant="outline"
 								type="button"
 								disabled={!!form.pending}
 								onclick={() => {
@@ -119,10 +127,12 @@
 					</div>
 				{/each}
 			</div>
+		</CardContent>
+		<CardFooter class="flex flex-row items-center justify-between py-2">
+			<Button type="submit" disabled={submitting}>submit</Button>
 
-			<div class="flex flex-row gap-2 py-2">
+			<div class="flex flex-row items-center gap-2">
 				<Button type="button" disabled={tags.length >= 4} onclick={addTag}>add tag</Button>
-
 				<Button
 					type="button"
 					variant="destructive"
@@ -132,8 +142,6 @@
 					remove all tags
 				</Button>
 			</div>
-
-			<Button type="submit" disabled={submitting}>submit</Button>
-		</form>
-	</CardContent>
+		</CardFooter>
+	</form>
 </Card>
