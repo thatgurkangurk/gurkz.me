@@ -34,10 +34,16 @@ function MusicCard(
 function RouteComponent() {
     const { data } = useSuspenseQuery(orpc.music.list.queryOptions());
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-            {data.map((item) => (
-                <MusicCard key={item.id} musicId={item} />
-            ))}
-        </div>
+        <>
+            <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
+                hello there 👀
+            </h1>
+
+            <div className="flex flex-col gap-2">
+                {data.map((item) => (
+                    <MusicCard key={item.id} musicId={item} />
+                ))}
+            </div>
+        </>
     );
 }
