@@ -1,31 +1,31 @@
 {
-  "name": "gurkz.me",
-  "version": "0.0.1",
-  "type": "module",
-  "packageManager": "nub@0.7.5",
-  "devEngines": {
-    "packageManager": {
-      "name": "nub",
-      "version": "^0.7.5",
-      "onFail": "ignore"
+    "name": "gurkz.me",
+    "version": "0.0.1",
+    "type": "module",
+    "packageManager": "nub@0.8.3",
+    "devEngines": {
+        "packageManager": {
+            "name": "nub",
+            "version": "^0.7.5",
+            "onFail": "ignore"
+        }
+    },
+    "scripts": {
+        "dev": "vite dev",
+        "build": "vite build"
+    },
+    "devDependencies": {
+        "@types/react": "^19.2.18",
+        "@types/react-dom": "^19.2.7",
+        "@vitejs/plugin-react": "^6.1.1",
+        "nitro": "^3.0.260903-beta",
+        "typescript": "^7.0.2",
+        "vite": "^8.2.2"
+    },
+    "dependencies": {
+        "@tanstack/react-router": "^1.170.32",
+        "@tanstack/react-start": "^1.168.49",
+        "react": "^19.2.8",
+        "react-dom": "^19.2.8"
     }
-  },
-  "scripts": {
-    "dev": "vite dev",
-    "build": "vite build"
-  },
-  "devDependencies": {
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.7",
-    "@vitejs/plugin-react": "^6.1.1",
-    "nitro": "^3.0.260903-beta",
-    "typescript": "^7.0.2",
-    "vite": "^8.2.2"
-  },
-  "dependencies": {
-    "@tanstack/react-router": "^1.170.32",
-    "@tanstack/react-start": "^1.168.49",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8"
-  }
 }
