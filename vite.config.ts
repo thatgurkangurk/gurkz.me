@@ -23,7 +23,9 @@ export default defineConfig({
         }),
         // react's vite plugin must come after start's vite plugin
         viteReact({ compiler: true }),
-        nitro(),
+        nitro({
+            plugins: ["./plugins/db.ts"],
+        }),
         jotai(),
     ],
 });

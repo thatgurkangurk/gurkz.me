@@ -8,41 +8,12 @@ import {
 } from "#lib/components/ui/popover.js";
 import { buttonVariants } from "#lib/components/ui/button.js";
 import { cn } from "#lib/utils.js";
+import { UserMenu } from "./user-menu";
 
 const NAV_LINKS = [
     { label: "home", to: "/" },
     { label: "music id list", to: "/music" },
 ] as const;
-
-function UserMenuPlaceholder() {
-    const [open, setOpen] = useState(false);
-
-    return (
-        <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger
-                onMouseEnter={() => setOpen(true)}
-                onMouseLeave={() => setOpen(false)}
-                className={buttonVariants({
-                    size: "icon",
-                    variant: "secondary",
-                    className:
-                        "size-8 cursor-not-allowed rounded-full text-black dark:text-white",
-                })}
-            >
-                <IconUser size={18} />
-            </PopoverTrigger>
-            <PopoverContent
-                className="w-auto rounded-full px-3 py-1.5 shadow-md"
-                align="end"
-                sideOffset={8}
-            >
-                <p className="text-xs font-medium text-muted-foreground whitespace-nowrap">
-                    will be added soon
-                </p>
-            </PopoverContent>
-        </Popover>
-    );
-}
 
 export function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -106,7 +77,7 @@ export function Navbar() {
                         <div className="flex items-center gap-8">
                             {renderLinks()}
                         </div>
-                        <UserMenuPlaceholder />
+                        <UserMenu />
                     </div>
                 </div>
             </nav>
@@ -146,7 +117,7 @@ export function Navbar() {
                             gurkan's website
                         </Link>
 
-                        <UserMenuPlaceholder />
+                        <UserMenu />
                     </div>
 
                     <div
