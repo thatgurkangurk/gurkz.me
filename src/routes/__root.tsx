@@ -50,7 +50,6 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
 
                     <main className="mt-20 grow px-4 pt-2">{children}</main>
                 </div>
-                {children}
                 <Scripts />
             </body>
         </html>
