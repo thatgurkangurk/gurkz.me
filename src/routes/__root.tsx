@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-router";
 import type { QueryClient } from "@tanstack/react-query";
 import "../styles.css";
+import { Navbar } from "#lib/components/navbar.js";
 
 export const Route = createRootRouteWithContext<{
     queryClient: QueryClient;
@@ -39,25 +40,16 @@ function RootComponent() {
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
     return (
-        <html className="dark">
+        <html className="dark cc--darkmode">
             <head>
                 <HeadContent />
             </head>
-            <body className="bg-gray-950 text-gray-100 min-h-screen">
-                <nav className="flex gap-4 py-3">
-                    <Link
-                        to="/"
-                        className="text-gray-200 hover:text-white no-underline [&.active]:underline [&.active]:font-bold"
-                    >
-                        home
-                    </Link>
-                    <Link
-                        to="/music"
-                        className="text-gray-200 hover:text-white no-underline [&.active]:underline [&.active]:font-bold"
-                    >
-                        music id list
-                    </Link>
-                </nav>
+            <body className="flex min-h-screen flex-col">
+                <div className="min-h-screen bg-gray-950">
+                    <Navbar />
+
+                    <main className="mt-20 grow px-4 pt-2">{children}</main>
+                </div>
                 {children}
                 <Scripts />
             </body>
