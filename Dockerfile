@@ -3,7 +3,7 @@ LABEL org.opencontainers.image.source="https://github.com/thatgurkangurk/gurkz.m
 WORKDIR /app
 
 FROM base AS deps
-COPY --chown=node:node package.json pnpm-lock.yaml ./
+COPY --chown=node:node package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN nub ci
 
 FROM base AS build
@@ -15,11 +15,11 @@ RUN CI="1" BETTER_AUTH_SECRET="changeme" DATABASE_URL="postgres://changeme" nub 
 
 FROM base
 
-COPY --from=build --chown=node:node /app/build /app/build
+COPY --from=build --chown=node:node /app/.output /app/.output
 
 ENV NODE_ENV="production"
 ENV HOST=0.0.0.0
 ENV PORT=4321
 EXPOSE 4321/tcp
 
-CMD [ "nub", "./build/index.js" ]
+CMD [ "nub", "./.output/server/index.mjs" ]
