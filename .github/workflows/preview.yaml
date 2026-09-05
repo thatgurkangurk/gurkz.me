@@ -1,0 +1,43 @@
+name: Build Static Image (Preview)
+on:
+    push:
+        branches: ["tsstart"]
+env:
+    REGISTRY: ghcr.io
+    IMAGE_NAME: "thatgurkangurk/gurkz.me"
+
+jobs:
+    amd64:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            packages: write
+        steps:
+            - id: commit
+              name: Commit Hash
+              uses: prompt/actions-commit-hash@v3.0.0
+            - uses: actions/checkout@v6
+            - name: Set up QEMU
+              uses: docker/setup-qemu-action@v3
+
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v4
+
+            - name: Login to GHCR
+              uses: docker/login-action@v4
+              with:
+                  registry: ${{ env.REGISTRY }}
+                  username: ${{ github.actor }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+            - name: Build and push
+              uses: docker/build-push-action@v7
+              with:
+                  push: true
+                  file: Dockerfile
+                  context: .
+                  tags: |
+                      ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.commit.outputs.short }}
+                      ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:tsstart
+            - name: Trigger Preview Deploy Webhook
+              run: |
+                  curl --request POST --max-time 1 --silent '${{ secrets.PREVIEW_DEPLOY_WEBHOOK }}' || true

@@ -1,46 +1,27 @@
-import devtoolsJson from "vite-plugin-devtools-json";
-import tailwindcss from "@tailwindcss/vite";
-import { sveltekit } from "@sveltejs/kit/vite";
 import { defineConfig } from "vite";
-import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
-import adapter from "@sveltejs/adapter-node";
-import path from "node:path";
-import wasm from "vite-plugin-wasm";
+import { tanstackStart } from "@tanstack/react-start/plugin/vite";
+import viteReact from "@vitejs/plugin-react";
+import { nitro } from "nitro/vite";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-	plugins: [
-		wasm(),
-		tailwindcss(),
-		sveltekit({
-			preprocess: vitePreprocess(),
-
-			adapter: adapter(),
-
-			csrf: {
-				trustedOrigins: ["https://www.gurkz.me", "https://gurkz.me"]
-			},
-
-			experimental: {
-				remoteFunctions: true
-			},
-
-			compilerOptions: {
-				experimental: {
-					async: true
-				}
-			},
-
-			paths: {
-				origin: "https://www.gurkz.me"
-			},
-
-			inspector: true
-		}),
-		devtoolsJson()
-	],
-	server: {
-		fs: {
-			allow: ["..", path.resolve(process.env.HOME || "~", ".cache")] // nub cache
-		}
-	}
+    server: {
+        port: 3000,
+    },
+    resolve: {
+        tsconfigPaths: true,
+    },
+    plugins: [
+        tailwindcss(),
+        tanstackStart({
+            importProtection: {
+                client: {
+                    files: ["**/server/**"],
+                },
+            },
+        }),
+        // react's vite plugin must come after start's vite plugin
+        viteReact({ compiler: true }),
+        nitro(),
+    ],
 });
