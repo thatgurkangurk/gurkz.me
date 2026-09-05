@@ -3,7 +3,7 @@ LABEL org.opencontainers.image.source="https://github.com/thatgurkangurk/gurkz.m
 WORKDIR /app
 
 FROM base AS deps
-COPY --chown=node:node package.json pnpm-lock.yaml ./
+COPY --chown=node:node package.json nub.lock ./
 RUN nub ci
 
 FROM base AS build
