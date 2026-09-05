@@ -43,7 +43,9 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
         <html className="dark cc--darkmode">
             <head>
                 <HeadContent />
-                <script src="https://unpkg.com/react-scan/dist/auto.global.js" />
+                {import.meta.env.DEV && (
+                    <script src="https://unpkg.com/react-scan/dist/auto.global.js" />
+                )}
             </head>
             <body className="flex min-h-screen flex-col">
                 <div className="min-h-screen bg-gray-950">
