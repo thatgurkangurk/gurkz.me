@@ -7,6 +7,7 @@ import {
     Link,
 } from "@tanstack/react-router";
 import type { QueryClient } from "@tanstack/react-query";
+import "../styles.css";
 
 export const Route = createRootRouteWithContext<{
     queryClient: QueryClient;
