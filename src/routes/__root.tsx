@@ -39,35 +39,21 @@ function RootComponent() {
 
 function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
     return (
-        <html>
+        <html className="dark">
             <head>
                 <HeadContent />
             </head>
-            <body>
-                <nav
-                    style={{ display: "flex", gap: "16px", padding: "12px 0" }}
-                >
+            <body className="bg-gray-950 text-gray-100 min-h-screen">
+                <nav className="flex gap-4 py-3">
                     <Link
                         to="/"
-                        style={{ color: "#333", textDecoration: "none" }}
-                        activeProps={{
-                            style: {
-                                textDecoration: "underline",
-                                fontWeight: "bold",
-                            },
-                        }}
+                        className="text-gray-200 hover:text-white no-underline [&.active]:underline [&.active]:font-bold"
                     >
                         home
                     </Link>
                     <Link
                         to="/music"
-                        style={{ color: "#333", textDecoration: "none" }}
-                        activeProps={{
-                            style: {
-                                textDecoration: "underline",
-                                fontWeight: "bold",
-                            },
-                        }}
+                        className="text-gray-200 hover:text-white no-underline [&.active]:underline [&.active]:font-bold"
                     >
                         music id list
                     </Link>

@@ -21,16 +21,10 @@ function MusicCard(
     return (
         <div
             key={props.musicId.id}
-            style={{
-                border: "1px solid #ccc",
-                padding: "8px 12px",
-                borderRadius: "4px",
-            }}
+            className="rounded border border-gray-800 bg-gray-900/50 p-3"
         >
-            <p style={{ margin: 0, fontWeight: "bold" }}>
-                {props.musicId.name}
-            </p>
-            <p style={{ margin: 0, color: "#666", fontSize: "14px" }}>
+            <p className="m-0 font-bold text-gray-100">{props.musicId.name}</p>
+            <p className="m-0 text-sm text-gray-400">
                 id: {props.musicId.robloxId}
             </p>
         </div>
