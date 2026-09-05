@@ -2,7 +2,7 @@ import { db } from "#lib/server/db/index.js";
 import { error } from "@sveltejs/kit";
 
 import type { PageServerLoad } from "./$types";
-import { defineMeta } from "#lib/meta.js";
+import { definePageMetaTags } from "svelte-meta-tags";
 
 async function getSubmittersForVideo(videoId: string) {
 	const res = await db.query.clip.findMany({
@@ -68,9 +68,7 @@ export const load = (async (ev) => {
 	if (!queriedVideo) throw error(404);
 
 	if (queriedVideo.submissionsOpen && !ev.locals.user)
-		throw error(401, {
-			message: "please sign in to continue"
-		});
+		throw error(401, "please sign in to continue");
 
 	const submitters = queriedVideo.submissionsOpen
 		? []
@@ -80,7 +78,7 @@ export const load = (async (ev) => {
 		submissionsOpen: queriedVideo.submissionsOpen,
 		submitters,
 		details: queriedVideo,
-		meta: defineMeta({
+		...definePageMetaTags({
 			title: `submit to ${queriedVideo.title}`
 		})
 	};

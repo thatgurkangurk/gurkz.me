@@ -1,9 +1,10 @@
+import type { MetaTagsProps } from "svelte-meta-tags";
+
 // See https://svelte.dev/docs/kit/types#app.d.ts
 // for information about these interfaces
 /// <reference types="vite-plugin-simple-scope/types" />
-
 import type { Session, User } from "#lib/auth.js";
-import type { Meta } from "#lib/meta.js";
+
 import type { PermissionsDefinition } from "#lib/permix.js";
 import type { Permix } from "permix";
 
@@ -23,9 +24,12 @@ declare global {
 			session?: Session;
 			permix: Permix<PermissionsDefinition>;
 		}
+
 		interface PageData {
-			meta?: Meta;
+			baseMetaTags?: MetaTagsProps;
+			pageMetaTags?: MetaTagsProps;
 		}
+
 		// interface PageState {}
 		// interface Platform {}
 	}

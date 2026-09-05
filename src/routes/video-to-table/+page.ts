@@ -1,11 +1,11 @@
-import { defineMeta } from "#lib/meta.js";
+import { definePageMetaTags } from "svelte-meta-tags";
 import type { PageLoad } from "./$types";
 
 export const ssr = false;
 
 export const load: PageLoad = ({ params }) => {
 	return {
-		meta: defineMeta({
+		...definePageMetaTags({
 			title: "video to html table"
 		})
 	};

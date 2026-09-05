@@ -1,10 +1,8 @@
-import { defineMeta } from "#lib/meta.js";
+import { definePageMetaTags } from "svelte-meta-tags";
 import type { PageLoad } from "./$types";
 
-export const load: PageLoad = ({ params }) => {
+export const load: PageLoad = ({ params, url }) => {
 	return {
-		meta: defineMeta({
-			title: "home"
-		})
+		...definePageMetaTags({ title: "home" })
 	};
 };

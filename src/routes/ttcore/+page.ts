@@ -1,10 +1,10 @@
-import { defineMeta } from "#lib/meta.js";
+import { definePageMetaTags } from "svelte-meta-tags";
 import type { PageLoad } from "./$types";
 
 export const load: PageLoad = ({ params }) => {
 	return {
-		meta: defineMeta({
-			title: "tt core"
+		...definePageMetaTags({
+			title: "traitor town core"
 		})
 	};
 };

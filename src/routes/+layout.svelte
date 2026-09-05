@@ -15,6 +15,7 @@
 	import { QueryClientProvider } from "@tanstack/svelte-query";
 	import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
 	import { setPermix } from "#lib/permix.svelte.js";
+	import { MetaTags, deepMerge } from "svelte-meta-tags";
 
 	const { children, data }: LayoutProps = $props();
 
@@ -36,25 +37,13 @@
 
 	$effect(() => {
 		run({
-			language: {
-				default: "en",
-				translations: {
-					en: "/en.json"
-				}
-			},
+			language: { default: "en", translations: { en: "/en.json" } },
 			autoClearCookies: true,
 			categories: {
 				preferences: {
 					enabled: true,
 					autoClear: {
-						cookies: [
-							{
-								name: "id_format"
-							},
-							{
-								name: "better-auth.last_used_login_method"
-							}
-						]
+						cookies: [{ name: "id_format" }, { name: "better-auth.last_used_login_method" }]
 					}
 				}
 			}
@@ -64,20 +53,11 @@
 	$effect(() => {
 		configure();
 	});
+
+	let metaTags = $derived(deepMerge(data.baseMetaTags, page.data.pageMetaTags));
 </script>
 
-<svelte:head>
-	{#if page.data.meta}
-		<title>{page.data.meta.title}</title>
-		<link rel="icon" href={favicon} />
-
-		<meta property="og:title" content={page.data.meta.title} />
-		<meta property="og:description" content={page.data.meta.description} />
-		<meta property="og:type" content="website" />
-	{/if}
-
-	<meta name="twitter:card" content="summary_large_image" />
-</svelte:head>
+<MetaTags {...metaTags} />
 
 <QueryClientProvider client={data.queryClient}>
 	<PermixProvider permix={permixInstance}>
@@ -88,9 +68,7 @@
 			<div class="min-h-screen bg-gray-950">
 				<Navbar />
 
-				<main class="mt-20 grow px-4 pt-2" data-vaul-drawer-wrapper>
-					{@render children()}
-				</main>
+				<main class="mt-20 grow px-4 pt-2" data-vaul-drawer-wrapper>{@render children()}</main>
 			</div>
 
 			<SvelteQueryDevtools />

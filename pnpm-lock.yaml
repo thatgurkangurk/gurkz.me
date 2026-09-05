@@ -144,6 +144,9 @@ importers:
       svelte-check:
         specifier: ^4.7.5
         version: 4.7.6(picomatch@4.0.7)(svelte@5.57.0)(typescript@6.0.3)
+      svelte-meta-tags:
+        specifier: ^5.0.2
+        version: 5.0.2(svelte@5.57.0)(typescript@6.0.3)
       svelte-sonner:
         specifier: ^1.1.1
         version: 1.2.1(svelte@5.57.0)
@@ -2659,6 +2662,15 @@ packages:
     resolution: {integrity: sha512-xal3CZX1Xlo/k4ApwCFrHVACi9fBqJ7V+mwhBsuf/1IOKbBy098Fex+Wa/5QMubw09pSZ/u8EY8PWgevJsXp1A==}
     engines: {node: '>=6'}
 
+  schema-dts-lib@1.0.0:
+    resolution: {integrity: sha512-9MEO5vpQH9JdBioUupqluzxSYxPLjhmqRUudk15adUl/ypnRsM2/M1kN3AmVJQeG7nZqcL68H8JlGqQQT6vy9A==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      typescript: '>=4.9.5'
+
+  schema-dts@2.0.0:
+    resolution: {integrity: sha512-t7NoCy3Rn5GHGx6p7s1qIYK/AeIb8ZxJNR9WUNFkwMv2CiiGZBmqqYWc2FlZVm5ZbiHMY4OvBWhj7QtyrFO2Jw==}
+
   semver@6.3.1:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
     hasBin: true
@@ -2715,6 +2727,11 @@ packages:
     peerDependenciesMeta:
       svelte:
         optional: true
+
+  svelte-meta-tags@5.0.2:
+    resolution: {integrity: sha512-OkAcO7JKBzNGsRY8RE1mlVZYzuL9tS9S1zsV2PDp5cRhVJ4EN+Bu+bpNFHcMP3mBQAnpIRpsEteuBzlfiYjq1w==}
+    peerDependencies:
+      svelte: ^5.0.0
 
   svelte-sonner@1.2.1:
     resolution: {integrity: sha512-N00LOWb60fjKXULbpngku+7E9Krb16KpNq4/Eax5Vu7o1Dpbca55QpaLPsB+yp82JIEdFhfJuv5cVXLoe0ZtVA==}
@@ -4799,6 +4816,14 @@ snapshots:
     dependencies:
       mri: 1.2.0
 
+  schema-dts-lib@1.0.0(typescript@6.0.3):
+    dependencies:
+      typescript: 6.0.3
+
+  schema-dts@2.0.0(typescript@6.0.3):
+    dependencies:
+      schema-dts-lib: 1.0.0(typescript@6.0.3)
+
   semver@6.3.1: {}
 
   semver@7.8.5: {}
@@ -4854,6 +4879,11 @@ snapshots:
       postcss-selector-parser: 7.1.5
       semver: 7.8.5
     optionalDependencies:
+      svelte: 5.57.0
+
+  svelte-meta-tags@5.0.2(svelte@5.57.0)(typescript@6.0.3):
+    dependencies:
+      schema-dts: 2.0.0(typescript@6.0.3)
       svelte: 5.57.0
 
   svelte-sonner@1.2.1(svelte@5.57.0):

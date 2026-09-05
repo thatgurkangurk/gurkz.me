@@ -1,12 +1,12 @@
 import type { PageServerLoad } from "./$types";
 import { adminGuard } from "../guard";
-import { defineMeta } from "#lib/meta.js";
+import { definePageMetaTags } from "svelte-meta-tags";
 
 export const load = (async (ev) => {
 	adminGuard(ev);
 
 	return {
-		meta: defineMeta({
+		...definePageMetaTags({
 			title: "users - admin"
 		})
 	};
