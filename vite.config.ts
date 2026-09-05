@@ -21,7 +21,7 @@ export default defineConfig({
             },
         }),
         // react's vite plugin must come after start's vite plugin
-        viteReact(),
+        viteReact({ compiler: true }),
         nitro(),
     ],
 });
