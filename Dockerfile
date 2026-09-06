@@ -3,11 +3,11 @@ LABEL org.opencontainers.image.source="https://github.com/thatgurkangurk/gurkz.m
 WORKDIR /app
 
 FROM base AS deps
-COPY --chown=node:node package.json pnpm-lock.yaml ./
+COPY --chown=node:node package.json pnpm-lock.yaml ./scripts/tsconfig.ts ./
 RUN nub ci
 
 FROM base AS prod-deps
-COPY --chown=node:node package.json pnpm-lock.yaml ./
+COPY --chown=node:node package.json pnpm-lock.yaml /scripts/tsconfig.ts ./
 COPY --chown=node:node --from=deps /app/node_modules /app/node_modules
 RUN nub prune --prod
 
