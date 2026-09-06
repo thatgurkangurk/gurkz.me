@@ -1,6 +1,7 @@
-import { createContext } from "svelte";
 import type { Permix } from "permix";
 import { createComponents, usePermix as libUsePermix } from "permix/svelte";
+import { createContext } from "svelte";
+
 import type { PermissionsDefinition } from "./permix.js";
 
 export const [getPermix, setPermix] = createContext<Permix<PermissionsDefinition>>();

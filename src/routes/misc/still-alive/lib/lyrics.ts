@@ -1,8 +1,10 @@
+import { createTimeout } from "#lib/utils/timeouts.svelte.js";
+
+import type { Writable } from "svelte/store";
+
+import { type ASCII, AsciiEnum } from "./ascii";
 import { Cursor } from "./cursor";
 import { typeOneByOne } from "./text";
-import { AsciiEnum, type ASCII } from "./ascii";
-import type { Writable } from "svelte/store";
-import { createTimeout } from "#lib/utils/timeouts.svelte.js";
 
 type Lyric =
 	| {

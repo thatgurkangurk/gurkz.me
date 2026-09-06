@@ -1,6 +1,7 @@
+import { type InferSelectModel, sql } from "drizzle-orm";
 import { pgTable } from "drizzle-orm/pg-core";
-import { sql, type InferSelectModel } from "drizzle-orm";
 import { ulid } from "ulid";
+
 import { user } from "./auth.js";
 
 export const musicIds = pgTable("music_id", (t) => ({

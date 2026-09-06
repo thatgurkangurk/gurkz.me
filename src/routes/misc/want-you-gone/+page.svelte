@@ -1,10 +1,12 @@
 <script lang="ts">
-	import { Cake } from "./lib/cake";
-	import { onMount } from "svelte";
-	import Ui from "./lib/ui.svelte";
-	import { clearTimeouts } from "#lib/utils/timeouts.svelte.js";
-	import { Input } from "#lib/components/ui/input/index.js";
 	import Button from "#lib/components/ui/button/button.svelte";
+	import { Input } from "#lib/components/ui/input/index.js";
+	import { clearTimeouts } from "#lib/utils/timeouts.svelte.js";
+
+	import { onMount } from "svelte";
+
+	import { Cake } from "./lib/cake";
+	import Ui from "./lib/ui.svelte";
 
 	let hasStarted = $state(false);
 	let audioSrc = $state<string | null>(null);

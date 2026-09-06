@@ -1,7 +1,8 @@
 import { createPermix } from "#lib/permix.js";
-import { db } from "#lib/server/db/index.js";
-import { error } from "@sveltejs/kit";
 import { getSessionFromApiKey } from "#lib/server/api-helpers.js";
+import { db } from "#lib/server/db/index.js";
+
+import { error } from "@sveltejs/kit";
 
 export async function GET({ request }) {
 	const authResult = await getSessionFromApiKey(request);

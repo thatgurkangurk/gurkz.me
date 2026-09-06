@@ -1,8 +1,9 @@
-import accounts from "./data/account.json" with { type: "json" };
+import { InferSelectModel } from "drizzle-orm";
+
 import { local } from "../src/lib/server/db/index.js";
 import { schema } from "../src/lib/server/db/schema.js";
+import accounts from "./data/account.json" with { type: "json" };
 import { hydrateAndCamelCase } from "./utils.js";
-import { InferSelectModel } from "drizzle-orm";
 
 await local.transaction(async (tx) => {
 	for (const rawAccount of accounts) {

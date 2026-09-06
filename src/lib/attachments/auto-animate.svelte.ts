@@ -1,9 +1,9 @@
-import { fromAction } from "svelte/attachments";
 import {
-	autoAnimate as autoAnimateAction,
 	type AutoAnimateOptions,
-	type AutoAnimationPlugin
+	type AutoAnimationPlugin,
+	autoAnimate as autoAnimateAction
 } from "@formkit/auto-animate";
+import { fromAction } from "svelte/attachments";
 
 export function autoAnimate(
 	config?: Partial<AutoAnimateOptions> | AutoAnimationPlugin | undefined

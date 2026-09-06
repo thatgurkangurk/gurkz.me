@@ -1,8 +1,9 @@
 import { db } from "#lib/server/db/index.js";
+
 import { error } from "@sveltejs/kit";
+import { definePageMetaTags } from "svelte-meta-tags";
 
 import type { PageServerLoad } from "./$types";
-import { definePageMetaTags } from "svelte-meta-tags";
 
 async function getSubmittersForVideo(videoId: string) {
 	const res = await db.query.clip.findMany({

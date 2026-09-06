@@ -1,7 +1,8 @@
 import { auth } from "#lib/server/auth.js";
-import { isAPIError } from "better-auth/api";
-import { Result, ok, err } from "neverthrow";
 import type { Session, User } from "#lib/server/auth.js";
+
+import { isAPIError } from "better-auth/api";
+import { Result, err, ok } from "neverthrow";
 
 export type AuthError =
 	| { type: "UNAUTHORIZED"; message: string }

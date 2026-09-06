@@ -1,16 +1,18 @@
 <script lang="ts">
+	import Search from "#lib/components/search.svelte";
+	import { ConfirmDeleteDialog } from "#lib/components/ui/confirm-delete-dialog/index.js";
+	import * as Empty from "#lib/components/ui/empty/index.js";
+	import { Check } from "#lib/permix.svelte.js";
+	import { scope } from "#lib/utils/scope.js";
+
+	import { Loader, SearchAlert } from "@lucide/svelte";
+	import { createInfiniteQuery } from "@tanstack/svelte-query";
+	import { Debounced, useIntersectionObserver } from "runed";
+
 	import FormatSelector from "./components/format-selector.svelte";
 	import MusicCard from "./components/music-card.svelte";
 	import NewMusicIdForm from "./components/new-music-id-form.svelte";
-	import { ConfirmDeleteDialog } from "#lib/components/ui/confirm-delete-dialog/index.js";
-	import * as Empty from "#lib/components/ui/empty/index.js";
-	import { scope } from "#lib/utils/scope.js";
-	import { Check } from "#lib/permix.svelte.js";
-	import { Loader, SearchAlert } from "@lucide/svelte";
-	import { Debounced, useIntersectionObserver } from "runed";
-	import { createInfiniteQuery } from "@tanstack/svelte-query";
 	import { musicIdsInfiniteQueryOptions } from "./query.js";
-	import Search from "#lib/components/search.svelte";
 
 	let searchFilter = $state("");
 	const debouncedSearchFilter = new Debounced(() => searchFilter, 500);

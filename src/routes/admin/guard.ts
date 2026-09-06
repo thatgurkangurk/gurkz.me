@@ -1,4 +1,4 @@
-import { error, type ServerLoadEvent } from "@sveltejs/kit";
+import { type ServerLoadEvent, error } from "@sveltejs/kit";
 
 export function adminGuard(ev: ServerLoadEvent) {
 	if (!ev.locals.user) throw error(401, "please sign in to continue");

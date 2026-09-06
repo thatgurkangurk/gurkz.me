@@ -1,6 +1,6 @@
-import users from "./data/user.json" with { type: "json" };
 import { local } from "../src/lib/server/db/index.js";
 import { schema } from "../src/lib/server/db/schema.js";
+import users from "./data/user.json" with { type: "json" };
 import { hydrateAndCamelCase } from "./utils.js";
 
 await local.transaction(async (tx) => {

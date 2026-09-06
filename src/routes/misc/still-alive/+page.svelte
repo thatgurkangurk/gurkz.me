@@ -1,15 +1,17 @@
 <script lang="ts">
+	import Button from "#lib/components/ui/button/button.svelte";
+	import { Input } from "#lib/components/ui/input/index.js";
+	import { clearTimeouts, createTimeout } from "#lib/utils/timeouts.svelte.js";
+
+	import { onMount } from "svelte";
+
+	import { artPieces, ascii } from "./lib/ascii";
+	import { CreditsRenderer } from "./lib/credits";
+	import { Cursor } from "./lib/cursor";
 	import CourierSansBoldTTF from "./lib/fonts/CourierPrimeSansBold.ttf";
 	import CourierSansBoldWoff2 from "./lib/fonts/CourierPrimeSansBold.woff2";
 	import { LyricRenderer } from "./lib/lyrics";
-	import { ascii, artPieces } from "./lib/ascii";
-	import { onMount } from "svelte";
-	import { Cursor } from "./lib/cursor";
-	import { clearTimeouts, createTimeout } from "#lib/utils/timeouts.svelte.js";
-	import { CreditsRenderer } from "./lib/credits";
 	import styleUrl from "./style.css?url";
-	import { Input } from "#lib/components/ui/input/index.js";
-	import Button from "#lib/components/ui/button/button.svelte";
 
 	let hasStarted = $state(false);
 	let audioSrc = $state<string | null>(null);

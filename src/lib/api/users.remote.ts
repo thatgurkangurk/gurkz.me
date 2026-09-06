@@ -1,7 +1,8 @@
-import { form, getRequestEvent, query } from "$app/server";
 import { SetNewDisplayNameSchema } from "#lib/schemas/user.js";
 import { auth } from "#lib/server/auth.js";
 import { db } from "#lib/server/db/index.js";
+
+import { form, getRequestEvent, query } from "$app/server";
 import { error } from "@sveltejs/kit";
 
 import { adminOnlyGuard, authGuard } from "./utils";

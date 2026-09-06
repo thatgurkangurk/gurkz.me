@@ -1,11 +1,12 @@
-import {
-	infiniteQueryOptions,
-	keepPreviousData,
-	mutationOptions,
-	type InfiniteData
-} from "@tanstack/svelte-query";
 import { deleteMusicId, getMusicIds } from "#lib/api/music.remote.js";
 import type { MusicIdWithCreator } from "#lib/server/db/schema.js";
+
+import {
+	type InfiniteData,
+	infiniteQueryOptions,
+	keepPreviousData,
+	mutationOptions
+} from "@tanstack/svelte-query";
 
 const LIMIT = 20;
 

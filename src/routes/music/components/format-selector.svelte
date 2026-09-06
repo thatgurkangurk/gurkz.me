@@ -1,6 +1,7 @@
 <script lang="ts">
 	import * as ToggleGroup from "#lib/components/ui/toggle-group/index.js";
-	import { getIdFormat, ID_FORMAT_OPTIONS, type IdFormat } from "../context.svelte.js";
+
+	import { ID_FORMAT_OPTIONS, type IdFormat, getIdFormat } from "../context.svelte.js";
 
 	const state = getIdFormat();
 </script>
@@ -19,10 +20,10 @@
 			{value}
 			aria-label={label}
 			onclick={(e) => {
-							if (state.idFormat.current === value) {
-           e.preventDefault();
-       }
-   }}
+				if (state.idFormat.current === value) {
+					e.preventDefault();
+				}
+			}}
 			class="rounded-md px-3.5 py-1.5 text-sm font-medium transition-all data-[state=on]:bg-background data-[state=on]:text-foreground data-[state=on]:shadow-sm"
 		>
 			{label}

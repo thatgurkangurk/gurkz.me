@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, check } from "drizzle-orm/pg-core";
+import { check, pgTable } from "drizzle-orm/pg-core";
 import { ulid } from "ulid";
 
 export const video = pgTable(

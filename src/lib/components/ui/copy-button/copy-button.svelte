@@ -1,8 +1,9 @@
 <script lang="ts" module>
-	import type { Snippet } from "svelte";
 	import type { ButtonProps } from "#lib/components/ui/button/index.js";
-	import type { HTMLAttributes } from "svelte/elements";
+
 	import type { WithChildren, WithoutChildren } from "bits-ui";
+	import type { Snippet } from "svelte";
+	import type { HTMLAttributes } from "svelte/elements";
 
 	export type CopyButtonPropsWithoutHTML = WithChildren<
 		Pick<ButtonProps, "size" | "variant"> & {
@@ -22,10 +23,11 @@
 	import Button from "#lib/components/button.svelte";
 	import { UseClipboard } from "#lib/hooks/use-clipboard.svelte.js";
 	import { cn } from "#lib/utils.js";
-	import { mergeProps } from "bits-ui";
+
 	import CheckIcon from "@lucide/svelte/icons/check";
 	import CopyIcon from "@lucide/svelte/icons/copy";
 	import XIcon from "@lucide/svelte/icons/x";
+	import { mergeProps } from "bits-ui";
 	import { scale } from "svelte/transition";
 
 	let {

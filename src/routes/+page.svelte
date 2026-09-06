@@ -8,6 +8,7 @@
 		CardHeader,
 		CardTitle
 	} from "#lib/components/ui/card/index.js";
+
 	import { ExternalLink } from "@lucide/svelte";
 </script>
 

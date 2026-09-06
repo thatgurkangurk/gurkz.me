@@ -1,15 +1,17 @@
-import { command, form } from "$app/server";
-import * as env from "$app/env/private";
+import { ClipTitleSchema, CreateNewClipArgs, UpdateClipArgs } from "#lib/schemas/clip.js";
+import { SongsSchema } from "#lib/schemas/song.js";
 import { db } from "#lib/server/db/index.js";
 import { clip } from "#lib/server/db/schema/clip.js";
+
+import * as env from "$app/env/private";
+import { command, form } from "$app/server";
 import { EmbedBuilder } from "@discordjs/builders";
 import { error, invalid } from "@sveltejs/kit";
 import { and, eq } from "drizzle-orm";
-import { ClipTitleSchema, CreateNewClipArgs, UpdateClipArgs } from "#lib/schemas/clip.js";
-import { SongsSchema } from "#lib/schemas/song.js";
-import { authGuard, ttcoreAdminOnlyGuard as adminOnlyGuard } from "./utils.js";
-import { getClipsForVideo, getMyClipsForVideo } from "./videos.remote.js";
 import * as z from "zod/v4";
+
+import { ttcoreAdminOnlyGuard as adminOnlyGuard, authGuard } from "./utils.js";
+import { getClipsForVideo, getMyClipsForVideo } from "./videos.remote.js";
 
 type Video = {
 	title: string;

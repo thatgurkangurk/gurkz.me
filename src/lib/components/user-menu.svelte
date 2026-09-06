@@ -2,18 +2,20 @@
 	import {
 		DropdownMenu,
 		DropdownMenuContent,
+		DropdownMenuGroup,
+		DropdownMenuItem,
 		DropdownMenuLabel,
 		DropdownMenuSeparator,
-		DropdownMenuTrigger,
-		DropdownMenuGroup,
-		DropdownMenuItem
+		DropdownMenuTrigger
 	} from "#lib/components/ui/dropdown-menu/index.js";
 	import { Skeleton } from "#lib/components/ui/skeleton/index.js";
+	import { useSession } from "#lib/session.svelte.js";
+
+	import { LogOut, Settings, UserIcon } from "@lucide/svelte";
+
+	import SigninModal from "./signin-modal.svelte";
 	import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 	import { buttonVariants } from "./ui/button";
-	import { useSession } from "#lib/session.svelte.js";
-	import { LogOut, UserIcon, Settings } from "@lucide/svelte";
-	import SigninModal from "./signin-modal.svelte";
 
 	const session = useSession();
 </script>

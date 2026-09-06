@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Button } from "#lib/components/ui/button/index.js";
 	import { Card, CardFooter, CardHeader, CardTitle } from "#lib/components/ui/card/index.js";
+
 	import type { PageProps } from "./$types";
 
 	let { data }: PageProps = $props();

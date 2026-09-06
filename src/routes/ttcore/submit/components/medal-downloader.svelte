@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { medalDownloader } from "#lib/api/ttcore/medal.remote.js";
+	import InputErrors from "#lib/components/form/input-errors.svelte";
+	import ButtonGroup from "#lib/components/ui/button-group/button-group.svelte";
+	import { Button } from "#lib/components/ui/button/index.js";
 	import { Input } from "#lib/components/ui/input/index.js";
 	import { Label } from "#lib/components/ui/label/index.js";
-	import { Button } from "#lib/components/ui/button/index.js";
-	import InputErrors from "#lib/components/form/input-errors.svelte";
-	import { toErrors } from "#lib/utils/to-errors.js";
 	import { MedalDownloaderSchema } from "#lib/schemas/medal-downloader.js";
+	import { toErrors } from "#lib/utils/to-errors.js";
+
 	import { Download, LoaderCircle } from "@lucide/svelte";
-	import ButtonGroup from "#lib/components/ui/button-group/button-group.svelte";
 </script>
 
 <form

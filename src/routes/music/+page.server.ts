@@ -1,5 +1,6 @@
 import { error } from "@sveltejs/kit";
 import { definePageMetaTags } from "svelte-meta-tags";
+
 import type { PageServerLoad } from "./$types";
 
 export const load = (async (ev) => {

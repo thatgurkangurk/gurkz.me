@@ -1,9 +1,11 @@
-import * as z from "zod/v4";
-import { command, form, getRequestEvent, query } from "$app/server";
-import { error } from "@sveltejs/kit";
 import { db } from "#lib/server/db/index.js";
 import { musicIds } from "#lib/server/db/schema.js";
+
+import { command, form, getRequestEvent, query } from "$app/server";
+import { error } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
+import * as z from "zod/v4";
+
 import { createMusicIdSchema } from "../../routes/music/schemas";
 
 const createMusicId = form(createMusicIdSchema, async (data) => {

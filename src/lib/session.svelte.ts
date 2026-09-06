@@ -1,6 +1,7 @@
+import type { Session, User, auth } from "#lib/server/auth.js";
+
 import { invalidateAll } from "$app/navigation";
 import { page } from "$app/state";
-import type { User, Session, auth } from "#lib/server/auth.js";
 import type { SocialProvider } from "better-auth";
 import { inferAdditionalFields, lastLoginMethodClient } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/svelte";

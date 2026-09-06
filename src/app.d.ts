@@ -1,12 +1,11 @@
-import type { MetaTagsProps } from "svelte-meta-tags";
-
 // See https://svelte.dev/docs/kit/types#app.d.ts
 // for information about these interfaces
 /// <reference types="vite-plugin-simple-scope/types" />
 import type { Session, User } from "#lib/auth.js";
-
 import type { PermissionsDefinition } from "#lib/permix.js";
+
 import type { Permix } from "permix";
+import type { MetaTagsProps } from "svelte-meta-tags";
 
 declare global {
 	namespace App {

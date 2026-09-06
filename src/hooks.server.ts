@@ -1,10 +1,11 @@
-import type { Handle, ServerInit } from "@sveltejs/kit/hooks";
-import { svelteKitHandler } from "better-auth/svelte-kit";
 import { createPermix } from "#lib/permix.js";
 import type { User } from "#lib/server/auth.js";
 import { auth } from "#lib/server/auth.js";
 import { db } from "#lib/server/db/index.js";
+
 import { building } from "$app/env";
+import type { Handle, ServerInit } from "@sveltejs/kit/hooks";
+import { svelteKitHandler } from "better-auth/svelte-kit";
 
 let isShutdownRegistered = false;
 

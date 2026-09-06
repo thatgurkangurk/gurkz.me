@@ -1,6 +1,7 @@
-import { idFormatSchema, type IdFormat } from "./context.svelte.js";
-import * as z from "zod/v4";
 import { fromThrowable } from "neverthrow";
+import * as z from "zod/v4";
+
+import { type IdFormat, idFormatSchema } from "./context.svelte.js";
 
 export function load({ cookies }) {
 	const idFormatCookie = cookies.get("id_format") ?? `"DEFAULT"`;

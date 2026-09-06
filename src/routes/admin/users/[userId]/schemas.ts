@@ -1,4 +1,5 @@
-import { permissions, type Permission } from "#lib/permissions.js";
+import { type Permission, permissions } from "#lib/permissions.js";
+
 import * as z from "zod/v4";
 
 export type NonDefaultPermission = Exclude<Permission, "DEFAULT">;

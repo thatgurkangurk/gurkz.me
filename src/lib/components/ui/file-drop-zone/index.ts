@@ -1,12 +1,12 @@
-import Root from './file-drop-zone.svelte';
-import Trigger from './file-drop-zone-trigger.svelte';
-import Textarea from './file-drop-zone-textarea.svelte';
-import DragOverlay from './file-drop-zone-drag-overlay.svelte';
+import DragOverlay from "./file-drop-zone-drag-overlay.svelte";
+import Textarea from "./file-drop-zone-textarea.svelte";
+import Trigger from "./file-drop-zone-trigger.svelte";
+import Root from "./file-drop-zone.svelte";
 import type {
 	FileDropZoneDragOverlayProps,
 	FileDropZoneRootProps,
 	FileRejectedReason
-} from './types';
+} from "./types";
 
 export function displaySize(bytes: number): string {
 	if (bytes < KILOBYTE) return `${bytes.toFixed(0)} B`;
@@ -25,9 +25,9 @@ export const MEGABYTE = 1000 * KILOBYTE;
 export const GIGABYTE = 1000 * MEGABYTE;
 
 // utilities for limiting accepted files
-export const ACCEPT_IMAGE = 'image/*';
-export const ACCEPT_VIDEO = 'video/*';
-export const ACCEPT_AUDIO = 'audio/*';
+export const ACCEPT_IMAGE = "image/*";
+export const ACCEPT_VIDEO = "video/*";
+export const ACCEPT_AUDIO = "audio/*";
 
 export {
 	Root,

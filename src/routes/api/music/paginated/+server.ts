@@ -1,9 +1,10 @@
 import { createPermix } from "#lib/permix.js";
-import { db } from "#lib/server/db/index.js";
-import { error } from "@sveltejs/kit";
 import { getSessionFromApiKey } from "#lib/server/api-helpers.js";
-import { count, ilike } from "drizzle-orm";
+import { db } from "#lib/server/db/index.js";
 import { musicIds as musicIdsTable } from "#lib/server/db/schema.js";
+
+import { error } from "@sveltejs/kit";
+import { count, ilike } from "drizzle-orm";
 import { z } from "zod";
 
 const querySchema = z.object({

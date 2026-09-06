@@ -1,8 +1,10 @@
-import { form } from "$app/server";
 import { MedalDownloaderSchema } from "#lib/schemas/medal-downloader.js";
+
 import * as env from "$app/env/private";
-import { authGuard } from "./utils";
+import { form } from "$app/server";
 import { invalid, redirect } from "@sveltejs/kit";
+
+import { authGuard } from "./utils";
 
 export const medalDownloader = form(MedalDownloaderSchema, async (data, issues) => {
 	authGuard();

@@ -1,9 +1,11 @@
 <script lang="ts">
-	import { cn } from '#lib/utils.js';
-	import { useFileDropZoneTrigger } from './file-drop-zone.svelte.js';
-	import { displaySize } from './index.js';
-	import type { FileDropZoneTriggerProps } from './types.js';
-	import UploadIcon from '@lucide/svelte/icons/upload';
+	import { cn } from "#lib/utils.js";
+
+	import UploadIcon from "@lucide/svelte/icons/upload";
+
+	import { useFileDropZoneTrigger } from "./file-drop-zone.svelte.js";
+	import { displaySize } from "./index.js";
+	import type { FileDropZoneTriggerProps } from "./types.js";
 
 	let {
 		ref = $bindable(null),
@@ -17,7 +19,7 @@
 
 <label
 	bind:this={ref}
-	class={cn('group/file-drop-zone-trigger', className)}
+	class={cn("group/file-drop-zone-trigger", className)}
 	{...triggerState.props}
 	{...rest}
 >

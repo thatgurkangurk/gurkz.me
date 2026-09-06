@@ -1,4 +1,5 @@
-import { auth, type Session, type User } from "#lib/server/auth.js";
+import { type Session, type User, auth } from "#lib/server/auth.js";
+
 import type { LayoutServerLoad } from "./$types";
 
 export const load = (async (ev) => {

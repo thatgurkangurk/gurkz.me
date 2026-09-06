@@ -1,7 +1,8 @@
-import { defineBaseMetaTags } from "svelte-meta-tags";
-import type { LayoutLoad } from "./$types";
 import { browser } from "$app/env";
 import { QueryClient } from "@tanstack/svelte-query";
+import { defineBaseMetaTags } from "svelte-meta-tags";
+
+import type { LayoutLoad } from "./$types";
 
 export async function load({ data, parent, url }) {
 	const queryClient = new QueryClient({ defaultOptions: { queries: { enabled: browser } } });

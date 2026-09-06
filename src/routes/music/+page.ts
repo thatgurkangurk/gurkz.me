@@ -1,5 +1,5 @@
-import { musicIdsInfiniteQueryOptions } from "./query.js";
 import type { PageLoad } from "./$types.js";
+import { musicIdsInfiniteQueryOptions } from "./query.js";
 
 export const load: PageLoad = async ({ parent, data }) => {
 	const { queryClient } = await parent();

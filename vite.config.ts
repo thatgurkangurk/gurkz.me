@@ -1,10 +1,10 @@
-import devtoolsJson from "vite-plugin-devtools-json";
-import tailwindcss from "@tailwindcss/vite";
-import { sveltekit } from "@sveltejs/kit/vite";
-import { defineConfig } from "vite";
-import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 import adapter from "@sveltejs/adapter-node";
+import { sveltekit } from "@sveltejs/kit/vite";
+import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
+import tailwindcss from "@tailwindcss/vite";
 import path from "node:path";
+import { defineConfig } from "vite";
+import devtoolsJson from "vite-plugin-devtools-json";
 import wasm from "vite-plugin-wasm";
 
 export default defineConfig({

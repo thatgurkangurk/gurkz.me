@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { getUsers } from "#lib/api/admin.remote.js";
+	import { Avatar, AvatarFallback, AvatarImage } from "#lib/components/ui/avatar/index.js";
 	import Button from "#lib/components/ui/button/button.svelte";
 	import {
 		Card,
@@ -9,10 +10,10 @@
 		CardHeader,
 		CardTitle
 	} from "#lib/components/ui/card/index.js";
-	import { ExternalLink } from "@lucide/svelte";
-	import { Avatar, AvatarFallback, AvatarImage } from "#lib/components/ui/avatar/index.js";
 	import { getInitials } from "#lib/utils/initials.js";
+
 	import { resolve } from "$app/paths";
+	import { ExternalLink } from "@lucide/svelte";
 
 	type Props = {
 		user: Awaited<ReturnType<typeof getUsers>>[0];

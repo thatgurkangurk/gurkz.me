@@ -1,5 +1,6 @@
-import type { Cursor } from "./cursor";
 import { createTimeout } from "#lib/utils/timeouts.svelte.js";
+
+import type { Cursor } from "./cursor";
 
 function typeOneByOne(
 	targetElem: HTMLElement,

@@ -1,10 +1,12 @@
 <script lang="ts">
-	import { cn } from '#lib/utils.js';
-	import { useFileDropZoneDragOverlay } from './file-drop-zone.svelte.js';
-	import type { FileDropZoneDragOverlayProps } from './types.js';
-	import UploadIcon from '@lucide/svelte/icons/upload';
-	import { Portal } from 'bits-ui';
-	import { box, mergeProps } from 'svelte-toolbelt';
+	import { cn } from "#lib/utils.js";
+
+	import UploadIcon from "@lucide/svelte/icons/upload";
+	import { Portal } from "bits-ui";
+	import { box, mergeProps } from "svelte-toolbelt";
+
+	import { useFileDropZoneDragOverlay } from "./file-drop-zone.svelte.js";
+	import type { FileDropZoneDragOverlayProps } from "./types.js";
 
 	let {
 		ref = $bindable(null),
@@ -35,7 +37,7 @@
 		<div
 			bind:this={ref}
 			class={cn(
-				'animate-in fade-in-0 fixed inset-0 z-50 flex place-items-center justify-center bg-black/25 p-6 duration-100 supports-backdrop-filter:backdrop-blur-xs',
+				"animate-in fade-in-0 fixed inset-0 z-50 flex place-items-center justify-center bg-black/25 p-6 duration-100 supports-backdrop-filter:backdrop-blur-xs",
 				className
 			)}
 			{...mergedProps}

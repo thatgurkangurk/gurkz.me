@@ -1,6 +1,7 @@
 <script lang="ts">
+	import { type WithoutChildrenOrChild, cn } from "#lib/utils.js";
+
 	import { Slider as SliderPrimitive } from "bits-ui";
-	import { cn, type WithoutChildrenOrChild } from "#lib/utils.js";
 
 	let {
 		ref = $bindable(null),

@@ -1,9 +1,11 @@
 <script lang="ts">
 	import Button from "#lib/components/button.svelte";
-	import { XIcon, CircleAlert, FilmIcon, CircleCheck, UploadIcon } from "@lucide/svelte";
-	import * as FileDropZone from "#lib/components/ui/file-drop-zone/index.js";
 	import * as Card from "#lib/components/ui/card/index.js";
+	import * as FileDropZone from "#lib/components/ui/file-drop-zone/index.js";
+
+	import { CircleAlert, CircleCheck, FilmIcon, UploadIcon, XIcon } from "@lucide/svelte";
 	import { toast } from "svelte-sonner";
+
 	import { CopyButton } from "../ui/copy-button";
 
 	type UploadedFile = {

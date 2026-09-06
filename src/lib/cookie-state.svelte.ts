@@ -1,5 +1,6 @@
-import * as cookie from "npm-cookie";
 import { browser } from "$app/env";
+import * as cookie from "npm-cookie";
+
 import { getUserPreferences } from "./cookie-consent";
 
 export class CookieState<T> {

@@ -1,14 +1,16 @@
 <script lang="ts">
-	import { resolve } from "$app/paths";
-	import { Button } from "#lib/components/ui/button/index.js";
-	import SubmitForm from "../components/submit-form.svelte";
-	import type { PageProps } from "./$types";
-	import { Alert, AlertDescription, AlertTitle } from "#lib/components/ui/alert/index.js";
-	import CircleQuestionMark from "@lucide/svelte/icons/circle-question-mark";
-	import CircleAlert from "@lucide/svelte/icons/circle-alert";
-	import MedalDownloader from "../components/medal-downloader.svelte";
-	import VideoUploader from "#lib/components/ttcore/video-uploader.svelte";
 	import { getDateOfLastSubmissionForVideoByCurrentUser } from "#lib/api/ttcore/videos.remote.js";
+	import VideoUploader from "#lib/components/ttcore/video-uploader.svelte";
+	import { Alert, AlertDescription, AlertTitle } from "#lib/components/ui/alert/index.js";
+	import {
+		Breadcrumb,
+		BreadcrumbItem,
+		BreadcrumbLink,
+		BreadcrumbList,
+		BreadcrumbPage,
+		BreadcrumbSeparator
+	} from "#lib/components/ui/breadcrumb/index.js";
+	import { Button } from "#lib/components/ui/button/index.js";
 	import {
 		Card,
 		CardContent,
@@ -17,14 +19,13 @@
 		CardTitle
 	} from "#lib/components/ui/card/index.js";
 
-	import {
-		Breadcrumb,
-		BreadcrumbItem,
-		BreadcrumbLink,
-		BreadcrumbList,
-		BreadcrumbSeparator,
-		BreadcrumbPage
-	} from "#lib/components/ui/breadcrumb/index.js";
+	import { resolve } from "$app/paths";
+	import CircleAlert from "@lucide/svelte/icons/circle-alert";
+	import CircleQuestionMark from "@lucide/svelte/icons/circle-question-mark";
+
+	import MedalDownloader from "../components/medal-downloader.svelte";
+	import SubmitForm from "../components/submit-form.svelte";
+	import type { PageProps } from "./$types";
 
 	let { data }: PageProps = $props();
 

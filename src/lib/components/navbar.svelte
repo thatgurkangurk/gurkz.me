@@ -1,16 +1,18 @@
 <script lang="ts">
-	import { page } from "$app/state";
+	import { showPreferences } from "#lib/cookie-consent.js";
+	import { Check } from "#lib/permix.svelte.js";
 	import { useSession } from "#lib/session.svelte.js";
-	import { Button, buttonVariants } from "./ui/button";
-	import UserMenu from "./user-menu.svelte";
+
+	import { page } from "$app/state";
+	import { Cookie } from "@lucide/svelte";
 	import Menu from "@lucide/svelte/icons/menu";
 	import X from "@lucide/svelte/icons/x";
-	import { Cookie } from "@lucide/svelte";
-	import { sizeMap } from "./button.svelte";
-	import { showPreferences } from "#lib/cookie-consent.js";
-	import { slide } from "svelte/transition";
 	import { cubicOut } from "svelte/easing";
-	import { Check } from "#lib/permix.svelte.js";
+	import { slide } from "svelte/transition";
+
+	import { sizeMap } from "./button.svelte";
+	import { Button, buttonVariants } from "./ui/button";
+	import UserMenu from "./user-menu.svelte";
 
 	type NavLinkProps = {
 		label: string;

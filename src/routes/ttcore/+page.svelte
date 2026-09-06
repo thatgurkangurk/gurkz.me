@@ -1,16 +1,16 @@
 <script lang="ts">
+	import { getVideos } from "#lib/api/ttcore/videos.remote.js";
 	import {
 		Breadcrumb,
 		BreadcrumbItem,
 		BreadcrumbLink,
 		BreadcrumbList,
-		BreadcrumbSeparator,
-		BreadcrumbPage
+		BreadcrumbPage,
+		BreadcrumbSeparator
 	} from "#lib/components/ui/breadcrumb/index.js";
-	import { resolve } from "$app/paths";
-	import { getVideos } from "#lib/api/ttcore/videos.remote.js";
-
 	import { Button } from "#lib/components/ui/button/index.js";
+
+	import { resolve } from "$app/paths";
 
 	const videos = $derived(await getVideos());
 

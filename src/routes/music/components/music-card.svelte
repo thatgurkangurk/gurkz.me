@@ -1,4 +1,8 @@
 <script lang="ts">
+	import CheckWithPending from "#lib/components/check-with-pending.svelte";
+	import { Avatar, AvatarFallback, AvatarImage } from "#lib/components/ui/avatar/index.js";
+	import { Badge } from "#lib/components/ui/badge/index.js";
+	import { Button } from "#lib/components/ui/button/index.js";
 	import {
 		Card,
 		CardContent,
@@ -6,17 +10,15 @@
 		CardHeader,
 		CardTitle
 	} from "#lib/components/ui/card/index.js";
-	import type { MusicIdWithCreator } from "#lib/server/db/schema.js";
-	import { Button } from "#lib/components/ui/button/index.js";
 	import { confirmDelete } from "#lib/components/ui/confirm-delete-dialog/index.js";
-	import { Badge } from "#lib/components/ui/badge/index.js";
-	import { SquareArrowOutUpRight } from "@lucide/svelte";
-	import { getIdFormat } from "../context.svelte";
 	import { CopyButton } from "#lib/components/ui/copy-button/index.js";
 	import { Skeleton } from "#lib/components/ui/skeleton/index.js";
-	import CheckWithPending from "#lib/components/check-with-pending.svelte";
-	import { Avatar, AvatarFallback, AvatarImage } from "#lib/components/ui/avatar/index.js";
+	import type { MusicIdWithCreator } from "#lib/server/db/schema.js";
+
+	import { SquareArrowOutUpRight } from "@lucide/svelte";
 	import { createMutation } from "@tanstack/svelte-query";
+
+	import { getIdFormat } from "../context.svelte";
 	import { deleteMusicIdMutation } from "../query";
 
 	type Props = {

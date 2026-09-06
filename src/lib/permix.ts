@@ -1,6 +1,7 @@
-import { createPermix as libCreatePermix, type Rules } from "permix";
-import type { MusicId } from "./server/db/schema";
+import { type Rules, createPermix as libCreatePermix } from "permix";
+
 import type { User } from "./server/auth";
+import type { MusicId } from "./server/db/schema";
 
 export type PermissionsDefinition = {
 	musicId: [

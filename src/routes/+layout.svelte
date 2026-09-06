@@ -1,21 +1,23 @@
 <script lang="ts">
-	import "./layout.css";
-	import { configure } from "onedollarstats";
 	import favicon from "#lib/assets/favicon.svg";
-	import { ModeWatcher } from "mode-watcher";
 	import Navbar from "#lib/components/navbar.svelte";
-	import { SessionState, setSession } from "#lib/session.svelte.js";
-	import type { LayoutProps } from "./$types";
-	import "vanilla-cookieconsent/dist/cookieconsent.css";
 	import { run } from "#lib/cookie-consent.js";
-	import { Toaster } from "svelte-sonner";
+	import { createPermix, getRules } from "#lib/permix.js";
+	import { setPermix } from "#lib/permix.svelte.js";
+	import { SessionState, setSession } from "#lib/session.svelte.js";
+
 	import { page } from "$app/state";
-	import { PermixProvider, PermixHydrate } from "permix/svelte";
-	import { getRules, createPermix } from "#lib/permix.js";
 	import { QueryClientProvider } from "@tanstack/svelte-query";
 	import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
-	import { setPermix } from "#lib/permix.svelte.js";
+	import { ModeWatcher } from "mode-watcher";
+	import { configure } from "onedollarstats";
+	import { PermixHydrate, PermixProvider } from "permix/svelte";
 	import { MetaTags, deepMerge } from "svelte-meta-tags";
+	import { Toaster } from "svelte-sonner";
+	import "vanilla-cookieconsent/dist/cookieconsent.css";
+
+	import type { LayoutProps } from "./$types";
+	import "./layout.css";
 
 	const { children, data }: LayoutProps = $props();
 

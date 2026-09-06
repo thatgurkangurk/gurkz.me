@@ -4,11 +4,12 @@
 		BreadcrumbItem,
 		BreadcrumbLink,
 		BreadcrumbList,
-		BreadcrumbSeparator,
-		BreadcrumbPage
+		BreadcrumbPage,
+		BreadcrumbSeparator
 	} from "#lib/components/ui/breadcrumb/index.js";
-	import { resolve } from "$app/paths";
 	import { Button } from "#lib/components/ui/button/index.js";
+
+	import { resolve } from "$app/paths";
 </script>
 
 <Breadcrumb>

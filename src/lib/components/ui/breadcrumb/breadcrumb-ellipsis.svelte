@@ -1,6 +1,7 @@
 <script lang="ts">
+	import { type WithElementRef, type WithoutChildren, cn } from "#lib/utils.js";
+
 	import MoreHorizontalIcon from "@lucide/svelte/icons/more-horizontal";
-	import { cn, type WithElementRef, type WithoutChildren } from "#lib/utils.js";
 	import type { HTMLAttributes } from "svelte/elements";
 
 	let {

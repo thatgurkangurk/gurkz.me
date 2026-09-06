@@ -1,4 +1,5 @@
 import { definePageMetaTags } from "svelte-meta-tags";
+
 import type { PageServerLoad } from "./$types";
 import { adminGuard } from "./guard";
 

@@ -1,18 +1,19 @@
 <script lang="ts">
-	import { Card, CardContent, CardHeader, CardTitle } from "#lib/components/ui/card/index.js";
-	import { Button } from "#lib/components/ui/button/index.js";
-	import Save from "@lucide/svelte/icons/save";
-	import { useSession } from "#lib/session.svelte.js";
-	import { toast } from "svelte-sonner";
-	import { watch } from "runed";
 	import { setDisplayName } from "#lib/api/users.remote.js";
-	import { SetNewDisplayNameSchema } from "#lib/schemas/user.js";
-	import { Label } from "#lib/components/ui/label/index.js";
-	import { Input } from "#lib/components/ui/input/index.js";
 	import InputErrors from "#lib/components/form/input-errors.svelte";
-	import { toErrors } from "#lib/utils/to-errors.js";
 	import ButtonGroup from "#lib/components/ui/button-group/button-group.svelte";
+	import { Button } from "#lib/components/ui/button/index.js";
+	import { Card, CardContent, CardHeader, CardTitle } from "#lib/components/ui/card/index.js";
+	import { Input } from "#lib/components/ui/input/index.js";
+	import { Label } from "#lib/components/ui/label/index.js";
 	import { Spinner } from "#lib/components/ui/spinner/index.js";
+	import { SetNewDisplayNameSchema } from "#lib/schemas/user.js";
+	import { useSession } from "#lib/session.svelte.js";
+	import { toErrors } from "#lib/utils/to-errors.js";
+
+	import Save from "@lucide/svelte/icons/save";
+	import { watch } from "runed";
+	import { toast } from "svelte-sonner";
 
 	const session = useSession();
 

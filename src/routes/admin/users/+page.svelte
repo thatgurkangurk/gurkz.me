@@ -1,4 +1,5 @@
 <script>
+	import { getUsers } from "#lib/api/admin.remote.js";
 	import {
 		Breadcrumb,
 		BreadcrumbItem,
@@ -7,7 +8,7 @@
 		BreadcrumbPage,
 		BreadcrumbSeparator
 	} from "#lib/components/ui/breadcrumb/index.js";
-	import { getUsers } from "#lib/api/admin.remote.js";
+
 	import UserCard from "./user-card.svelte";
 </script>
 

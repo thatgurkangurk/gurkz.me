@@ -1,21 +1,22 @@
 <script lang="ts">
-	import { CreateNewClipArgs } from "#lib/schemas/clip.js";
-	import { Button } from "#lib/components/ui/button/index.js";
-	import { NativeSelect, NativeSelectOption } from "#lib/components/ui/native-select/index.js";
-	import { createNewClip } from "#lib/api/ttcore/clips.remote.js";
-	import { Label } from "#lib/components/ui/label/index.js";
-	import Trash2 from "@lucide/svelte/icons/trash-2";
-	import { useSession } from "#lib/session.svelte.js";
 	import { getUsers } from "#lib/api/admin.remote.js";
-	import { ButtonGroup } from "#lib/components/ui/button-group/index.js";
-	import { Input } from "#lib/components/ui/input/index.js";
-	import InputErrors from "#lib/components/form/input-errors.svelte";
-	import { toErrors } from "#lib/utils/to-errors.js";
-	import Textarea from "#lib/components/ui/textarea/textarea.svelte";
-	import { autoAnimate } from "#lib/attachments/auto-animate.svelte.js";
-	import { configureForm } from "#lib/remote-form.svelte.js";
-	import { toast } from "svelte-sonner";
+	import { createNewClip } from "#lib/api/ttcore/clips.remote.js";
 	import { getProfiles } from "#lib/api/ttcore/profiles.remote.js";
+	import { autoAnimate } from "#lib/attachments/auto-animate.svelte.js";
+	import InputErrors from "#lib/components/form/input-errors.svelte";
+	import { ButtonGroup } from "#lib/components/ui/button-group/index.js";
+	import { Button } from "#lib/components/ui/button/index.js";
+	import { Input } from "#lib/components/ui/input/index.js";
+	import { Label } from "#lib/components/ui/label/index.js";
+	import { NativeSelect, NativeSelectOption } from "#lib/components/ui/native-select/index.js";
+	import Textarea from "#lib/components/ui/textarea/textarea.svelte";
+	import { configureForm } from "#lib/remote-form.svelte.js";
+	import { CreateNewClipArgs } from "#lib/schemas/clip.js";
+	import { useSession } from "#lib/session.svelte.js";
+	import { toErrors } from "#lib/utils/to-errors.js";
+
+	import Trash2 from "@lucide/svelte/icons/trash-2";
+	import { toast } from "svelte-sonner";
 
 	type Props = {
 		videoId: string;

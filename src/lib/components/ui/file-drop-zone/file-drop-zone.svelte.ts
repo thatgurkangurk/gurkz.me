@@ -1,14 +1,15 @@
-import type { ReadableBoxedValues } from 'svelte-toolbelt';
-import type { FileRejectedReason } from './types';
-import { Context } from 'runed';
-import type { HTMLAttributes } from 'svelte/elements';
+import { Context } from "runed";
+import type { ReadableBoxedValues } from "svelte-toolbelt";
+import type { HTMLAttributes } from "svelte/elements";
+
+import type { FileRejectedReason } from "./types";
 
 function getFiles(dataTransfer: DataTransfer | null): File[] {
 	return Array.from(dataTransfer?.files ?? []);
 }
 
 function hasFiles(dataTransfer: DataTransfer | null): boolean {
-	return dataTransfer?.types.includes('Files') ?? false;
+	return dataTransfer?.types.includes("Files") ?? false;
 }
 
 type FileDropZoneStateOptions = ReadableBoxedValues<{
@@ -29,7 +30,7 @@ class FileDropZoneState {
 	constructor(readonly opts: FileDropZoneStateOptions) {
 		if (this.opts.maxFiles !== undefined && this.opts.fileCount === undefined) {
 			console.warn(
-				'Make sure to provide FileDropZone with `fileCount` when using the `maxFiles` prompt'
+				"Make sure to provide FileDropZone with `fileCount` when using the `maxFiles` prompt"
 			);
 		}
 
@@ -84,39 +85,39 @@ class FileDropZoneState {
 		await this.upload(Array.from(selectedFiles));
 
 		// this if a file fails and we upload the same file again we still get feedback
-		(e.target as HTMLInputElement).value = '';
+		(e.target as HTMLInputElement).value = "";
 	}
 
 	shouldAcceptFile(file: File, fileNumber: number): FileRejectedReason | undefined {
 		if (this.opts.maxFileSize.current !== undefined && file.size > this.opts.maxFileSize.current)
-			return 'Maximum file size exceeded';
+			return "Maximum file size exceeded";
 
 		if (this.opts.maxFiles.current !== undefined && fileNumber > this.opts.maxFiles.current)
-			return 'Maximum files uploaded';
+			return "Maximum files uploaded";
 
 		if (!this.opts.accept.current) return undefined;
 
-		const acceptedTypes = this.opts.accept.current.split(',').map((a) => a.trim().toLowerCase());
+		const acceptedTypes = this.opts.accept.current.split(",").map((a) => a.trim().toLowerCase());
 		const fileType = file.type.toLowerCase();
 		const fileName = file.name.toLowerCase();
 
 		const isAcceptable = acceptedTypes.some((pattern) => {
 			// check extension like .mp4
-			if (fileType === '' || pattern.startsWith('.')) {
+			if (fileType === "" || pattern.startsWith(".")) {
 				return fileName.endsWith(pattern);
 			}
 
 			// if pattern has wild card like video/*
-			if (pattern.endsWith('/*')) {
-				const baseType = pattern.slice(0, pattern.indexOf('/*'));
-				return fileType.startsWith(baseType + '/');
+			if (pattern.endsWith("/*")) {
+				const baseType = pattern.slice(0, pattern.indexOf("/*"));
+				return fileType.startsWith(baseType + "/");
 			}
 
 			// otherwise it must be a specific type like video/mp4
 			return fileType === pattern;
 		});
 
-		if (!isAcceptable) return 'File type not allowed';
+		if (!isAcceptable) return "File type not allowed";
 
 		return undefined;
 	}
@@ -166,7 +167,7 @@ class FileDropZoneState {
 		multiple:
 			this.opts.maxFiles.current === undefined ||
 			this.opts.maxFiles.current - (this.opts.fileCount.current ?? 0) > 1,
-		type: 'file',
+		type: "file",
 		onchange: this.onchange
 	}));
 }
@@ -190,14 +191,14 @@ class FileDropZoneTrigger {
 		ondragover: this.ondragover.bind(this),
 		ondrop: this.ondrop.bind(this),
 		for: this.rootState.opts.id.current,
-		'aria-disabled': !this.rootState.canUploadFiles
+		"aria-disabled": !this.rootState.canUploadFiles
 	}));
 }
 
 type FileDropZoneTextareaOptions = ReadableBoxedValues<{
-	ondragover: HTMLAttributes<HTMLTextAreaElement>['ondragover'];
-	ondrop: HTMLAttributes<HTMLTextAreaElement>['ondrop'];
-	onpaste: HTMLAttributes<HTMLTextAreaElement>['onpaste'];
+	ondragover: HTMLAttributes<HTMLTextAreaElement>["ondragover"];
+	ondrop: HTMLAttributes<HTMLTextAreaElement>["ondrop"];
+	onpaste: HTMLAttributes<HTMLTextAreaElement>["onpaste"];
 }>;
 
 class FileDropZoneTextareaState {
@@ -206,17 +207,17 @@ class FileDropZoneTextareaState {
 		readonly rootState: FileDropZoneState
 	) {}
 
-	ondragover(e: Parameters<NonNullable<HTMLAttributes<HTMLTextAreaElement>['ondragover']>>[0]) {
+	ondragover(e: Parameters<NonNullable<HTMLAttributes<HTMLTextAreaElement>["ondragover"]>>[0]) {
 		e.preventDefault();
 		this.opts.ondragover.current?.(e);
 	}
 
-	ondrop(e: Parameters<NonNullable<HTMLAttributes<HTMLTextAreaElement>['ondrop']>>[0]) {
+	ondrop(e: Parameters<NonNullable<HTMLAttributes<HTMLTextAreaElement>["ondrop"]>>[0]) {
 		this.rootState.ondrop(e);
 		this.opts.ondrop.current?.(e);
 	}
 
-	onpaste(e: Parameters<NonNullable<HTMLAttributes<HTMLTextAreaElement>['onpaste']>>[0]) {
+	onpaste(e: Parameters<NonNullable<HTMLAttributes<HTMLTextAreaElement>["onpaste"]>>[0]) {
 		this.rootState.uploadFromClipboard(e);
 
 		this.opts.onpaste.current?.(e);
@@ -299,7 +300,7 @@ class FileDropZoneDragOverlayState {
 	}));
 }
 
-const ctx = new Context<FileDropZoneState>('file-drop-zone-state');
+const ctx = new Context<FileDropZoneState>("file-drop-zone-state");
 
 export function useFileDropZone(opts: FileDropZoneStateOptions) {
 	return ctx.set(new FileDropZoneState(opts));

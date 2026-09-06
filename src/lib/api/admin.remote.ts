@@ -1,15 +1,17 @@
-import { form, query } from "$app/server";
-import { db } from "#lib/server/db/index.js";
-import { error } from "@sveltejs/kit";
-import { adminOnlyGuard } from "./utils";
-import * as z from "zod/v4";
-import {
-	SetUserPermissions,
-	type NonDefaultPermission
-} from "../../routes/admin/users/[userId]/schemas";
 import type { Permission } from "#lib/permissions.js";
+import { db } from "#lib/server/db/index.js";
 import { user } from "#lib/server/db/schema.js";
+
+import { form, query } from "$app/server";
+import { error } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
+import * as z from "zod/v4";
+
+import {
+	type NonDefaultPermission,
+	SetUserPermissions
+} from "../../routes/admin/users/[userId]/schemas";
+import { adminOnlyGuard } from "./utils";
 
 export const getUsers = query(async () => {
 	adminOnlyGuard();

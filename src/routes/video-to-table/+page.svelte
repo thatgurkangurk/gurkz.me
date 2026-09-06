@@ -8,6 +8,7 @@
 		CardHeader,
 		CardTitle
 	} from "#lib/components/ui/card/index.js";
+
 	import { onMount, tick } from "svelte";
 
 	let videoElem = $state<HTMLVideoElement | null>(null);

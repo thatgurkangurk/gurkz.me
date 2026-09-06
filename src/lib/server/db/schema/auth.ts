@@ -1,14 +1,15 @@
-import { relations } from "drizzle-orm/_relations";
 import { sql } from "drizzle-orm";
+import { relations } from "drizzle-orm/_relations";
 import {
+	boolean,
+	index,
+	integer,
 	pgTable,
 	text,
 	timestamp,
-	boolean,
-	integer,
-	index,
 	uniqueIndex
 } from "drizzle-orm/pg-core";
+
 import { permissionsEnum } from "./permission";
 
 export const user = pgTable("user", {

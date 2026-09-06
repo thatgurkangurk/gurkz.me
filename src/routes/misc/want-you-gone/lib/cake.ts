@@ -1,6 +1,7 @@
-import { lyrics } from "./lyrics";
-import { credits } from "./credits";
 import { createTimeout } from "#lib/utils/timeouts.svelte.js";
+
+import { credits } from "./credits";
+import { lyrics } from "./lyrics";
 
 export class Cake {
 	private delayMultiplier = 1000;
