@@ -24,6 +24,7 @@
 		"@trivago/prettier-plugin-sort-imports": "^6.0.2",
 		"@types/canvas-confetti": "^1.9.0",
 		"@types/node": "^26.1.2",
+		"@types/sharp": "^0.32.0",
 		"auth": "^1.7.2",
 		"better-auth": "^1.7.2",
 		"bits-ui": "^2.18.1",
@@ -35,6 +36,7 @@
 		"eslint": "^10.8.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-svelte": "^3.22.0",
+		"ffmpeg-static": "^5.3.0",
 		"globals": "^17.8.0",
 		"jsrepo": "^3.8.1",
 		"mode-watcher": "^1.1.0",
@@ -94,6 +96,7 @@
 	},
 	"dependencies": {
 		"esbuild": "^0.28.2",
+		"sharp": "^0.35.4",
 		"typescript": "~6"
 	}
 }

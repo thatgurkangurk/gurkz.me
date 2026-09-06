@@ -12,5 +12,6 @@ export const clip = pgTable("clip", (t) => ({
 	createdAt: t.timestamp("created_at").notNull().defaultNow(),
 	overriddenProfileDataId: t.uuid("overridden_profile_data_id").references(() => profile.id),
 	songs: t.text().array().default([]).notNull(),
+	thumbnail: t.bytea("thumbnail"),
 	note: t.text()
 }));

@@ -4,7 +4,8 @@ export const permissions = [
 	"DEFAULT",
 	"VIEW_MUSIC_IDS",
 	"CREATE_MUSIC_IDS",
-	"MANAGE_MUSIC_IDS"
+	"MANAGE_MUSIC_IDS",
+	"TTCORE_ADMIN"
 ] as const;
 
 export const Permissions = z.enum(permissions);

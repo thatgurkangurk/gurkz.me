@@ -1,4 +1,5 @@
 import { CreateNewVideoSchema, VideoMessageSchema } from "#lib/schemas/video.js";
+import { getOrGenerateClipThumbnail } from "#lib/server/clips/thumbnail.js";
 import { db } from "#lib/server/db/index.js";
 import { video } from "#lib/server/db/schema/video.js";
 
@@ -119,6 +120,9 @@ export const getMyClipsForVideo = query(
 			orderBy: {
 				createdAt: "asc"
 			},
+			columns: {
+				thumbnail: false
+			},
 			with: {
 				creator: true
 			}
@@ -130,24 +134,35 @@ export const getMyClipsForVideo = query(
 
 export const getClipsForVideo = query(
 	z.object({
-		videoId: z.string()
+		videoId: z.string(),
+		page: z.number().int().positive().default(1),
+		limit: z.number().int().min(1).max(100).default(20),
+		search: z.string().default("")
 	}),
-	async (params) => {
+	async ({ videoId, page = 1, limit = 20, search = "" }) => {
 		adminOnlyGuard();
 
-		const allClips = await db.query.clip.findMany({
+		const offset = (page - 1) * limit;
+
+		const res = await db.query.clip.findMany({
 			where: {
-				videoId: params.videoId
+				videoId,
+				...(search && {
+					title: { ilike: `%${search}%` }
+				})
 			},
-			orderBy: {
-				createdAt: "asc"
+			columns: {
+				thumbnail: false
 			},
 			with: {
 				creator: true
-			}
+			},
+			orderBy: ({ createdAt }, { asc }) => asc(createdAt),
+			limit,
+			offset
 		});
 
-		return allClips;
+		return res;
 	}
 );
 

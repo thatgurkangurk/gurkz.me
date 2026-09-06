@@ -2,9 +2,10 @@ import { getRequestEvent } from "$app/server";
 import { error } from "@sveltejs/kit";
 
 export function ttcoreAdminOnlyGuard() {
+	const ev = getRequestEvent();
 	const { user, session } = authGuard();
 
-	if (!user.admin) error(403);
+	if (!ev.locals.permix.check("ttcore.manage")) error(403);
 
 	return {
 		user: user,

@@ -11,6 +11,7 @@ export type PermissionsDefinition = {
 		{ name: "delete"; type: MusicId; required: true },
 		{ name: "list" }
 	];
+	ttcore: [{ name: "submit" }, { name: "manage" }];
 };
 
 export function getRules(user: User | undefined): Rules<PermissionsDefinition> {
@@ -33,6 +34,10 @@ export function getRules(user: User | undefined): Rules<PermissionsDefinition> {
 
 				return isAdmin || isCreator || Boolean(canManage);
 			}
+		},
+		ttcore: {
+			submit: Boolean(user),
+			manage: Boolean(user?.admin || user?.permissions?.includes("TTCORE_ADMIN"))
 		}
 	};
 }
