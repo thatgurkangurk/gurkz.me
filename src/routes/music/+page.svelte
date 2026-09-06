@@ -8,15 +8,12 @@
 	import { Check } from "#lib/permix.svelte.js";
 	import { Loader, SearchAlert } from "@lucide/svelte";
 	import { Debounced, useIntersectionObserver } from "runed";
-	import { createInfiniteQuery, useQueryClient, type InfiniteData } from "@tanstack/svelte-query";
+	import { createInfiniteQuery } from "@tanstack/svelte-query";
 	import { musicIdsInfiniteQueryOptions } from "./query.js";
-	import type { getMusicIds } from "#lib/api/music.remote.js";
 	import Search from "#lib/components/search.svelte";
 
 	let searchFilter = $state("");
 	const debouncedSearchFilter = new Debounced(() => searchFilter, 500);
-
-	const queryClient = useQueryClient();
 
 	const query = createInfiniteQuery(() =>
 		musicIdsInfiniteQueryOptions(debouncedSearchFilter.current)
@@ -34,23 +31,6 @@
 			}
 		}
 	);
-
-	type MusicPage = Awaited<ReturnType<typeof getMusicIds>>;
-
-	type MusicCache = InfiniteData<MusicPage>;
-
-	function handleDelete(deletedId: string) {
-		const options = musicIdsInfiniteQueryOptions(debouncedSearchFilter.current);
-
-		queryClient.setQueryData<MusicCache>(options.queryKey, (oldData) => {
-			if (!oldData) return oldData;
-
-			return {
-				...oldData,
-				pages: oldData.pages.map((page) => page.filter((item) => item.id !== deletedId))
-			};
-		});
-	}
 
 	let isSearching = $derived(
 		debouncedSearchFilter.pending || (query.isFetching && !query.isFetchingNextPage)
@@ -85,7 +65,7 @@
 		>
 			{#each musicIds as musicId (musicId.id)}
 				<div class="transition-transform duration-200 ease-out hover:-translate-y-1.5">
-					<MusicCard {musicId} onDelete={handleDelete} />
+					<MusicCard {musicId} />
 				</div>
 			{/each}
 		</div>
