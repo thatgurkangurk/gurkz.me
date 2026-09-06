@@ -39,11 +39,11 @@ export default defineConfig({
 		devtoolsJson()
 	],
 	ssr: {
-		external: ["ffmpeg-static"]
+		external: ["ffmpeg-static", "sharp"]
 	},
 	build: {
 		rolldownOptions: {
-			external: ["ffmpeg-static"]
+			external: ["ffmpeg-static", "sharp"]
 		}
 	},
 	server: {
