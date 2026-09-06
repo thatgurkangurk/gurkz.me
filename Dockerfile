@@ -6,6 +6,11 @@ FROM base AS deps
 COPY --chown=node:node package.json pnpm-lock.yaml ./
 RUN nub ci
 
+FROM base AS prod-deps
+COPY --chown=node:node package.json pnpm-lock.yaml ./
+COPY --chown=node:node --from=deps /app/node_modules /app/node_modules
+RUN nub prune --prod
+
 FROM base AS build
 ENV CI=1
 COPY --chown=node:node --from=deps /app/node_modules /app/node_modules
@@ -15,7 +20,9 @@ RUN CI="1" BETTER_AUTH_SECRET="changeme" DATABASE_URL="postgres://changeme" nub 
 
 FROM base
 
+COPY --from=prod-deps --chown=node:node /app/node_modules /app/node_modules
 COPY --from=build --chown=node:node /app/build /app/build
+COPY --chown=node:node package.json ./
 
 ENV NODE_ENV="production"
 ENV HOST=0.0.0.0

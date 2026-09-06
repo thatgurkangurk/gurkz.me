@@ -38,6 +38,14 @@ export default defineConfig({
 		}),
 		devtoolsJson()
 	],
+	ssr: {
+		external: ["ffmpeg-static"]
+	},
+	build: {
+		rolldownOptions: {
+			external: ["ffmpeg-static"]
+		}
+	},
 	server: {
 		fs: {
 			allow: ["..", path.resolve(process.env.HOME || "~", ".cache")] // nub cache
