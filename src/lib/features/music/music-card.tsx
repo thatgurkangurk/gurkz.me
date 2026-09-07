@@ -99,7 +99,10 @@ export function MusicCard({
                             src={musicId.creator.image ?? undefined}
                             alt={musicId.creator.name}
                         />
-                        <AvatarFallback className="text-[10px]">
+                        <AvatarFallback
+                            className="text-[10px]"
+                            suppressHydrationWarning
+                        >
                             {musicId.creator.name
                                 .split(" ")
                                 .map((n) => n[0])
