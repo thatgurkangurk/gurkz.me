@@ -10,7 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as MusicRouteImport } from './routes/music'
+import { Route as MusicRouteRouteImport } from './routes/music/route'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc/$'
 
@@ -19,7 +19,7 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MusicRoute = MusicRouteImport.update({
+const MusicRouteRoute = MusicRouteRouteImport.update({
   id: '/music',
   path: '/music',
   getParentRoute: () => rootRouteImport,
@@ -37,20 +37,20 @@ const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/music': typeof MusicRoute
+  '/music': typeof MusicRouteRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/music': typeof MusicRoute
+  '/music': typeof MusicRouteRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/music': typeof MusicRoute
+  '/music': typeof MusicRouteRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
 }
@@ -64,7 +64,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  MusicRoute: typeof MusicRoute
+  MusicRouteRoute: typeof MusicRouteRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiRpcSplatRoute: typeof ApiRpcSplatRoute
 }
@@ -82,7 +82,7 @@ declare module '@tanstack/react-router' {
       id: '/music'
       path: '/music'
       fullPath: '/music'
-      preLoaderRoute: typeof MusicRouteImport
+      preLoaderRoute: typeof MusicRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
@@ -104,7 +104,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  MusicRoute: MusicRoute,
+  MusicRouteRoute: MusicRouteRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiRpcSplatRoute: ApiRpcSplatRoute,
 }
