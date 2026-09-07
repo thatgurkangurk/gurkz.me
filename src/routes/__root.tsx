@@ -55,14 +55,17 @@ function RootComponent() {
     const { permix, state } = Route.useRouteContext();
     const { data: session } = authClient.useSession();
 
-    authClient.hydrateSession(ssrSession);
+    const isServer = typeof window === "undefined";
+    const currentUser = isServer
+        ? ssrSession?.user
+        : (session?.user ?? ssrSession?.user);
+
     useMemo(() => {
-        const currentUser = session?.user ?? ssrSession?.user;
         if (currentUser) {
             // @ts-expect-error its fine
             permix.setup(getRules(currentUser));
         }
-    }, [permix, session, ssrSession]);
+    }, [permix, currentUser]);
 
     return (
         <PermixProvider permix={permix}>
