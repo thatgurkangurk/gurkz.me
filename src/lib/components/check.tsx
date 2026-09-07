@@ -23,16 +23,24 @@ export function Check<P extends RulesPaths<PermissionsDefinition>>({
         }
     }, [isDynamic]);
 
-    if (isDynamic && !isMounted) {
-        const fallback = reverse ? children : otherwise;
-        return <>{fallback}</>;
+    const canEvaluate = !isDynamic || isMounted;
+
+    let shouldRender = false;
+
+    if (canEvaluate) {
+        const hasPermission = check(
+            ...([path, data] as unknown as CheckArgs<PermissionsDefinition>),
+        );
+        shouldRender = reverse ? !hasPermission : hasPermission;
+    } else {
+        shouldRender = reverse ? true : false;
     }
 
-    const hasPermission = check(
-        ...([path, data] as unknown as CheckArgs<PermissionsDefinition>),
+    const content = shouldRender ? children : otherwise;
+
+    return (
+        <span style={{ display: "contents" }} suppressHydrationWarning>
+            {content}
+        </span>
     );
-
-    const shouldRender = reverse ? !hasPermission : hasPermission;
-
-    return <>{shouldRender ? children : otherwise}</>;
 }
