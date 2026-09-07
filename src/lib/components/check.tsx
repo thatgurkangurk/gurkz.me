@@ -23,15 +23,12 @@ export function Check<P extends RulesPaths<PermissionsDefinition>>({
         ...([path, data] as unknown as CheckArgs<PermissionsDefinition>),
     );
 
-    const shouldRenderChildren = reverse ? !hasPermission : hasPermission;
+    const shouldRender = reverse ? !hasPermission : hasPermission;
 
     if (!isMounted) {
-        return (
-            <span style={{ display: "contents" }} suppressHydrationWarning>
-                {shouldRenderChildren ? children : otherwise}
-            </span>
-        );
+        const fallback = otherwise ?? <span style={{ display: "none" }} />;
+        return <>{shouldRender ? children : fallback}</>;
     }
 
-    return shouldRenderChildren ? children : otherwise;
+    return <>{shouldRender ? children : otherwise}</>;
 }
