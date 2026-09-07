@@ -15,13 +15,9 @@ export function Check<P extends RulesPaths<PermissionsDefinition>>({
     const { check } = usePermix();
     const [isMounted, setIsMounted] = useState(false);
 
-    const requiresClientCalculation = data !== null && data !== undefined;
-
     useEffect(() => {
-        if (requiresClientCalculation) {
-            setIsMounted(true);
-        }
-    }, [requiresClientCalculation]);
+        setIsMounted(true);
+    }, []);
 
     const hasPermission = check(
         ...([path, data] as unknown as CheckArgs<PermissionsDefinition>),
@@ -29,8 +25,12 @@ export function Check<P extends RulesPaths<PermissionsDefinition>>({
 
     const shouldRenderChildren = reverse ? !hasPermission : hasPermission;
 
-    if (requiresClientCalculation && !isMounted) {
-        return reverse ? children : otherwise;
+    if (!isMounted) {
+        return (
+            <span style={{ display: "contents" }} suppressHydrationWarning>
+                {shouldRenderChildren ? children : otherwise}
+            </span>
+        );
     }
 
     return shouldRenderChildren ? children : otherwise;
