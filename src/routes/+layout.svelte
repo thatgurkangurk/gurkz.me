@@ -38,6 +38,8 @@
 	});
 
 	$effect(() => {
+		sessionState.authClient.hydrateSession(data.session);
+
 		run({
 			language: { default: "en", translations: { en: "/en.json" } },
 			autoClearCookies: true,
