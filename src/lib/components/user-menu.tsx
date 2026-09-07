@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -23,7 +24,12 @@ import {
 } from "@tabler/icons-react";
 
 export function UserMenu() {
+    const [mounted, setMounted] = useState(false);
     const { data: session, isPending } = authClient.useSession();
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const handleDiscordSignIn = async () => {
         await authClient.signIn.social({
@@ -32,30 +38,31 @@ export function UserMenu() {
         });
     };
 
-    if (isPending) {
-        return <Skeleton className="size-8 rounded-full" />;
+    if (!mounted || isPending) {
+        return <Skeleton className="size-8 rounded-xl" />;
     }
 
     const username = session?.user?.username;
+    const userInitials = session?.user?.name
+        ? session.user.name.slice(0, 2).toUpperCase()
+        : "U";
 
     return (
         <DropdownMenu>
             <DropdownMenuTrigger
                 className={buttonVariants({
                     size: "icon",
-                    variant: "secondary",
-                    className: "size-8 rounded-full text-black dark:text-white",
+                    variant: "ghost",
+                    className: "size-8 rounded-xl p-0 focus-visible:ring-0",
                 })}
             >
                 {session ? (
-                    <Avatar className="size-8 rounded-full">
+                    <Avatar className="size-8">
                         <AvatarImage
                             src={session.user.image ?? undefined}
                             alt={session.user.name}
                         />
-                        <AvatarFallback className="rounded-full">
-                            <Skeleton className="size-8 rounded-full" />
-                        </AvatarFallback>
+                        <AvatarFallback>{userInitials}</AvatarFallback>
                     </Avatar>
                 ) : (
                     <IconUser size={18} />
@@ -72,15 +79,15 @@ export function UserMenu() {
                         <DropdownMenuGroup>
                             <DropdownMenuLabel className="p-0 font-normal">
                                 <div className="flex items-center gap-2.5 px-2 py-1.5 text-start text-sm">
-                                    <Avatar className="size-8 rounded-full shrink-0">
+                                    <Avatar className="size-8">
                                         <AvatarImage
                                             src={
                                                 session.user.image ?? undefined
                                             }
                                             alt={session.user.name}
                                         />
-                                        <AvatarFallback className="rounded-full">
-                                            <Skeleton className="size-8 rounded-full" />
+                                        <AvatarFallback>
+                                            {userInitials}
                                         </AvatarFallback>
                                     </Avatar>
                                     <div className="grid flex-1 text-start text-sm leading-tight">
