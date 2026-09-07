@@ -65,14 +65,11 @@ function RootComponent() {
     );
 }
 
-function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
+function RootDocument({ children }: { children: React.ReactNode }) {
     return (
-        <html className="dark cc--darkmode" suppressHydrationWarning>
+        <html lang="en" className="dark cc--darkmode" suppressHydrationWarning>
             <head>
                 <HeadContent />
-                {import.meta.env.DEV && (
-                    <script src="https://unpkg.com/react-scan/dist/auto.global.js" />
-                )}
             </head>
             <body
                 className="flex min-h-screen flex-col"
@@ -80,7 +77,6 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
             >
                 <div className="min-h-screen bg-gray-950">
                     <Navbar />
-
                     <main className="mt-20 grow px-4 pt-2">{children}</main>
                 </div>
                 <Scripts />

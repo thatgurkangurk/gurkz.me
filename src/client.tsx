@@ -92,6 +92,11 @@ if (typeof window !== "undefined") {
     });
 }
 
+// @ts-expect-error its fine
+if (process.env.NODE_ENV === "development") {
+    import("react-scan").then(({ scan }) => scan());
+}
+
 hydrateRoot(
     document,
     <StrictMode>
