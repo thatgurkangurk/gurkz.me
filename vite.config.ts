@@ -28,4 +28,8 @@ export default defineConfig({
         }),
         jotai(),
     ],
+    build: {
+        minify: false,
+        sourcemap: true,
+    },
 });
