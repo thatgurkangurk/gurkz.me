@@ -17,6 +17,7 @@ import { type Permix } from "permix";
 import { getPermixState } from "#lib/permix.server.js";
 import { PermixHydrate, PermixProvider } from "permix/react";
 import { ConfirmDeleteDialog } from "#lib/components/confirm-delete-dialog.js";
+import { Providers } from "#lib/components/providers.js";
 
 const getSession = createServerFn({ method: "GET" }).handler(async () => {
     const headers = getRequestHeaders();
@@ -40,39 +41,27 @@ export const Route = createRootRouteWithContext<{
         ],
     }),
     beforeLoad: async ({ context }) => {
-        if (typeof window === "undefined") {
-            const state = await getPermixState();
-            context.permix.hydrate(state);
-            return { state };
-        }
+        const state = await getPermixState();
+        context.permix.hydrate(state);
+        return { state };
     },
     loader: async () => await getSession(),
     component: RootComponent,
 });
 
 function RootComponent() {
-    const ssrSession = Route.useLoaderData();
     const { permix, state } = Route.useRouteContext();
     const { data: session } = authClient.useSession();
 
-    useLayoutEffect(() => {
-        const currentUser = session?.user ?? ssrSession?.user;
-        if (currentUser) {
-            // @ts-expect-error its fine
-            permix.setup(getRules(currentUser));
-        }
-    }, [permix, session, ssrSession]);
-
     return (
-        <PermixProvider permix={permix}>
-            <PermixHydrate state={state}>
-                <RootDocument>
-                    <Outlet />
+        // @ts-expect-error its FINE.
+        <Providers permix={permix} state={state} session={session ?? null}>
+            <RootDocument>
+                <Outlet />
 
-                    <ConfirmDeleteDialog />
-                </RootDocument>
-            </PermixHydrate>
-        </PermixProvider>
+                <ConfirmDeleteDialog />
+            </RootDocument>
+        </Providers>
     );
 }
 
