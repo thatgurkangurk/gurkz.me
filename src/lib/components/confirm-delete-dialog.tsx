@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { atom, useAtom, getDefaultStore } from "jotai";
 import {
     AlertDialog,
@@ -62,10 +62,13 @@ export function confirmDelete(options: ConfirmDeleteOptions) {
 }
 
 export function ConfirmDeleteDialog() {
+    const [isMounted, setIsMounted] = useState(false);
     const [state, setState] = useAtom(confirmDialogAtom);
     const { open, inputText, options, loading } = state;
 
     useEffect(() => {
+        setIsMounted(true);
+
         const forceClose = () => setState(INITIAL_STATE);
 
         if (import.meta.hot) {
@@ -111,6 +114,10 @@ export function ConfirmDeleteDialog() {
         options?.onCancel?.();
         setState((prev) => ({ ...prev, open: false }));
     };
+
+    if (!isMounted) {
+        return null;
+    }
 
     if (!open && !loading && !options) {
         return null;
