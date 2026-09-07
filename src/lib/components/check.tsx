@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import type { CheckArgs, RulesPaths } from "permix";
 import type { CheckProps } from "permix/react";
 
@@ -12,16 +13,25 @@ export function Check<P extends RulesPaths<PermissionsDefinition>>({
     reverse = false,
 }: CheckProps<PermissionsDefinition, P>) {
     const { check } = usePermix();
+    const [isMounted, setIsMounted] = useState(false);
+
+    const requiresClientCalculation = data !== null && data !== undefined;
+
+    useEffect(() => {
+        if (requiresClientCalculation) {
+            setIsMounted(true);
+        }
+    }, [requiresClientCalculation]);
 
     const hasPermission = check(
         ...([path, data] as unknown as CheckArgs<PermissionsDefinition>),
     );
 
-    return reverse
-        ? hasPermission
-            ? otherwise
-            : children
-        : hasPermission
-          ? children
-          : otherwise;
+    const shouldRenderChildren = reverse ? !hasPermission : hasPermission;
+
+    if (requiresClientCalculation && !isMounted) {
+        return reverse ? children : otherwise;
+    }
+
+    return shouldRenderChildren ? children : otherwise;
 }
