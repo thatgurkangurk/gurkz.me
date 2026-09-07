@@ -17,7 +17,7 @@ FROM base
 
 COPY --from=build --chown=node:node /app/.output /app/.output
 
-ENV NODE_ENV="production"
+ENV NODE_ENV="development"
 ENV HOST=0.0.0.0
 ENV PORT=4321
 EXPOSE 4321/tcp
