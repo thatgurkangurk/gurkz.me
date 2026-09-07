@@ -1,5 +1,5 @@
 import { browser } from "$app/env";
-import * as cookie from "npm-cookie";
+import * as cookie from "cookie";
 
 import { getUserPreferences } from "./cookie-consent";
 

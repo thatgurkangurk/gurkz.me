@@ -31,6 +31,7 @@
     "canvas-confetti": "^1.9.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "cookie": "^2.0.1",
     "drizzle-kit": "^1.0.0-rc.4",
     "drizzle-orm": "^1.0.0-rc.4",
     "eslint": "^10.8.0",
@@ -40,7 +41,6 @@
     "jsrepo": "^3.8.1",
     "mode-watcher": "^1.1.0",
     "neverthrow": "^8.2.0",
-    "npm-cookie": "npm:cookie@^2.0.1",
     "onedollarstats": "^0.0.23",
     "permix": "^4.1.2",
     "postgres": "^3.4.9",
@@ -86,7 +86,7 @@
     "db:migrate": "nub node_modules/drizzle-kit/bin.cjs --config ./drizzle.config.ts migrate",
     "db:studio": "nub node_modules/drizzle-kit/bin.cjs --config ./drizzle.config.ts studio",
     "auth:schema": "auth generate --config ./src/lib/server/auth.ts --output ./src/lib/server/db/schema/auth.ts --yes",
-    "postinstall": "node scripts/tsconfig.ts"
+    "postinstall": "nub --node scripts/tsconfig.ts"
   },
   "type": "module",
   "packageManager": "pnpm@11.18.0+sha512.33d83c77da82f49fba836925c6f1b841181ec3132b670639bd012f7075f5c7cf634c5f870147c19aae7478fac01df09d8892e880454896edd23ee9b33757563c",

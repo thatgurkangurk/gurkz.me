@@ -96,6 +96,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      cookie:
+        specifier: ^2.0.1
+        version: 2.0.1
       drizzle-kit:
         specifier: ^1.0.0-rc.4
         version: 1.0.0-rc.5-ab785fc
@@ -123,9 +126,6 @@ importers:
       neverthrow:
         specifier: ^8.2.0
         version: 8.2.0
-      npm-cookie:
-        specifier: npm:cookie@^2.0.1
-        version: cookie@2.0.1
       onedollarstats:
         specifier: ^0.0.23
         version: 0.0.23
