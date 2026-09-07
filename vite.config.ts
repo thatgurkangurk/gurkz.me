@@ -11,6 +11,15 @@ export default defineConfig({
     },
     resolve: {
         tsconfigPaths: true,
+        // @ts-expect-error its fine
+        alias: process.env.DEBUG_HYDRATION
+            ? {
+                  "react/jsx-runtime":
+                      "react/jsx-runtime/react-jsx-runtime.development.js",
+                  "react-dom/server": "react-dom/server.node.development.js",
+                  "react-dom": "react-dom/cjs/react-dom.development.js",
+              }
+            : {},
     },
     plugins: [
         tailwindcss(),
