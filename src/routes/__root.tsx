@@ -16,6 +16,7 @@ import { getRules, type PermissionsDefinition } from "#lib/permix.js";
 import { type Permix } from "permix";
 import { getPermixState } from "#lib/permix.server.js";
 import { PermixHydrate, PermixProvider } from "permix/react";
+import { ConfirmDeleteDialog } from "#lib/components/confirm-delete-dialog.js";
 
 const getSession = createServerFn({ method: "GET" }).handler(async () => {
     const headers = getRequestHeaders();
@@ -65,6 +66,8 @@ function RootComponent() {
             <PermixHydrate state={state}>
                 <RootDocument>
                     <Outlet />
+
+                    <ConfirmDeleteDialog />
                 </RootDocument>
             </PermixHydrate>
         </PermixProvider>

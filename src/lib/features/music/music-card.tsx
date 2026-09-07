@@ -18,6 +18,7 @@ import {
 import { idFormatAtom, type IdFormat } from "#lib/features/music/state.js";
 import { useAtomValue } from "jotai";
 import { Check } from "#lib/components/check.js";
+import { confirmDelete } from "#lib/components/confirm-delete-dialog.js";
 
 const dateFormat = new Intl.DateTimeFormat("en-GB", {
     dateStyle: "long",
@@ -119,7 +120,26 @@ export function MusicCard({
 
                 <div className="flex h-8 items-center">
                     <Check path="musicId.delete" data={musicId}>
-                        <Button variant={"destructive"} disabled>
+                        <Button
+                            variant={"destructive"}
+                            onClick={() =>
+                                confirmDelete({
+                                    title: "ay",
+                                    description: "ayyy",
+                                    input: {
+                                        confirmationText: "DELETE",
+                                    },
+                                    onConfirm: async () => {
+                                        return new Promise((resolve) => {
+                                            setTimeout(() => {
+                                                alert("coming soon");
+                                                resolve(true);
+                                            }, 1200);
+                                        });
+                                    },
+                                })
+                            }
+                        >
                             delete (soon)
                         </Button>
                     </Check>
