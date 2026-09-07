@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useMemo, type ReactNode } from "react";
 import {
     Outlet,
     createRootRouteWithContext,
@@ -56,10 +56,13 @@ function RootComponent() {
     const { data: session } = authClient.useSession();
 
     authClient.hydrateSession(ssrSession);
-    useLayoutEffect(() => {
-        // @ts-expect-error its fine
-        permix.setup(getRules(session?.user));
-    }, [permix, session, state]);
+    useMemo(() => {
+        const currentUser = session?.user ?? ssrSession?.user;
+        if (currentUser) {
+            // @ts-expect-error its fine
+            permix.setup(getRules(currentUser));
+        }
+    }, [permix, session, ssrSession]);
 
     return (
         <PermixProvider permix={permix}>

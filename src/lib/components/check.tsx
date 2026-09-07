@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import type { CheckArgs, RulesPaths } from "permix";
 import type { CheckProps } from "permix/react";
 
@@ -12,11 +11,7 @@ export function Check<P extends RulesPaths<PermissionsDefinition>>({
     otherwise = null,
     reverse = false,
 }: CheckProps<PermissionsDefinition, P>) {
-    const { check, isReady } = usePermix();
-
-    if (!isReady) {
-        return null;
-    }
+    const { check } = usePermix();
 
     const hasPermission = check(
         ...([path, data] as unknown as CheckArgs<PermissionsDefinition>),
