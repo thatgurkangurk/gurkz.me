@@ -44,6 +44,7 @@
     "better-auth": "^1.7.2",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.2.5",
+    "cookie": "^2.0.1",
     "drizzle-orm": "^1.0.0-rc.4",
     "jotai": "^2.20.3",
     "permix": "^4.1.2",

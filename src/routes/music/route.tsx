@@ -23,15 +23,43 @@ import {
 } from "@tabler/icons-react";
 import { createDebouncedAtom } from "#lib/util/debounced-atom.js";
 import { Search } from "#lib/components/search.js";
-import { Atom, useAtomValue } from "jotai";
+import { Atom, Provider, useAtomValue } from "jotai";
+import { createIsomorphicFn } from "@tanstack/react-start";
+import { getCookie } from "@tanstack/react-start/server";
+import * as cookie from "cookie";
+import { idFormatAtom, idFormatSchema } from "#lib/features/music/state.js";
+import { useHydrateAtoms } from "jotai/utils";
+import { AtomsHydrator } from "#lib/components/atoms-hydrator.js";
+
+const getInitialIdFormat = createIsomorphicFn()
+    .server(() => {
+        const raw = getCookie("id_format");
+        try {
+            return idFormatSchema.parse(raw);
+        } catch {
+            return "DEFAULT";
+        }
+    })
+    .client(() => {
+        const raw = cookie.parseCookie(document.cookie).id_format;
+        try {
+            return idFormatSchema.parse(raw);
+        } catch {
+            return "DEFAULT";
+        }
+    });
 
 export const Route = createFileRoute("/music")({
-    component: MusicPage,
+    component: RouteComponent,
     loader: async ({ context }) => {
         await context.queryClient.infiniteQuery({
             ...musicIdsInfiniteQueryOptions(""),
             staleTime: "static",
         });
+
+        return {
+            initialIdFormat: getInitialIdFormat(),
+        };
     },
     errorComponent: ({ error, reset }) => {
         return (
@@ -193,6 +221,18 @@ function MusicGridSkeleton() {
 }
 
 const musicSearchAtoms = createDebouncedAtom("", 400);
+
+function RouteComponent() {
+    const { initialIdFormat } = Route.useLoaderData();
+
+    return (
+        <Provider>
+            <AtomsHydrator atomValues={[[idFormatAtom, initialIdFormat]]}>
+                <MusicPage />
+            </AtomsHydrator>
+        </Provider>
+    );
+}
 
 function MusicPage() {
     return (

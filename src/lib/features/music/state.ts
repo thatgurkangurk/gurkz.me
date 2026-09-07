@@ -1,5 +1,5 @@
 import * as z from "zod/v4";
-import { atom } from "jotai";
+import { atomWithCookie } from "#lib/util/cookie-atom.js";
 
 const idFormatSchema = z
     .optional(z.enum(["DEFAULT", "TRAITOR_TOWN"]))
@@ -19,7 +19,7 @@ const ID_FORMAT_OPTIONS = (Object.keys(ID_FORMAT_LABELS) as IdFormat[]).map(
 
 type IdFormat = z.infer<typeof idFormatSchema>;
 
-const idFormatAtom = atom<IdFormat>("DEFAULT");
+const idFormatAtom = atomWithCookie<IdFormat>("id_format", "DEFAULT");
 
 export {
     type IdFormat,

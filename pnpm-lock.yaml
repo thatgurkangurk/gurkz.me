@@ -59,6 +59,9 @@ importers:
       cn:
         specifier: ^0.2.5
         version: 0.2.5
+      cookie:
+        specifier: ^2.0.1
+        version: 2.0.1
       drizzle-orm:
         specifier: ^1.0.0-rc.4
         version: 1.0.0-rc.5-ab785fc(@opentelemetry/api@1.9.1)(postgres@3.4.9)(zod@4.5.4)
