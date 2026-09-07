@@ -1,9 +1,13 @@
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import type { CheckArgs, RulesPaths } from "permix";
 import type { CheckProps } from "permix/react";
 
 import type { PermissionsDefinition } from "#lib/permix.js";
 import { usePermix } from "#lib/util/use-permix.js";
+
+const emptySubscribe = () => () => {};
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
 
 export function Check<P extends RulesPaths<PermissionsDefinition>>({
     children,
@@ -13,34 +17,26 @@ export function Check<P extends RulesPaths<PermissionsDefinition>>({
     reverse = false,
 }: CheckProps<PermissionsDefinition, P>) {
     const { check } = usePermix();
-    const [isMounted, setIsMounted] = useState(false);
+
+    const isClient = useSyncExternalStore(
+        emptySubscribe,
+        getClientSnapshot,
+        getServerSnapshot,
+    );
 
     const isDynamic = data !== undefined && data !== null;
 
-    useEffect(() => {
-        if (isDynamic) {
-            setIsMounted(true);
-        }
-    }, [isDynamic]);
-
-    const canEvaluate = !isDynamic || isMounted;
-
-    let shouldRender = false;
-
-    if (canEvaluate) {
-        const hasPermission = check(
-            ...([path, data] as unknown as CheckArgs<PermissionsDefinition>),
-        );
-        shouldRender = reverse ? !hasPermission : hasPermission;
-    } else {
-        shouldRender = reverse ? true : false;
+    if (isDynamic && !isClient) {
+        const fallback = reverse ? children : otherwise;
+        return <span style={{ display: "contents" }}>{fallback}</span>;
     }
 
+    const hasPermission = check(
+        ...([path, data] as unknown as CheckArgs<PermissionsDefinition>),
+    );
+
+    const shouldRender = reverse ? !hasPermission : hasPermission;
     const content = shouldRender ? children : otherwise;
 
-    return (
-        <span style={{ display: "contents" }} suppressHydrationWarning>
-            {content}
-        </span>
-    );
+    return <span style={{ display: "contents" }}>{content}</span>;
 }
