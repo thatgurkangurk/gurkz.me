@@ -6,7 +6,7 @@ import {
     CardHeader,
     CardTitle,
 } from "#lib/components/ui/card.js";
-import { buttonVariants } from "#lib/components/ui/button.js";
+import { Button, buttonVariants } from "#lib/components/ui/button.js";
 import { IconExternalLink } from "@tabler/icons-react";
 import { cn } from "cn";
 import { Badge } from "#lib/components/ui/badge.js";
@@ -17,6 +17,7 @@ import {
 } from "#lib/components/ui/avatar.js";
 import { idFormatAtom, type IdFormat } from "#lib/features/music/state.js";
 import { useAtomValue } from "jotai";
+import { Check } from "#lib/components/check.js";
 
 const dateFormat = new Intl.DateTimeFormat("en-GB", {
     dateStyle: "long",
@@ -117,7 +118,11 @@ export function MusicCard({
                 </div>
 
                 <div className="flex h-8 items-center">
-                    {/* delete button */}
+                    <Check path="musicId.delete" data={musicId}>
+                        <Button variant={"destructive"} disabled>
+                            delete (soon)
+                        </Button>
+                    </Check>
                 </div>
             </CardFooter>
         </Card>
