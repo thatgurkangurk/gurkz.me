@@ -15,20 +15,24 @@ export function Check<P extends RulesPaths<PermissionsDefinition>>({
     const { check } = usePermix();
     const [isMounted, setIsMounted] = useState(false);
 
+    const isDynamic = data !== undefined && data !== null;
+
     useEffect(() => {
-        setIsMounted(true);
-    }, []);
+        if (isDynamic) {
+            setIsMounted(true);
+        }
+    }, [isDynamic]);
+
+    if (isDynamic && !isMounted) {
+        const fallback = reverse ? children : otherwise;
+        return <>{fallback}</>;
+    }
 
     const hasPermission = check(
         ...([path, data] as unknown as CheckArgs<PermissionsDefinition>),
     );
 
     const shouldRender = reverse ? !hasPermission : hasPermission;
-
-    if (!isMounted) {
-        const fallback = otherwise ?? <span style={{ display: "none" }} />;
-        return <>{shouldRender ? children : fallback}</>;
-    }
 
     return <>{shouldRender ? children : otherwise}</>;
 }
