@@ -11,7 +11,6 @@ export default defineConfig({
     },
     resolve: {
         tsconfigPaths: true,
-        conditions: ["development", "browser"],
     },
     plugins: [
         tailwindcss(),
@@ -29,8 +28,4 @@ export default defineConfig({
         }),
         jotai(),
     ],
-    build: {
-        minify: false,
-        sourcemap: true,
-    },
 });

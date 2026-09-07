@@ -22,6 +22,7 @@ import { confirmDelete } from "#lib/components/confirm-delete-dialog.js";
 
 const dateFormat = new Intl.DateTimeFormat("en-GB", {
     dateStyle: "long",
+    timeZone: "Europe/Stockholm",
 });
 
 function format(robloxId: string, idFormat: IdFormat): string {
