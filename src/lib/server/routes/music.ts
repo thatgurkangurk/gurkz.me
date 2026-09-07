@@ -1,8 +1,7 @@
-import { os } from "@orpc/server";
-import { db } from "../db";
 import * as z from "zod/v4";
+import { base, orpcPermix } from "../orpc";
 
-export const listMusicIds = os
+export const listMusicIds = base
     .input(
         z.compile(
             z.object({
@@ -12,10 +11,11 @@ export const listMusicIds = os
             }),
         ),
     )
-    .handler(async ({ input }) => {
+    .use(orpcPermix.checkMiddleware("musicId.list"))
+    .handler(async ({ input, context }) => {
         const offset = (input.page - 1) * input.limit;
 
-        return await db.query.musicIds.findMany({
+        return await context.db.query.musicIds.findMany({
             ...(input.search && {
                 where: {
                     name: { ilike: `%${input.search}%` },

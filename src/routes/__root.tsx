@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useEffect, useLayoutEffect, type ReactNode } from "react";
 import {
     Outlet,
     createRootRouteWithContext,
@@ -12,6 +12,10 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import { auth } from "#lib/server/auth.js";
 import { authClient } from "#lib/auth.js";
+import { getRules, type PermissionsDefinition } from "#lib/permix.js";
+import { type Permix } from "permix";
+import { getPermixState } from "#lib/permix.server.js";
+import { PermixHydrate, PermixProvider } from "permix/react";
 
 const getSession = createServerFn({ method: "GET" }).handler(async () => {
     const headers = getRequestHeaders();
@@ -22,6 +26,7 @@ const getSession = createServerFn({ method: "GET" }).handler(async () => {
 
 export const Route = createRootRouteWithContext<{
     queryClient: QueryClient;
+    permix: Permix<PermissionsDefinition>;
 }>()({
     head: () => ({
         meta: [
@@ -33,19 +38,36 @@ export const Route = createRootRouteWithContext<{
             { title: "gurkz.me" },
         ],
     }),
+    beforeLoad: async ({ context }) => {
+        const state = await getPermixState();
+
+        context.permix.hydrate(state);
+
+        return { state };
+    },
     loader: async () => getSession(),
     component: RootComponent,
 });
 
 function RootComponent() {
-    const session = Route.useLoaderData();
+    const ssrSession = Route.useLoaderData();
+    const { permix, state } = Route.useRouteContext();
+    const { data: session } = authClient.useSession();
 
-    authClient.hydrateSession(session);
+    authClient.hydrateSession(ssrSession);
+    useLayoutEffect(() => {
+        // @ts-expect-error its fine
+        permix.setup(getRules(session?.user));
+    }, [permix, session, state]);
 
     return (
-        <RootDocument>
-            <Outlet />
-        </RootDocument>
+        <PermixProvider permix={permix}>
+            <PermixHydrate state={state}>
+                <RootDocument>
+                    <Outlet />
+                </RootDocument>
+            </PermixHydrate>
+        </PermixProvider>
     );
 }
 

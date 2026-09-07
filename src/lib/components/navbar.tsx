@@ -1,23 +1,48 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
-import { IconMenu2, IconX, IconUser } from "@tabler/icons-react";
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "#lib/components/ui/popover.js";
+import { IconMenu2, IconX } from "@tabler/icons-react";
 import { buttonVariants } from "#lib/components/ui/button.js";
 import { cn } from "#lib/utils.js";
 import { UserMenu } from "./user-menu";
+import { usePermix } from "#lib/util/use-permix.js";
 
-const NAV_LINKS = [
-    { label: "home", to: "/" },
-    { label: "music id list", to: "/music" },
-] as const;
+type NavLinkProps = {
+    to: string;
+    label: string;
+    mobile?: boolean;
+    onClick?: () => void;
+};
+
+function NavLink({ to, label, mobile, onClick }: NavLinkProps) {
+    return (
+        <Link
+            to={to}
+            onClick={onClick}
+            className={
+                mobile
+                    ? "block rounded-lg px-4 py-2.5 text-base transition-colors duration-150"
+                    : "transition-colors duration-150"
+            }
+            activeProps={{
+                className: mobile
+                    ? "bg-gray-100 font-medium text-primary dark:bg-white/10"
+                    : "font-medium text-primary",
+            }}
+            inactiveProps={{
+                className: mobile
+                    ? "text-gray-700 hover:bg-gray-100 hover:text-black dark:text-white/90 dark:hover:bg-white/5 dark:hover:text-white"
+                    : "text-gray-700 hover:text-black dark:text-white/90 dark:hover:text-white",
+            }}
+        >
+            {label}
+        </Link>
+    );
+}
 
 export function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const mobileNavRef = useRef<HTMLDivElement>(null);
+    const { check, isReady } = usePermix();
 
     const closeMenu = () => setIsOpen(false);
 
@@ -37,31 +62,11 @@ export function Navbar() {
             document.removeEventListener("mousedown", handleOutsideClick);
     }, [isOpen]);
 
-    const renderLinks = (mobile = false) =>
-        NAV_LINKS.map(({ label, to }) => (
-            <Link
-                key={to}
-                to={to}
-                onClick={mobile ? closeMenu : undefined}
-                className={
-                    mobile
-                        ? "block rounded-lg px-4 py-2.5 text-base transition-colors duration-150"
-                        : "transition-colors duration-150"
-                }
-                activeProps={{
-                    className: mobile
-                        ? "bg-gray-100 font-medium text-primary dark:bg-white/10"
-                        : "font-medium text-primary",
-                }}
-                inactiveProps={{
-                    className: mobile
-                        ? "text-gray-700 hover:bg-gray-100 hover:text-black dark:text-white/90 dark:hover:bg-white/5 dark:hover:text-white"
-                        : "text-gray-700 hover:text-black dark:text-white/90 dark:hover:text-white",
-                }}
-            >
-                {label}
-            </Link>
-        ));
+    useEffect(() => {
+        console.log(isReady);
+    }, [isReady]);
+
+    const canAccessMusicIdList = check("musicId.list");
 
     return (
         <>
@@ -75,7 +80,10 @@ export function Navbar() {
                             gurkan's website
                         </Link>
                         <div className="flex items-center gap-8">
-                            {renderLinks()}
+                            <NavLink to="/" label="home" />
+                            {canAccessMusicIdList && (
+                                <NavLink to="/music" label="music id list" />
+                            )}
                         </div>
                         <UserMenu />
                     </div>
@@ -131,7 +139,20 @@ export function Navbar() {
                     >
                         <div className="overflow-hidden">
                             <div className="mt-3 flex flex-col gap-1 border-t border-gray-200 pt-3 dark:border-white/10">
-                                {renderLinks(true)}
+                                <NavLink
+                                    to="/"
+                                    label="home"
+                                    mobile
+                                    onClick={closeMenu}
+                                />
+                                {canAccessMusicIdList && (
+                                    <NavLink
+                                        to="/music"
+                                        label="music id list"
+                                        mobile
+                                        onClick={closeMenu}
+                                    />
+                                )}
                             </div>
                         </div>
                     </div>

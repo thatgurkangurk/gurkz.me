@@ -65,6 +65,9 @@ importers:
       jotai:
         specifier: ^2.20.3
         version: 2.20.3(@babel/core@7.29.7)(@babel/template@7.29.7)(@types/react@19.2.18)(react@19.2.8)
+      permix:
+        specifier: ^4.1.2
+        version: 4.1.2(@tanstack/react-start@1.168.49(react@19.2.8)(react-dom@19.2.8(react@19.2.8))(vite@8.2.2(jiti@2.7.0)(yaml@2.9.0)))(crossws@0.4.12(srvx@0.11.22))(drizzle-orm@1.0.0-rc.5-ab785fc(@opentelemetry/api@1.9.1)(postgres@3.4.9)(zod@4.5.4))(express@5.2.1)(hono@4.13.5)(react@19.2.8)(react-dom@19.2.8(react@19.2.8))(rolldown@1.2.7)
       postgres:
         specifier: ^3.4.9
         version: 3.4.9
@@ -2529,6 +2532,60 @@ packages:
 
   pathe@2.0.3:
     resolution: {integrity: sha512-WUjGcAqP1gQacoQe+OBJsFA7Ld4DyXuUIjZ5cc75cLHvJ7dtNsTugphxIADwspS+AraAUePCKrSVtPLFj/F88w==}
+
+  permix@4.1.2:
+    resolution: {integrity: sha512-AeGqOQWkZD6PZYPQwcSKZOBCnGdcOfwXPGEs3N+nWRMZHOnkHFipPQ1wSAsb9RVIXnOHhOoxotPlNqC6xSxMHQ==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      '@orpc/server': '>=1'
+      '@tanstack/react-start': '>=1'
+      '@trpc/server': '>=11'
+      drizzle-orm: '>=0.30.0 || >=1.0.0-rc.3'
+      effect: '>=3'
+      elysia: '>=1'
+      express: '>=4'
+      fastify: '>=5'
+      fastify-plugin: '>=5'
+      hono: '>=4'
+      next: '>=14'
+      react: '>=18'
+      react-dom: '>=18'
+      solid-js: '>=1'
+      svelte: '>=5'
+      vue: '>=3'
+    peerDependenciesMeta:
+      '@orpc/server':
+        optional: true
+      '@tanstack/react-start':
+        optional: true
+      '@trpc/server':
+        optional: true
+      drizzle-orm:
+        optional: true
+      effect:
+        optional: true
+      elysia:
+        optional: true
+      express:
+        optional: true
+      fastify:
+        optional: true
+      fastify-plugin:
+        optional: true
+      hono:
+        optional: true
+      next:
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
+      solid-js:
+        optional: true
+      svelte:
+        optional: true
+      vue:
+        optional: true
 
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
@@ -5080,6 +5137,15 @@ snapshots:
   path-to-regexp@8.4.2: {}
 
   pathe@2.0.3: {}
+
+  permix@4.1.2(@tanstack/react-start@1.168.49(react@19.2.8)(react-dom@19.2.8(react@19.2.8))(vite@8.2.2(jiti@2.7.0)(yaml@2.9.0)))(crossws@0.4.12(srvx@0.11.22))(drizzle-orm@1.0.0-rc.5-ab785fc(@opentelemetry/api@1.9.1)(postgres@3.4.9)(zod@4.5.4))(express@5.2.1)(hono@4.13.5)(react@19.2.8)(react-dom@19.2.8(react@19.2.8))(rolldown@1.2.7):
+    dependencies:
+      '@tanstack/react-start': 1.168.49(crossws@0.4.12(srvx@0.11.22))(react@19.2.8)(react-dom@19.2.8(react@19.2.8))(rolldown@1.2.7)(vite@8.2.2(jiti@2.7.0)(yaml@2.9.0))
+      drizzle-orm: 1.0.0-rc.5-ab785fc(@opentelemetry/api@1.9.1)(postgres@3.4.9)(zod@4.5.4)
+      express: 5.2.1
+      hono: 4.13.5
+      react: 19.2.8
+      react-dom: 19.2.8(react@19.2.8)
 
   picocolors@1.1.1: {}
 

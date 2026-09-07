@@ -2,14 +2,18 @@ import { createRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
 import { QueryClient } from "@tanstack/react-query";
+import { type PermissionsDefinition } from "#lib/permix.js";
+import { createPermix } from "permix";
 
 export function getRouter() {
     const queryClient = new QueryClient();
 
+    const permix = createPermix<PermissionsDefinition>();
+
     const router = createRouter({
         routeTree,
         scrollRestoration: true,
-        context: { queryClient },
+        context: { queryClient, permix },
     });
 
     setupRouterSsrQueryIntegration({

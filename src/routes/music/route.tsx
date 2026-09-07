@@ -1,4 +1,8 @@
-import { useInfiniteQuery, keepPreviousData } from "@tanstack/react-query";
+import {
+    useInfiniteQuery,
+    keepPreviousData,
+    noop,
+} from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { MusicCard } from "#lib/features/music/music-card.js";
 import { FormatSelector } from "#lib/features/music/format-selector.js";
@@ -11,7 +15,12 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from "#lib/components/ui/empty.js";
-import { IconZoomExclamation, IconLoader } from "@tabler/icons-react";
+import {
+    IconZoomExclamation,
+    IconLoader,
+    IconAlertTriangle,
+    IconRefresh,
+} from "@tabler/icons-react";
 import { createDebouncedAtom } from "#lib/util/debounced-atom.js";
 import { Search } from "#lib/components/search.js";
 import { Atom, useAtomValue } from "jotai";
@@ -23,6 +32,30 @@ export const Route = createFileRoute("/music")({
             ...musicIdsInfiniteQueryOptions(""),
             staleTime: "static",
         });
+    },
+    errorComponent: ({ error, reset }) => {
+        return (
+            <div className="flex w-full items-center justify-center p-8">
+                <Empty className="py-20 animate-in fade-in-50 duration-300">
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            <IconAlertTriangle className="h-10 w-10 text-destructive" />
+                        </EmptyMedia>
+                        <EmptyTitle>failed to load music page</EmptyTitle>
+                        <EmptyDescription>
+                            {error.message || "an unexpected error occurred"}
+                        </EmptyDescription>
+                    </EmptyHeader>
+                    <button
+                        onClick={() => reset()}
+                        className="mt-4 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+                    >
+                        <IconRefresh className="h-4 w-4" />
+                        try again
+                    </button>
+                </Empty>
+            </div>
+        );
     },
 });
 
@@ -38,18 +71,25 @@ function MusicGrid({
     const loadMoreAnchorRef = useRef<HTMLDivElement>(null);
     const queryOptions = musicIdsInfiniteQueryOptions(search);
 
-    const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-        useInfiniteQuery({
-            ...queryOptions,
-            staleTime: 1000 * 60 * 5,
-            placeholderData: keepPreviousData,
-        });
+    const {
+        data,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+        isError,
+        error,
+        refetch,
+    } = useInfiniteQuery({
+        ...queryOptions,
+        staleTime: 1000 * 60 * 5,
+        placeholderData: keepPreviousData,
+    });
 
     const musicIds = data?.pages.flatMap((page) => page) ?? [];
 
     useEffect(() => {
         const el = loadMoreAnchorRef.current;
-        if (!el || !hasNextPage) return;
+        if (!el || !hasNextPage || isError) return;
 
         const observer = new IntersectionObserver(
             ([entry]) => {
@@ -62,7 +102,32 @@ function MusicGrid({
 
         observer.observe(el);
         return () => observer.disconnect();
-    }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+    }, [hasNextPage, isFetchingNextPage, fetchNextPage, isError]);
+
+    if (isError) {
+        return (
+            <Empty className="py-20 animate-in fade-in-50 duration-300">
+                <EmptyHeader>
+                    <EmptyMedia variant="icon">
+                        <IconAlertTriangle className="h-10 w-10 text-destructive" />
+                    </EmptyMedia>
+                    <EmptyTitle>failed to fetch music ids</EmptyTitle>
+                    <EmptyDescription>
+                        {error instanceof Error
+                            ? error.message
+                            : "an unknown error occurred while searching"}
+                    </EmptyDescription>
+                </EmptyHeader>
+                <button
+                    onClick={() => refetch()}
+                    className="mt-4 inline-flex items-center gap-2 rounded-lg border bg-background px-4 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-muted"
+                >
+                    <IconRefresh className="h-4 w-4" />
+                    retry query
+                </button>
+            </Empty>
+        );
+    }
 
     if (musicIds.length === 0 && !isSearching) {
         return (
