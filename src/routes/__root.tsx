@@ -40,13 +40,13 @@ export const Route = createRootRouteWithContext<{
         ],
     }),
     beforeLoad: async ({ context }) => {
-        const state = await getPermixState();
-
-        context.permix.hydrate(state);
-
-        return { state };
+        if (typeof window === "undefined") {
+            const state = await getPermixState();
+            context.permix.hydrate(state);
+            return { state };
+        }
     },
-    loader: async () => getSession(),
+    loader: async () => await getSession(),
     component: RootComponent,
 });
 
