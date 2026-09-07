@@ -3,7 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { MusicCard } from "#lib/features/music/music-card.js";
 import { FormatSelector } from "#lib/features/music/format-selector.js";
 import { musicIdsInfiniteQueryOptions } from "#lib/features/music/query.js";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import {
     Empty,
     EmptyDescription,
@@ -11,15 +11,10 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from "#lib/components/ui/empty.js";
-import {
-    IconZoomExclamation,
-    IconLoader,
-    IconSearch,
-    IconX,
-} from "@tabler/icons-react";
-import { Input } from "#lib/components/ui/input.js";
-import { Label } from "#lib/components/ui/label.js";
-import { useDebouncedValue } from "@tanstack/react-pacer";
+import { IconZoomExclamation, IconLoader } from "@tabler/icons-react";
+import { createDebouncedAtom } from "#lib/util/debounced-atom.js";
+import { Search } from "#lib/components/search.js";
+import { Atom, useAtomValue } from "jotai";
 
 export const Route = createFileRoute("/music")({
     component: MusicPage,
@@ -32,12 +27,14 @@ export const Route = createFileRoute("/music")({
 });
 
 function MusicGrid({
-    search,
-    isSearching,
+    searchAtom,
+    isSearchingAtom,
 }: {
-    search: string;
-    isSearching: boolean;
+    searchAtom: Atom<string>;
+    isSearchingAtom: Atom<boolean>;
 }) {
+    const search = useAtomValue(searchAtom);
+    const isSearching = useAtomValue(isSearchingAtom);
     const loadMoreAnchorRef = useRef<HTMLDivElement>(null);
     const queryOptions = musicIdsInfiniteQueryOptions(search);
 
@@ -130,14 +127,9 @@ function MusicGridSkeleton() {
     );
 }
 
+const musicSearchAtoms = createDebouncedAtom("", 400);
+
 function MusicPage() {
-    const [searchFilter, setSearchFilter] = useState("");
-    const [debouncedSearchFilter] = useDebouncedValue(searchFilter, {
-        wait: 400,
-    });
-
-    const isSearching = searchFilter !== debouncedSearchFilter;
-
     return (
         <div className="w-full space-y-8 p-8">
             <h1 className="text-3xl font-bold tracking-tight md:text-4xl">
@@ -146,40 +138,18 @@ function MusicPage() {
 
             <FormatSelector />
 
-            <div className="max-w-sm space-y-2">
-                <Label htmlFor="search_filter">search</Label>
-                <div className="relative flex items-center">
-                    <IconSearch className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors duration-200" />
-
-                    <Input
-                        id="search_filter"
-                        value={searchFilter}
-                        onChange={(e) => setSearchFilter(e.target.value)}
-                        placeholder="search music ids..."
-                        className="pl-10 pr-10 transition-shadow duration-200 focus-visible:ring-2"
-                    />
-
-                    <div className="absolute right-3.5 top-1/2 flex -translate-y-1/2 items-center">
-                        {isSearching ? (
-                            <IconLoader className="h-4 w-4 animate-spin text-muted-foreground" />
-                        ) : searchFilter ? (
-                            <button
-                                type="button"
-                                onClick={() => setSearchFilter("")}
-                                className="rounded-sm opacity-70 ring-offset-background transition-all duration-200 hover:opacity-100 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-ring"
-                            >
-                                <IconX className="h-4 w-4 text-muted-foreground" />
-                                <span className="sr-only">clear search</span>
-                            </button>
-                        ) : null}
-                    </div>
-                </div>
-            </div>
+            <Search
+                label="search"
+                placeholder="search music ids..."
+                inputAtom={musicSearchAtoms.inputAtom}
+                writeAtom={musicSearchAtoms.writeAtom}
+                isLoading={musicSearchAtoms.isDebouncingAtom}
+            />
 
             <Suspense fallback={<MusicGridSkeleton />}>
                 <MusicGrid
-                    search={debouncedSearchFilter}
-                    isSearching={isSearching}
+                    searchAtom={musicSearchAtoms.debouncedAtom}
+                    isSearchingAtom={musicSearchAtoms.isDebouncingAtom}
                 />
             </Suspense>
         </div>
