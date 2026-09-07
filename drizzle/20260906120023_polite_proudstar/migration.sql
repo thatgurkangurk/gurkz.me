@@ -1,0 +1,1 @@
+ALTER TYPE "permission" ADD VALUE 'TTCORE_ADMIN';
