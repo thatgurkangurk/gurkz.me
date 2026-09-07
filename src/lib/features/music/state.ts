@@ -1,9 +1,5 @@
-import * as z from "zod/v4";
-import { atomWithCookie } from "#lib/util/cookie-atom.js";
-
-const idFormatSchema = z
-    .optional(z.enum(["DEFAULT", "TRAITOR_TOWN"]))
-    .default("DEFAULT");
+import { type IdFormat, preferencesAtom } from "#lib/preferences.js";
+import { atom } from "jotai";
 
 const ID_FORMAT_LABELS: Record<IdFormat, string> = {
     DEFAULT: "default",
@@ -17,14 +13,12 @@ const ID_FORMAT_OPTIONS = (Object.keys(ID_FORMAT_LABELS) as IdFormat[]).map(
     }),
 );
 
-type IdFormat = z.infer<typeof idFormatSchema>;
+const idFormatAtom = atom(
+    (get) => get(preferencesAtom).musicIdFormat,
+    (get, set, newFormat: "DEFAULT" | "TRAITOR_TOWN") => {
+        const current = get(preferencesAtom);
+        set(preferencesAtom, { ...current, musicIdFormat: newFormat });
+    },
+);
 
-const idFormatAtom = atomWithCookie<IdFormat>("id_format", "DEFAULT");
-
-export {
-    type IdFormat,
-    idFormatAtom,
-    ID_FORMAT_LABELS,
-    ID_FORMAT_OPTIONS,
-    idFormatSchema,
-};
+export { type IdFormat, idFormatAtom, ID_FORMAT_LABELS, ID_FORMAT_OPTIONS };

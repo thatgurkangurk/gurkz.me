@@ -19,6 +19,9 @@ import { ConfirmDeleteDialog } from "#lib/components/confirm-delete-dialog.js";
 import { Providers } from "#lib/components/providers.js";
 import "vanilla-cookieconsent/dist/cookieconsent.css";
 import { run } from "#lib/cookie-consent.js";
+import { getInitialPreferences, preferencesAtom } from "#lib/preferences.js";
+import { AtomsHydrator } from "#lib/components/atoms-hydrator.js";
+import { Provider } from "jotai";
 
 const getSession = createServerFn({ method: "GET" }).handler(async () => {
     const headers = getRequestHeaders();
@@ -46,22 +49,32 @@ export const Route = createRootRouteWithContext<{
         context.permix.hydrate(state);
         return { state };
     },
-    loader: async () => await getSession(),
+    loader: async () => {
+        const preferences = getInitialPreferences();
+        const session = await getSession();
+
+        return { session, preferences };
+    },
     component: RootComponent,
 });
 
 function RootComponent() {
     const { permix, state } = Route.useRouteContext();
     const { data: session } = authClient.useSession();
+    const { preferences } = Route.useLoaderData();
 
     return (
         // @ts-expect-error its FINE.
         <Providers permix={permix} state={state} session={session ?? null}>
-            <RootDocument>
-                <Outlet />
+            <Provider>
+                <AtomsHydrator atomValues={[[preferencesAtom, preferences]]}>
+                    <RootDocument>
+                        <Outlet />
 
-                <ConfirmDeleteDialog />
-            </RootDocument>
+                        <ConfirmDeleteDialog />
+                    </RootDocument>
+                </AtomsHydrator>
+            </Provider>
         </Providers>
     );
 }
@@ -78,6 +91,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                         cookies: [
                             { name: "id_format" },
                             { name: "better-auth.last_used_login_method" },
+                            { name: "user_preferences" },
                         ],
                     },
                 },
