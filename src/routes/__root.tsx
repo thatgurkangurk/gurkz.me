@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, type ReactNode } from "react";
+import { useEffect } from "react";
 import {
     Outlet,
     createRootRouteWithContext,
@@ -12,12 +12,13 @@ import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeaders } from "@tanstack/react-start/server";
 import { auth } from "#lib/server/auth.js";
 import { authClient } from "#lib/auth.js";
-import { getRules, type PermissionsDefinition } from "#lib/permix.js";
+import { type PermissionsDefinition } from "#lib/permix.js";
 import { type Permix } from "permix";
 import { getPermixState } from "#lib/permix.server.js";
-import { PermixHydrate, PermixProvider } from "permix/react";
 import { ConfirmDeleteDialog } from "#lib/components/confirm-delete-dialog.js";
 import { Providers } from "#lib/components/providers.js";
+import "vanilla-cookieconsent/dist/cookieconsent.css";
+import { run } from "#lib/cookie-consent.js";
 
 const getSession = createServerFn({ method: "GET" }).handler(async () => {
     const headers = getRequestHeaders();
@@ -66,6 +67,24 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: { children: React.ReactNode }) {
+    useEffect(() => {
+        run({
+            language: { default: "en", translations: { en: "/en.json" } },
+            autoClearCookies: true,
+            categories: {
+                preferences: {
+                    enabled: true,
+                    autoClear: {
+                        cookies: [
+                            { name: "id_format" },
+                            { name: "better-auth.last_used_login_method" },
+                        ],
+                    },
+                },
+            },
+        });
+    }, []);
+
     return (
         <html lang="en" className="dark cc--darkmode" suppressHydrationWarning>
             <head>

@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
-import { IconMenu2, IconX } from "@tabler/icons-react";
-import { buttonVariants } from "#lib/components/ui/button.js";
+import { IconCookie, IconMenu2, IconX } from "@tabler/icons-react";
+import { Button, buttonVariants } from "#lib/components/ui/button.js";
 import { cn } from "#lib/utils.js";
 import { UserMenu } from "./user-menu";
 import { usePermix } from "#lib/util/use-permix.js";
+import { showPreferences } from "#lib/cookie-consent.js";
 
 type NavLinkProps = {
     to: string;
@@ -85,7 +86,18 @@ export function Navbar() {
                                 <NavLink to="/music" label="music id list" />
                             )}
                         </div>
-                        <UserMenu />
+                        <div className="flex items-center gap-4">
+                            <Button
+                                type="button"
+                                onClick={showPreferences}
+                                variant="ghost"
+                                size={"icon"}
+                            >
+                                <IconCookie />
+                            </Button>
+
+                            <UserMenu />
+                        </div>
                     </div>
                 </div>
             </nav>
@@ -125,7 +137,18 @@ export function Navbar() {
                             gurkan's website
                         </Link>
 
-                        <UserMenu />
+                        <div className="flex items-center gap-4">
+                            <Button
+                                type="button"
+                                onClick={showPreferences}
+                                variant="ghost"
+                                size={"icon"}
+                            >
+                                <IconCookie />
+                            </Button>
+
+                            <UserMenu />
+                        </div>
                     </div>
 
                     <div
