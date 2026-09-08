@@ -4,6 +4,7 @@ import viteReact from "@vitejs/plugin-react";
 import { nitro } from "nitro/vite";
 import tailwindcss from "@tailwindcss/vite";
 import jotai from "jotai-rolldown";
+import { devtools } from "@tanstack/devtools-vite";
 
 export default defineConfig({
     server: {
@@ -13,6 +14,7 @@ export default defineConfig({
         tsconfigPaths: true,
     },
     plugins: [
+        devtools(),
         tailwindcss(),
         tanstackStart({
             importProtection: {

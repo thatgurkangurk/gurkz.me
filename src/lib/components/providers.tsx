@@ -5,6 +5,9 @@ import { useLayoutEffect } from "react";
 import type { Session, User } from "#lib/server/auth.js";
 import type { PermissionsDefinition } from "#lib/permix.js";
 import { getRules } from "#lib/permix.js";
+import { TanStackDevtools } from "@tanstack/react-devtools";
+import { ReactQueryDevtoolsPanel } from "@tanstack/react-query-devtools";
+import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 
 function ClientRulesSetup({
     permix,
@@ -44,6 +47,18 @@ export function Providers({
                     session={session}
                 >
                     {children}
+                    <TanStackDevtools
+                        plugins={[
+                            {
+                                name: "TanStack Query",
+                                render: <ReactQueryDevtoolsPanel />,
+                            },
+                            {
+                                name: "TanStack Router",
+                                render: <TanStackRouterDevtoolsPanel />,
+                            },
+                        ]}
+                    />
                 </ClientRulesSetup>
             </PermixHydrate>
         </PermixProvider>
