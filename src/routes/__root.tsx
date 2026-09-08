@@ -66,15 +66,13 @@ function RootComponent() {
     return (
         // @ts-expect-error its FINE.
         <Providers permix={permix} state={state} session={session ?? null}>
-            <Provider>
-                <AtomsHydrator atomValues={[[preferencesAtom, preferences]]}>
-                    <RootDocument>
-                        <Outlet />
+            <AtomsHydrator atomValues={[[preferencesAtom, preferences]]}>
+                <RootDocument>
+                    <Outlet />
 
-                        <ConfirmDeleteDialog />
-                    </RootDocument>
-                </AtomsHydrator>
-            </Provider>
+                    <ConfirmDeleteDialog />
+                </RootDocument>
+            </AtomsHydrator>
         </Providers>
     );
 }
