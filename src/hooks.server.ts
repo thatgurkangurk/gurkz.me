@@ -5,7 +5,7 @@ import { auth } from "#lib/server/auth.js";
 import { db } from "#lib/server/db/index.js";
 
 import { building } from "$app/env";
-import type { Handle, ServerInit } from "@sveltejs/kit/hooks";
+import { type Handle, type ServerInit, sequence } from "@sveltejs/kit/hooks";
 import { svelteKitHandler } from "better-auth/svelte-kit";
 import * as cookie from "cookie";
 
@@ -20,7 +20,7 @@ export const init: ServerInit = async () => {
 	});
 };
 
-export const preferencesHook: Handle = async ({ event, resolve }) => {
+const preferencesHook: Handle = async ({ event, resolve }) => {
 	const rawCookieHeader = event.request.headers.get("cookie") || "";
 	const parsedCookies = cookie.parseCookie(rawCookieHeader);
 	const raw = parsedCookies.user_preferences;
@@ -38,7 +38,7 @@ export const preferencesHook: Handle = async ({ event, resolve }) => {
 	return resolve(event);
 };
 
-export const handle: Handle = async ({ event, resolve }) => {
+const corsHook: Handle = async ({ event, resolve }) => {
 	if (event.url.pathname.startsWith("/api/") && event.request.method === "OPTIONS") {
 		return new Response(null, {
 			headers: {
@@ -49,6 +49,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 		});
 	}
 
+	return resolve(event);
+};
+
+const sessionHook: Handle = async ({ event, resolve }) => {
 	let session: Awaited<ReturnType<typeof auth.api.getSession>> = null;
 
 	try {
@@ -81,3 +85,5 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	return response;
 };
+
+export const handle = sequence(corsHook, sessionHook, preferencesHook);
