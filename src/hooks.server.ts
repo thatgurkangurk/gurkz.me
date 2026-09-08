@@ -1,4 +1,5 @@
 import { createPermix } from "#lib/permix.js";
+import { initialPreferences, userPreferencesSchema } from "#lib/preferences.svelte.js";
 import type { User } from "#lib/server/auth.js";
 import { auth } from "#lib/server/auth.js";
 import { db } from "#lib/server/db/index.js";
@@ -6,6 +7,7 @@ import { db } from "#lib/server/db/index.js";
 import { building } from "$app/env";
 import type { Handle, ServerInit } from "@sveltejs/kit/hooks";
 import { svelteKitHandler } from "better-auth/svelte-kit";
+import * as cookie from "cookie";
 
 let isShutdownRegistered = false;
 
@@ -16,6 +18,24 @@ export const init: ServerInit = async () => {
 	process.on("sveltekit:shutdown", async (reason) => {
 		await db.$client.end();
 	});
+};
+
+export const preferencesHook: Handle = async ({ event, resolve }) => {
+	const rawCookieHeader = event.request.headers.get("cookie") || "";
+	const parsedCookies = cookie.parseCookie(rawCookieHeader);
+	const raw = parsedCookies.user_preferences;
+
+	if (raw) {
+		try {
+			event.locals.preferences = userPreferencesSchema.parse(JSON.parse(raw));
+		} catch {
+			event.locals.preferences = initialPreferences;
+		}
+	} else {
+		event.locals.preferences = initialPreferences;
+	}
+
+	return resolve(event);
 };
 
 export const handle: Handle = async ({ event, resolve }) => {

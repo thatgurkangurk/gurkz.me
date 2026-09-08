@@ -14,6 +14,7 @@ export const load = (async (ev) => {
 
 	return {
 		session,
-		permixState
+		permixState,
+		preferences: ev.locals.preferences
 	};
 }) satisfies LayoutServerLoad;

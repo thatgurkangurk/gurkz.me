@@ -13,13 +13,14 @@
 	import { confirmDelete } from "#lib/components/ui/confirm-delete-dialog/index.js";
 	import { CopyButton } from "#lib/components/ui/copy-button/index.js";
 	import { Skeleton } from "#lib/components/ui/skeleton/index.js";
+	import { usePreferences } from "#lib/preferences.svelte.js";
 	import type { MusicIdWithCreator } from "#lib/server/db/schema.js";
 
 	import { SquareArrowOutUpRight } from "@lucide/svelte";
 	import { createMutation } from "@tanstack/svelte-query";
 
-	import { getIdFormat } from "../context.svelte";
-	import { deleteMusicIdMutation } from "../query";
+	import { formatMusicId } from "../format.js";
+	import { deleteMusicIdMutation } from "../query.js";
 
 	type Props = {
 		musicId: MusicIdWithCreator;
@@ -31,7 +32,7 @@
 
 	let { musicId }: Props = $props();
 
-	const state = getIdFormat();
+	const preferences = usePreferences();
 
 	const mutation = createMutation(() => deleteMusicIdMutation());
 </script>
@@ -66,9 +67,13 @@
 	<CardContent class="py-1">
 		<div class="flex items-center justify-between rounded-lg border p-2.5">
 			<span class="font-mono text-base font-semibold tracking-wide">
-				{state.format(musicId.robloxId)}
+				{formatMusicId(preferences.musicIdFormat, musicId.robloxId)}
 			</span>
-			<CopyButton text={state.format(musicId.robloxId)} variant="ghost" size="sm" />
+			<CopyButton
+				text={formatMusicId(preferences.musicIdFormat, musicId.robloxId)}
+				variant="ghost"
+				size="sm"
+			/>
 		</div>
 	</CardContent>
 

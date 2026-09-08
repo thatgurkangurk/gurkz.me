@@ -4,6 +4,7 @@
 	import { run } from "#lib/cookie-consent.js";
 	import { createPermix, getRules } from "#lib/permix.js";
 	import { setPermix } from "#lib/permix.svelte.js";
+	import { PreferencesStore, setPreferencesContext } from "#lib/preferences.svelte.js";
 	import { SessionState, setSession } from "#lib/session.svelte.js";
 
 	import { page } from "$app/state";
@@ -27,6 +28,11 @@
 	setSession(sessionState);
 
 	// svelte-ignore state_referenced_locally
+	let preferencesStore = new PreferencesStore(data.preferences);
+
+	setPreferencesContext(preferencesStore);
+
+	// svelte-ignore state_referenced_locally
 	const permixInstance = createPermix(data.session?.user);
 
 	setPermix(permixInstance);
@@ -47,7 +53,11 @@
 				preferences: {
 					enabled: true,
 					autoClear: {
-						cookies: [{ name: "id_format" }, { name: "better-auth.last_used_login_method" }]
+						cookies: [
+							{ name: "id_format" },
+							{ name: "better-auth.last_used_login_method" },
+							{ name: "user_preferences" }
+						]
 					}
 				}
 			}
