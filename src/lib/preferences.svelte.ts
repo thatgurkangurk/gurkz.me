@@ -35,7 +35,7 @@ export class PreferencesStore {
 		return this.#state.musicIdFormat;
 	}
 
-	setMusicIdFormat(format: IdFormat) {
+	set musicIdFormat(format: IdFormat) {
 		this.update({ musicIdFormat: format });
 	}
 

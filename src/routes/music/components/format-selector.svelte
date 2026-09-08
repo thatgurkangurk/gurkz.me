@@ -12,7 +12,7 @@
 	value={preferences.musicIdFormat}
 	spacing={2}
 	onValueChange={(val) => {
-		if (val) preferences.setMusicIdFormat(val as IdFormat);
+		if (val) preferences.musicIdFormat = val as IdFormat;
 	}}
 	class="inline-flex rounded-lg bg-muted p-1 text-muted-foreground select-none"
 >
