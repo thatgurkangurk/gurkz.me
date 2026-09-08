@@ -154,7 +154,7 @@ export function MusicCard({
                                 })
                             }
                         >
-                            delete (soon)
+                            delete
                         </Button>
                     </Check>
                 </div>
