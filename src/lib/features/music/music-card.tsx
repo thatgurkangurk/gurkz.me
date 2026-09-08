@@ -54,8 +54,8 @@ export function MusicCard({
 }>) {
     const { mutateAsync } = useMutation(
         orpc.music.delete.mutationOptions({
-            onSuccess: (_data, _variables, _result, ctx) => {
-                ctx.client.invalidateQueries({
+            onSuccess: async (_data, _variables, _result, ctx) => {
+                await ctx.client.invalidateQueries({
                     queryKey: orpc.music.list.key(),
                     exact: false,
                 });
