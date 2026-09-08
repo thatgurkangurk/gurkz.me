@@ -19,6 +19,8 @@ import { idFormatAtom, type IdFormat } from "#lib/features/music/state.js";
 import { useAtomValue } from "jotai";
 import { Check } from "#lib/components/check.js";
 import { confirmDelete } from "#lib/components/confirm-delete-dialog.js";
+import { useMutation } from "@tanstack/react-query";
+import { orpc } from "#lib/orpc.js";
 
 const dateFormat = new Intl.DateTimeFormat("en-GB", {
     dateStyle: "long",
@@ -50,6 +52,17 @@ export function MusicCard({
 }: Readonly<{
     musicId: MusicIdWithCreator;
 }>) {
+    const { mutateAsync } = useMutation(
+        orpc.music.delete.mutationOptions({
+            onSuccess: (_data, _variables, _result, ctx) => {
+                ctx.client.invalidateQueries({
+                    queryKey: orpc.music.list.key(),
+                    exact: false,
+                });
+            },
+        }),
+    );
+
     return (
         <Card className="flex h-full w-full flex-col justify-between overflow-hidden">
             <CardHeader>
@@ -134,11 +147,8 @@ export function MusicCard({
                                         confirmationText: "DELETE",
                                     },
                                     onConfirm: async () => {
-                                        return new Promise((resolve) => {
-                                            setTimeout(() => {
-                                                alert("coming soon");
-                                                resolve(true);
-                                            }, 1200);
+                                        await mutateAsync({
+                                            id: musicId.id,
                                         });
                                     },
                                 })

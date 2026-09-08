@@ -1,5 +1,8 @@
 import * as z from "zod/v4";
 import { base, orpcPermix } from "../orpc";
+import { musicIds } from "../db/schema";
+import { eq } from "drizzle-orm";
+import { ORPCError } from "@orpc/client";
 
 export const listMusicIds = base
     .input(
@@ -45,6 +48,43 @@ export const listMusicIds = base
         });
     });
 
+export const deleteMusicId = base
+    .input(
+        z.compile(
+            z.object({
+                id: z.ulid(),
+            }),
+        ),
+    )
+    .handler(async ({ context, input }) => {
+        if (!context.session) throw new ORPCError("UNAUTHORIZED");
+
+        const musicIdToDelete = (
+            await context.db
+                .select()
+                .from(musicIds)
+                .where(eq(musicIds.id, input.id))
+                .limit(1)
+        )[0];
+
+        if (!musicIdToDelete) throw new ORPCError("NOT_FOUND");
+
+        if (!context.permix.check("musicId.delete", musicIdToDelete))
+            throw new ORPCError("FORBIDDEN");
+
+        try {
+            await context.db
+                .delete(musicIds)
+                .where(eq(musicIds.id, musicIdToDelete.id));
+        } catch (err) {
+            console.error("failed to delete music id", err);
+            throw new ORPCError("INTERNAL_SERVER_ERROR", {
+                message: "failed to delete that music id",
+            });
+        }
+    });
+
 export const musicRouter = {
     list: listMusicIds,
+    delete: deleteMusicId,
 };
