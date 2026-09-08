@@ -1,7 +1,8 @@
-import { getUserPreferences } from "#lib/cookie-consent.js";
+import { getUserPreferences, validConsent } from "#lib/cookie-consent.js";
 
 import * as cookie from "cookie";
 import { createContext } from "svelte";
+import type { UserPreferences as CookieConsentUserPreferences } from "vanilla-cookieconsent";
 import { z } from "zod";
 
 export const idFormatSchema = z.optional(z.enum(["DEFAULT", "TRAITOR_TOWN"])).default("DEFAULT");
@@ -18,13 +19,49 @@ export const initialPreferences: UserPreferences = {
 	musicIdFormat: "DEFAULT"
 };
 
+export type ConsentCategories = {
+	necessary: boolean;
+	preferences: boolean;
+	analytics: boolean;
+	marketing: boolean;
+	[key: string]: boolean;
+};
+
 export class PreferencesStore {
 	#state = $state<UserPreferences>(initialPreferences);
+	#consent = $state<CookieConsentUserPreferences>({
+		acceptType: "necessary",
+		acceptedCategories: [],
+		rejectedCategories: [],
+		acceptedServices: {},
+		rejectedServices: {}
+	});
 
 	constructor(initialData?: UserPreferences) {
 		if (initialData) {
 			this.#state = initialData;
 		}
+
+		if (typeof window !== "undefined") {
+			this.#syncConsentWithLibrary();
+		}
+	}
+
+	#syncConsentWithLibrary() {
+		const updateConsentState = () => {
+			const userConsent = getUserPreferences();
+			if (userConsent) {
+				console.debug("updating user consent", userConsent);
+				this.#consent = userConsent;
+			}
+		};
+
+		if (validConsent()) {
+			updateConsentState();
+		}
+
+		window.addEventListener("cc:onConsent", updateConsentState);
+		window.addEventListener("cc:onChange", updateConsentState);
 	}
 
 	get current() {
@@ -33,6 +70,14 @@ export class PreferencesStore {
 
 	get musicIdFormat() {
 		return this.#state.musicIdFormat;
+	}
+
+	get consent() {
+		return this.#consent;
+	}
+
+	get hasPreferencesConsent() {
+		return this.#consent.acceptedCategories.includes("preferences");
 	}
 
 	set musicIdFormat(format: IdFormat) {
@@ -54,9 +99,7 @@ export class PreferencesStore {
 	#persistToCookie(data: UserPreferences) {
 		if (typeof window === "undefined") return;
 
-		const preferences = getUserPreferences();
-
-		if (preferences?.acceptedCategories?.includes("preferences")) {
+		if (this.hasPreferencesConsent) {
 			document.cookie = cookie.stringifySetCookie({
 				name: "user_preferences",
 				value: JSON.stringify(data),
