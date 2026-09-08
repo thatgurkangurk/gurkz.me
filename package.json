@@ -10,7 +10,6 @@
     "@discordjs/builders": "^1.14.1",
     "@fontsource-variable/dm-sans": "^5.3.0",
     "@formkit/auto-animate": "^0.10.0",
-    "@internationalized/date": "^3.12.4",
     "@lucide/svelte": "^1.42.0",
     "@sillvva/utils": "^0.9.0",
     "@standard-schema/spec": "^1.1.0",
@@ -64,7 +63,6 @@
     "vite": "^8.2.0",
     "vite-plugin-devtools-json": "^1.1.0",
     "vite-plugin-wasm": "^3.6.0",
-    "vite-tsconfig-paths": "^6.1.1",
     "zod": "^4.5.4"
   },
   "bugs": {
@@ -95,9 +93,8 @@
     "#lib/*": "./src/lib/*"
   },
   "dependencies": {
-    "esbuild": "^0.28.2",
     "ffmpeg-static": "^5.3.0",
     "sharp": "^0.35.4",
-    "typescript": "~6"
+    "typescript": "~7.0.2"
   }
 }

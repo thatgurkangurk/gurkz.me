@@ -4,7 +4,6 @@ import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 import tailwindcss from "@tailwindcss/vite";
 import path from "node:path";
 import { defineConfig } from "vite";
-import devtoolsJson from "vite-plugin-devtools-json";
 import wasm from "vite-plugin-wasm";
 
 export default defineConfig({
@@ -35,8 +34,7 @@ export default defineConfig({
 			},
 
 			inspector: true
-		}),
-		devtoolsJson()
+		})
 	],
 	ssr: {
 		external: ["ffmpeg-static", "sharp"]

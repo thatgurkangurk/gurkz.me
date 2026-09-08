@@ -3,8 +3,7 @@
 	"compilerOptions": {
 		"rewriteRelativeImportExtensions": true,
 		"sourceMap": true,
-		"strict": true,
-		"erasableSyntaxOnly": true
+		"strict": true
 	},
 	"include": ["src"]
 }
