@@ -75,6 +75,7 @@
 	"license": "MIT",
 	"private": true,
 	"scripts": {
+		"start": "node ./build/index.js",
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
