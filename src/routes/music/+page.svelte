@@ -9,8 +9,8 @@
 	import { scope } from "#lib/utils/scope.js";
 
 	import { Loader, Search, SearchAlert } from "@lucide/svelte";
-	import { Debounced, useIntersectionObserver, watch } from "runed";
-	import { untrack } from "svelte";
+	import { Debounced, watch } from "runed";
+	import { InfiniteLoader, LoaderState } from "svelte-infinite";
 
 	import FormatSelector from "./components/format-selector.svelte";
 	import MusicCard from "./components/music-card.svelte";
@@ -19,33 +19,23 @@
 	const LIMIT = 20;
 	const initialItems = await getMusicIds({ page: 1, limit: LIMIT, search: "" });
 
+	const loaderState = new LoaderState();
+
 	let searchFilter = $state("");
 	const debouncedSearchFilter = new Debounced(() => searchFilter, 500);
 
 	let musicIds = $state(initialItems);
-	let lastBatchLength = $state(initialItems.length);
 	let page = $state(2);
-
-	let isFetchingMore = $state(false);
 	let isFetchingNewSearch = $state(false);
 
 	let isSearching = $derived(searchFilter !== debouncedSearchFilter.current || isFetchingNewSearch);
-	let hasMore = $derived(lastBatchLength === LIMIT);
 
-	let loadMoreAnchor = $state<HTMLElement | null>(null);
-
-	useIntersectionObserver(
-		() => loadMoreAnchor,
-		([entry]) => {
-			if (entry?.isIntersecting) {
-				untrack(() => loadMore());
-			}
-		}
-	);
+	if (initialItems.length < LIMIT) {
+		loaderState.complete();
+	}
 
 	async function loadMore() {
-		if (isFetchingMore || !hasMore || isSearching) return;
-		isFetchingMore = true;
+		if (isSearching) return;
 
 		try {
 			const newItems = await getMusicIds({
@@ -57,11 +47,19 @@
 			const existingIds = new Set(musicIds.map((item) => item.id));
 			const uniqueItems = newItems.filter((item) => !existingIds.has(item.id));
 
-			musicIds = [...musicIds, ...uniqueItems];
-			lastBatchLength = newItems.length;
-			page += 1;
-		} finally {
-			isFetchingMore = false;
+			if (uniqueItems.length) {
+				musicIds = [...musicIds, ...uniqueItems];
+			}
+
+			if (newItems.length < LIMIT) {
+				loaderState.complete();
+			} else {
+				page += 1;
+				loaderState.loaded();
+			}
+		} catch (error) {
+			console.error("Failed to load more music IDs:", error);
+			loaderState.error();
 		}
 	}
 
@@ -73,9 +71,18 @@
 
 				try {
 					const newItems = await getMusicIds({ page: 1, limit: LIMIT, search: currentSearch });
+
 					musicIds = newItems;
-					lastBatchLength = newItems.length;
 					page = 2;
+
+					if (newItems.length < LIMIT) {
+						loaderState.complete();
+					} else {
+						loaderState.loaded();
+					}
+				} catch (error) {
+					console.error("Search failed:", error);
+					loaderState.error();
 				} finally {
 					isFetchingNewSearch = false;
 				}
@@ -123,43 +130,75 @@
 	</div>
 </div>
 
-<div
-	class={[
-		"grid w-full grid-cols-1 place-items-center gap-4 py-6 transition-opacity duration-300 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5",
-		isSearching && "opacity-50"
-	]}
->
-	{#each musicIds as musicId (musicId.id)}
-		<MusicCard
-			{musicId}
-			onDelete={(deletedId) => {
-				musicIds = musicIds.filter((item) => item.id !== deletedId);
-			}}
-		/>
-	{/each}
+{#if musicIds.length === 0 && !isSearching}
+	<Empty.Root>
+		<Empty.Header>
+			<Empty.Media variant="icon">
+				<SearchAlert />
+			</Empty.Media>
+			<Empty.Title>no music ids were found</Empty.Title>
+			<Empty.Description>try searching for something else</Empty.Description>
+		</Empty.Header>
+	</Empty.Root>
+{/if}
 
-	{#if musicIds.length === 0 && !isSearching}
-		<Empty.Root>
-			<Empty.Header>
-				<Empty.Media variant="icon">
-					<SearchAlert />
-				</Empty.Media>
-				<Empty.Title>no music ids were found</Empty.Title>
-				<Empty.Description>try searching for something else</Empty.Description>
-			</Empty.Header>
-		</Empty.Root>
-	{/if}
-</div>
+{#if musicIds.length > 0}
+	<InfiniteLoader {loaderState} triggerLoad={loadMore}>
+		<div
+			class={[
+				"grid w-full grid-cols-1 place-items-center gap-4 py-6 transition-opacity duration-300 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5",
+				isSearching && "opacity-50"
+			]}
+		>
+			{#each musicIds as musicId (musicId.id)}
+				<MusicCard
+					{musicId}
+					onDelete={(deletedId) => {
+						musicIds = musicIds.filter((item) => item.id !== deletedId);
+					}}
+				/>
+			{/each}
+		</div>
 
-{#if hasMore && !isSearching}
-	<div bind:this={loadMoreAnchor} class="flex w-full items-center justify-center py-10">
-		{#if isFetchingMore}
-			<div
-				class="flex items-center gap-2 rounded-full border bg-background px-4 py-2 text-sm text-muted-foreground shadow-sm"
-			>
-				<Loader class="h-4 w-4 animate-spin text-primary" />
-				loading
+		{#snippet loading()}
+			<div class="flex w-full items-center justify-center py-10">
+				<div
+					class="flex items-center gap-2 rounded-full border bg-background px-4 py-2 text-sm text-muted-foreground shadow-sm"
+				>
+					<Loader class="h-4 w-4 animate-spin text-primary" />
+					loading
+				</div>
 			</div>
-		{/if}
-	</div>
+		{/snippet}
+
+		{#snippet noResults()}
+			<div class="flex w-full items-center justify-center py-10">
+				<div
+					class="flex items-center gap-2 rounded-full border bg-background px-4 py-2 text-sm text-muted-foreground shadow-sm"
+				>
+					no more results
+				</div>
+			</div>
+		{/snippet}
+
+		{#snippet noData()}
+			<div class="flex w-full items-center justify-center py-10">
+				<div
+					class="flex items-center gap-2 rounded-full border bg-background px-4 py-2 text-sm text-muted-foreground shadow-sm"
+				>
+					no more results
+				</div>
+			</div>
+		{/snippet}
+
+		{#snippet coolingOff()}
+			<div class="flex w-full items-center justify-center py-10">
+				<div
+					class="flex items-center gap-2 rounded-full border bg-background px-4 py-2 text-sm text-muted-foreground shadow-sm"
+				>
+					woah. slow down there
+				</div>
+			</div>
+		{/snippet}
+	</InfiniteLoader>
 {/if}

@@ -50,6 +50,7 @@
     "shadcn-svelte": "^1.6.1",
     "svelte": "^5.56.8",
     "svelte-check": "^4.7.5",
+    "svelte-infinite": "^0.6.0",
     "svelte-meta-tags": "^5.0.2",
     "svelte-sonner": "^1.1.1",
     "svelte-toolbelt": "^0.10.6",
