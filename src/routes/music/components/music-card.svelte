@@ -21,14 +21,16 @@
 
 	type Props = {
 		musicId: MusicIdWithCreator;
-		onDelete?: (id: string) => void;
+		currentPage: number;
+		search: string;
+		limit: number;
 	};
 
 	const dateFormat = new Intl.DateTimeFormat("en-GB", {
 		dateStyle: "long"
 	});
 
-	let { musicId, onDelete }: Props = $props();
+	let { musicId, currentPage, limit, search }: Props = $props();
 
 	const preferences = usePreferences();
 </script>
@@ -111,9 +113,11 @@
 							description: "are you sure you want to delete this music id?",
 							onConfirm: async () => {
 								await deleteMusicId({
-									id: musicId.id
+									id: musicId.id,
+									limit: limit,
+									currentPage: currentPage,
+									searchFilter: search
 								});
-								onDelete?.(musicId.id);
 							}
 						});
 					}}

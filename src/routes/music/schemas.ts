@@ -1,3 +1,5 @@
+import { musicIdRefetchOptions } from "#lib/schemas/music.js";
+
 import * as z from "zod/v4";
 
 export const searchParamsSchema = z.object({
@@ -10,6 +12,7 @@ export const musicSearchSchema = z.object({
 });
 
 export const createMusicIdSchema = z.object({
+	...musicIdRefetchOptions.shape,
 	name: z
 		.string()
 		.min(6, {

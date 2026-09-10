@@ -6,10 +6,9 @@
 	import * as Empty from "#lib/components/ui/empty/index.js";
 	import { Input } from "#lib/components/ui/input/index.js";
 	import { Label } from "#lib/components/ui/label/index.js";
-	import type { MusicIdWithCreator } from "#lib/server/db/schema.js";
 	import { scope } from "#lib/utils/scope.js";
 
-	import { ChevronLeft, ChevronRight, Loader, Search, SearchAlert, X } from "@lucide/svelte";
+	import { ChevronLeft, ChevronRight, Search, SearchAlert, X } from "@lucide/svelte";
 	import { Debounced, watch } from "runed";
 	import { useSearchParams } from "runed/kit";
 	import { fade, scale } from "svelte/transition";
@@ -24,45 +23,28 @@
 
 	let { data }: PageProps = $props();
 
-	$inspect(data.searchParams);
-
 	const params = useSearchParams(searchParamsSchema, {
 		pushHistory: false,
 		noScroll: true,
-		// svelte-ignore state_referenced_locally i only want the initial
+		// svelte-ignore state_referenced_locally
 		initial: $state.snapshot(data.searchParams)
-	});
-
-	const initialItems = await getMusicIds({
-		page: params.page,
-		limit: LIMIT,
-		search: params.filter
 	});
 
 	let searchInput = $state(params.filter ?? "");
 	const debouncedSearch = new Debounced(() => searchInput, 500);
 
-	let musicIds = $state<MusicIdWithCreator[]>(initialItems);
-	let isFetching = $state(false);
+	const fetchPromise = $derived(
+		getMusicIds({
+			page: params.page,
+			limit: LIMIT,
+			search: params.filter
+		})
+	);
+
+	let musicIds = $derived(await fetchPromise);
 
 	let hasNextPage = $derived(musicIds.length === LIMIT);
 	let hasPrevPage = $derived(params.page > 1);
-
-	async function loadMusicData() {
-		isFetching = true;
-		try {
-			const items = await getMusicIds({
-				page: params.page,
-				limit: LIMIT,
-				search: params.filter
-			});
-			musicIds = items;
-		} catch (error) {
-			console.error("Failed to fetch music IDs:", error);
-		} finally {
-			isFetching = false;
-		}
-	}
 
 	watch(
 		() => debouncedSearch.current,
@@ -75,10 +57,8 @@
 	);
 
 	watch(
-		() => [params.page, params.filter] as const,
-		([newPage], oldValues) => {
-			loadMusicData();
-			const oldPage = oldValues?.[0];
+		() => params.page,
+		(newPage, oldPage) => {
 			if (oldPage !== undefined && newPage !== oldPage) {
 				window.scrollTo({ top: 0, behavior: "smooth" });
 			}
@@ -98,10 +78,6 @@
 
 	let id = $props.id();
 
-	function handleCreate(newItem: MusicIdWithCreator) {
-		musicIds = [newItem, ...musicIds];
-	}
-
 	function handleClearSearch() {
 		searchInput = "";
 	}
@@ -110,7 +86,7 @@
 <h1 class="pb-2 text-3xl font-bold tracking-tight md:text-4xl">music id list</h1>
 
 <CheckWithPending path="musicId.create">
-	<NewMusicIdForm onCreate={handleCreate} />
+	<NewMusicIdForm search={params.filter} limit={20} currentPage={params.page} />
 	<br />
 </CheckWithPending>
 
@@ -129,14 +105,7 @@
 				class="px-9"
 			/>
 
-			{#if isFetching}
-				<div
-					class="absolute top-2.5 right-3 text-muted-foreground"
-					transition:fade={{ duration: 150 }}
-				>
-					<Loader class="h-4 w-4 animate-spin" />
-				</div>
-			{:else if searchInput}
+			{#if searchInput}
 				<button
 					type="button"
 					onclick={handleClearSearch}
@@ -155,7 +124,7 @@
 	</div>
 </div>
 
-{#if musicIds.length === 0 && !isFetching}
+{#if musicIds.length === 0}
 	<Empty.Root>
 		<Empty.Header>
 			<Empty.Media variant="icon">
@@ -165,18 +134,13 @@
 			<Empty.Description>
 				{searchInput || params.filter
 					? `no results for "${searchInput || params.filter}". try searching for something else.`
-					: "create the first music id! (if you're seeing this something went HORRIBLY wrong)"}
+					: "create the first music id!"}
 			</Empty.Description>
 		</Empty.Header>
 	</Empty.Root>
-{/if}
-
-{#if musicIds.length > 0}
+{:else}
 	<div
-		class={[
-			"grid w-full items-stretch gap-4 py-6 transition-opacity duration-300 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5",
-			isFetching && "pointer-events-none opacity-50"
-		]}
+		class="grid w-full items-stretch gap-4 py-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5"
 	>
 		{#each musicIds as musicId, i (musicId.id)}
 			<div
@@ -184,12 +148,7 @@
 				in:scale={{ duration: 200, start: 0.95, delay: Math.min(i * 30, 300) }}
 				out:fade={{ duration: 150 }}
 			>
-				<MusicCard
-					{musicId}
-					onDelete={(deletedId) => {
-						musicIds = musicIds.filter((item) => item.id !== deletedId);
-					}}
-				/>
+				<MusicCard search={params.filter} limit={20} currentPage={params.page} {musicId} />
 			</div>
 		{/each}
 	</div>
@@ -199,21 +158,11 @@
 			page {params.page}
 		</span>
 		<div class="flex items-center gap-2">
-			<Button
-				variant="outline"
-				size="sm"
-				disabled={!hasPrevPage || isFetching}
-				onclick={handlePrevPage}
-			>
+			<Button variant="outline" size="sm" disabled={!hasPrevPage} onclick={handlePrevPage}>
 				<ChevronLeft class="mr-1 h-4 w-4" />
 				previous
 			</Button>
-			<Button
-				variant="outline"
-				size="sm"
-				disabled={!hasNextPage || isFetching}
-				onclick={handleNextPage}
-			>
+			<Button variant="outline" size="sm" disabled={!hasNextPage} onclick={handleNextPage}>
 				next
 				<ChevronRight class="ml-1 h-4 w-4" />
 			</Button>

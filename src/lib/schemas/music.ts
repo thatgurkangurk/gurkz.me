@@ -23,3 +23,9 @@ export const musicIdWithCreatorSchema = musicIdSchema.extend({
 		image: true
 	})
 });
+
+export const musicIdRefetchOptions = z.object({
+	currentPage: z.number().optional().default(1),
+	searchFilter: z.string().optional().default(""),
+	limit: z.number().optional().default(20)
+});

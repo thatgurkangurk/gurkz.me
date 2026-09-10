@@ -1,3 +1,4 @@
+import { musicIdRefetchOptions } from "#lib/schemas/music.js";
 import { db } from "#lib/server/db/index.js";
 import { musicIds } from "#lib/server/db/schema.js";
 
@@ -14,34 +15,18 @@ const createMusicId = form(createMusicIdSchema, async (data) => {
 	if (!event.locals.user || !event.locals.permix.check("musicId.create")) error(403);
 
 	try {
-		const [inserted] = await db
-			.insert(musicIds)
-			.values({
-				createdById: event.locals.user.id,
-				name: data.name,
-				tags: data.tags,
-				robloxId: data.robloxId
-			})
-			.returning();
-
-		const newMusicId = await db.query.musicIds.findFirst({
-			where: {
-				id: inserted.id
-			},
-			with: {
-				creator: {
-					columns: {
-						id: true,
-						name: true,
-						image: true
-					}
-				}
-			}
+		await db.insert(musicIds).values({
+			createdById: event.locals.user.id,
+			name: data.name,
+			tags: data.tags,
+			robloxId: data.robloxId
 		});
 
-		await getMusicIds({}).refresh();
-
-		return newMusicId;
+		void getMusicIds({
+			page: data.currentPage,
+			limit: data.limit,
+			search: data.searchFilter
+		}).refresh();
 	} catch (err) {
 		console.error("creating music id failed", err);
 	}
@@ -93,9 +78,10 @@ const getMusicIds = query(
 
 const deleteMusicId = command(
 	z.object({
-		id: z.ulid()
+		id: z.ulid(),
+		...musicIdRefetchOptions.shape
 	}),
-	async ({ id }) => {
+	async ({ id, currentPage, limit, searchFilter }) => {
 		const event = getRequestEvent();
 
 		if (!event.locals.user) error(401);
@@ -110,6 +96,12 @@ const deleteMusicId = command(
 
 		try {
 			await db.delete(musicIds).where(eq(musicIds.id, musicIdToDelete.id));
+
+			void getMusicIds({
+				page: currentPage,
+				limit: limit,
+				search: searchFilter
+			}).refresh();
 		} catch (err) {
 			console.error("failed to delete music id", err);
 			error(500, "Failed to delete music id");
