@@ -1,18 +1,17 @@
 <script lang="ts">
 	import * as ToggleGroup from "#lib/components/ui/toggle-group/index.js";
+	import { ID_FORMAT_OPTIONS, type IdFormat } from "#lib/features/music/format.js";
 	import { usePreferences } from "#lib/preferences.svelte.js";
-
-	import { ID_FORMAT_OPTIONS, type IdFormat } from "../format.js";
 
 	const preferences = usePreferences();
 </script>
 
 <ToggleGroup.Root
 	type="single"
-	value={preferences.musicIdFormat}
+	value={preferences.music.idFormat}
 	spacing={2}
 	onValueChange={(val) => {
-		if (val) preferences.musicIdFormat = val as IdFormat;
+		if (val) preferences.music.idFormat = val as IdFormat;
 	}}
 	class="inline-flex rounded-lg bg-muted p-1 text-muted-foreground select-none"
 >
@@ -21,7 +20,7 @@
 			{value}
 			aria-label={label}
 			onclick={(e) => {
-				if (preferences.musicIdFormat === value) {
+				if (preferences.music.idFormat === value) {
 					e.preventDefault();
 				}
 			}}

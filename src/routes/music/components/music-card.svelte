@@ -19,7 +19,6 @@
 	import { SquareArrowOutUpRight } from "@lucide/svelte";
 	import { createMutation } from "@tanstack/svelte-query";
 
-	import { formatMusicId } from "../format.js";
 	import { deleteMusicIdMutation } from "../query.js";
 
 	type Props = {
@@ -67,10 +66,10 @@
 	<CardContent class="py-1">
 		<div class="flex items-center justify-between rounded-lg border p-2.5">
 			<span class="font-mono text-base font-semibold tracking-wide">
-				{formatMusicId(preferences.musicIdFormat, musicId.robloxId)}
+				{preferences.music.formatMusicId(musicId.robloxId)}
 			</span>
 			<CopyButton
-				text={formatMusicId(preferences.musicIdFormat, musicId.robloxId)}
+				text={preferences.music.formatMusicId(musicId.robloxId)}
 				variant="ghost"
 				size="sm"
 			/>

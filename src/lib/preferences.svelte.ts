@@ -1,34 +1,25 @@
 import { getUserPreferences, validConsent } from "#lib/cookie-consent.js";
+import {
+	MusicPreferencesStore,
+	musicPreferencesSchema
+} from "#lib/features/music/preferences.svelte.js";
 
 import * as cookie from "cookie";
 import { createContext } from "svelte";
 import type { UserPreferences as CookieConsentUserPreferences } from "vanilla-cookieconsent";
 import { z } from "zod";
 
-export const idFormatSchema = z.optional(z.enum(["DEFAULT", "TRAITOR_TOWN"])).default("DEFAULT");
-
-export type IdFormat = z.infer<typeof idFormatSchema>;
-
 export const userPreferencesSchema = z.object({
-	musicIdFormat: idFormatSchema.default("DEFAULT")
+	music: musicPreferencesSchema.prefault({})
 });
 
 export type UserPreferences = z.infer<typeof userPreferencesSchema>;
 
 export const initialPreferences: UserPreferences = {
-	musicIdFormat: "DEFAULT"
-};
-
-export type ConsentCategories = {
-	necessary: boolean;
-	preferences: boolean;
-	analytics: boolean;
-	marketing: boolean;
-	[key: string]: boolean;
+	music: { idFormat: "DEFAULT" }
 };
 
 export class PreferencesStore {
-	#state = $state<UserPreferences>(initialPreferences);
 	#consent = $state<CookieConsentUserPreferences>({
 		acceptType: "necessary",
 		acceptedCategories: [],
@@ -37,10 +28,13 @@ export class PreferencesStore {
 		rejectedServices: {}
 	});
 
+	readonly music: MusicPreferencesStore;
+
 	constructor(initialData?: UserPreferences) {
-		if (initialData) {
-			this.#state = initialData;
-		}
+		const parsed = userPreferencesSchema.parse(initialData ?? {});
+
+		const notify = () => this.#persistToCookie(this.current);
+		this.music = new MusicPreferencesStore(parsed.music, notify);
 
 		if (typeof window !== "undefined") {
 			this.#syncConsentWithLibrary();
@@ -64,14 +58,6 @@ export class PreferencesStore {
 		window.addEventListener("cc:onChange", updateConsentState);
 	}
 
-	get current() {
-		return this.#state;
-	}
-
-	get musicIdFormat() {
-		return this.#state.musicIdFormat;
-	}
-
 	get consent() {
 		return this.#consent;
 	}
@@ -80,20 +66,10 @@ export class PreferencesStore {
 		return this.#consent.acceptedCategories.includes("preferences");
 	}
 
-	set musicIdFormat(format: IdFormat) {
-		this.update({ musicIdFormat: format });
-	}
-
-	update(
-		partial: Partial<UserPreferences> | ((prev: UserPreferences) => Partial<UserPreferences>)
-	) {
-		const partialNext = typeof partial === "function" ? partial(this.#state) : partial;
-		const next = { ...this.#state, ...partialNext };
-
-		const validated = userPreferencesSchema.parse(next);
-		this.#state = validated;
-
-		this.#persistToCookie(validated);
+	get current(): UserPreferences {
+		return {
+			music: this.music.toJSON()
+		};
 	}
 
 	#persistToCookie(data: UserPreferences) {
