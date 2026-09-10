@@ -18,7 +18,7 @@ RUN CI="1" BETTER_AUTH_SECRET="changeme" DATABASE_URL="postgres://changeme" pnpm
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm prune --prod
 
-FROM node:26-alpine AS runner
+FROM node:26-slim AS runner
 WORKDIR /app
 
 ENV NODE_ENV="production"
