@@ -14,12 +14,34 @@ const createMusicId = form(createMusicIdSchema, async (data) => {
 	if (!event.locals.user || !event.locals.permix.check("musicId.create")) error(403);
 
 	try {
-		await db.insert(musicIds).values({
-			createdById: event.locals.user.id,
-			name: data.name,
-			tags: data.tags,
-			robloxId: data.robloxId
+		const [inserted] = await db
+			.insert(musicIds)
+			.values({
+				createdById: event.locals.user.id,
+				name: data.name,
+				tags: data.tags,
+				robloxId: data.robloxId
+			})
+			.returning();
+
+		const newMusicId = await db.query.musicIds.findFirst({
+			where: {
+				id: inserted.id
+			},
+			with: {
+				creator: {
+					columns: {
+						id: true,
+						name: true,
+						image: true
+					}
+				}
+			}
 		});
+
+		await getMusicIds({}).refresh();
+
+		return newMusicId;
 	} catch (err) {
 		console.error("creating music id failed", err);
 	}

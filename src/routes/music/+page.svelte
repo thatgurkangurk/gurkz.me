@@ -1,102 +1,165 @@
 <script lang="ts">
-	import Search from "#lib/components/search.svelte";
+	import { getMusicIds } from "#lib/api/music.remote.js";
+	import CheckWithPending from "#lib/components/check-with-pending.svelte";
 	import { ConfirmDeleteDialog } from "#lib/components/ui/confirm-delete-dialog/index.js";
 	import * as Empty from "#lib/components/ui/empty/index.js";
-	import { Check } from "#lib/permix.svelte.js";
+	import { Input } from "#lib/components/ui/input/index.js";
+	import { Label } from "#lib/components/ui/label/index.js";
+	import type { MusicIdWithCreator } from "#lib/server/db/schema.js";
 	import { scope } from "#lib/utils/scope.js";
 
-	import { Loader, SearchAlert } from "@lucide/svelte";
-	import { createInfiniteQuery } from "@tanstack/svelte-query";
-	import { Debounced, useIntersectionObserver } from "runed";
+	import { Loader, Search, SearchAlert } from "@lucide/svelte";
+	import { Debounced, useIntersectionObserver, watch } from "runed";
+	import { untrack } from "svelte";
 
 	import FormatSelector from "./components/format-selector.svelte";
 	import MusicCard from "./components/music-card.svelte";
 	import NewMusicIdForm from "./components/new-music-id-form.svelte";
-	import { musicIdsInfiniteQueryOptions } from "./query.js";
+
+	const LIMIT = 20;
+	const initialItems = await getMusicIds({ page: 1, limit: LIMIT, search: "" });
 
 	let searchFilter = $state("");
 	const debouncedSearchFilter = new Debounced(() => searchFilter, 500);
 
-	const query = createInfiniteQuery(() =>
-		musicIdsInfiniteQueryOptions(debouncedSearchFilter.current)
-	);
+	let musicIds = $state(initialItems);
+	let lastBatchLength = $state(initialItems.length);
+	let page = $state(2);
 
-	let musicIds = $derived(query.data?.pages.flat() ?? []);
+	let isFetchingMore = $state(false);
+	let isFetchingNewSearch = $state(false);
+
+	let isSearching = $derived(searchFilter !== debouncedSearchFilter.current || isFetchingNewSearch);
+	let hasMore = $derived(lastBatchLength === LIMIT);
 
 	let loadMoreAnchor = $state<HTMLElement | null>(null);
 
 	useIntersectionObserver(
 		() => loadMoreAnchor,
 		([entry]) => {
-			if (entry?.isIntersecting && query.hasNextPage && !query.isFetchingNextPage) {
-				query.fetchNextPage();
+			if (entry?.isIntersecting) {
+				untrack(() => loadMore());
 			}
 		}
 	);
 
-	let isSearching = $derived(
-		debouncedSearchFilter.pending || (query.isFetching && !query.isFetchingNextPage)
+	async function loadMore() {
+		if (isFetchingMore || !hasMore || isSearching) return;
+		isFetchingMore = true;
+
+		try {
+			const newItems = await getMusicIds({
+				page,
+				limit: LIMIT,
+				search: debouncedSearchFilter.current
+			});
+
+			const existingIds = new Set(musicIds.map((item) => item.id));
+			const uniqueItems = newItems.filter((item) => !existingIds.has(item.id));
+
+			musicIds = [...musicIds, ...uniqueItems];
+			lastBatchLength = newItems.length;
+			page += 1;
+		} finally {
+			isFetchingMore = false;
+		}
+	}
+
+	watch(
+		() => debouncedSearchFilter.current,
+		(currentSearch) => {
+			(async () => {
+				isFetchingNewSearch = true;
+
+				try {
+					const newItems = await getMusicIds({ page: 1, limit: LIMIT, search: currentSearch });
+					musicIds = newItems;
+					lastBatchLength = newItems.length;
+					page = 2;
+				} finally {
+					isFetchingNewSearch = false;
+				}
+			})();
+		},
+		{ lazy: true }
 	);
+
 	let id = $props.id();
+
+	function handleCreate(newItem: MusicIdWithCreator) {
+		musicIds = [newItem, ...musicIds];
+	}
 </script>
 
-<div class="space-y-8 pb-12">
-	<div class="space-y-4">
-		<h1 class="text-3xl font-bold tracking-tight md:text-4xl">music id list</h1>
+<h1 class="pb-2 text-3xl font-bold tracking-tight md:text-4xl">music id list</h1>
 
-		<Check path="musicId.create">
-			<div class="pt-2">
-				<NewMusicIdForm />
-			</div>
-		</Check>
-	</div>
+<CheckWithPending path="musicId.create">
+	<NewMusicIdForm onCreate={handleCreate} />
+	<br />
+</CheckWithPending>
 
-	<div class="flex flex-col gap-6 pt-2">
-		<FormatSelector />
-		<ConfirmDeleteDialog />
+<FormatSelector />
+<ConfirmDeleteDialog />
 
-		<Search id={scope(id, "search_filter")} bind:value={searchFilter} {isSearching} />
-	</div>
+<div class="grid max-w-sm grid-cols-1 gap-2 pt-4">
+	<div class="space-y-2">
+		<Label for={scope(id, "search_filter")}>search</Label>
+		<div class="relative">
+			<Search class="absolute top-2.5 left-3 h-4 w-4 text-muted-foreground" />
 
-	<div class="w-full pt-4">
-		<div
-			class={[
-				"grid w-full grid-cols-1 gap-8 transition-all duration-300 ease-out sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5",
-				isSearching ? "pointer-events-none scale-[0.99] opacity-40" : "scale-100 opacity-100"
-			]}
-		>
-			{#each musicIds as musicId (musicId.id)}
-				<div class="transition-transform duration-200 ease-out hover:-translate-y-1.5">
-					<MusicCard {musicId} />
+			<Input
+				id={scope(id, "search_filter")}
+				bind:value={searchFilter}
+				placeholder="search music ids"
+				class="px-9"
+			/>
+
+			{#if isSearching}
+				<div class="absolute top-2.5 right-3 text-muted-foreground">
+					<Loader class="h-4 w-4 animate-spin" />
 				</div>
-			{/each}
+			{/if}
 		</div>
-
-		{#if musicIds.length === 0 && !query.isLoading && !isSearching}
-			<div class="py-16">
-				<Empty.Root class="py-12">
-					<Empty.Header>
-						<Empty.Media variant="icon">
-							<SearchAlert class="h-10 w-10" />
-						</Empty.Media>
-						<Empty.Title class="text-lg">no music ids were found</Empty.Title>
-						<Empty.Description class="text-sm">try searching for something else</Empty.Description>
-					</Empty.Header>
-				</Empty.Root>
-			</div>
-		{/if}
-
-		{#if query.hasNextPage && !isSearching}
-			<div bind:this={loadMoreAnchor} class="flex w-full items-center justify-center py-20">
-				{#if query.isFetchingNextPage}
-					<div
-						class="flex animate-in items-center gap-2.5 rounded-full border bg-background/80 px-5 py-2.5 text-sm text-muted-foreground shadow-xs backdrop-blur-md duration-200 zoom-in-95 fade-in"
-					>
-						<Loader class="h-4 w-4 animate-spin text-primary" />
-						<span>loading more...</span>
-					</div>
-				{/if}
-			</div>
-		{/if}
 	</div>
 </div>
+
+<div
+	class={[
+		"grid w-full grid-cols-1 place-items-center gap-4 py-6 transition-opacity duration-300 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5",
+		isSearching && "opacity-50"
+	]}
+>
+	{#each musicIds as musicId (musicId.id)}
+		<MusicCard
+			{musicId}
+			onDelete={(deletedId) => {
+				musicIds = musicIds.filter((item) => item.id !== deletedId);
+			}}
+		/>
+	{/each}
+
+	{#if musicIds.length === 0 && !isSearching}
+		<Empty.Root>
+			<Empty.Header>
+				<Empty.Media variant="icon">
+					<SearchAlert />
+				</Empty.Media>
+				<Empty.Title>no music ids were found</Empty.Title>
+				<Empty.Description>try searching for something else</Empty.Description>
+			</Empty.Header>
+		</Empty.Root>
+	{/if}
+</div>
+
+{#if hasMore && !isSearching}
+	<div bind:this={loadMoreAnchor} class="flex w-full items-center justify-center py-10">
+		{#if isFetchingMore}
+			<div
+				class="flex items-center gap-2 rounded-full border bg-background px-4 py-2 text-sm text-muted-foreground shadow-sm"
+			>
+				<Loader class="h-4 w-4 animate-spin text-primary" />
+				loading
+			</div>
+		{/if}
+	</div>
+{/if}

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { deleteMusicId } from "#lib/api/music.remote.js";
 	import CheckWithPending from "#lib/components/check-with-pending.svelte";
 	import { Avatar, AvatarFallback, AvatarImage } from "#lib/components/ui/avatar/index.js";
 	import { Badge } from "#lib/components/ui/badge/index.js";
@@ -17,23 +18,19 @@
 	import type { MusicIdWithCreator } from "#lib/server/db/schema.js";
 
 	import { SquareArrowOutUpRight } from "@lucide/svelte";
-	import { createMutation } from "@tanstack/svelte-query";
-
-	import { deleteMusicIdMutation } from "../query.js";
 
 	type Props = {
 		musicId: MusicIdWithCreator;
+		onDelete?: (id: string) => void;
 	};
 
 	const dateFormat = new Intl.DateTimeFormat("en-GB", {
 		dateStyle: "long"
 	});
 
-	let { musicId }: Props = $props();
+	let { musicId, onDelete }: Props = $props();
 
 	const preferences = usePreferences();
-
-	const mutation = createMutation(() => deleteMusicIdMutation());
 </script>
 
 <Card class="flex h-full w-full flex-col justify-between overflow-hidden">
@@ -113,7 +110,10 @@
 							title: `delete "${musicId.name}"?`,
 							description: "are you sure you want to delete this music id?",
 							onConfirm: async () => {
-								await mutation.mutateAsync(musicId);
+								await deleteMusicId({
+									id: musicId.id
+								});
+								onDelete?.(musicId.id);
 							}
 						});
 					}}

@@ -14,6 +14,8 @@
 	import { Input } from "#lib/components/ui/input/index.js";
 	import { Label } from "#lib/components/ui/label/index.js";
 	import { configureForm } from "#lib/remote-form.svelte.js";
+	import { musicIdWithCreatorSchema } from "#lib/schemas/music.js";
+	import type { MusicIdWithCreator } from "#lib/server/db/schema.js";
 	import { toErrors } from "#lib/utils/to-errors.js";
 
 	import { Trash2 } from "@lucide/svelte";
@@ -23,14 +25,28 @@
 
 	let formEl: HTMLFormElement | undefined = $state.raw();
 
+	type Props = {
+		onCreate?: (newItem: MusicIdWithCreator) => void;
+	};
+
+	let { onCreate }: Props = $props();
+
 	const configured = configureForm(() => ({
 		form: createMusicId,
 		formEl,
 		schema: createMusicIdSchema,
 		navBlockMessage: "you have unsaved changes. are you sure?",
-		onresult: ({ success, error }) => {
+		onresult: ({ success, error, result }) => {
 			if (success) {
 				toast.success("successfully submitted");
+
+				const resultParse = musicIdWithCreatorSchema.safeParse(result);
+
+				if (resultParse.success) {
+					onCreate?.(resultParse.data);
+				} else {
+					console.log(resultParse.error);
+				}
 			} else if (error) {
 				toast.error(error);
 			}
