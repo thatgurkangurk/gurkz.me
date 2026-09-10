@@ -1,17 +1,14 @@
-FROM ghcr.io/nubjs/nub:alpine AS base
+FROM ghcr.io/pnpm/pnpm:12 AS base
 LABEL org.opencontainers.image.source="https://github.com/thatgurkangurk/gurkz.me"
 WORKDIR /app
 
 FROM base AS deps
 COPY --chown=node:node package.json pnpm-lock.yaml ./
-COPY --chown=node:node scripts/tsconfig.ts ./scripts/tsconfig.ts
-RUN nub ci
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 FROM base AS prod-deps
 COPY --chown=node:node package.json pnpm-lock.yaml ./
-COPY --chown=node:node scripts/tsconfig.ts ./scripts/tsconfig.ts
-COPY --chown=node:node --from=deps /app/node_modules /app/node_modules
-RUN nub prune --prod
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile
 
 FROM base AS build
 ENV CI=1
@@ -31,4 +28,4 @@ ENV HOST=0.0.0.0
 ENV PORT=4321
 EXPOSE 4321/tcp
 
-CMD [ "nub", "./build/index.js" ]
+CMD [ "node", "./build/index.js" ]

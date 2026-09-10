@@ -2,7 +2,6 @@ import adapter from "@sveltejs/adapter-node";
 import { sveltekit } from "@sveltejs/kit/vite";
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 import tailwindcss from "@tailwindcss/vite";
-import path from "node:path";
 import { defineConfig } from "vite";
 import wasm from "vite-plugin-wasm";
 
@@ -42,11 +41,6 @@ export default defineConfig({
 	build: {
 		rolldownOptions: {
 			external: ["ffmpeg-static", "sharp"]
-		}
-	},
-	server: {
-		fs: {
-			allow: ["..", path.resolve(process.env.HOME || "~", ".cache")] // nub cache
 		}
 	}
 });

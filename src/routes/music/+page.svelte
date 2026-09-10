@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { getMusicIds } from "#lib/api/music.remote.js";
 	import CheckWithPending from "#lib/components/check-with-pending.svelte";
+	import { Button } from "#lib/components/ui/button/index.js";
 	import { ConfirmDeleteDialog } from "#lib/components/ui/confirm-delete-dialog/index.js";
 	import * as Empty from "#lib/components/ui/empty/index.js";
 	import { Input } from "#lib/components/ui/input/index.js";
@@ -8,93 +9,101 @@
 	import type { MusicIdWithCreator } from "#lib/server/db/schema.js";
 	import { scope } from "#lib/utils/scope.js";
 
-	import { Loader, Search, SearchAlert } from "@lucide/svelte";
+	import { ChevronLeft, ChevronRight, Loader, Search, SearchAlert, X } from "@lucide/svelte";
 	import { Debounced, watch } from "runed";
-	import { InfiniteLoader, LoaderState } from "svelte-infinite";
+	import { useSearchParams } from "runed/kit";
+	import { fade, scale } from "svelte/transition";
 
+	import type { PageProps } from "./$types.js";
 	import FormatSelector from "./components/format-selector.svelte";
 	import MusicCard from "./components/music-card.svelte";
 	import NewMusicIdForm from "./components/new-music-id-form.svelte";
+	import { searchParamsSchema } from "./schemas.js";
 
 	const LIMIT = 20;
-	const initialItems = await getMusicIds({ page: 1, limit: LIMIT, search: "" });
 
-	const loaderState = new LoaderState();
+	let { data }: PageProps = $props();
 
-	let searchFilter = $state("");
-	const debouncedSearchFilter = new Debounced(() => searchFilter, 500);
+	$inspect(data.searchParams);
 
-	let musicIds = $state(initialItems);
-	let page = $state(2);
-	let isFetchingNewSearch = $state(false);
+	const params = useSearchParams(searchParamsSchema, {
+		pushHistory: false,
+		noScroll: true,
+		// svelte-ignore state_referenced_locally i only want the initial
+		initial: $state.snapshot(data.searchParams)
+	});
 
-	let isSearching = $derived(searchFilter !== debouncedSearchFilter.current || isFetchingNewSearch);
+	const initialItems = await getMusicIds({
+		page: params.page,
+		limit: LIMIT,
+		search: params.filter
+	});
 
-	if (initialItems.length < LIMIT) {
-		loaderState.complete();
-	}
+	let searchInput = $state(params.filter ?? "");
+	const debouncedSearch = new Debounced(() => searchInput, 500);
 
-	async function loadMore() {
-		if (isSearching) return;
+	let musicIds = $state<MusicIdWithCreator[]>(initialItems);
+	let isFetching = $state(false);
 
+	let hasNextPage = $derived(musicIds.length === LIMIT);
+	let hasPrevPage = $derived(params.page > 1);
+
+	async function loadMusicData() {
+		isFetching = true;
 		try {
-			const newItems = await getMusicIds({
-				page,
+			const items = await getMusicIds({
+				page: params.page,
 				limit: LIMIT,
-				search: debouncedSearchFilter.current
+				search: params.filter
 			});
-
-			const existingIds = new Set(musicIds.map((item) => item.id));
-			const uniqueItems = newItems.filter((item) => !existingIds.has(item.id));
-
-			if (uniqueItems.length) {
-				musicIds = [...musicIds, ...uniqueItems];
-			}
-
-			if (newItems.length < LIMIT) {
-				loaderState.complete();
-			} else {
-				page += 1;
-				loaderState.loaded();
-			}
+			musicIds = items;
 		} catch (error) {
-			console.error("Failed to load more music IDs:", error);
-			loaderState.error();
+			console.error("Failed to fetch music IDs:", error);
+		} finally {
+			isFetching = false;
 		}
 	}
 
 	watch(
-		() => debouncedSearchFilter.current,
-		(currentSearch) => {
-			(async () => {
-				isFetchingNewSearch = true;
+		() => debouncedSearch.current,
+		(newQuery) => {
+			if (newQuery !== params.filter) {
+				params.filter = newQuery;
+				params.page = 1;
+			}
+		}
+	);
 
-				try {
-					const newItems = await getMusicIds({ page: 1, limit: LIMIT, search: currentSearch });
-
-					musicIds = newItems;
-					page = 2;
-
-					if (newItems.length < LIMIT) {
-						loaderState.complete();
-					} else {
-						loaderState.loaded();
-					}
-				} catch (error) {
-					console.error("Search failed:", error);
-					loaderState.error();
-				} finally {
-					isFetchingNewSearch = false;
-				}
-			})();
+	watch(
+		() => [params.page, params.filter] as const,
+		([newPage], oldValues) => {
+			loadMusicData();
+			const oldPage = oldValues?.[0];
+			if (oldPage !== undefined && newPage !== oldPage) {
+				window.scrollTo({ top: 0, behavior: "smooth" });
+			}
 		},
 		{ lazy: true }
 	);
+
+	function handlePrevPage() {
+		if (!hasPrevPage) return;
+		params.page -= 1;
+	}
+
+	function handleNextPage() {
+		if (!hasNextPage) return;
+		params.page += 1;
+	}
 
 	let id = $props.id();
 
 	function handleCreate(newItem: MusicIdWithCreator) {
 		musicIds = [newItem, ...musicIds];
+	}
+
+	function handleClearSearch() {
+		searchInput = "";
 	}
 </script>
 
@@ -105,100 +114,109 @@
 	<br />
 </CheckWithPending>
 
-<FormatSelector />
 <ConfirmDeleteDialog />
 
-<div class="grid max-w-sm grid-cols-1 gap-2 pt-4">
-	<div class="space-y-2">
+<div class="flex flex-col gap-4 pt-4 sm:flex-row sm:items-end sm:justify-between">
+	<div class="w-full max-w-sm space-y-2">
 		<Label for={scope(id, "search_filter")}>search</Label>
 		<div class="relative">
 			<Search class="absolute top-2.5 left-3 h-4 w-4 text-muted-foreground" />
 
 			<Input
 				id={scope(id, "search_filter")}
-				bind:value={searchFilter}
-				placeholder="search music ids"
+				bind:value={searchInput}
+				placeholder="search..."
 				class="px-9"
 			/>
 
-			{#if isSearching}
-				<div class="absolute top-2.5 right-3 text-muted-foreground">
+			{#if isFetching}
+				<div
+					class="absolute top-2.5 right-3 text-muted-foreground"
+					transition:fade={{ duration: 150 }}
+				>
 					<Loader class="h-4 w-4 animate-spin" />
 				</div>
+			{:else if searchInput}
+				<button
+					type="button"
+					onclick={handleClearSearch}
+					class="absolute top-2.5 right-3 text-muted-foreground hover:text-foreground"
+					aria-label="clear search"
+					transition:fade={{ duration: 150 }}
+				>
+					<X class="h-4 w-4" />
+				</button>
 			{/if}
 		</div>
 	</div>
+
+	<div class="flex w-full justify-start sm:w-auto sm:justify-end">
+		<FormatSelector />
+	</div>
 </div>
 
-{#if musicIds.length === 0 && !isSearching}
+{#if musicIds.length === 0 && !isFetching}
 	<Empty.Root>
 		<Empty.Header>
 			<Empty.Media variant="icon">
 				<SearchAlert />
 			</Empty.Media>
-			<Empty.Title>no music ids were found</Empty.Title>
-			<Empty.Description>try searching for something else</Empty.Description>
+			<Empty.Title>no music ids found</Empty.Title>
+			<Empty.Description>
+				{searchInput || params.filter
+					? `no results for "${searchInput || params.filter}". try searching for something else.`
+					: "create the first music id! (if you're seeing this something went HORRIBLY wrong)"}
+			</Empty.Description>
 		</Empty.Header>
 	</Empty.Root>
 {/if}
 
 {#if musicIds.length > 0}
-	<InfiniteLoader {loaderState} triggerLoad={loadMore}>
-		<div
-			class={[
-				"grid w-full grid-cols-1 place-items-center gap-4 py-6 transition-opacity duration-300 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5",
-				isSearching && "opacity-50"
-			]}
-		>
-			{#each musicIds as musicId (musicId.id)}
+	<div
+		class={[
+			"grid w-full items-stretch gap-4 py-6 transition-opacity duration-300 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5",
+			isFetching && "pointer-events-none opacity-50"
+		]}
+	>
+		{#each musicIds as musicId, i (musicId.id)}
+			<div
+				class="flex h-full w-full"
+				in:scale={{ duration: 200, start: 0.95, delay: Math.min(i * 30, 300) }}
+				out:fade={{ duration: 150 }}
+			>
 				<MusicCard
 					{musicId}
 					onDelete={(deletedId) => {
 						musicIds = musicIds.filter((item) => item.id !== deletedId);
 					}}
 				/>
-			{/each}
+			</div>
+		{/each}
+	</div>
+
+	<div class="mt-6 flex items-center justify-between border-t pt-4 pb-8">
+		<span class="text-sm text-muted-foreground">
+			page {params.page}
+		</span>
+		<div class="flex items-center gap-2">
+			<Button
+				variant="outline"
+				size="sm"
+				disabled={!hasPrevPage || isFetching}
+				onclick={handlePrevPage}
+			>
+				<ChevronLeft class="mr-1 h-4 w-4" />
+				previous
+			</Button>
+			<Button
+				variant="outline"
+				size="sm"
+				disabled={!hasNextPage || isFetching}
+				onclick={handleNextPage}
+			>
+				next
+				<ChevronRight class="ml-1 h-4 w-4" />
+			</Button>
 		</div>
-
-		{#snippet loading()}
-			<div class="flex w-full items-center justify-center py-10">
-				<div
-					class="flex items-center gap-2 rounded-full border bg-background px-4 py-2 text-sm text-muted-foreground shadow-sm"
-				>
-					<Loader class="h-4 w-4 animate-spin text-primary" />
-					loading
-				</div>
-			</div>
-		{/snippet}
-
-		{#snippet noResults()}
-			<div class="flex w-full items-center justify-center py-10">
-				<div
-					class="flex items-center gap-2 rounded-full border bg-background px-4 py-2 text-sm text-muted-foreground shadow-sm"
-				>
-					no more results
-				</div>
-			</div>
-		{/snippet}
-
-		{#snippet noData()}
-			<div class="flex w-full items-center justify-center py-10">
-				<div
-					class="flex items-center gap-2 rounded-full border bg-background px-4 py-2 text-sm text-muted-foreground shadow-sm"
-				>
-					no more results
-				</div>
-			</div>
-		{/snippet}
-
-		{#snippet coolingOff()}
-			<div class="flex w-full items-center justify-center py-10">
-				<div
-					class="flex items-center gap-2 rounded-full border bg-background px-4 py-2 text-sm text-muted-foreground shadow-sm"
-				>
-					woah. slow down there
-				</div>
-			</div>
-		{/snippet}
-	</InfiniteLoader>
+	</div>
 {/if}

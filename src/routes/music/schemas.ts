@@ -1,5 +1,10 @@
 import * as z from "zod/v4";
 
+export const searchParamsSchema = z.object({
+	page: z.coerce.number().default(1),
+	filter: z.string().default("")
+});
+
 export const musicSearchSchema = z.object({
 	search: z.string().default("")
 });
