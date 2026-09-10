@@ -115,6 +115,9 @@ importers:
       ffmpeg-static:
         specifier: ^5.3.0
         version: 5.3.0
+      node:
+        specifier: runtime:^26.8.2
+        version: runtime:26.8.2
       sharp:
         specifier: ^0.35.4
         version: 0.35.4(@types/node@26.4.0)
@@ -221,9 +224,6 @@ importers:
       neverthrow:
         specifier: ^8.2.0
         version: 8.2.0
-      node:
-        specifier: runtime:26.8.2
-        version: runtime:26.8.2
       onedollarstats:
         specifier: ^0.0.23
         version: 0.0.23
