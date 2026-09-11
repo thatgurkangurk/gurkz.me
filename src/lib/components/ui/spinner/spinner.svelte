@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { cn } from "#lib/utils.js";
 
-	import Loader2Icon from "@lucide/svelte/icons/loader-2";
+	import LoaderIcon from "@lucide/svelte/icons/loader";
 	import type { SVGAttributes } from "svelte/elements";
 
 	let {
@@ -16,7 +16,7 @@
 	}: SVGAttributes<SVGSVGElement> = $props();
 </script>
 
-<Loader2Icon
+<LoaderIcon
 	{role}
 	name={name === null ? undefined : name}
 	color={color === null ? undefined : color}

@@ -1,5 +1,10 @@
 <script lang="ts">
-	import { Input } from "#lib/components/ui/input/index.js";
+	import {
+		InputGroup,
+		InputGroupAddon,
+		InputGroupButton,
+		InputGroupInput
+	} from "#lib/components/ui/input-group/index.js";
 	import { Label } from "#lib/components/ui/label/index.js";
 
 	import { Loader, Search, X } from "@lucide/svelte";
@@ -25,31 +30,30 @@
 			{label}
 		</Label>
 		<div class="relative flex items-center">
-			<Search
-				class="pointer-events-none absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-muted-foreground/70 transition-colors duration-200"
-			/>
+			<InputGroup class="h-8">
+				<InputGroupAddon>
+					<Search class="h-4 w-4" />
+				</InputGroupAddon>
 
-			<Input
-				{id}
-				bind:value
-				{placeholder}
-				class="h-10 pr-10 pl-10 shadow-xs transition-shadow duration-200 focus-visible:ring-2"
-			/>
+				<InputGroupInput {id} bind:value {placeholder} />
 
-			<div class="absolute top-1/2 right-3.5 flex -translate-y-1/2 items-center">
-				{#if isSearching}
-					<Loader class="h-4 w-4 animate-spin text-muted-foreground" />
-				{:else if value}
-					<button
-						type="button"
-						onclick={() => (value = "")}
-						class="rounded-sm opacity-70 ring-offset-background transition-all duration-200 hover:scale-110 hover:opacity-100 focus:ring-2 focus:ring-ring focus:outline-none"
-					>
-						<X class="h-4 w-4 text-muted-foreground" />
-						<span class="sr-only">clear search</span>
-					</button>
-				{/if}
-			</div>
+				<InputGroupAddon align="inline-end">
+					<div class="flex w-4 items-center justify-center">
+						{#if isSearching}
+							<Loader class="h-4 w-4 animate-spin text-muted-foreground" />
+						{:else if value}
+							<InputGroupButton
+								aria-label="clear search"
+								title="clear search"
+								size="icon-xs"
+								onclick={() => (value = "")}
+							>
+								<X class="h-4 w-4 text-muted-foreground" />
+							</InputGroupButton>
+						{/if}
+					</div>
+				</InputGroupAddon>
+			</InputGroup>
 		</div>
 	</div>
 </div>
