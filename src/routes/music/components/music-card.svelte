@@ -14,23 +14,23 @@
 	import { confirmDelete } from "#lib/components/ui/confirm-delete-dialog/index.js";
 	import { CopyButton } from "#lib/components/ui/copy-button/index.js";
 	import { Skeleton } from "#lib/components/ui/skeleton/index.js";
+	import type { MusicIdListState } from "#lib/features/music/state.svelte.js";
 	import { usePreferences } from "#lib/preferences.svelte.js";
 	import type { MusicIdWithCreator } from "#lib/server/db/schema.js";
+	import { getInitials } from "#lib/utils/initials.js";
 
 	import { SquareArrowOutUpRight } from "@lucide/svelte";
 
 	type Props = {
 		musicId: MusicIdWithCreator;
-		currentPage: number;
-		search: string;
-		limit: number;
+		listState: MusicIdListState;
 	};
 
 	const dateFormat = new Intl.DateTimeFormat("en-GB", {
 		dateStyle: "long"
 	});
 
-	let { musicId, currentPage, limit, search }: Props = $props();
+	let { musicId, listState }: Props = $props();
 
 	const preferences = usePreferences();
 </script>
@@ -79,14 +79,7 @@
 		<div class="flex items-center gap-2.5">
 			<Avatar class="h-7 w-7 border">
 				<AvatarImage src={musicId.creator.image} alt={musicId.creator.name} />
-				<AvatarFallback class="text-[10px]"
-					>{musicId.creator.name
-						.split(" ")
-						.map((n) => n[0])
-						.join("")
-						.toUpperCase()
-						.slice(0, 2)}</AvatarFallback
-				>
+				<AvatarFallback class="text-[10px]">{getInitials(musicId.creator.name)}</AvatarFallback>
 			</Avatar>
 			<div class="flex flex-col text-xs leading-tight">
 				<span class="font-medium text-foreground">
@@ -114,9 +107,9 @@
 							onConfirm: async () => {
 								await deleteMusicId({
 									id: musicId.id,
-									limit: limit,
-									currentPage: currentPage,
-									searchFilter: search
+									limit: listState.limit,
+									currentPage: listState.params.page,
+									searchFilter: listState.params.filter
 								});
 							}
 						});

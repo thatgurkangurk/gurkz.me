@@ -13,23 +13,21 @@
 	} from "#lib/components/ui/card/index.js";
 	import { Input } from "#lib/components/ui/input/index.js";
 	import { Label } from "#lib/components/ui/label/index.js";
+	import { createMusicIdSchema } from "#lib/features/music/schemas.js";
+	import type { MusicIdListState } from "#lib/features/music/state.svelte.js";
 	import { configureForm } from "#lib/remote-form.svelte.js";
 	import { toErrors } from "#lib/utils/to-errors.js";
 
 	import { Trash2 } from "@lucide/svelte";
 	import { toast } from "svelte-sonner";
 
-	import { createMusicIdSchema } from "../schemas";
-
 	let formEl: HTMLFormElement | undefined = $state.raw();
 
 	type Props = {
-		currentPage: number;
-		search: string;
-		limit: number;
+		listState: MusicIdListState;
 	};
 
-	let { currentPage, search, limit }: Props = $props();
+	let { listState }: Props = $props();
 
 	const configured = configureForm(() => ({
 		form: createMusicId,
@@ -71,9 +69,9 @@
 	</CardHeader>
 
 	<form bind:this={formEl} {...attributes} enctype="multipart/form-data">
-		<input {...form.fields.currentPage.as("hidden", currentPage)} />
-		<input {...form.fields.searchFilter.as("hidden", search)} />
-		<input {...form.fields.limit.as("hidden", limit)} />
+		<input {...form.fields.currentPage.as("hidden", listState.params.page)} />
+		<input {...form.fields.searchFilter.as("hidden", listState.params.filter)} />
+		<input {...form.fields.limit.as("hidden", listState.limit)} />
 
 		<CardContent>
 			<div>

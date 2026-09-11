@@ -1,9 +1,10 @@
+import { searchParamsSchema } from "#lib/features/music/schemas.js";
+
 import { error } from "@sveltejs/kit";
 import { validateSearchParams } from "runed/kit";
 import { definePageMetaTags } from "svelte-meta-tags";
 
 import type { PageServerLoad } from "./$types";
-import { searchParamsSchema } from "./schemas.js";
 
 export const load = (async (ev) => {
 	if (!ev.locals.user) error(401, "please sign in to continue");
