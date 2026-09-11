@@ -24,9 +24,6 @@
 
 	const musicIds = $derived(await listState.musicIds);
 
-	const hasNextPage = $derived(musicIds.length === listState.limit);
-	const hasPrevPage = $derived(listState.params.page > 1);
-
 	const id = $props.id();
 
 	function subtleIn(_node: HTMLElement, { delay = 0, duration = 180 }) {
@@ -42,6 +39,13 @@
 				`;
 			}
 		};
+	}
+
+	function getPageUrl(pageOffset: number): string {
+		const params = new URLSearchParams(listState.params.toURLSearchParams());
+		const currentPage = listState.params.page ?? 1;
+		params.set("page", String(currentPage + pageOffset));
+		return `${resolve("/music")}?${params.toString()}`;
 	}
 </script>
 
@@ -67,7 +71,7 @@
 	</div>
 </div>
 
-{#if musicIds.length === 0}
+{#if musicIds.data.length === 0}
 	<div in:fade={{ duration: 150 }}>
 		<Empty.Root>
 			<Empty.Header>
@@ -85,11 +89,11 @@
 	</div>
 {:else}
 	<div
-		class="grid w-full items-stretch gap-4 py-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 transition-opacity duration-200"
+		class="grid w-full items-stretch gap-4 py-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 transition-opacity duration-200"
 		class:opacity-50={listState.isPending}
 		class:pointer-events-none={listState.isPending}
 	>
-		{#each musicIds as musicId, i (musicId.id)}
+		{#each musicIds.data as musicId, i (musicId.id)}
 			<div class="flex h-full w-full" in:subtleIn={{ delay: Math.min(i * 20, 180), duration: 180 }}>
 				<MusicCard {listState} {musicId} />
 			</div>
@@ -104,15 +108,13 @@
 			<Button
 				variant="outline"
 				size="sm"
-				aria-disabled={!hasPrevPage || listState.isPending}
-				class={!hasPrevPage || listState.isPending ? "pointer-events-none opacity-50" : ""}
-				href={(() => {
-					const params = new URLSearchParams(listState.params.toURLSearchParams());
-					params.set("page", String((listState.params.page ?? 1) - 1));
-					return `${resolve("/music")}?${params.toString()}`;
-				})()}
+				aria-disabled={!musicIds.pagination.hasPrevPage || listState.isPending}
+				class={!musicIds.pagination.hasPrevPage || listState.isPending
+					? "pointer-events-none opacity-50"
+					: ""}
+				href={getPageUrl(-1)}
 				onclick={(e) => {
-					if (!hasPrevPage || listState.isPending) e.preventDefault();
+					if (!musicIds.pagination.hasPrevPage || listState.isPending) e.preventDefault();
 				}}
 			>
 				<ChevronLeft class="mr-1 h-4 w-4" />
@@ -122,15 +124,13 @@
 			<Button
 				variant="outline"
 				size="sm"
-				disabled={!hasNextPage || listState.isPending}
-				class={!hasNextPage || listState.isPending ? "pointer-events-none opacity-50" : ""}
-				href={(() => {
-					const params = new URLSearchParams(listState.params.toURLSearchParams());
-					params.set("page", String((listState.params.page ?? 1) + 1));
-					return `${resolve("/music")}?${params.toString()}`;
-				})()}
+				disabled={!musicIds.pagination.hasNextPage || listState.isPending}
+				class={!musicIds.pagination.hasNextPage || listState.isPending
+					? "pointer-events-none opacity-50"
+					: ""}
+				href={getPageUrl(1)}
 				onclick={(e) => {
-					if (!hasNextPage || listState.isPending) e.preventDefault();
+					if (!musicIds.pagination.hasNextPage || listState.isPending) e.preventDefault();
 				}}
 			>
 				next

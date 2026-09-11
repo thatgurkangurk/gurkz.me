@@ -5,7 +5,7 @@ import { musicIds } from "#lib/server/db/schema.js";
 
 import { command, form, getRequestEvent, query } from "$app/server";
 import { error } from "@sveltejs/kit";
-import { eq } from "drizzle-orm";
+import { count, eq, ilike } from "drizzle-orm";
 import * as z from "zod/v4";
 
 const createMusicId = form(createMusicIdSchema, async (data) => {
@@ -44,34 +44,52 @@ const getMusicIds = query(
 
 		const offset = (page - 1) * limit;
 
-		return await db.query.musicIds.findMany({
-			...(search && {
-				where: {
-					name: { ilike: `%${search}%` }
-				}
-			}),
-			columns: {
-				id: true,
-				name: true,
-				robloxId: true,
-				createdById: true,
-				createdAt: true,
-				working: true,
-				tags: true
-			},
-			with: {
-				creator: {
-					columns: {
-						id: true,
-						name: true,
-						image: true
+		const whereClause = search ? ilike(musicIds.name, `%${search}%`) : undefined;
+
+		const [totalResult, musicIdsResult] = await Promise.all([
+			db.select({ count: count() }).from(musicIds).where(whereClause),
+			db.query.musicIds.findMany({
+				...(search && {
+					where: { name: { ilike: `%${search}%` } }
+				}),
+				columns: {
+					id: true,
+					name: true,
+					robloxId: true,
+					createdById: true,
+					createdAt: true,
+					working: true,
+					tags: true
+				},
+				with: {
+					creator: {
+						columns: {
+							id: true,
+							name: true,
+							image: true
+						}
 					}
-				}
-			},
-			orderBy: ({ id }, { desc }) => desc(id),
-			limit,
-			offset
-		});
+				},
+				orderBy: ({ id }, { desc }) => desc(id),
+				limit,
+				offset
+			})
+		]);
+
+		const totalItems = totalResult[0]?.count ?? 0;
+		const totalPages = Math.ceil(totalItems / limit);
+
+		return {
+			data: musicIdsResult,
+			pagination: {
+				page,
+				limit,
+				totalItems,
+				totalPages,
+				hasNextPage: page < totalPages,
+				hasPrevPage: page > 1
+			}
+		};
 	}
 );
 
