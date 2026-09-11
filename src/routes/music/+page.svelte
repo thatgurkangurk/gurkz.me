@@ -45,7 +45,7 @@
 	let hasNextPage = $derived(musicIds.length === LIMIT);
 	let hasPrevPage = $derived(params.page > 1);
 
-	let isPending = $derived($effect.pending() > 0);
+	let isPending = $derived($effect.pending() > 0 || searchInput !== debouncedSearch.current);
 
 	watch(
 		() => debouncedSearch.current,
