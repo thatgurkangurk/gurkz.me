@@ -1,9 +1,9 @@
-import { type Rules, createPermix as libCreatePermix } from "permix";
+import { type Rules, type ValidateDefinition, createPermix as libCreatePermix } from "permix";
 
 import type { User } from "./server/auth";
 import type { MusicId } from "./server/db/schema";
 
-export type PermissionsDefinition = {
+export type PermissionsDefinition = ValidateDefinition<{
 	musicId: [
 		{ name: "create" },
 		{ name: "read" },
@@ -12,7 +12,7 @@ export type PermissionsDefinition = {
 		{ name: "list" }
 	];
 	ttcore: [{ name: "submit" }, { name: "manage" }];
-};
+}>;
 
 export function getRules(user: User | undefined): Rules<PermissionsDefinition> {
 	return {
