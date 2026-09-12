@@ -1,6 +1,6 @@
 import type { Session, User, auth } from "#lib/server/auth.js";
 
-import { invalidateAll } from "$app/navigation";
+import { refreshAll } from "$app/navigation";
 import { page } from "$app/state";
 import type { SocialProvider } from "better-auth";
 import { inferAdditionalFields, lastLoginMethodClient } from "better-auth/client/plugins";
@@ -39,7 +39,7 @@ export class SessionState {
 
 	async signOut() {
 		const res = await this.authClient.signOut();
-		await invalidateAll();
+		await refreshAll();
 		return res;
 	}
 
