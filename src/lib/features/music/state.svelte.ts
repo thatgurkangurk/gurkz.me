@@ -6,7 +6,7 @@ import { useSearchParams } from "runed/kit";
 import { searchParamsSchema } from "./schemas.js";
 
 export class MusicIdListState {
-	limit = 15;
+	limit;
 
 	#params;
 
@@ -17,7 +17,9 @@ export class MusicIdListState {
 
 	#isPending = $derived($effect.pending() > 0 || this.searchInput !== this.debouncedSearch.current);
 
-	constructor(initialSearchParams?: Record<string, string>) {
+	constructor(initialSearchParams?: Record<string, string>, limit: number = 15) {
+		this.limit = limit;
+
 		this.#params = useSearchParams(searchParamsSchema, {
 			pushHistory: false,
 			noScroll: true,
@@ -31,7 +33,7 @@ export class MusicIdListState {
 		this.musicIds = $derived(
 			getMusicIds({
 				page: this.#params.page,
-				limit: 20,
+				limit: this.limit,
 				search: this.#params.filter
 			})
 		);

@@ -20,7 +20,7 @@
 	let { data }: PageProps = $props();
 
 	// svelte-ignore state_referenced_locally
-	const listState = new MusicIdListState(data.searchParams);
+	const listState = new MusicIdListState(data.searchParams, 15);
 
 	const musicIds = $derived(await listState.musicIds);
 
