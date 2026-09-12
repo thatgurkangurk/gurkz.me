@@ -89,9 +89,10 @@
 	</div>
 {:else}
 	<div
-		class="grid w-full items-stretch gap-4 py-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 transition-opacity duration-200"
-		class:opacity-50={listState.isPending}
-		class:pointer-events-none={listState.isPending}
+		class={[
+			listState.isPending && "opacity-50 pointer-events-none",
+			"grid w-full items-stretch gap-4 py-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 transition-opacity duration-200"
+		]}
 	>
 		{#each musicIds.data as musicId, i (musicId.id)}
 			<div class="flex h-full w-full" in:subtleIn={{ delay: Math.min(i * 20, 180), duration: 180 }}>
