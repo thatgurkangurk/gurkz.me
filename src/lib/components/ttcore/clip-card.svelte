@@ -74,7 +74,7 @@
 			<Accordion type="single" class="w-full">
 				<AccordionItem value="item-1" class="border-b-0">
 					<AccordionTrigger class="py-1 text-xs">note</AccordionTrigger>
-					<AccordionContent class="whitespace-pre-wrap text-xs text-muted-foreground">
+					<AccordionContent class="text-xs whitespace-pre-wrap text-muted-foreground">
 						{clip.note}
 					</AccordionContent>
 				</AccordionItem>

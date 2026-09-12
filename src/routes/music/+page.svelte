@@ -90,8 +90,8 @@
 {:else}
 	<div
 		class={[
-			listState.isPending && "opacity-50 pointer-events-none",
-			"grid w-full items-stretch gap-4 py-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 transition-opacity duration-200"
+			listState.isPending && "pointer-events-none opacity-50",
+			"grid w-full grid-cols-1 items-stretch gap-4 py-6 transition-opacity duration-200 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
 		]}
 	>
 		{#each musicIds.data as musicId, i (musicId.id)}
@@ -102,7 +102,7 @@
 	</div>
 
 	<div class="mt-6 flex items-center justify-between border-t pt-4 pb-8">
-		<span class="text-sm font-mono text-muted-foreground">
+		<span class="font-mono text-sm text-muted-foreground">
 			page {listState.params.page}
 		</span>
 		<div class="flex items-center gap-2">

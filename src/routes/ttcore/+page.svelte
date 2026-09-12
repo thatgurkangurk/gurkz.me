@@ -27,7 +27,7 @@
 	const closedVideos = $derived(videos.filter((v) => !v.submissionsOpen));
 </script>
 
-<div class="flex flex-col gap-6 max-w-2xl">
+<div class="flex max-w-2xl flex-col gap-6">
 	<Breadcrumb>
 		<BreadcrumbList>
 			<BreadcrumbItem>
@@ -40,19 +40,19 @@
 		</BreadcrumbList>
 	</Breadcrumb>
 
-	<h1 class="text-3xl font-bold tracking-tight md:text-4xl lowercase">traitor town core</h1>
+	<h1 class="text-3xl font-bold tracking-tight lowercase md:text-4xl">traitor town core</h1>
 
 	<Check path="ttcore.manage">
 		<Card class="max-w-xs">
 			<CardHeader>
-				<CardTitle class="lowercase flex items-center gap-2">
+				<CardTitle class="flex items-center gap-2 lowercase">
 					<ShieldCheck class="size-4" />
 					ttcore admin
 				</CardTitle>
 				<CardDescription class="lowercase">you can manage ttcore submissions !</CardDescription>
 			</CardHeader>
 			<CardFooter>
-				<Button href="/ttcore/admin" variant="outline" class="lowercase gap-2">
+				<Button href="/ttcore/admin" variant="outline" class="gap-2 lowercase">
 					manage submissions
 					<ArrowRight class="size-4" />
 				</Button>
@@ -61,20 +61,20 @@
 	</Check>
 
 	<section class="flex flex-col gap-3">
-		<p class="font-medium text-sm text-muted-foreground lowercase">open submissions</p>
+		<p class="text-sm font-medium text-muted-foreground lowercase">open submissions</p>
 
-		<div class="flex flex-col gap-2 align-start">
+		<div class="align-start flex flex-col gap-2">
 			{#each openVideos as video (video.id)}
 				<Button
 					variant="outline"
-					class="justify-between lowercase w-full max-w-md"
+					class="w-full max-w-md justify-between lowercase"
 					href={resolve("/ttcore/submit/[videoId]", { videoId: video.id })}
 				>
 					<span class="flex items-center gap-2 truncate">
 						<Video class="size-4 shrink-0 text-muted-foreground" />
 						{video.title}
 					</span>
-					<ArrowRight class="size-4 text-muted-foreground shrink-0" />
+					<ArrowRight class="size-4 shrink-0 text-muted-foreground" />
 				</Button>
 			{:else}
 				<p class="text-sm text-muted-foreground lowercase">
@@ -87,24 +87,24 @@
 	{#if closedVideos.length > 0}
 		<section class="flex flex-col gap-3">
 			<div>
-				<p class="font-medium text-sm text-muted-foreground lowercase">closed submissions</p>
+				<p class="text-sm font-medium text-muted-foreground lowercase">closed submissions</p>
 				<p class="text-xs text-muted-foreground/70 lowercase">
 					you can view these to see who submitted to them
 				</p>
 			</div>
 
-			<div class="flex flex-col gap-2 align-start">
+			<div class="align-start flex flex-col gap-2">
 				{#each closedVideos as video (video.id)}
 					<Button
 						variant="secondary"
-						class="justify-between lowercase w-full max-w-md opacity-80"
+						class="w-full max-w-md justify-between lowercase opacity-80"
 						href={resolve("/ttcore/submit/[videoId]", { videoId: video.id })}
 					>
 						<span class="flex items-center gap-2 truncate">
 							<Video class="size-4 shrink-0 text-muted-foreground" />
 							{video.title}
 						</span>
-						<ArrowRight class="size-4 text-muted-foreground shrink-0" />
+						<ArrowRight class="size-4 shrink-0 text-muted-foreground" />
 					</Button>
 				{/each}
 			</div>

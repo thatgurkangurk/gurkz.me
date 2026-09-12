@@ -37,7 +37,7 @@
 		<div
 			bind:this={ref}
 			class={cn(
-				"animate-in fade-in-0 fixed inset-0 z-50 flex place-items-center justify-center bg-black/25 p-6 duration-100 supports-backdrop-filter:backdrop-blur-xs",
+				"fixed inset-0 z-50 flex animate-in place-items-center justify-center bg-black/25 p-6 duration-100 fade-in-0 supports-backdrop-filter:backdrop-blur-xs",
 				className
 			)}
 			{...mergedProps}
@@ -45,7 +45,7 @@
 			{#if children}
 				{@render children()}
 			{:else}
-				<div class="text-foreground flex flex-col place-items-center justify-center gap-3">
+				<div class="flex flex-col place-items-center justify-center gap-3 text-foreground">
 					<UploadIcon class="size-8" />
 					<span class="text-lg font-medium">Drop files here to upload</span>
 				</div>

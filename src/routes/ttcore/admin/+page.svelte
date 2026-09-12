@@ -51,13 +51,13 @@
 		<div class="grid gap-3">
 			{#each videos as video (video.id)}
 				<a href={resolve("/ttcore/admin/[videoId]", { videoId: video.id })}>
-					<Card class="transition-all hover:bg-accent/50 hover:border-foreground/20">
+					<Card class="transition-all hover:border-foreground/20 hover:bg-accent/50">
 						<CardContent class="flex items-center justify-between p-4">
-							<div class="flex items-center gap-3 min-w-0">
+							<div class="flex min-w-0 items-center gap-3">
 								<div class="rounded-md bg-muted p-2 text-muted-foreground">
 									<Video class="size-4" />
 								</div>
-								<div class="flex flex-col gap-0.5 min-w-0">
+								<div class="flex min-w-0 flex-col gap-0.5">
 									<span class="truncate text-sm font-medium lowercase">
 										{video.title}
 									</span>
@@ -67,7 +67,7 @@
 								</div>
 							</div>
 
-							<div class="flex items-center gap-3 shrink-0 ml-4">
+							<div class="ml-4 flex shrink-0 items-center gap-3">
 								<Badge variant={video.submissionsOpen ? "default" : "secondary"} class="lowercase">
 									{video.submissionsOpen ? "active" : "closed"}
 								</Badge>
@@ -79,7 +79,7 @@
 			{:else}
 				<Card class="border-dashed">
 					<CardContent class="flex flex-col items-center justify-center p-8 text-center">
-						<Video class="size-8 text-muted-foreground/60 mb-2" />
+						<Video class="mb-2 size-8 text-muted-foreground/60" />
 						<p class="text-sm text-muted-foreground lowercase">
 							no clip submissions are open at the moment !
 						</p>

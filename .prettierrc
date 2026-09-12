@@ -5,8 +5,8 @@
 	"printWidth": 100,
 	"plugins": [
 		"prettier-plugin-svelte",
-		"prettier-plugin-tailwindcss",
-		"@trivago/prettier-plugin-sort-imports"
+		"@trivago/prettier-plugin-sort-imports",
+		"prettier-plugin-tailwindcss"
 	],
 	"importOrder": ["^#lib/(.*)$", "<THIRD_PARTY_MODULES>", "^[./]"],
 	"importOrderSeparation": true,
@@ -19,5 +19,7 @@
 			}
 		}
 	],
-	"tailwindStylesheet": "./src/routes/layout.css"
+	"tailwindStylesheet": "./src/routes/layout.css",
+	"tailwindAttributes": ["class", "class:*"],
+	"tailwindFunctions": ["class", "clsx", "cn"]
 }
