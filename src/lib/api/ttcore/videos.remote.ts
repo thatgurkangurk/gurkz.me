@@ -3,7 +3,7 @@ import { getOrGenerateClipThumbnail } from "#lib/server/clips/thumbnail.js";
 import { db } from "#lib/server/db/index.js";
 import { video } from "#lib/server/db/schema/video.js";
 
-import { command, form, query } from "$app/server";
+import { command, form, getRequestEvent, query } from "$app/server";
 import { error } from "@sveltejs/kit";
 import { eq } from "drizzle-orm";
 import * as z from "zod/v4";
@@ -176,6 +176,60 @@ function notifyVideoStatusChange(videoId: string) {
 	}
 }
 
+async function getSubmittersForVideo(videoId: string) {
+	const res = await db.query.clip.findMany({
+		where: {
+			videoId: videoId
+		},
+		columns: {
+			createdAt: false,
+			createdById: false,
+			id: false,
+			selected: false,
+			title: false,
+			url: false,
+			videoId: false
+		},
+		with: {
+			creator: {
+				columns: {
+					id: true,
+					name: true,
+					username: true
+				}
+			},
+			overriddenProfileData: true
+		}
+	});
+
+	const unique = new Map<
+		string,
+		{ id: string; line1: string; line2: string; isOverridden?: boolean }
+	>();
+
+	for (const row of res) {
+		if (row.overriddenProfileData) {
+			unique.set(row.overriddenProfileData.id, {
+				id: row.overriddenProfileData.id,
+				line1: row.overriddenProfileData.line1,
+				line2: row.overriddenProfileData.line2,
+				isOverridden: true
+			});
+
+			continue;
+		}
+
+		if (row.creator) {
+			unique.set(row.creator.id, {
+				id: row.creator.id,
+				line1: row.creator.name,
+				line2: `@${row.creator.username}`
+			});
+		}
+	}
+	return [...unique.values()];
+}
+
 export const getVideoStatus = query.live(
 	z.object({
 		videoId: z.string()
@@ -191,7 +245,23 @@ export const getVideoStatus = query.live(
 
 				if (!queriedVideo) error(404);
 
-				yield queriedVideo;
+				if (queriedVideo.submissionsOpen) {
+					const event = getRequestEvent();
+
+					if (!event.locals.user) error(401, "please sign in to continue");
+
+					yield {
+						...queriedVideo,
+						submitters: []
+					};
+				} else {
+					const submitters = await getSubmittersForVideo(queriedVideo.id);
+
+					yield {
+						...queriedVideo,
+						submitters: submitters
+					};
+				}
 
 				const { promise, resolve } = Promise.withResolvers<void>();
 

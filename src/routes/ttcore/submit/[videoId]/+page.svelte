@@ -29,8 +29,9 @@
 	import MedalDownloader from "../components/medal-downloader.svelte";
 	import SubmitForm from "../components/submit-form.svelte";
 	import type { PageProps } from "./$types";
+	import { MetaTags } from "svelte-meta-tags";
 
-	let { data, params }: PageProps = $props();
+	let { params }: PageProps = $props();
 
 	let videoStatus = $derived(
 		await getVideoStatus({
@@ -52,17 +53,19 @@
 		</BreadcrumbItem>
 		<BreadcrumbSeparator />
 		<BreadcrumbItem>
-			<BreadcrumbPage>{data.details.title}</BreadcrumbPage>
+			<BreadcrumbPage>{videoStatus.title}</BreadcrumbPage>
 		</BreadcrumbItem>
 	</BreadcrumbList>
 </Breadcrumb>
+
+<MetaTags title="submit to {videoStatus.title}" titleTemplate="%s - gurkan's website" />
 
 <Button href={resolve("ttcore")}>go back</Button>
 
 {#if videoStatus.submissionsOpen}
 	<div class="mx-auto max-w-4xl space-y-6 px-6 py-8 text-sm">
 		<h1 class="text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
-			{data.details.title}
+			{videoStatus.title}
 		</h1>
 
 		<Alert class="p-4 sm:p-5">
@@ -79,18 +82,18 @@
 
 		<VideoUploader />
 
-		{#if data.details.message}
+		{#if videoStatus.message}
 			<Alert variant="destructive" class="p-4 sm:p-5">
 				<CircleAlert class="h-5 w-5" />
 				<AlertTitle class="text-base font-semibold">read this first</AlertTitle>
 				<AlertDescription class="text-sm leading-relaxed">
-					{data.details.message}
+					{videoStatus.message}
 				</AlertDescription>
 			</Alert>
 
-			{const date = await getDateOfLastSubmissionForVideoByCurrentUser(data.details.id)}
+			{const date = await getDateOfLastSubmissionForVideoByCurrentUser(videoStatus.id)}
 
-			{#if (!date || date < data.details.messageUpdatedAt!) && !isMessageDismissed}
+			{#if (!date || date < videoStatus.messageUpdatedAt!) && !isMessageDismissed}
 				<Card class="border-destructive/40 bg-destructive/10">
 					<CardHeader>
 						<CardTitle class="text-base font-semibold text-foreground">
@@ -109,12 +112,12 @@
 				</Card>
 			{:else}
 				<div class="pt-2">
-					<SubmitForm videoId={data.details.id} />
+					<SubmitForm videoId={videoStatus.id} />
 				</div>
 			{/if}
 		{:else}
 			<div class="pt-2">
-				<SubmitForm videoId={data.details.id} />
+				<SubmitForm videoId={videoStatus.id} />
 			</div>
 		{/if}
 	</div>
@@ -125,16 +128,16 @@
 				sorry, but submissions are not open at the moment, please check back later !
 			</h1>
 
-			{#if data.submitters.length > 0}
+			{#if videoStatus.submitters.length > 0}
 				<div class="space-y-4 border-t border-border/60 pt-2">
 					<p class="font-medium text-muted-foreground">
 						but thank you to all of these amazing people who submitted for <span
-							class="font-semibold text-foreground">{data.details.title}</span
+							class="font-semibold text-foreground">{videoStatus.title}</span
 						>:
 					</p>
 
 					<ul class="grid grid-cols-1 gap-2.5 text-xs sm:grid-cols-2 md:grid-cols-3">
-						{#each data.submitters as submitter (submitter.id)}
+						{#each videoStatus.submitters as submitter (submitter.id)}
 							<li
 								class={[
 									"flex items-center gap-1.5 rounded-lg border bg-muted/30 px-3 py-2 text-foreground/90",
