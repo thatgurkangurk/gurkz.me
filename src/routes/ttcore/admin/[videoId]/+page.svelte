@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getVideoById } from "#lib/api/ttcore/videos.remote.js";
+	import { getVideoById, setSubmissionsOpen } from "#lib/api/ttcore/videos.remote.js";
 	import Search from "#lib/components/search.svelte";
 	import {
 		Breadcrumb,
@@ -20,6 +20,7 @@
 	import type { PageProps } from "./$types.js";
 	import ClipCard from "./clip-card.svelte";
 	import { clipsForVideoInfiniteQueryOptions } from "./query.js";
+	import Button from "#lib/components/ui/button/button.svelte";
 
 	let { params }: PageProps = $props();
 
@@ -81,6 +82,21 @@
 
 		<h1 class="text-3xl font-bold tracking-tight md:text-4xl">clips for {video.title}</h1>
 	</div>
+
+	<Button
+		onclick={async () =>
+			await setSubmissionsOpen({
+				videoId: video.id,
+				submissionsOpen: !video.submissionsOpen
+			})}
+		variant={video.submissionsOpen ? "destructive" : "default"}
+	>
+		{#if video.submissionsOpen}
+			close submissions
+		{:else}
+			open submissions
+		{/if}
+	</Button>
 
 	<div class="flex flex-col gap-6 pt-2">
 		<ConfirmDeleteDialog />

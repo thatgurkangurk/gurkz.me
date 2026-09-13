@@ -166,6 +166,53 @@ export const getClipsForVideo = query(
 	}
 );
 
+const videoStatusListeners = new Map<string, Set<() => void>>();
+
+function notifyVideoStatusChange(videoId: string) {
+	const listeners = videoStatusListeners.get(videoId);
+	if (listeners) {
+		listeners.forEach((resolve) => resolve());
+		listeners.clear();
+	}
+}
+
+export const getVideoStatus = query.live(
+	z.object({
+		videoId: z.string()
+	}),
+	async function* (data) {
+		try {
+			while (true) {
+				const queriedVideo = await db.query.video.findFirst({
+					where: {
+						id: data.videoId
+					}
+				});
+
+				if (!queriedVideo) error(404);
+
+				yield queriedVideo;
+
+				const { promise, resolve } = Promise.withResolvers<void>();
+
+				if (!videoStatusListeners.has(data.videoId)) {
+					videoStatusListeners.set(data.videoId, new Set());
+				}
+				const listeners = videoStatusListeners.get(data.videoId)!;
+				listeners.add(resolve);
+
+				await promise;
+			}
+		} finally {
+			const listeners = videoStatusListeners.get(data.videoId);
+			if (listeners) {
+				listeners.clear();
+				videoStatusListeners.delete(data.videoId);
+			}
+		}
+	}
+);
+
 export const getSubmissionsOpen = query(
 	z.object({
 		videoId: z.string()
@@ -205,5 +252,7 @@ export const setSubmissionsOpen = command(
 			videoId: data.videoId
 		}).refresh();
 		await getVideos().refresh();
+
+		notifyVideoStatusChange(data.videoId);
 	}
 );

@@ -1,5 +1,8 @@
 <script lang="ts">
-	import { getDateOfLastSubmissionForVideoByCurrentUser } from "#lib/api/ttcore/videos.remote.js";
+	import {
+		getDateOfLastSubmissionForVideoByCurrentUser,
+		getVideoStatus
+	} from "#lib/api/ttcore/videos.remote.js";
 	import VideoUploader from "#lib/components/ttcore/video-uploader.svelte";
 	import { Alert, AlertDescription, AlertTitle } from "#lib/components/ui/alert/index.js";
 	import {
@@ -27,7 +30,13 @@
 	import SubmitForm from "../components/submit-form.svelte";
 	import type { PageProps } from "./$types";
 
-	let { data }: PageProps = $props();
+	let { data, params }: PageProps = $props();
+
+	let videoStatus = $derived(
+		await getVideoStatus({
+			videoId: params.videoId
+		})
+	);
 
 	let isMessageDismissed = $state(false);
 </script>
@@ -50,7 +59,7 @@
 
 <Button href={resolve("ttcore")}>go back</Button>
 
-{#if data.details.submissionsOpen}
+{#if videoStatus.submissionsOpen}
 	<div class="mx-auto max-w-4xl space-y-6 px-6 py-8 text-sm">
 		<h1 class="text-2xl font-bold tracking-tight sm:text-3xl lg:text-4xl">
 			{data.details.title}
