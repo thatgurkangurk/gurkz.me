@@ -1,0 +1,1 @@
+ALTER TABLE "short_link" ALTER COLUMN "location" SET NOT NULL;

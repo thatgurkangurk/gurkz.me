@@ -1,0 +1,1 @@
+ALTER TABLE "short_link" ADD CONSTRAINT "short_link_created_by_id_user_id_fkey" FOREIGN KEY ("created_by_id") REFERENCES "user"("id");

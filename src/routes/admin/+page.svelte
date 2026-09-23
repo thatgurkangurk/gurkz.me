@@ -27,3 +27,4 @@
 <h1 class="text-3xl font-bold tracking-tight md:text-4xl">admin</h1>
 
 <Button href={resolve("admin/users")}>manage users</Button>
+<Button href={resolve("admin/links")}>manage short links</Button>

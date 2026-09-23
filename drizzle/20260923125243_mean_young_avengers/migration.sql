@@ -1,0 +1,1 @@
+ALTER TABLE "short_link" ADD COLUMN "uses" integer DEFAULT 0 NOT NULL;

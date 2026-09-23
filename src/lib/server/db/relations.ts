@@ -5,7 +5,14 @@ import { schema } from "./schema.js";
 export const relations = defineRelations(schema, (r) => ({
 	user: {
 		musicIds: r.many.musicIds(),
-		clips: r.many.clip()
+		clips: r.many.clip(),
+		shortLinks: r.many.shortLink()
+	},
+	shortLink: {
+		creator: r.one.user({
+			from: r.shortLink.createdById,
+			to: r.user.id
+		})
 	},
 	clip: {
 		creator: r.one.user({
