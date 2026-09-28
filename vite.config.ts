@@ -35,12 +35,5 @@ export default defineConfig({
 			inspector: true
 		})
 	],
-	ssr: {
-		external: ["ffmpeg-static", "sharp"]
-	},
-	build: {
-		rolldownOptions: {
-			external: ["ffmpeg-static", "sharp"]
-		}
-	}
+	build: {}
 });
