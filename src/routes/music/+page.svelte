@@ -45,17 +45,13 @@
 		const params = new URLSearchParams(listState.params.toURLSearchParams());
 		const currentPage = listState.params.page ?? 1;
 		params.set("page", String(currentPage + pageOffset));
-		return `${resolve("/music")}?${params.toString()}`;
+		return `${resolve("music")}?${params.toString()}`;
 	}
 </script>
 
 <h1 class="pb-2 text-3xl font-bold tracking-tight md:text-4xl">music id list</h1>
 
-<CheckWithPending path="musicId.create">
-	<NewMusicIdForm {listState} />
-	<br />
-</CheckWithPending>
-
+<CheckWithPending path="musicId.create"><NewMusicIdForm {listState} /><br /></CheckWithPending>
 <ConfirmDeleteDialog />
 
 <div class="flex flex-col gap-4 pt-4 sm:flex-row sm:items-end sm:justify-between">

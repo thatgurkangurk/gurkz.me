@@ -229,6 +229,7 @@ export function configureForm<Input extends RemoteFormInput = RemoteFormInput>(
 	});
 
 	beforeNavigate((ev) => {
+		if (ev.shallow && ev.type === "goto") return;
 		if (ev.shallow) return;
 		if ((dirty || issues) && navBlockMessage && !confirm(navBlockMessage)) ev.cancel();
 	});
