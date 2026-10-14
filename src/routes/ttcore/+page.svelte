@@ -21,7 +21,7 @@
 	import { resolve } from "$app/paths";
 	import { ArrowRight, ShieldCheck, Video } from "@lucide/svelte";
 
-	const videos = $derived(await getVideos());
+	const videos = $derived((await getVideos()).filter((v) => !v.hidden));
 
 	const openVideos = $derived(videos.filter((v) => v.submissionsOpen));
 	const closedVideos = $derived(videos.filter((v) => !v.submissionsOpen));

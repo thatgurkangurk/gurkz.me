@@ -301,19 +301,20 @@ export const getSubmissionsOpen = query(
 	}
 );
 
-export const setSubmissionsOpen = command(
+export const updateVideo = command(
 	z.object({
 		videoId: z.string(),
-		submissionsOpen: z.boolean()
+		submissionsOpen: z.boolean().optional(),
+		hidden: z.boolean().optional()
 	}),
 	async (data) => {
 		adminOnlyGuard();
-		await db
-			.update(video)
-			.set({
-				submissionsOpen: data.submissionsOpen
-			})
-			.where(eq(video.id, data.videoId));
+
+		const { videoId, ...updates } = data;
+
+		if (Object.keys(updates).length > 0) {
+			await db.update(video).set(updates).where(eq(video.id, videoId));
+		}
 
 		await getSubmissionsOpen({
 			videoId: data.videoId

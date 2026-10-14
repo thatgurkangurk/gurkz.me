@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getVideoById, setSubmissionsOpen } from "#lib/api/ttcore/videos.remote.js";
+	import { getVideoById, updateVideo } from "#lib/api/ttcore/videos.remote.js";
 	import Search from "#lib/components/search.svelte";
 	import {
 		Breadcrumb,
@@ -85,7 +85,7 @@
 
 	<Button
 		onclick={async () =>
-			await setSubmissionsOpen({
+			await updateVideo({
 				videoId: video.id,
 				submissionsOpen: !video.submissionsOpen
 			})}
@@ -95,6 +95,21 @@
 			close submissions
 		{:else}
 			open submissions
+		{/if}
+	</Button>
+
+	<Button
+		onclick={async () =>
+			await updateVideo({
+				videoId: video.id,
+				hidden: !video.hidden
+			})}
+		variant={video.hidden ? "default" : "destructive"}
+	>
+		{#if video.hidden}
+			show video
+		{:else}
+			hide video
 		{/if}
 	</Button>
 

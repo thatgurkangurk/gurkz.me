@@ -13,7 +13,8 @@ export const video = pgTable(
 		submissionsOpen: t.boolean("submissions_open").notNull().default(true),
 		createdAt: t.timestamp("created_at").defaultNow().notNull(),
 		message: t.text(),
-		messageUpdatedAt: t.timestamp("message_updated_at")
+		messageUpdatedAt: t.timestamp("message_updated_at"),
+		hidden: t.boolean()
 	}),
 	(table) => [
 		check(
