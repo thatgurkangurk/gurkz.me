@@ -1,12 +1,13 @@
-import { deleteClip, setClipSelected } from "#lib/api/ttcore/clips.remote.js";
-import { getClipsForVideo } from "#lib/api/ttcore/videos.remote.js";
+import { deleteClip, moveClipVideo, setClipSelected } from "#lib/api/ttcore/clips.remote.js";
+import { getClipsForVideo, getVideos } from "#lib/api/ttcore/videos.remote.js";
 import type { Clip } from "#lib/types/clip.js";
 
 import {
 	type InfiniteData,
 	infiniteQueryOptions,
 	keepPreviousData,
-	mutationOptions
+	mutationOptions,
+	queryOptions
 } from "@tanstack/svelte-query";
 
 const LIMIT = 20;
@@ -20,6 +21,16 @@ export function clipsForVideoInfiniteQueryOptions(videoId: string, search: strin
 		initialPageParam: 1,
 		getNextPageParam: (lastPage, allPages) => {
 			return lastPage.length === LIMIT ? allPages.length + 1 : undefined;
+		},
+		placeholderData: keepPreviousData
+	});
+}
+
+export function getVideosQuery() {
+	return queryOptions({
+		queryKey: ["ttcore", "admin", "videos"] as const,
+		queryFn: async () => {
+			return getVideos();
 		},
 		placeholderData: keepPreviousData
 	});
@@ -46,6 +57,30 @@ export function deleteClipMutation() {
 					return {
 						...oldData,
 						pages: oldData.pages.map((page) => page.filter((item) => item.id !== deletedClip.id))
+					};
+				}
+			);
+		}
+	});
+}
+
+export function moveClipMutation() {
+	return mutationOptions({
+		mutationKey: ["ttcore", "admin", "clips", "move"],
+		mutationFn: async (payload: { clip: Clip; newVideoId: string }) => {
+			await moveClipVideo({ clipId: payload.clip.id, newVideoId: payload.newVideoId });
+
+			return payload.clip;
+		},
+		onSuccess: (movedClip, _variables, _result, { client }) => {
+			client.setQueriesData<ClipCache>(
+				{ queryKey: ["ttcore", "admin", "clips", movedClip.videoId] },
+				(oldData) => {
+					if (!oldData) return oldData;
+
+					return {
+						...oldData,
+						pages: oldData.pages.map((page) => page.filter((item) => item.id !== movedClip.id))
 					};
 				}
 			);

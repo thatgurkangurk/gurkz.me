@@ -15,10 +15,11 @@
 	import { Spinner } from "#lib/components/ui/spinner/index.js";
 	import type { Clip } from "#lib/types/clip.js";
 
-	import Star from "@lucide/svelte/icons/star";
+	import { Star, Trash } from "@lucide/svelte";
 	import { createMutation } from "@tanstack/svelte-query";
 
 	import { deleteClipMutation, setClipSelectedMutation } from "./query.js";
+	import MoveClipDropdown from "./move-clip-dropdown.svelte";
 
 	type Props = {
 		clip: Clip;
@@ -37,6 +38,7 @@
 <ClipCard {clip}>
 	{#snippet footer()}
 		<!-- <EditClip {clip} /> -->
+		<MoveClipDropdown {clip} />
 		<Button
 			disabled={!submissionsOpen}
 			onclick={async () => {
@@ -51,9 +53,9 @@
 			<AlertDialogTrigger
 				disabled={!submissionsOpen}
 				onclick={() => (dialogOpen = true)}
-				class={buttonVariants({ variant: "destructive" })}
+				class={buttonVariants({ variant: "destructive", size: "icon" })}
 			>
-				delete
+				<Trash />
 			</AlertDialogTrigger>
 			<AlertDialogContent>
 				<AlertDialogHeader>

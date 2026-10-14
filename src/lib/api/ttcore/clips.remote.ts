@@ -233,6 +233,28 @@ export const setNewClipTitle = command(
 	}
 );
 
+export const moveClipVideo = command(
+	z.object({
+		clipId: z.string(),
+		newVideoId: z.string()
+	}),
+	async (data) => {
+		adminOnlyGuard();
+
+		const [result] = await db
+			.update(clip)
+			.set({
+				videoId: data.newVideoId
+			})
+			.where(eq(clip.id, data.clipId))
+			.returning();
+
+		await getClipsForVideo({
+			videoId: result.videoId
+		}).refresh();
+	}
+);
+
 export const setClipSelected = command(
 	z.object({
 		clipId: z.string(),
