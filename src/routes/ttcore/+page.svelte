@@ -19,7 +19,7 @@
 	} from "#lib/components/ui/card/index.js";
 
 	import { resolve } from "$app/paths";
-	import { ArrowRight, ShieldCheck, Video } from "@lucide/svelte";
+	import { ArrowRight, ShieldCheck, Video, CircleUserRound } from "@lucide/svelte";
 
 	const videos = $derived((await getVideos()).filter((v) => !v.hidden));
 
@@ -42,23 +42,41 @@
 
 	<h1 class="text-3xl font-bold tracking-tight lowercase md:text-4xl">traitor town core</h1>
 
-	<Check path="ttcore.manage">
-		<Card class="max-w-xs">
+	<div class="grid grid-cols-2 gap-4">
+		<Card class="flex h-full w-full flex-col justify-between">
 			<CardHeader>
 				<CardTitle class="flex items-center gap-2 lowercase">
-					<ShieldCheck class="size-4" />
-					ttcore admin
+					<CircleUserRound class="size-4" />
+					my submissions
 				</CardTitle>
-				<CardDescription class="lowercase">you can manage ttcore submissions !</CardDescription>
+				<CardDescription class="lowercase">check out your submissions here</CardDescription>
 			</CardHeader>
 			<CardFooter>
-				<Button href="/ttcore/admin" variant="outline" class="gap-2 lowercase">
-					manage submissions
+				<Button href="/ttcore/my" variant="outline" class="gap-2 lowercase">
+					my submissions
 					<ArrowRight class="size-4" />
 				</Button>
 			</CardFooter>
 		</Card>
-	</Check>
+
+		<Check path="ttcore.manage">
+			<Card class="flex h-full w-full flex-col justify-between">
+				<CardHeader>
+					<CardTitle class="flex items-center gap-2 lowercase">
+						<ShieldCheck class="size-4" />
+						ttcore admin
+					</CardTitle>
+					<CardDescription class="lowercase">you can manage ttcore submissions !</CardDescription>
+				</CardHeader>
+				<CardFooter>
+					<Button href="/ttcore/admin" variant="outline" class="gap-2 lowercase">
+						manage submissions
+						<ArrowRight class="size-4" />
+					</Button>
+				</CardFooter>
+			</Card>
+		</Check>
+	</div>
 
 	<section class="flex flex-col gap-3">
 		<p class="text-sm font-medium text-muted-foreground lowercase">open submissions</p>
