@@ -1,6 +1,8 @@
 import { getRequestEvent } from "$app/server";
 import { error } from "@sveltejs/kit";
 
+export const GURKANS_USER_ID = "jiLfhur7unov22ZMuZW3a";
+
 export function adminOnlyGuard() {
 	const { user, session } = authGuard();
 
