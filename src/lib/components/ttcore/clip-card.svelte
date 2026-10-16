@@ -36,7 +36,7 @@
 			<video
 				class="h-full w-full object-cover"
 				src={clip.url}
-				poster={`/api/clips/${clip.id}/thumbnail`}
+				poster={`/api/ttcore/clips/${clip.id}/thumbnail`}
 				controls
 				preload="none"
 			></video>
