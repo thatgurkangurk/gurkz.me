@@ -2,6 +2,7 @@ import { db } from "#lib/server/db/index.js";
 import { clip as clips } from "#lib/server/db/schema.js";
 import type { Clip } from "#lib/types/clip.js";
 
+import { THUMBNAIL_TOKEN } from "$app/env/private";
 import { eq } from "drizzle-orm";
 import { ResultAsync } from "neverthrow";
 
@@ -55,7 +56,11 @@ function fetchThumbnailApi(videoUrl: string): ResultAsync<Buffer, Error> {
 	const apiUrl = `https://thumbnail.gurkz.me/api/thumbnail?videoUrl=${encodeURIComponent(videoUrl)}`;
 
 	return ResultAsync.fromPromise(
-		fetch(apiUrl).then(async (res) => {
+		fetch(apiUrl, {
+			headers: {
+				Authorization: `Bearer ${THUMBNAIL_TOKEN}`
+			}
+		}).then(async (res) => {
 			if (!res.ok) {
 				throw new Error(`HTTP ${res.status}: ${res.statusText}`);
 			}

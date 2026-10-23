@@ -38,5 +38,8 @@ export const variables = defineEnvVars({
 	},
 	DOWNLOAD_URL: {
 		schema: skipInCI(z.url())
+	},
+	THUMBNAIL_TOKEN: {
+		schema: skipInCI(z.string())
 	}
 });
