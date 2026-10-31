@@ -1,0 +1,72 @@
+import { musicIds } from "#lib/server/db/schema.js";
+
+import { count, ilike } from "drizzle-orm";
+import * as z from "zod/v4";
+
+import { base, orpcPermix } from "..";
+
+export const FetchMusicIdsArgs = z.compile(
+	z.object({
+		page: z.number().int().positive().default(1),
+		limit: z.number().int().min(1).max(100).default(20),
+		search: z.string().default("")
+	})
+);
+
+export const listMusicIds = base
+	.input(FetchMusicIdsArgs)
+	.use(orpcPermix.checkMiddleware("musicId.list"))
+	.handler(async ({ input, context }) => {
+		const offset = (input.page - 1) * input.limit;
+
+		const whereClause = input.search ? ilike(musicIds.name, `%${input.search}%`) : undefined;
+
+		const [totalResult, musicIdsResult] = await Promise.all([
+			context.db.select({ count: count() }).from(musicIds).where(whereClause),
+			context.db.query.musicIds.findMany({
+				...(input.search && {
+					where: { name: { ilike: `%${input.search}%` } }
+				}),
+				columns: {
+					id: true,
+					name: true,
+					robloxId: true,
+					createdById: true,
+					createdAt: true,
+					working: true,
+					tags: true
+				},
+				with: {
+					creator: {
+						columns: {
+							id: true,
+							name: true,
+							image: true
+						}
+					}
+				},
+				orderBy: ({ id }, { desc }) => desc(id),
+				limit: input.limit,
+				offset
+			})
+		]);
+
+		const totalItems = totalResult[0]?.count ?? 0;
+		const totalPages = Math.ceil(totalItems / input.limit);
+
+		return {
+			data: musicIdsResult,
+			pagination: {
+				page: input.page,
+				limit: input.limit,
+				totalItems,
+				totalPages,
+				hasNextPage: input.page < totalPages,
+				hasPrevPage: input.page > 1
+			}
+		};
+	});
+
+export const musicRouter = {
+	list: listMusicIds
+};

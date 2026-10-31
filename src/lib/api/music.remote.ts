@@ -1,11 +1,14 @@
 import { createMusicIdSchema } from "#lib/features/music/schemas.js";
+import { orpc } from "#lib/orpc.js";
 import { musicIdRefetchOptions } from "#lib/schemas/music.js";
 import { db } from "#lib/server/db/index.js";
 import { musicIds } from "#lib/server/db/schema.js";
+import { FetchMusicIdsArgs } from "#lib/server/orpc/routers/music.js";
+import { handleOrpc } from "#lib/server/orpc/util.js";
 
 import { command, form, getRequestEvent, query } from "$app/server";
 import { error } from "@sveltejs/kit";
-import { count, eq, ilike } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import * as z from "zod/v4";
 
 const createMusicId = form(createMusicIdSchema, async (data) => {
@@ -31,67 +34,11 @@ const createMusicId = form(createMusicIdSchema, async (data) => {
 	}
 });
 
-const getMusicIds = query(
-	z.object({
-		page: z.number().int().positive().default(1),
-		limit: z.number().int().min(1).max(100).default(20),
-		search: z.string().default("")
-	}),
-	async ({ page = 1, limit = 20, search = "" }) => {
-		const event = getRequestEvent();
+const getMusicIds = query(FetchMusicIdsArgs, async ({ page = 1, limit = 20, search = "" }) => {
+	const result = await handleOrpc(() => orpc.music.list({ page, limit, search }));
 
-		if (!event.locals.user || !event.locals.permix.check("musicId.list")) error(403);
-
-		const offset = (page - 1) * limit;
-
-		const whereClause = search ? ilike(musicIds.name, `%${search}%`) : undefined;
-
-		const [totalResult, musicIdsResult] = await Promise.all([
-			db.select({ count: count() }).from(musicIds).where(whereClause),
-			db.query.musicIds.findMany({
-				...(search && {
-					where: { name: { ilike: `%${search}%` } }
-				}),
-				columns: {
-					id: true,
-					name: true,
-					robloxId: true,
-					createdById: true,
-					createdAt: true,
-					working: true,
-					tags: true
-				},
-				with: {
-					creator: {
-						columns: {
-							id: true,
-							name: true,
-							image: true
-						}
-					}
-				},
-				orderBy: ({ id }, { desc }) => desc(id),
-				limit,
-				offset
-			})
-		]);
-
-		const totalItems = totalResult[0]?.count ?? 0;
-		const totalPages = Math.ceil(totalItems / limit);
-
-		return {
-			data: musicIdsResult,
-			pagination: {
-				page,
-				limit,
-				totalItems,
-				totalPages,
-				hasNextPage: page < totalPages,
-				hasPrevPage: page > 1
-			}
-		};
-	}
-);
+	return result;
+});
 
 const deleteMusicId = command(
 	z.object({
