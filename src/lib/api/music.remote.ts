@@ -3,12 +3,11 @@ import { orpc } from "#lib/orpc.js";
 import { musicIdRefetchOptions } from "#lib/schemas/music.js";
 import { db } from "#lib/server/db/index.js";
 import { musicIds } from "#lib/server/db/schema.js";
-import { FetchMusicIdsArgs } from "#lib/server/orpc/routers/music.js";
+import { DeleteMusicIdArgs, FetchMusicIdsArgs } from "#lib/server/orpc/routers/music.js";
 import { handleOrpc } from "#lib/server/orpc/util.js";
 
 import { command, form, getRequestEvent, query } from "$app/server";
 import { error } from "@sveltejs/kit";
-import { eq } from "drizzle-orm";
 import * as z from "zod/v4";
 
 const createMusicId = form(createMusicIdSchema, async (data) => {
@@ -42,38 +41,19 @@ const getMusicIds = query(FetchMusicIdsArgs, async ({ page = 1, limit = 20, sear
 
 const deleteMusicId = command(
 	z.object({
-		id: z.ulid(),
+		...DeleteMusicIdArgs.shape,
 		...musicIdRefetchOptions.shape
 	}),
 	async ({ id, currentPage, limit, searchFilter }) => {
-		const event = getRequestEvent();
+		const result = await handleOrpc(() => orpc.music.delete({ id: id }));
 
-		if (!event.locals.user) error(401);
+		void getMusicIds({
+			page: currentPage,
+			limit: limit,
+			search: searchFilter
+		}).refresh();
 
-		const musicIdToDelete = (
-			await db.select().from(musicIds).where(eq(musicIds.id, id)).limit(1)
-		)[0];
-
-		if (!musicIdToDelete) error(404);
-
-		if (!event.locals.permix.check("musicId.delete", musicIdToDelete)) error(403);
-
-		try {
-			await db.delete(musicIds).where(eq(musicIds.id, musicIdToDelete.id));
-
-			void getMusicIds({
-				page: currentPage,
-				limit: limit,
-				search: searchFilter
-			}).refresh();
-		} catch (err) {
-			console.error("failed to delete music id", err);
-			error(500, "Failed to delete music id");
-		}
-
-		return {
-			success: true
-		};
+		return result;
 	}
 );
 

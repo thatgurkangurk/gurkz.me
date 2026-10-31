@@ -1,7 +1,8 @@
 import { musicIds } from "#lib/server/db/schema.js";
 
+import { ORPCError } from "@orpc/client";
 import { openapi } from "@orpc/openapi";
-import { count, ilike } from "drizzle-orm";
+import { count, eq, ilike } from "drizzle-orm";
 import * as z from "zod/v4";
 
 import { base, orpcPermix } from "..";
@@ -11,6 +12,12 @@ export const FetchMusicIdsArgs = z.compile(
 		page: z.number().int().positive().default(1),
 		limit: z.number().int().min(1).max(100).default(20),
 		search: z.string().default("")
+	})
+);
+
+export const DeleteMusicIdArgs = z.compile(
+	z.object({
+		id: z.ulid()
 	})
 );
 
@@ -75,6 +82,40 @@ export const listMusicIds = base
 		};
 	});
 
+export const deleteMusicId = base
+	.meta(
+		openapi({
+			method: "DELETE",
+			path: "/music/{id}"
+		})
+	)
+	.input(DeleteMusicIdArgs)
+	.handler(async ({ input, context }) => {
+		if (!context.session) throw new ORPCError("UNAUTHORIZED");
+
+		const musicIdToDelete = (
+			await context.db.select().from(musicIds).where(eq(musicIds.id, input.id)).limit(1)
+		)[0];
+
+		if (!musicIdToDelete) throw new ORPCError("NOT_FOUND");
+
+		if (!context.permix.check("musicId.delete", musicIdToDelete)) throw new ORPCError("FORBIDDEN");
+
+		try {
+			await context.db.delete(musicIds).where(eq(musicIds.id, musicIdToDelete.id));
+		} catch (err) {
+			console.error("failed to delete music id", err);
+			throw new ORPCError("INTERNAL_SERVER_ERROR", {
+				message: "Failed to delete music id"
+			});
+		}
+
+		return {
+			success: true
+		};
+	});
+
 export const musicRouter = {
-	list: listMusicIds
+	list: listMusicIds,
+	delete: deleteMusicId
 };
