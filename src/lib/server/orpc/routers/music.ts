@@ -1,3 +1,4 @@
+import { createMusicIdSchema } from "#lib/features/music/schemas.js";
 import { musicIds } from "#lib/server/db/schema.js";
 
 import { ORPCError } from "@orpc/client";
@@ -115,7 +116,36 @@ export const deleteMusicId = base
 		};
 	});
 
+export const createMusicId = base
+	.meta(
+		openapi({
+			method: "POST",
+			path: "/music"
+		})
+	)
+	.use(orpcPermix.checkMiddleware("musicId.create"))
+	.input(z.compile(createMusicIdSchema))
+	.handler(async ({ input, context }) => {
+		if (!context.session) throw new ORPCError("UNAUTHORIZED");
+
+		try {
+			await context.db.insert(musicIds).values({
+				createdById: context.session.user.id,
+				name: input.name,
+				tags: input.tags,
+				robloxId: input.robloxId
+			});
+		} catch (err) {
+			console.error("creating music id failed", err);
+		}
+
+		return {
+			success: true
+		};
+	});
+
 export const musicRouter = {
 	list: listMusicIds,
+	create: createMusicId,
 	delete: deleteMusicId
 };
