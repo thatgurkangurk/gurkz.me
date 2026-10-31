@@ -87,7 +87,8 @@ export const deleteMusicId = base
 	.meta(
 		openapi({
 			method: "DELETE",
-			path: "/music/{id}"
+			path: "/music/{id}",
+			spec: { security: [{ apiKey: [] }] }
 		})
 	)
 	.input(DeleteMusicIdArgs)
@@ -120,7 +121,8 @@ export const createMusicId = base
 	.meta(
 		openapi({
 			method: "POST",
-			path: "/music"
+			path: "/music",
+			spec: { security: [{ apiKey: [] }] }
 		})
 	)
 	.use(orpcPermix.checkMiddleware("musicId.create"))
@@ -137,6 +139,9 @@ export const createMusicId = base
 			});
 		} catch (err) {
 			console.error("creating music id failed", err);
+			throw new ORPCError("INTERNAL_SERVER_ERROR", {
+				message: "Failed to create music id"
+			});
 		}
 
 		return {
