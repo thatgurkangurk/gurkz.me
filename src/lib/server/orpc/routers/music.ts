@@ -1,5 +1,6 @@
 import { musicIds } from "#lib/server/db/schema.js";
 
+import { openapi } from "@orpc/openapi";
 import { count, ilike } from "drizzle-orm";
 import * as z from "zod/v4";
 
@@ -14,6 +15,13 @@ export const FetchMusicIdsArgs = z.compile(
 );
 
 export const listMusicIds = base
+	.meta(
+		openapi({
+			method: "GET",
+			path: "/music",
+			spec: { security: [{ apiKey: [] }] }
+		})
+	)
 	.input(FetchMusicIdsArgs)
 	.use(orpcPermix.checkMiddleware("musicId.list"))
 	.handler(async ({ input, context }) => {
